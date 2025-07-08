@@ -1,0 +1,144 @@
+/*
+  fonts.css for Luna5
+  -------------------
+  This file defines @font-face rules for all custom fonts used in the app.
+  Make sure the relative paths to font files are correct from this CSS file location.
+  Place this file in: src/renderer/src/css/fonts.css
+  Font files should be in: src/renderer/src/assets/fonts/
+*/
+
+/* Comic Neue Font Definitions */
+@font-face {
+    font-family: 'Comic Neue';
+    src: url('@renderer/assets/fonts/Comic_Neue/ComicNeue-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Comic Neue';
+    src: url('@renderer/assets/fonts/Comic_Neue/ComicNeue-BoldItalic.woff2') format('woff2');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Comic Neue';
+    src: url('@renderer/assets/fonts/Comic_Neue/ComicNeue-Italic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Comic Neue';
+    src: url('@renderer/assets/fonts/Comic_Neue/ComicNeue-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Roboto Font Definitions */
+@font-face {
+    font-family: 'Roboto';
+    src: url('@renderer/assets/fonts/Roboto/Roboto-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('@renderer/assets/fonts/Roboto/Roboto-BoldItalic.woff2') format('woff2');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('@renderer/assets/fonts/Roboto/Roboto-Italic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('@renderer/assets/fonts/Roboto/Roboto-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* OpenDyslexic Font Definitions */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('@renderer/assets/fonts/OpenDyslexic/OpenDyslexic-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('@renderer/assets/fonts/OpenDyslexic/OpenDyslexic-Italic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('@renderer/assets/fonts/OpenDyslexic/OpenDyslexic-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('@renderer/assets/fonts/OpenDyslexic/OpenDyslexic-Bold-Italic.woff2') format('woff2');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* Fira Code Font Definitions */
+@font-face {
+    font-family: 'Fira Code';
+    src: url('@renderer/assets/fonts/FiraCode/FiraCode-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Fira Code';
+    src: url('@renderer/assets/fonts/FiraCode/FiraCode-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Arimo Font Definitions */
+@font-face {
+    font-family: 'Arimo';
+    src: url('@renderer/assets/fonts/Arimo/Arimo-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Arimo';
+    src: url('@renderer/assets/fonts/Arimo/Arimo-Italic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Arimo';
+    src: url('@renderer/assets/fonts/Arimo/Arimo-BoldItalic.woff2') format('woff2');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Arimo';
+    src: url('@renderer/assets/fonts/Arimo/Arimo-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}

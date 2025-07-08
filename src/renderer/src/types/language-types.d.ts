@@ -1,0 +1,10 @@
+export type LanguageType =
+  | 'english'
+  | 'norwegian'
+  | 'swedish'
+  | 'finnish'
+  | 'danish'
+  | 'german'
+  | 'french'
+  | 'spanish'
+  | 'italian'

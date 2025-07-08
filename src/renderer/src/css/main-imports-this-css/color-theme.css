@@ -1,0 +1,14 @@
+/* filepath: c:\Users\magnus.simonsen\luna\luna\src\renderer\src\css\color-theme.css */
+
+:root {
+    --app-background: #ffffff;
+    --menu-background: #f0f0f0;
+    --menu-background-hover: #e0e0e0;
+    --text-color: #222222;
+    --border-color: #cccccc;
+    --border-color-divider: #dddddd;
+    --button-hover-color: lightgreen;
+    --button-on-color: '#81C784',
+    --button-transparent-off-color: transparent;
+    --button-hard-off-color: red;
+}
