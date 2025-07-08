@@ -1,7 +1,8 @@
 # Luna5
+For contributors: Please read src/README-BEST-PRACTICE.md
 
 Built using **Electron**, **Vite**, **Vue 3**, **Pinia**, and **TypeScript**, along with other powerful open-source modules.
----
+
 
 ## 📚 What is Luna?
 
