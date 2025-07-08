@@ -4,6 +4,9 @@
 
 Built using **Electron**, **Vite**, **Vue 3**, **Pinia**, and **TypeScript**, along with other powerful open-source modules.
 
+## 🙏 Acknowledgments
+
+Special thanks to the [electron-vite](https://electron-vite.org/guide/) team for creating the excellent `npm create @quick-start/electron@latest` starter tool that jumpstarted this project.
 
 ## 📚 What is Luna?
 
