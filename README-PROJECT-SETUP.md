@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# luna
+# Luna5
 
 An Electron application with Vue and TypeScript
 
