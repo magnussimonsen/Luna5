@@ -2,7 +2,7 @@
 
 > 📋 **For contributors:** Please read [src/README-BEST-PRACTICE.md](src/README-BEST-PRACTICE.md) for coding guidelines and project structure.
 
-Built using **Electron**, **Vite**, **Vue 3**, **Pinia**, and **TypeScript**, along with other powerful open-source modules.
+Built using **Electron**, **Vite**, **Vue 3**, **Pinia**, and **TypeScript**, along with other open-source modules.
 
 ## 🙏 Acknowledgments
 
