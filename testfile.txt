@@ -1,0 +1,1 @@
+Test if github clone on windows machine is synced correct with ssh
