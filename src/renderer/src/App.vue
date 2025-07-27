@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MenuBar from '@renderer/components/navigation_bars/MenuBar.vue'
-import Toolbar from '@renderer/components/navigation_bars/Toolbar.vue'
+import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
 import StatusBar from '@renderer/components/navigation_bars/StatusBar.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 import GeneralSettingsModal from '@renderer/components/modals/settings_modals/SettingsModal.vue'

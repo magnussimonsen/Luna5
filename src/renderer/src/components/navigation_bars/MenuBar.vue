@@ -286,7 +286,7 @@ const handleToggleDark = (): void => {
   left: 0;
   width: 100%;
   height: fit-content;
-  gap: 0.1em;
+  gap: 0em;
   /* Border */
   border-bottom: 1px solid var(--border-color, #444);
   /* Adjusted to fit button height */
