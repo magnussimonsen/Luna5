@@ -7,7 +7,9 @@
     }"
   >
     <div class="workspace-scroll">
-      <!-- Cell list slot / future cell renderer -->
+      <!-- Cell list slot / future cell renderer 
+       (only way I got scrolling working was by adding this div)
+       dont know why -->
       <slot />
     </div>
   </div>
@@ -31,7 +33,7 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  /* No scrolling here; delegate to inner wrapper to avoid flex overflow bugs */
+  /* No scrolling here; delegate to inner wrapper to avoid flex overflow bugs? */
   overflow: hidden;
 }
 
@@ -56,9 +58,6 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   max-width: 210mm;
   min-height: 297mm;
   background: var(--color-surface-paper, #fff);
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.12),
-    0 6px 18px rgba(0, 0, 0, 0.08);
   border: 1px solid var(--color-border-light, #e0e0e0);
   position: relative;
 }

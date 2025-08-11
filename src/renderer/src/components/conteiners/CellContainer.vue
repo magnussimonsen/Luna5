@@ -14,21 +14,24 @@
     tabindex="0"
     @click="onSelect"
     @keydown="onKeyDown"
-    @focus="emit('focus', cellId)"
     @blur="emit('blur', cellId)"
   >
     <div class="cell-margin">
       <div class="cell-index" :title="`Cell ${displayIndex}`">{{ displayIndex }}</div>
     </div>
     <div class="cell-body">
-      <!-- Optional top tools slot (e.g., toolbar) -->
+      <!-- 
+      Optional top tools slot (e.g., toolbar) 
       <div v-if="$slots.tools" class="cell-tools"><slot name="tools" /></div>
+      -->
       <!-- Main cell content -->
       <div class="cell-content">
         <slot />
       </div>
-      <!-- Optional status/footer slot -->
+      <!-- 
+      Optional status/footer slot 
       <div v-if="$slots.status" class="cell-status"><slot name="status" /></div>
+      -->
     </div>
   </div>
 </template>
@@ -52,13 +55,13 @@ const emit = defineEmits<{
   (e: 'select', cellId: string): void
   (e: 'focus', cellId: string): void
   (e: 'blur', cellId: string): void
-  (e: 'moveUp', cellId: string): void
-  (e: 'moveDown', cellId: string): void
-  (e: 'delete', cellId: string): void
-  (e: 'duplicate', cellId: string): void
-  (e: 'toggleLock', cellId: string): void
-  (e: 'requestFocusAbove', cellId: string): void
-  (e: 'requestFocusBelow', cellId: string): void
+  (e: 'moveUp', cellId: string): void // Dont need this. Movement of cells is handled by buttons in menubar-component
+  (e: 'moveDown', cellId: string): void // Dont need this. Movement of cells is handled by buttons in menubar-component
+  (e: 'delete', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
+  (e: 'duplicate', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
+  (e: 'toggleLock', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
+  (e: 'requestFocusAbove', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
+  (e: 'requestFocusBelow', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
 }>()
 
 const displayIndex = computed(() => props.index + 1)
@@ -74,7 +77,7 @@ function onSelect(): void {
     nextTick(() => rootEl.value?.focus())
   }
 }
-
+// Should be handled by buttons in menubar-component
 function onKeyDown(e: KeyboardEvent): void {
   if (e.defaultPrevented) return
   switch (e.key) {
@@ -112,9 +115,6 @@ function onKeyDown(e: KeyboardEvent): void {
   margin-block: 0.2rem;
   position: relative;
   outline: none;
-  transition:
-    border-color 0.18s ease,
-    background-color 0.18s ease;
 }
 
 .cell-container:focus-visible {
