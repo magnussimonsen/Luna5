@@ -60,7 +60,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <div class="setting-row">
+         <div class="setting-row">
           <label for="toolbar-font-size-select">Toolbar Font Size:</label>
           <select
             id="toolbar-font-size-select"
@@ -71,6 +71,47 @@
             <option
               v-for="size in fontSizeOptions"
               :key="'toolbarFontSize-' + size"
+              :value="size + 'px'"
+            >
+              {{ size }} px
+            </option>
+          </select>
+          <ImplementedMark :implemented="false" />
+        </div>
+        <!-- Set the font size for side panel menu bar -->
+        <div class="setting-row">
+          <label for="side-panel-menu-bar-font-size-select">Side Panel Menu Bar Font Size:</label>
+          <select
+            id="side-panel-menu-bar-font-size-select"
+            v-model="fontSizeStore.fontSizes.sidePanelMenuBarFontSize"
+            :class="{ 'dark-mode': themeStore.isDarkMode }"
+            @change="
+              fontSizeStore.setSidePanelMenuBarFontSize(
+                fontSizeStore.fontSizes.sidePanelMenuBarFontSize
+              )
+            "
+          >
+            <option
+              v-for="size in fontSizeOptions"
+              :key="'sidePanelMenuBarFontSize-' + size"
+              :value="size + 'px'"
+            >
+              {{ size }} px
+            </option>
+          </select>
+          <ImplementedMark :implemented="false" />
+        </div>
+       <div class="setting-row">
+          <label for="side-panel-font-size-select">Side Panel Font Size:</label>
+          <select
+            id="side-panel-font-size-select"
+            v-model="fontSizeStore.fontSizes.sidePanelFontSize"
+            :class="{ 'dark-mode': themeStore.isDarkMode }"
+            @change="fontSizeStore.setSidePanelFontSize(fontSizeStore.fontSizes.sidePanelFontSize)"
+          >
+            <option
+              v-for="size in fontSizeOptions"
+              :key="'sidePanelFontSize-' + size"
               :value="size + 'px'"
             >
               {{ size }} px
@@ -96,24 +137,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <div class="setting-row">
-          <label for="side-panel-font-size-select">Side Panel Font Size:</label>
-          <select
-            id="side-panel-font-size-select"
-            v-model="fontSizeStore.fontSizes.sidePanelFontSize"
-            :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontSizeStore.setSidePanelFontSize(fontSizeStore.fontSizes.sidePanelFontSize)"
-          >
-            <option
-              v-for="size in fontSizeOptions"
-              :key="'sidePanelFontSize-' + size"
-              :value="size + 'px'"
-            >
-              {{ size }} px
-            </option>
-          </select>
-          <ImplementedMark :implemented="false" />
-        </div>
+        
 
         <div class="setting-row">
           <label for="default-cell-font-size-select">Default Cell Font Size:</label>

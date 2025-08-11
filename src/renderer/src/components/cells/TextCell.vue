@@ -11,7 +11,8 @@
   font-size: 0.9rem;
   line-height: 1.4;
   font-family: var(--content-font, inherit);
-  color: var(--content-color, #222);
+  color: var(--text-color, #222);
+  background-color: red;
   white-space: pre-wrap;
 }
 </style>

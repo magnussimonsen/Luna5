@@ -13,6 +13,9 @@ export type ThemeColorTypes = {
   menuBackground: string
   menuBackgroundHover: string
 
+  cellBackground: string
+  cellBorderColor: string
+
   toolbarBackground: string
 
   mainPanelBackground: string
@@ -24,17 +27,26 @@ export type ThemeColorTypes = {
   borderColor: string
   dropdownBorderColor: string
 
+  activeBackgroundColor: string
   activeBorderColor: string
   activeBorderColorHover: string
+
+  focusVisibleBorderColor: string
 
   sliderBackground: string
 
   dropdownDividerColor: string
 
+  buttonBackgroundColor: string
+  buttonBorderColor: string
   buttonHoverColor: string
+  buttonBorderHoverColor: string
+
   buttonOnColor: string
   buttonTransparentOffColor: string
   buttonHardOffColor: string
+
+  deleteButtonHoverColor: string
 
   resetZoomButtonColor: string
 }

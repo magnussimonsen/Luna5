@@ -6,8 +6,10 @@
       'workspace-container--a4': layoutMode === 'a4Preview'
     }"
   >
-    <!-- Cell list slot / future cell renderer -->
-    <slot />
+    <div class="workspace-scroll">
+      <!-- Cell list slot / future cell renderer -->
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -22,16 +24,28 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 <style scoped>
 .workspace-container {
   box-sizing: border-box;
-  padding: 1rem 1.25rem;
-  transition:
-    max-width 0.25s ease,
-    background-color 0.25s ease,
-    box-shadow 0.25s ease;
+  padding: 0;
   margin: 0 auto;
-  /* Shared typography scaling could go here */
+  height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  /* No scrolling here; delegate to inner wrapper to avoid flex overflow bugs */
+  overflow: hidden;
+}
+
+.workspace-scroll {
+  flex: 1 1 auto;
+  min-height: 0; /* critical for Chrome flex overflow */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 1.25rem;
+  box-sizing: border-box;
 }
 
 .workspace-container--fluid {
+  background: var(--main-panel-background, #f0f0f0);
   max-width: 100%;
   width: 100%;
 }

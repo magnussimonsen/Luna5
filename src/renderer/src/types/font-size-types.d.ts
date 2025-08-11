@@ -5,6 +5,7 @@
 export type FontSizeTypes = {
   menuBarFontSize: string
   statusBarFontSize: string
+  sidePanelMenuBarFontSize: string
   sidePanelFontSize: string
   toolbarFontSize: string
   defaultCellFontSize: string

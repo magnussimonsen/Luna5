@@ -19,35 +19,6 @@
   >
     <div class="cell-margin">
       <div class="cell-index" :title="`Cell ${displayIndex}`">{{ displayIndex }}</div>
-      <div class="cell-margin-buttons">
-        <button
-          class="cell-btn move-up"
-          type="button"
-          :disabled="locked"
-          aria-label="Move cell up"
-          @click.stop="emit('moveUp', cellId)"
-        >
-          ▲
-        </button>
-        <button
-          class="cell-btn move-down"
-          type="button"
-          :disabled="locked"
-          aria-label="Move cell down"
-          @click.stop="emit('moveDown', cellId)"
-        >
-          ▼
-        </button>
-        <button
-          class="cell-btn lock"
-          type="button"
-          :aria-pressed="locked"
-          :title="locked ? 'Unlock cell' : 'Lock cell'"
-          @click.stop="emit('toggleLock', cellId)"
-        >
-          {{ locked ? '🔒' : '🔓' }}
-        </button>
-      </div>
     </div>
     <div class="cell-body">
       <!-- Optional top tools slot (e.g., toolbar) -->
@@ -133,34 +104,27 @@ function onKeyDown(e: KeyboardEvent): void {
 
 <style scoped>
 .cell-container {
-  --cell-border-color: var(--cell-border-color, #d0d7de);
-  --cell-bg: var(--cell-bg, #fff);
-  --cell-selected-border: var(--cell-selected-border, #2563eb);
-  --cell-margin-bg: var(--cell-margin-bg, #f5f7fa);
-  --cell-locked-overlay: rgba(0, 0, 0, 0.04);
   display: flex;
   width: 100%;
-  border: 1px solid var(--cell-border-color);
-  border-radius: 6px;
-  background: var(--cell-bg);
-  margin-block: 0.75rem;
+  border: 2px solid var(--cell-border-color);
+  border-radius: var(--border-radius, 4px);
+  background: var(--cell-background);
+  margin-block: 0.2rem;
   position: relative;
   outline: none;
   transition:
     border-color 0.18s ease,
-    box-shadow 0.18s ease,
     background-color 0.18s ease;
 }
 
 .cell-container:focus-visible {
-  border-color: var(--cell-selected-border);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--cell-selected-border) 50%, transparent);
+  border: solid 2px var(--focus-visible-border-color, blue);
 }
 
 .cell-container.is-selected {
-  border-color: var(--cell-selected-border);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--cell-selected-border) 35%, transparent);
-  background: var(--cell-selected-bg);
+  border-color: var(--active-border-color);
+  border: solid 2px var(--active-border-color);
+  background: var(transparent, yellow);
 }
 
 /* Left bar removed for simpler visual; reintroduce if stronger affordance needed */
@@ -182,21 +146,20 @@ function onKeyDown(e: KeyboardEvent): void {
 }
 
 .cell-margin {
-  flex: 0 0 3.2rem;
+  flex: 0 0 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.5rem 0.4rem 0.4rem;
-  gap: 0.4rem;
-  background: var(--cell-margin-bg);
+  padding: 0.2rem 0.2rem 0.2rem;
+  gap: 0rem;
+  background: var(--cell-margin-bg, lightgray);
   border-right: 1px solid var(--cell-border-color);
-  border-radius: 6px 0 0 6px;
 }
 
 .cell-index {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--cell-index-color, #555);
+  color: var(--text-color, #555);
   user-select: none;
 }
 

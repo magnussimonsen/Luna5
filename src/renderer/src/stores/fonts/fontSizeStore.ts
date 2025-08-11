@@ -12,9 +12,10 @@ export const fontSizeOptions: fontSizeOptionsType[] = [
 export const useFontSizeStore = defineStore('fontSize', {
   state: () => ({
     fontSizes: {
-      menuBarFontSize: '14px',
+      menuBarFontSize: '12px',
       statusBarFontSize: '11px',
-      sidePanelFontSize: '14px',
+      sidePanelMenuBarFontSize: '12px',
+      sidePanelFontSize: '12px',
       toolbarFontSize: '14px',
       defaultCellFontSize: '14px',
       codeEditorCellFontSize: '14px',
@@ -30,6 +31,10 @@ export const useFontSizeStore = defineStore('fontSize', {
     setStatusBarFontSize(size: string) {
       this.fontSizes.statusBarFontSize = size
       document.documentElement.style.setProperty('--status-bar-font-size', size)
+    },
+    setSidePanelMenuBarFontSize(size: string) {
+      this.fontSizes.sidePanelMenuBarFontSize = size
+      document.documentElement.style.setProperty('--side-panel-menu-bar-font-size', size)
     },
     setSidePanelFontSize(size: string) {
       this.fontSizes.sidePanelFontSize = size
@@ -63,6 +68,10 @@ export const useFontSizeStore = defineStore('fontSize', {
       document.documentElement.style.setProperty(
         '--status-bar-font-size',
         this.fontSizes.statusBarFontSize
+      )
+      document.documentElement.style.setProperty(
+        '--side-panel-menu-bar-font-size',
+        this.fontSizes.sidePanelMenuBarFontSize
       )
       document.documentElement.style.setProperty(
         '--side-panel-font-size',

@@ -20,26 +20,36 @@ export const useThemeStore = defineStore('theme', {
       toolbarBackground: '#f0f0f0',
       // Main panel
       mainPanelBackground: '#ffffff',
-      //Side panel
+      // Side panel
       sidePanelBackground: '#f0f0f0',
+      // Cell
+      cellBackground: '#ffffff',
+      cellBorderColor: '#444444',
       // Text colors
       textColor: '#222222',
       UITextColor: '#222222',
       // Borders
       borderColor: '#dddddd',
       dropdownBorderColor: '#cccccc',
-      // Active borders
+      // Active
+      activeBackgroundColor: 'lightgreen',
       activeBorderColor: 'lightgreen',
       activeBorderColorHover: 'lightgreen',
+      // Focus-visible (for tab key outline)
+      focusVisibleBorderColor: 'blue',
       // Slider colors
       sliderBackground: '#cccccc',
       // Divider color
       dropdownDividerColor: '#cccccc',
       // Button colors
-      buttonHoverColor: 'lightgray',
-      buttonOnColor: 'lightgreen',
+      buttonBorderColor: '#cccccc',
+      buttonHoverColor: 'silver',
+      buttonBorderHoverColor: '#cccccc',
+      buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
+      buttonOnColor: 'lightgreen',
       buttonHardOffColor: 'salmon',
+      deleteButtonHoverColor: 'lightcoral',
       /* Reset zoom button color */
       resetZoomButtonColor: 'lightblue'
     } as ThemeColorTypes,
@@ -56,27 +66,37 @@ export const useThemeStore = defineStore('theme', {
       // Toolbar background
       toolbarBackground: '#333333',
       // Main panel
-      mainPanelBackground: '#222222',
+      mainPanelBackground: '#444444',
       //Side panel
       sidePanelBackground: '#333333',
+      // Cell
+      cellBackground: '#555555',
+      cellBorderColor: '#444444',
       // Text colors
       textColor: '#cccccc',
       UITextColor: '#cccccc',
       // Borders
       borderColor: '#000000',
       dropdownBorderColor: '#555555',
-      // Active borders
+      // Active
+      activeBackgroundColor: 'green',
       activeBorderColor: 'green',
       activeBorderColorHover: 'green',
+      // Focus-visible (for tab key outline)
+      focusVisibleBorderColor: 'blue',
       // Slider colors
       sliderBackground: '#cccccc',
       // Divider color
       dropdownDividerColor: '#555555',
       // Button colors
+      buttonBorderColor: '#555555',
       buttonHoverColor: 'dimgray',
-      buttonOnColor: 'green',
+      buttonBorderHoverColor: '#cccccc',
+      buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
+      buttonOnColor: 'green',
       buttonHardOffColor: 'firebrick',
+      deleteButtonHoverColor: 'lightcoral',
       /* Reset zoom button color */
       resetZoomButtonColor: 'darkgreen'
     } as ThemeColorTypes
@@ -108,18 +128,26 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--toolbar-background', colors.toolbarBackground)
       root.style.setProperty('--main-panel-background', colors.mainPanelBackground)
       root.style.setProperty('--side-panel-background', colors.sidePanelBackground)
+      root.style.setProperty('--cell-background', colors.cellBackground)
+      root.style.setProperty('--cell-border-color', colors.cellBorderColor)
       root.style.setProperty('--text-color', colors.textColor)
       root.style.setProperty('--ui-text-color', colors.UITextColor)
       root.style.setProperty('--border-color', colors.borderColor)
       root.style.setProperty('--dropdown-border-color', colors.dropdownBorderColor)
+      root.style.setProperty('--active-background-color', colors.activeBackgroundColor)
       root.style.setProperty('--active-border-color', colors.activeBorderColor)
       root.style.setProperty('--active-border-color-hover', colors.activeBorderColorHover)
+      root.style.setProperty('--focus-visible-border-color', colors.focusVisibleBorderColor)
       root.style.setProperty('--slider-background', colors.sliderBackground)
       root.style.setProperty('--dropdown-divider-color', colors.dropdownDividerColor)
+      root.style.setProperty('--button-background-color', colors.buttonBackgroundColor)
+      root.style.setProperty('--button-border-color', colors.buttonBorderColor)
       root.style.setProperty('--button-hover-color', colors.buttonHoverColor)
+      root.style.setProperty('--button-border-hover-color', colors.buttonBorderHoverColor)
       root.style.setProperty('--button-on-color', colors.buttonOnColor)
       root.style.setProperty('--button-transparent-off-color', colors.buttonTransparentOffColor)
       root.style.setProperty('--button-hard-off-color', colors.buttonHardOffColor)
+      root.style.setProperty('--delete-button-hover-color', colors.deleteButtonHoverColor)
       root.style.setProperty('--reset-zoom-button-color', colors.resetZoomButtonColor)
     },
     getLightTheme() {

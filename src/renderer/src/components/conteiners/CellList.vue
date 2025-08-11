@@ -62,7 +62,7 @@ function onSelect(id: string): void {
 .cell-list {
   display: flex;
   flex-direction: column;
-  padding: 1rem 1.25rem 3rem;
+  padding: 1rem;
   box-sizing: border-box;
 }
 </style>

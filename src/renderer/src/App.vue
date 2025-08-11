@@ -59,7 +59,8 @@ const modalStore = useModalStore()
   height: 100%;
   display: flex;
   flex-direction: row;
-  overflow: hidden;
+  /* Allow inner areas to manage their own overflow; do not clip scrollbars */
+  overflow: visible;
 }
 
 .main-panel {
