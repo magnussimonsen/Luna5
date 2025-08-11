@@ -1,28 +1,26 @@
 <template>
   <div class="toolbar-container">
-    <!-- Placeholder for the cell-specific toolbar component -->
-    Toolbar
     <component :is="currentToolbarComponent" v-if="currentToolbarComponent" />
+    <div v-else class="toolbar-placeholder" aria-hidden="true">No cell selected</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-// Import your toolbar components here, e.g. CodeCellToolbar, MarkdownCellToolbar, etc.
-// import CodeCellToolbar from './toolbars/CodeCellToolbar.vue'
-// import MarkdownCellToolbar from './toolbars/MarkdownCellToolbar.vue'
+import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+import TextCellToolbar from '@renderer/components/toolbars/TextCellToolbar.vue'
 
-// Example mapping (replace with your actual logic)
+const selectionStore = useCellSelectionStore()
+
 const toolbarComponents = {
-  // code: CodeCellToolbar,
-  // markdown: MarkdownCellToolbar,
+  text: TextCellToolbar
+  // future: code: CodeCellToolbar, markdown: MarkdownCellToolbar, etc.
 } as const
 
-// Replace this with your actual logic for determining the current toolbar
-const currentToolbarType: string | null = null // e.g. 'code', 'markdown', etc.
 const currentToolbarComponent = computed(() => {
-  if (!currentToolbarType) return null
-  return toolbarComponents[currentToolbarType as keyof typeof toolbarComponents] || null
+  const kind = selectionStore.selectedKind
+  if (!kind) return null
+  return toolbarComponents[kind as keyof typeof toolbarComponents] || null
 })
 </script>
 
@@ -42,5 +40,11 @@ const currentToolbarComponent = computed(() => {
   /* Lower than MenuBar dropdown (3000) */
   position: relative;
   /* Ensure z-index works correctly */
+}
+
+.toolbar-placeholder {
+  opacity: 0.6;
+  font-size: 0.75rem;
+  padding: 0.3rem 0;
 }
 </style>

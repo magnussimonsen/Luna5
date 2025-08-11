@@ -98,3 +98,13 @@ Luna5 offers a streamlined alternative, combining symbolic algebra, geometry, pr
 ## 📜 License
 
 This project is licensed under the **MIT License**.
+
+---
+
+## 🖼️ Current UI Snapshot
+
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-08-11.png" alt="Current state of the Luna5 UI" width="900" />
+</p>
+
+<div align="center"><em>Current state of the UI (development build, subject to rapid change)</em></div>
