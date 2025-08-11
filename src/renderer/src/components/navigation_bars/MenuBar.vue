@@ -84,9 +84,9 @@
       </div>
     </DropdownMenu>
     <DropdownMenu label="Insert">
-      <div class="dropdown-menu-item">
+      <div class="dropdown-menu-item" @click="handleInsertTextCell">
         Insert Text Cell <span class="shortcut">Ctrl + 1</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item">
         Insert Graphical Calculator Cell <span class="shortcut">Ctrl + 2</span>
@@ -128,7 +128,17 @@
     </div>
     <div class="toggle-button">Hide</div>
     <div class="toggle-button">Lock</div>
-    <div class="toggle-button">Portrait</div>
+
+    <!-- Workspace Layout Toggle -->
+    <div
+      class="toggle-button"
+      :class="{ active: isA4Preview }"
+      :title="isA4Preview ? 'Switch to fluid layout' : 'Switch to A4 preview layout'"
+      @click="handleToggleWorkspaceLayout"
+    >
+      {{ isA4Preview ? 'A4 Preview' : 'A4 Preview' }}
+    </div>
+
     <div
       class="toggle-button"
       :style="
@@ -181,6 +191,8 @@ import { useSidePanelStore } from '@renderer/stores/UI/sidePanelStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
+import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
+import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { computed } from 'vue'
 
 const modalStore = useModalStore()
@@ -188,7 +200,15 @@ const sidePanelStore = useSidePanelStore()
 const themeStore = useThemeStore()
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
+const menubarStore = useMenubarStore()
+const workspaceStore = useWorkspaceStore()
+// Computed properties
+const isA4Preview = computed(() => menubarStore.isA4Preview)
 const isDarkMode = computed(() => themeStore.isDarkMode)
+// Handle workspace layout toggle
+function handleToggleWorkspaceLayout(): void {
+  menubarStore.toggleA4Preview()
+}
 
 // Placeholder handlers
 const handleNewFile = (): void => {
@@ -266,6 +286,11 @@ const handleFind = (): void => {
 }
 const handleReplace = (): void => {
   console.log('Replace clicked')
+}
+
+const handleInsertTextCell = (): void => {
+  const cell = workspaceStore.addTextCell()
+  console.log('Inserted text cell', cell.id)
 }
 
 const handleTogglePanel = (panel: string): void => {
@@ -362,6 +387,16 @@ const handleToggleDark = (): void => {
   border-radius: var(--menu-bar-button-border-radius, 4px);
 }
 
+.toggle-button.active {
+  background: var(--button-on-color, #43a047);
+  color: var(--text-color, #fff);
+}
+
+.toggle-button:hover {
+  background: var(--button-hover-color, #333);
+  color: var(--text-color, #fff);
+}
+
 .side-panel-toggle-button {
   background: var(--button-transparent-off-color, transparent);
   color: var(--text-color, #fff);
@@ -387,10 +422,5 @@ const handleToggleDark = (): void => {
   display: flex;
   gap: 0.1em;
   /* Optional: space between right buttons */
-}
-
-.toggle-button:hover {
-  background: var(--button-hover-color, #333);
-  color: var(--text-color, #fff);
 }
 </style>

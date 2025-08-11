@@ -22,4 +22,14 @@
     /* Dropdown menu */
     --dropdown-trigger-padding: var(--menu-bar-button-padding); /* top, right, bottom, left */
     --dropdown-items-padding: 0.3em 0.3em 0.3em 0.3em; /* top, right, bottom, left */
+
+
+    /* Cell container styling */
+    --cell-selected-border: #2563eb;    
+    --cell-selected-bg: rgba(37, 99, 235, 0.08);
+    --cell-container-padding: 0.5em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
+    --cell-container-border: 1px solid var(--cell-border-color);
+    --cell-container-border-radius: 6px;
+    --cell-container-background: var(--cell-bg);
+    --cell-container-box-shadow: 0 0 0 2px color-mix(in srgb, var(--cell-selected-border) 35%, transparent);
 }

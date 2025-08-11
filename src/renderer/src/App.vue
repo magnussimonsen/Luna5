@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import MenuBar from '@renderer/components/navigation_bars/MenuBar.vue'
+import WorkspaceContainer from '@renderer/components/conteiners/WorkspaceContainer.vue'
 import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
+import CellList from '@renderer/components/conteiners/CellList.vue'
 import StatusBar from '@renderer/components/navigation_bars/StatusBar.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 import GeneralSettingsModal from '@renderer/components/modals/settings_modals/SettingsModal.vue'
@@ -19,24 +21,10 @@ const modalStore = useModalStore()
     <div class="workspace-container">
       <div class="main-panel">
         <!-- Add your main app content (cells) here -->
-        TESTtext: some text
-        <p>Welcome to Luna!</p>
-        <p>Click on the side panel to open it.</p>
-        <p>Use the toolbar to access various features.</p>
-        <p>Explore the menu bar for more options.</p>
-        <p>Enjoy your coding experience!</p>
-        <p>Feel free to customize this layout as needed.</p>
-        <p>Have fun coding with Luna!</p>
-        <p>Remember to save your work frequently.</p>
-        <p>Check out the documentation for more information.</p>
-        <p>If you have any questions, feel free to ask.</p>
-        <p>Happy coding!</p>
-        <p>More test text</p>
-        <p>More test text</p>
-        <p>More test text</p>
-        <p>More test text</p>
-        <p>More test text</p>
       </div>
+      <WorkspaceContainer>
+        <CellList />
+      </WorkspaceContainer>
       <SidePanel />
     </div>
     <StatusBar />
