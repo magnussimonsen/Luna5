@@ -107,4 +107,8 @@ This project is licensed under the **MIT License**.
   <img src="./src/development-screenshots/Luna5-2025-08-11.png" alt="Current state of the Luna5 UI" width="900" />
 </p>
 
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-08-11-130446.png" alt="Current state of the Luna5 UI settings modal" width="900" />
+</p>
+
 <div align="center"><em>Current state of the UI (development build, subject to rapid change)</em></div>
