@@ -6,7 +6,7 @@ export interface Notebook {
   id: string
   title: string
   cellOrder: string[]
-  lastSelectedCellId?: string  // Store this for when user switches between notebooks
+  lastSelectedCellId?: string // Store this for when user switches between notebooks
   metadata?: Record<string, unknown>
   // When set, the notebook has been soft-deleted and lives in the recycle bin.
   deletedAt?: string

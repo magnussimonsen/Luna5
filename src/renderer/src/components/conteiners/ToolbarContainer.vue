@@ -13,12 +13,12 @@ import TextCellToolbar from '@renderer/components/toolbars/TextCellToolbar.vue'
 const selectionStore = useCellSelectionStore()
 
 const toolbarComponents = {
-  text: TextCellToolbar
+  'text-cell': TextCellToolbar
   // future: code: CodeCellToolbar, markdown: MarkdownCellToolbar, etc.
 } as const
 
 const currentToolbarComponent = computed(() => {
-  const kind = selectionStore.selectedKind
+  const kind = selectionStore.selectedCellKind
   if (!kind) return null
   return toolbarComponents[kind as keyof typeof toolbarComponents] || null
 })

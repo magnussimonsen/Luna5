@@ -118,7 +118,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       try {
         // Set the selected cell to newCell
         const selectedCellStore = useCellSelectionStore()
-        selectedCellStore.selectCell(newCell.id, 'text-cell')
+        selectedCellStore.setSelectCell(newCell.id, 'text-cell')
       } catch {
         /* ignore */
       }

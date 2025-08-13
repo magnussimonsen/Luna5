@@ -6,7 +6,7 @@
       :index="idx"
       :cell-id="cellId"
       :kind="cells[cellId].kind"
-      :selected="selectionStore.selectedId === cellId"
+      :selected="selectionStore.selectedCellId === cellId"
       :soft-locked="cells[cellId].softLocked"
       :hard-locked="cells[cellId].hardLocked"
       @select="onSelect"
@@ -55,7 +55,7 @@ function resolveCellComponent(kind: string): Component {
 
 function onSelect(id: string): void {
   const cell = cells.value[id]
-  selectionStore.selectCell(id, cell.kind)
+  selectionStore.setSelectCell(id, cell.kind)
 }
 </script>
 

@@ -6,24 +6,24 @@ export interface SelectedCellInfo {
 }
 
 interface State {
-  selected: SelectedCellInfo | null
+  selectedCell: SelectedCellInfo | null
 }
 
 export const useCellSelectionStore = defineStore('cellSelection', {
   state: (): State => ({
-    selected: null
+    selectedCell: null
   }),
   actions: {
-    selectCell(id: string, kind: string) {
-      this.selected = { id, kind }
+    setSelectCell(id: string, kind: string) {
+      this.selectedCell = { id, kind }
     },
     clearSelection() {
-      this.selected = null
+      this.selectedCell = null
     }
   },
   getters: {
-    hasSelection: (s) => !!s.selected,
-    selectedKind: (s) => s.selected?.kind || null,
-    selectedId: (s) => s.selected?.id || null
+    hasSelection: (s) => !!s.selectedCell,
+    selectedCellKind: (s) => s.selectedCell?.kind || null,
+    selectedCellId: (s) => s.selectedCell?.id || null
   }
 })

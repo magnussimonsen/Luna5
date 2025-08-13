@@ -104,7 +104,7 @@ This project is licensed under the **MIT License**.
 ## 🖼️ Current UI Snapshot
 
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-11.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna-UI-Screenshot-2025-08-13.png" alt="Current state of the Luna5 UI" width="900" />
 </p>
 
 <p align="center">
