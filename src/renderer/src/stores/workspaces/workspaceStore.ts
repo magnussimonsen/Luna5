@@ -113,7 +113,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       const workspace = this.getWorkspace()
       const notebookId = this.ensureDefaultNotebook()
       const newCell = operationsCreateTextCell(content)
-      operationsSetCellBaseInputContent(newCell, newCell.id)
+      operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
       operationsAddCellToNotebook(workspace, notebookId, newCell)
       try {
         // Set the selected cell to newCell
