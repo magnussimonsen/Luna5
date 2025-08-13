@@ -1,6 +1,7 @@
 import type { Cell } from '@renderer/types/notebook-cell-types'
 
 // A Notebook is an ordered list of cells.
+
 export interface Notebook {
   id: string
   title: string

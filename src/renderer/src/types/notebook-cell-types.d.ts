@@ -3,41 +3,46 @@
  * (Moved from notebook-core/cell-types/* for unified type management.)
  */
 
-export type CellKind = 'text' | 'markdown' | 'code' | 'python'
+export type CellKind = 'text-cell' | 'markdown-cell' | 'python-cell'
 
 export interface BaseCell {
   id: string
   kind: CellKind
   createdAt: string
   updatedAt: string
-  locked?: boolean
+  softLocked?: boolean
+  hardLocked?: boolean
   hidden?: boolean
-  trashed?: boolean
+  softDeleted?: boolean
+  hardDeleted?: boolean // If true the cell is listed for permanent deletion
+  baseInputContent?: string // Mostly for development
+  baseOutputContent?: string // Mostly for development
   metadata?: Record<string, unknown>
 }
 
 export interface TextCell extends BaseCell {
-  kind: 'text'
+  kind: 'text-cell'
   source: string
+  inputContent?: string
+  outputContent?: string
+  errorContent?: string
 }
 
 export interface MarkdownCell extends BaseCell {
-  kind: 'markdown'
+  kind: 'markdown-cell'
   source: string
+  inputContent?: string
+  outputContent?: string
+  errorContent?: string
 }
 
-export interface CodeCell extends BaseCell {
-  kind: 'code' | 'python'
-  language: string
-  source: string
-  outputs: unknown[]
-  status?: 'idle' | 'running' | 'error' | 'success'
-  error?: { message: string; stack?: string } | null
-}
-
-export interface PythonCell extends CodeCell {
-  kind: 'python'
+export interface PythonCell extends BaseCell {
+  kind: 'python-cell'
   language: 'python'
+  source: string
+  inputContent?: string
+  outputContent?: string // this can be for example stdout from pyodide (inc. errors this must be captured)
+  errorContent?: string
 }
 
 export type Cell = TextCell | MarkdownCell | PythonCell

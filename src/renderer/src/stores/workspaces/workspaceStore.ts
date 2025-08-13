@@ -4,15 +4,34 @@ import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import type { TextCell } from '@renderer/types/notebook-cell-types'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { uuid } from '@renderer/code/notebook-core/utils/id-utils'
+import {
+  createNotebook as operationsCreateNotebook,
+  createTextCell as operationsCreateTextCell,
+  addCellToNotebook as operationsAddCellToNotebook,
+  deleteNotebookSoft as operationsDeleteNotebookSoft
+} from '@renderer/code/notebook-core/operations'
+import { setCellContent as operationsSetCellBaseInputContent } from '@renderer/code/notebook-core/operations/cells/set-cell-content'
 
-interface State {
+interface WorkspaceState {
   workspace: Workspace | null
   initialized: boolean
   currentNotebookId: string | null
 }
 
+/** EXPLANATION
+ * The workspace interface is defined in the schema.ts
+   export interface Workspace {
+   version: 1 (not used)
+   notebooks: Record<string notebook ID, Notebook> (Notebook is a Record with array of cell-Ids in the notebook + other metadata)
+   cells: Record<string, Cell> (Cell is a Record<cell Id, Cell-object with cell content + metadata>)
+   recycleBin: RecycleBin
+ }
+ */
+
 export const useWorkspaceStore = defineStore('workspace', {
-  state: (): State => ({
+  state: (): WorkspaceState => ({
+    // In a pinia store the states are reactive and can be accessed
+    // in components via the getter methods
     workspace: null,
     initialized: false,
     currentNotebookId: null
@@ -46,55 +65,30 @@ export const useWorkspaceStore = defineStore('workspace', {
       return this.workspace
     },
     ensureDefaultNotebook(): string {
-      const ws = this.getWorkspace()
-      const existing = Object.keys(ws.notebooks)
+      const workspace = this.getWorkspace()
+      const existing = Object.keys(workspace.notebooks)
       if (existing.length) {
-        if (!this.currentNotebookId || !ws.notebooks[this.currentNotebookId]) {
+        if (!this.currentNotebookId || !workspace.notebooks[this.currentNotebookId]) {
           this.currentNotebookId = existing[0]
         }
         return this.currentNotebookId
       }
       const nbId = uuid()
-      ws.notebooks[nbId] = { id: nbId, title: 'Notebook 1', cellOrder: [] }
+      workspace.notebooks[nbId] = { id: nbId, title: 'Notebook 1', cellOrder: [] }
       this.currentNotebookId = nbId
       return nbId
     },
     createNotebook(title = 'New Notebook'): string {
-      const ws = this.getWorkspace()
-      const id = uuid()
-      ws.notebooks[id] = { id, title, cellOrder: [] }
-      this.currentNotebookId = id
-      return id
+      const workspace = this.getWorkspace()
+      const nb = operationsCreateNotebook(workspace, title)
+      this.currentNotebookId = nb.id
+      return nb.id
     },
     deleteNotebook(id: string): void {
-      const ws = this.getWorkspace()
-      const nb = ws.notebooks[id]
-      if (!nb) return
-      const deletedAt = new Date().toISOString()
-      // Move notebook meta into recycle bin
-      ws.recycleBin.notebooks[id] = { id, title: nb.title, deletedAt }
-      ws.recycleBin.notebookOrder.unshift(id)
-      // Record each cell position for potential future restore (cells kept in ws.cells for now)
-      nb.cellOrder.forEach((cellId, index) => {
-        if (!ws.recycleBin.cells[cellId]) {
-          ws.recycleBin.cells[cellId] = {
-            id: cellId,
-            notebookId: id,
-            originalIndex: index,
-            deletedAt
-          }
-          ws.recycleBin.cellOrder.unshift(cellId)
-        }
-      })
-      // Remove notebook from active list
-      delete ws.notebooks[id]
-      // Adjust current selection if needed
+      const workspace = this.getWorkspace()
+      const { nextNotebookId } = operationsDeleteNotebookSoft(workspace, id)
       if (this.currentNotebookId === id) {
-        const remaining = Object.keys(ws.notebooks)
-        this.currentNotebookId = remaining.length ? remaining[0] : null
-        if (!this.currentNotebookId && remaining.length === 0) {
-          // Optionally auto-create a fresh notebook later via ensureDefaultNotebook when needed
-        }
+        this.currentNotebookId = nextNotebookId
         try {
           const sel = useCellSelectionStore()
           sel.clearSelection()
@@ -104,8 +98,8 @@ export const useWorkspaceStore = defineStore('workspace', {
       }
     },
     selectNotebook(id: string): void {
-      const ws = this.getWorkspace()
-      if (ws.notebooks[id]) {
+      const workspace = this.getWorkspace()
+      if (workspace.notebooks[id]) {
         this.currentNotebookId = id
         try {
           const sel = useCellSelectionStore()
@@ -115,29 +109,20 @@ export const useWorkspaceStore = defineStore('workspace', {
         }
       }
     },
-    addTextCell(content = 'This is a test text cell'): TextCell {
-      const ws = this.getWorkspace()
+    addTextCell(content = 'function: addTextCell in workspaceStore.ts'): TextCell {
+      const workspace = this.getWorkspace()
       const notebookId = this.ensureDefaultNotebook()
-      const notebook = ws.notebooks[notebookId]
-      const id = uuid()
-      const now = new Date().toISOString()
-      const cell: TextCell = {
-        id,
-        kind: 'text',
-        source: content,
-        createdAt: now,
-        updatedAt: now
-      }
-      ws.cells[id] = cell
-      notebook.cellOrder.push(id)
-      // Auto-select the new cell for immediate user feedback
+      const newCell = operationsCreateTextCell(content)
+      operationsSetCellBaseInputContent(newCell, newCell.id)
+      operationsAddCellToNotebook(workspace, notebookId, newCell)
       try {
-        const sel = useCellSelectionStore()
-        sel.selectCell(id, 'text')
+        // Set the selected cell to newCell
+        const selectedCellStore = useCellSelectionStore()
+        selectedCellStore.selectCell(newCell.id, 'text-cell')
       } catch {
-        // store might not be ready in some edge bootstrap cases; ignore
+        /* ignore */
       }
-      return cell
+      return newCell
     }
   }
 })

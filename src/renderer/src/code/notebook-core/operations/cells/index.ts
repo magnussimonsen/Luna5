@@ -1,2 +1,2 @@
 // Cell operation exports
-export * from './createTextCell'
+export * from './create-text-cell'

@@ -20,12 +20,13 @@
           :aria-selected="mode === 'bin'"
           @click="mode = 'bin'"
         >
-          Recycle Bin
+          Bin
         </button>
       </div>
       <div v-if="mode === 'active'" class="actions">
         <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
-          +📝
+          New
+
         </button>
         <button
           type="button"
@@ -34,7 +35,7 @@
           :disabled="!currentId"
           @click="onDelete"
         >
-          🗑️
+        Move to Bin
         </button>
       </div>
       <div v-else class="actions">

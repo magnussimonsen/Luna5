@@ -7,7 +7,8 @@
       :cell-id="cellId"
       :kind="cells[cellId].kind"
       :selected="selectionStore.selectedId === cellId"
-      :locked="cells[cellId].locked"
+      :soft-locked="cells[cellId].softLocked"
+      :hard-locked="cells[cellId].hardLocked"
       @select="onSelect"
     >
       <component :is="resolveCellComponent(cells[cellId].kind)" :cell="cells[cellId]" />
@@ -45,7 +46,7 @@ const cells = computed<Record<string, Cell>>(() => workspace.value.cells)
 
 function resolveCellComponent(kind: string): Component {
   switch (kind) {
-    case 'text':
+    case 'text-cell':
       return TextCell
     default:
       return TextCell // fallback
