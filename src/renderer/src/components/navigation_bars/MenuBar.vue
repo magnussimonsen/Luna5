@@ -45,11 +45,11 @@
     <DropdownMenu label="Edit">
       <div class="dropdown-menu-item" @click="handleMoveCellUp">
         Move cell up <span class="shortcut">Ctrl + Shift + Up</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item" @click="handleMoveCellDown">
         Move cell down <span class="shortcut">Ctrl + Shift + Down</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item" @click="handleMoveFocusToCellAbove">
         Move focus to cell above <span class="shortcut">Ctrl + Up</span>
@@ -251,12 +251,14 @@ const handleQuitLuna = async (): Promise<void> => {
   }
 }
 
-// Placeholder edit handlers
+// Edit handlers
 const handleMoveCellUp = (): void => {
-  console.log('Move cell up clicked')
+  const ok = workspaceStore.moveSelectedCellUp()
+  if (!ok) console.warn('Cannot move cell up: no selection or at top')
 }
 const handleMoveCellDown = (): void => {
-  console.log('Move cell down clicked')
+  const ok = workspaceStore.moveSelectedCellDown()
+  if (!ok) console.warn('Cannot move cell down: no selection or at bottom')
 }
 
 const handleMoveFocusToCellAbove = (): void => {

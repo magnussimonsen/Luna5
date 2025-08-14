@@ -13,14 +13,14 @@ export interface Notebook {
 }
 
 // Recycle bin entries keep origin + deletion metadata so we can restore precisely.
-export interface RecycleBinCellEntry {
+export interface RecycleBinCellEntryMetadata {
   id: string // cell id
   notebookId: string
   originalIndex: number
   deletedAt: string // ISO timestamp
 }
 
-export interface RecycleBinNotebookEntry {
+export interface RecycleBinNotebookEntryMetadata {
   id: string // notebook id
   title: string // capture title at deletion time for display
   deletedAt: string // ISO timestamp
@@ -29,8 +29,8 @@ export interface RecycleBinNotebookEntry {
 
 export interface RecycleBin {
   // Quick lookup by cell id / notebook id
-  cells: Record<string, RecycleBinCellEntry>
-  notebooks: Record<string, RecycleBinNotebookEntry>
+  cells: Record<string, RecycleBinCellEntryMetadata>
+  notebooks: Record<string, RecycleBinNotebookEntryMetadata>
   // Optional ordering arrays (most recent deletion first, etc.)
   cellOrder: string[]
   notebookOrder: string[]
