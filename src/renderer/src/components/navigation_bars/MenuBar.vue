@@ -373,7 +373,6 @@ const handleToggleDark = (): void => {
 .dropdown-menu-item:hover {
   background-color: var(--button-hover-color, red);
   border: var(--border-thickness, 2px) solid var(--button-border-hover-color, red);
-
 }
 
 .dropdown-menu-divider {
