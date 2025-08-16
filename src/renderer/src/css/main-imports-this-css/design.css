@@ -1,6 +1,7 @@
 :root {
     /* General design variables */
     --border-radius: 0px;
+    --transition-duration: 0.1s;
     --button-padding: 0.1em 0.3em 0.1em 0.3em; /* top, right, bottom, left */
 
     /* Menu bar */
@@ -22,14 +23,16 @@
     /* Dropdown menu */
     --dropdown-trigger-padding: var(--menu-bar-button-padding); /* top, right, bottom, left */
     --dropdown-items-padding: 0.3em 0.3em 0.3em 0.3em; /* top, right, bottom, left */
+    --dropdown-trigger-border-radius: var(--menu-bar-button-border-radius);
+    --dropdown-transition-duration: 0.1s;
 
     /* Border */
     --border-radius: 4px;
+    --border-thickness: 2px;
 
     /* Cell container styling */
     --cell-container-padding: 0.5em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
     --cell-container-border: 1px solid var(--cell-border-color);
-    --cell-container-border-radius: 6px;
+    --cell-container-border-radius: 4px;
     --cell-container-background: var(--cell-bg);
-    --cell-container-box-shadow: 0 0 0 2px color-mix(in srgb, var(--cell-selected-border) 35%, transparent);
 }

@@ -34,9 +34,13 @@ export function deleteNotebookSoft(
 		}
 	})
 
-	// Remove notebook from active list
+	// Remove notebook from active list and order
+	if (Array.isArray(workspace.notebookOrder)) {
+		const idx = workspace.notebookOrder.indexOf(notebookId)
+		if (idx !== -1) workspace.notebookOrder.splice(idx, 1)
+	}
 	delete workspace.notebooks[notebookId]
 
-	const remaining = Object.keys(workspace.notebooks)
-	return { nextNotebookId: remaining.length ? remaining[0] : null }
+	const nextId = workspace.notebookOrder[0] || Object.keys(workspace.notebooks)[0] || null
+	return { nextNotebookId: nextId }
 }

@@ -4,7 +4,7 @@
 import { defineStore } from 'pinia'
 import { createEmptyWorkspace } from '@renderer/code/notebook-core/model/workspace-initial'
 import type { Workspace, Notebook } from '@renderer/code/notebook-core/model/schema'
-import type { TextCell } from '@renderer/types/notebook-cell-types'
+import type { Cell, TextCell } from '@renderer/types/notebook-cell-types'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import {
   createNotebook as operationsCreateNotebook,
@@ -12,7 +12,10 @@ import {
   addCellToNotebook as operationsAddCellToNotebook,
   deleteNotebookSoft as operationsDeleteNotebookSoft,
   moveCellIdUp as operationsMoveCellIdUp,
-  moveCellIdDown as operationsMoveCellIdDown
+  moveCellIdDown as operationsMoveCellIdDown,
+  moveNotebookIdUp as operationsMoveNotebookIdUp,
+  moveNotebookIdDown as operationsMoveNotebookIdDown,
+  renameNotebook as operationsRenameNotebook
 } from '@renderer/code/notebook-core/operations'
 import { setCellContent as operationsSetCellBaseInputContent } from '@renderer/code/notebook-core/operations/cells/set-cell-content'
 
@@ -62,14 +65,47 @@ export const useWorkspaceStore = defineStore('workspace', {
     },
     // A flat list of all active notebooks (excludes recycle bin entries).
     getNotebookList: (LunaState): Notebook[] => {
-      // Note: the input parameter is the Pinia store state (LunaState), not the Workspace itself.
-      if (!LunaState.workspace) {
-        return []
-      }
-      return Object.values(LunaState.workspace.notebooks)
+      // Ordered list of active notebooks based on workspace.notebookOrder
+      if (!LunaState.workspace) return []
+      const ws = LunaState.workspace
+      const order = ws.notebookOrder || []
+      if (!order.length) return Object.values(ws.notebooks)
+      return order.map((id) => ws.notebooks[id]).filter(Boolean) as Notebook[]
     }
   },
   actions: {
+    // Insert any cell into the current notebook after the selected cell (if any),
+    // otherwise append to the end. Also selects the new cell.
+    insertCellGeneric(cell: Cell): Cell {
+      const workspace = this.getWorkspace()
+      const notebookId = this.ensureDefaultNotebook()
+      const position = this.computeInsertPositionAfterSelection(notebookId)
+      operationsAddCellToNotebook(workspace, notebookId, cell, position)
+      try {
+        const selectedCellStore = useCellSelectionStore()
+        selectedCellStore.setSelectCell(cell.id, cell.kind)
+      } catch {
+        /* ignore */
+      }
+      return cell
+    },
+    // Compute the insertion index directly after the currently selected cell (if any)
+    // for the given notebook. Returns undefined when no selection exists in this notebook
+    // so callers can append to the end by default.
+    computeInsertPositionAfterSelection(notebookId: string): number | undefined {
+      const workspace = this.getWorkspace()
+      try {
+        const sel = useCellSelectionStore()
+        const selectedId = sel.selectedCellId
+        if (!selectedId) return undefined
+        const nb = workspace.notebooks[notebookId]
+        const idx = nb.cellOrder.indexOf(selectedId)
+        if (idx === -1) return undefined
+        return idx + 1
+      } catch {
+        return undefined
+      }
+    },
     // --- Initialize Workspace ---
     initEmpty(force = false): Workspace {
       let ws = this.workspace
@@ -99,14 +135,14 @@ export const useWorkspaceStore = defineStore('workspace', {
       if (this.currentNotebookId && workspace.notebooks[this.currentNotebookId]) {
         return this.currentNotebookId
       }
-      // Otherwise, select first existing notebook if any.
-      const ids = Object.keys(workspace.notebooks)
-      if (ids.length) {
-        this.currentNotebookId = ids[0]
+      // Otherwise, select first existing notebook if any, preferring explicit order.
+      const firstId = workspace.notebookOrder?.[0] || Object.keys(workspace.notebooks)[0]
+      if (firstId) {
+        this.currentNotebookId = firstId
         return this.currentNotebookId
       }
       // None exist: create a default one via operation.
-      const nb = operationsCreateNotebook(workspace, 'Notebook 1')
+      const nb = operationsCreateNotebook(workspace, 'Notebook 1 (double click to rename)')
       this.currentNotebookId = nb.id
       return nb.id
     },
@@ -130,6 +166,26 @@ export const useWorkspaceStore = defineStore('workspace', {
           /* ignore */
         }
       }
+    },
+    // --- Notebook order movement ---
+    moveCurrentNotebookUp(): boolean {
+      const workspace = this.getWorkspace()
+      const id = this.currentNotebookId
+      if (!id) return false
+      return operationsMoveNotebookIdUp(workspace, id)
+    },
+    moveCurrentNotebookDown(): boolean {
+      const workspace = this.getWorkspace()
+      const id = this.currentNotebookId
+      if (!id) return false
+      return operationsMoveNotebookIdDown(workspace, id)
+    },
+    // --- Rename Notebook ---
+    renameNotebook(newTitle: string, id?: string): boolean {
+      const workspace = this.getWorkspace()
+      const targetId = id || this.currentNotebookId
+      if (!targetId) return false
+      return operationsRenameNotebook(workspace, targetId, newTitle)
     },
     // --- Select Notebook ---
     selectNotebook(id: string): void {
@@ -165,18 +221,11 @@ export const useWorkspaceStore = defineStore('workspace', {
     },
     //--- Cell Creation ---
     addTextCell(content = 'function: addTextCell in workspaceStore.ts'): TextCell {
-      const workspace = this.getWorkspace()
-      const notebookId = this.ensureDefaultNotebook()
+      this.getWorkspace() // ensure initialized
+      this.ensureDefaultNotebook()
       const newCell = operationsCreateTextCell(content)
       operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
-      operationsAddCellToNotebook(workspace, notebookId, newCell)
-      try {
-        // Set the selected cell to newCell
-        const selectedCellStore = useCellSelectionStore()
-        selectedCellStore.setSelectCell(newCell.id, 'text-cell')
-      } catch {
-        /* ignore */
-      }
+      this.insertCellGeneric(newCell)
       return newCell
     }
   }

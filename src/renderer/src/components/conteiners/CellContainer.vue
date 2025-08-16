@@ -152,7 +152,7 @@ function onKeyDown(e: KeyboardEvent): void {
   align-items: center;
   padding: 0.2rem 0.2rem 0.2rem;
   gap: 0rem;
-  background: var(--cell-margin-bg, lightgray);
+  background: var(--cell-margin-background-color, black);
   border-right: 1px solid var(--cell-border-color);
 }
 

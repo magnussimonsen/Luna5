@@ -40,5 +40,7 @@ export interface Workspace {
   version: 1
   notebooks: Record<string, Notebook>
   cells: Record<string, Cell>
+  // Order of active notebooks for stable display and reordering
+  notebookOrder: string[]
   recycleBin: RecycleBin
 }

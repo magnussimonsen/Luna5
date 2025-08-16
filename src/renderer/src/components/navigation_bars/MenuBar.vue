@@ -339,8 +339,10 @@ const handleToggleDark = (): void => {
 .dropdown-menu-item {
   display: flex;
   align-items: center;
+  background-color: var(--menu-background, #f9f9f9);
   /*padding: var(--button-padding);*/ /* top, right, bottom, left */
   padding: var(--dropdown-items-padding, 0.5em);
+  border: var(--border-thickness, 2px) solid var(--menu-background, #ccc);
   cursor: pointer;
   transition: background-color 0s ease;
   white-space: nowrap;
@@ -370,6 +372,8 @@ const handleToggleDark = (): void => {
 
 .dropdown-menu-item:hover {
   background-color: var(--button-hover-color, red);
+  border: var(--border-thickness, 2px) solid var(--button-border-hover-color, red);
+
 }
 
 .dropdown-menu-divider {
@@ -386,7 +390,7 @@ const handleToggleDark = (): void => {
   /* top, right, bottom, left */
   cursor: pointer;
   font: inherit;
-  border-radius: var(--menu-bar-button-border-radius, 4px);
+  border-radius: var(--menu-bar-button-border-radius, 0px);
 }
 
 .toggle-button.active {

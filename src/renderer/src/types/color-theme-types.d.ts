@@ -15,6 +15,7 @@ export type ThemeColorTypes = {
 
   cellBackground: string
   cellBorderColor: string
+  cellMarginBackgroundColor: string
 
   toolbarBackground: string
 

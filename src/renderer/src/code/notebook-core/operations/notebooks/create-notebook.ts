@@ -9,5 +9,8 @@ export function createNotebook(workspace: Workspace, title = 'Untitled Notebook'
   const id = uuid()
   const notebook: Notebook = { id, title, cellOrder: [] }
   workspace.notebooks[id] = notebook
+  // Track order of active notebooks
+  if (!Array.isArray(workspace.notebookOrder)) workspace.notebookOrder = []
+  workspace.notebookOrder.push(id)
   return notebook
 }

@@ -82,8 +82,8 @@ defineExpose({
   /* top, right, bottom, left */
   cursor: pointer;
   font: inherit;
-  border-radius: var(--border-radius);
-  transition: background 0.1s;
+  border-radius: var(--dropdown-trigger-border-radius, 0px);
+  transition: background var(--transition-duration, 0.1s);
 }
 
 .dropdown-trigger.is-active,

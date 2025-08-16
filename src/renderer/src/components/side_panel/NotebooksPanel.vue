@@ -22,11 +22,17 @@
         >
           Bin
         </button>
+        <button type="button" class="toggle-btn" :disabled="!currentId" @click="moveNotebookUp">
+          <span class="icon" aria-label="Move notebook up">↑</span>
+        </button>
+        <button type="button" class="toggle-btn" :disabled="!currentId" @click="moveNotebookDown">
+          <span class="icon" aria-label="Move notebook down">↓</span>
+        </button>
       </div>
+
       <div v-if="mode === 'active'" class="actions">
         <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
           New
-
         </button>
         <button
           type="button"
@@ -35,10 +41,22 @@
           :disabled="!currentId"
           @click="onDelete"
         >
-        Move to Bin
+          Move to Bin
         </button>
       </div>
       <div v-else class="actions">
+        <button
+          type="button"
+          class="restore-btn"
+          aria-label="Restore selected notebook"
+          :disabled="!currentId"
+          @click="onRestore"
+        >
+          Restore
+        </button>
+        <button type="button" class="empty-bin-btn" aria-label="Empty bin" @click="onEmptyBin">
+          Empty Bin
+        </button>
         <!-- Placeholder for future restore / empty bin actions -->
       </div>
     </div>
@@ -53,14 +71,28 @@
         role="listitem"
       >
         <button
+          v-if="editingId !== nb.id"
           type="button"
           class="nb-btn"
           :title="nb.title"
           :aria-current="nb.id === currentId ? 'true' : undefined"
           @click="select(nb.id)"
+          @dblclick="startEditing(nb.id, nb.title)"
         >
           <span class="nb-title">{{ nb.title }}</span>
         </button>
+        <div v-else class="nb-btn">
+          <input
+            :ref="setRenameInputRef"
+            v-model="editingTitle"
+            class="rename-input"
+            type="text"
+            @keydown.stop
+            @click.stop
+            @keyup.enter="commitRename(nb.id)"
+            @blur="commitRename(nb.id)"
+          />
+        </div>
       </li>
     </ul>
     <div v-else-if="mode === 'active'" class="empty">No notebooks yet.</div>
@@ -88,19 +120,27 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
+import type { ComponentPublicInstance } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
 const workspaceStore = useWorkspaceStore()
 
 const workspace = computed(() => workspaceStore.getWorkspace())
 const currentId = computed(() => workspaceStore.currentNotebookId)
-const notebookEntries = computed(() => Object.values(workspace.value.notebooks))
 // Mode toggle: active notebooks vs recycle bin list
 const mode = ref<'active' | 'bin'>('active')
+// Inline rename state
+const editingId = ref<string | null>(null)
+const editingTitle = ref('')
+const renameInputRef = ref<HTMLInputElement | null>(null)
+// function ref compatible with Vue's VNodeRef signature
+function setRenameInputRef(el: Element | ComponentPublicInstance | null): void {
+  renameInputRef.value = (el as HTMLInputElement | null) ?? null
+}
 
-// Active notebooks are those present in workspace.notebooks
-const activeNotebooks = computed(() => notebookEntries.value)
+// Active notebooks ordered by workspace.notebookOrder (with fallback handled in store)
+const activeNotebooks = computed(() => workspaceStore.getNotebookList)
 // Deleted notebooks come from recycle bin order for stable display
 const deletedNotebooks = computed(() => {
   const ws = workspace.value
@@ -113,12 +153,13 @@ function select(id: string): void {
 
 function onAdd(): void {
   const base = 'Notebook'
-  let idx = notebookEntries.value.length + 1
-  let title = `${base} ${idx}`
-  const titles = new Set(notebookEntries.value.map((n) => n.title))
+  const baseRename = '(double click to rename)'
+  let idx = activeNotebooks.value.length + 1
+  let title = `${base} ${idx} ${baseRename}`
+  const titles = new Set(activeNotebooks.value.map((n) => n.title))
   while (titles.has(title)) {
     idx += 1
-    title = `${base} ${idx}`
+    title = `${base} ${idx} ${baseRename}`
   }
   workspaceStore.createNotebook(title)
 }
@@ -131,6 +172,41 @@ function onDelete(): void {
   )
   if (!ok) return
   workspaceStore.deleteNotebook(currentId.value)
+}
+
+function moveNotebookUp(): void {
+  const ok = workspaceStore.moveCurrentNotebookUp()
+  if (!ok) console.warn('Cannot move notebook up')
+}
+function moveNotebookDown(): void {
+  const ok = workspaceStore.moveCurrentNotebookDown()
+  if (!ok) console.warn('Cannot move notebook down')
+}
+
+function startEditing(id: string, currentTitle: string): void {
+  editingId.value = id
+  editingTitle.value = currentTitle
+  // focus after DOM updates
+  nextTick(() => {
+    renameInputRef.value?.focus()
+    renameInputRef.value?.select()
+  })
+}
+function commitRename(id: string): void {
+  const title = editingTitle.value.trim()
+  if (title) {
+    workspaceStore.renameNotebook(title, id)
+  }
+  editingId.value = null
+  editingTitle.value = ''
+}
+
+// Bin actions (placeholders)
+function onRestore(): void {
+  console.log('Restore clicked (placeholder)')
+}
+function onEmptyBin(): void {
+  console.log('Empty Bin clicked (placeholder)')
 }
 
 function formatDate(iso?: string): string {
@@ -170,7 +246,7 @@ function formatDate(iso?: string): string {
 }
 .toggle-btn {
   cursor: pointer;
-  border: 1px solid var(--button-border-color, #ccc);
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
   background: var(--button-transparent-off-color, transparent);
   color: var(--text-color, #222);
   padding: 0.25rem 0.5rem;
@@ -198,9 +274,11 @@ function formatDate(iso?: string): string {
   gap: 0.25rem;
   align-items: center;
 }
-.add-btn {
+.add-btn,
+.restore-btn {
   cursor: pointer;
-  border: 1px solid var(--button-border-color, #ccc);
+  color: var(--text-color, blue);
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
   background: var(--button-background-color, #fff);
   padding: 0 0.4rem;
   border-radius: 4px;
@@ -210,14 +288,16 @@ function formatDate(iso?: string): string {
   font-weight: bold;
   font: inherit;
 }
-.add-btn:hover {
-  background: var(--button-border-hover-color, #2563eb);
+.add-btn:hover,
+.restore-btn:hover {
+  background: var(--button-hover-color, #2563eb);
   color: var(--text-color, #fff);
   border-color: var(--button-border-hover-color, #2563eb);
 }
-.delete-btn {
+.delete-btn,
+.empty-bin-btn {
   cursor: pointer;
-  border: 1px solid var(--button-border-color, #ccc);
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
   background: var(--button-transparent-off-color, transparent);
   color: var(--text-color, #222);
   padding: 0 0.4rem;
@@ -228,10 +308,19 @@ function formatDate(iso?: string): string {
   font-weight: bold;
   font: inherit;
 }
-.delete-btn:hover {
+.delete-btn:hover,
+.empty-bin-btn:hover {
   background: var(--delete-button-hover-color, #2563eb);
   color: var(--text-color, #fff);
-  border-color: var(--delete-button-hover-color, #2563eb);
+  border-color: var(--button-border-hover-color, #2563eb);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
 }
 
 .notebook-list {
@@ -243,13 +332,14 @@ function formatDate(iso?: string): string {
   gap: 0.25rem;
 }
 .notebook-item {
-  background: white;
+  background: var(--side-panel-background, red);
 }
 .nb-btn {
   width: 100%;
   text-align: left;
-  background: transparent;
-  border: 1px solid var(--button-border-color, #ccc);
+  color: var(--text-color, #222);
+  background: var(--side-panel-background, red);
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
   padding: 0.35rem 0.45rem;
   border-radius: 4px;
   cursor: pointer;
@@ -258,8 +348,17 @@ function formatDate(iso?: string): string {
   align-items: center;
   gap: 0.4rem;
 }
-.nb-btn:hover {
-  background: var(--button-hover-color, #2563eb);
+.rename-input {
+  width: 100%;
+  font: inherit;
+  padding: 0.2rem 0.3rem;
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
+  border-radius: 4px;
+}
+.nb-btn:hover,
+.notebook-item.is-active .nb-btn:hover {
+  /* background: var(--button-hover-color, #2563eb); */
+  border-color: var(--button-border-hover-color, #2563eb);
 }
 .notebook-item.is-active .nb-btn {
   background: var(--active-background-color, rgba(37, 99, 235, 0.08));
@@ -269,7 +368,7 @@ function formatDate(iso?: string): string {
 .nb-btn.deleted {
   opacity: 0.7;
   cursor: default;
-  border: 1px dashed var(--button-border-color, #ccc);
+  border: var(--border-thickness, 2px) dashed var(--button-border-color, #ccc);
 }
 .nb-meta {
   margin-left: auto;

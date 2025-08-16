@@ -25,6 +25,7 @@ export const useThemeStore = defineStore('theme', {
       // Cell
       cellBackground: '#ffffff',
       cellBorderColor: '#444444',
+      cellMarginBackgroundColor: '#f0f0f0',
       // Text colors
       textColor: '#222222',
       UITextColor: '#222222',
@@ -43,8 +44,8 @@ export const useThemeStore = defineStore('theme', {
       dropdownDividerColor: '#cccccc',
       // Button colors
       buttonBorderColor: '#cccccc',
-      buttonHoverColor: 'silver',
-      buttonBorderHoverColor: '#cccccc',
+      buttonHoverColor: 'lightgray',
+      buttonBorderHoverColor: 'black',
       buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'lightgreen',
@@ -72,6 +73,7 @@ export const useThemeStore = defineStore('theme', {
       // Cell
       cellBackground: '#555555',
       cellBorderColor: '#444444',
+      cellMarginBackgroundColor: '#333333',
       // Text colors
       textColor: '#cccccc',
       UITextColor: '#cccccc',
@@ -91,12 +93,12 @@ export const useThemeStore = defineStore('theme', {
       // Button colors
       buttonBorderColor: '#555555',
       buttonHoverColor: 'dimgray',
-      buttonBorderHoverColor: '#cccccc',
+      buttonBorderHoverColor: '#FFFFFF',
       buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'green',
       buttonHardOffColor: 'firebrick',
-      deleteButtonHoverColor: 'lightcoral',
+      deleteButtonHoverColor: 'red',
       /* Reset zoom button color */
       resetZoomButtonColor: 'darkgreen'
     } as ThemeColorTypes
@@ -130,6 +132,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--side-panel-background', colors.sidePanelBackground)
       root.style.setProperty('--cell-background', colors.cellBackground)
       root.style.setProperty('--cell-border-color', colors.cellBorderColor)
+      root.style.setProperty('--cell-margin-background-color', colors.cellMarginBackgroundColor)
       root.style.setProperty('--text-color', colors.textColor)
       root.style.setProperty('--ui-text-color', colors.UITextColor)
       root.style.setProperty('--border-color', colors.borderColor)

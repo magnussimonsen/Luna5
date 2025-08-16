@@ -9,6 +9,7 @@ export function createEmptyWorkspace(): Workspace {
     version: 1,
     notebooks: {},
     cells: {},
+    notebookOrder: [],
     recycleBin: {
       cells: {},
       notebooks: {},
