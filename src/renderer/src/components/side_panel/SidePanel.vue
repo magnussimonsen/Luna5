@@ -20,6 +20,7 @@
 import { ref, onBeforeUnmount, onMounted, nextTick, computed } from 'vue'
 import { useSidePanelStore } from '@renderer/stores/UI/sidePanelStore'
 import HelpPanel from './HelpPanel.vue'
+import FlashcardsPanel from './FlashcardsPanel.vue'
 import NotebooksPanel from './NotebooksPanel.vue'
 import TOCPanel from './TOCPanel.vue'
 import VariablesPanel from './VariablesPanel.vue'
@@ -35,6 +36,7 @@ let resizing: boolean = false
 
 // Map panel names to their component references
 const panelComponents = {
+  flashcards: FlashcardsPanel,
   help: HelpPanel,
   notebooks: NotebooksPanel,
   toc: TOCPanel,

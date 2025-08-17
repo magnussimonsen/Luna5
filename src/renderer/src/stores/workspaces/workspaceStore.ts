@@ -104,9 +104,45 @@ export const useWorkspaceStore = defineStore('workspace', {
     // --- View Mode ---
     setViewMode(mode: 'active' | 'bin'): void {
       this.viewMode = mode
-      if (mode === 'active') {
+      if (mode === 'bin') {
+        const ws = this.getWorkspace()
+        // If a previous bin selection is still valid, reuse it
+        const prev = this.binSelectedNotebookId
+        if (prev && this._isNotebookRepresentedInBin(ws, prev)) {
+          // Also restore last-selected cell (or first soft-deleted) for UX
+          this.selectNotebookInBin(prev)
+          return
+        }
+        // Else try current active notebook if it has items in bin
+        const cur = this.currentNotebookId
+        if (cur && this._isNotebookRepresentedInBin(ws, cur)) {
+          this.selectNotebookInBin(cur)
+          return
+        }
+        // Else pick a reasonable default: most recently deleted notebook
+        const recentDeleted = ws.recycleBin.notebookOrder[0]
+        if (recentDeleted) {
+          this.selectNotebookInBin(recentDeleted)
+          return
+        }
+        // Else pick first active notebook that has any soft-deleted cells
+        const withSoftDeleted = Object.values(ws.notebooks).find((nb) =>
+          nb.cellOrder.some((cid) => ws.cells[cid]?.softDeleted)
+        )
+        if (withSoftDeleted) {
+          this.selectNotebookInBin(withSoftDeleted.id)
+          return
+        }
+        // No bin content; leave selection null
         this.binSelectedNotebookId = null
       }
+    },
+    // Helper: Is a notebook represented in the Bin view (deleted notebook or has soft-deleted cells)?
+    _isNotebookRepresentedInBin(workspace: Workspace, notebookId: string): boolean {
+      if (workspace.recycleBin.notebooks[notebookId]) return true
+      const nb = workspace.notebooks[notebookId]
+      if (!nb) return false
+      return nb.cellOrder.some((cid) => workspace.cells[cid]?.softDeleted)
     },
     selectNotebookInBin(id: string): void {
       this.viewMode = 'bin'
@@ -297,18 +333,46 @@ export const useWorkspaceStore = defineStore('workspace', {
         if (ok) {
           // Remember this cell as the last-selected for this notebook in bin view
           this.setBinLastSelectedCell(notebookId, id)
-          // Switch to bin and select the notebook immediately
-          this.selectNotebookInBin(notebookId)
-          // Keep selection on the same cell in bin view
-          this._selectIfPossible(id)
+          // Do NOT switch to Bin; keep user in Active view per UX.
+          // Update selection to a nearby non-deleted cell (next, else previous), or clear if none.
+          try {
+            const nb = workspace.notebooks[notebookId]
+            const order = nb?.cellOrder || []
+            const idx = order.indexOf(id)
+            let nextId: string | null = null
+            // Look forward for the next non-soft-deleted cell
+            for (let i = idx + 1; i < order.length; i++) {
+              const cid = order[i]
+              if (!workspace.cells[cid]?.softDeleted) {
+                nextId = cid
+                break
+              }
+            }
+            if (!nextId) {
+              // Look backward if no next available
+              for (let i = idx - 1; i >= 0; i--) {
+                const cid = order[i]
+                if (!workspace.cells[cid]?.softDeleted) {
+                  nextId = cid
+                  break
+                }
+              }
+            }
+            if (nextId && workspace.cells[nextId]?.kind) {
+              sel.setSelectCell(nextId, workspace.cells[nextId]!.kind)
+            } else {
+              sel.clearSelection()
+            }
+          } catch {
+            /* ignore */
+          }
         }
         return ok
       } catch {
         return false
       }
     },
-    
-    
+
     // Helper: Find the first soft-deleted cell id for a given notebook id
     getFirstSoftDeletedCellId(workspace: Workspace, notebookId: string): string | null {
       const activeNb = workspace.notebooks[notebookId]

@@ -82,6 +82,13 @@
       <div class="dropdown-menu-item" @click="handleReplace">
         Replace <span class="shortcut">Ctrl + h</span> <ImplementedMark :implemented="false" />
       </div>
+      <div class="dropdown-menu-divider"></div>
+      <div class="dropdown-menu-item" @click="handleMoveCellToBin">
+        Move cell → Bin <ImplementedMark :implemented="true" />
+      </div>
+      <div class="dropdown-menu-item" @click="handleMoveNotebookToBin">
+        Move notebook → Bin <ImplementedMark :implemented="true" />
+      </div>
     </DropdownMenu>
     <DropdownMenu label="Insert">
       <div class="dropdown-menu-item" @click="handleInsertTextCell">
@@ -178,6 +185,13 @@
         @click="handleTogglePanel('help')"
       >
         <strong>Help</strong>
+      </div>
+      <div
+        class="side-panel-toggle-button"
+        :class="{ active: sidePanelStore.activePanel === 'flashcards' }"
+        @click="handleTogglePanel('flashcards')"
+      >
+        Flashcards
       </div>
     </div>
   </nav>
@@ -301,6 +315,22 @@ const handleTogglePanel = (panel: string): void => {
 
 const handleToggleDark = (): void => {
   themeStore.toggleIsDarkMode()
+}
+
+// Edit → Bin actions
+const handleMoveCellToBin = (): void => {
+  const ok = workspaceStore.softDeleteSelectedCell()
+  if (!ok) console.warn('No cell selected or cannot move to Bin')
+}
+const handleMoveNotebookToBin = (): void => {
+  const id = workspaceStore.currentNotebookId
+  if (!id) {
+    console.warn('No notebook selected to move to Bin')
+    return
+  }
+  const ok = window.confirm('Move the current notebook to the Bin?')
+  if (!ok) return
+  workspaceStore.deleteNotebook(id)
 }
 </script>
 

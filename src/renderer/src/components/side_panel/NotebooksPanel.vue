@@ -37,26 +37,17 @@
           <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
             New notebook
           </button>
-          <!-- Move selected cell to the mirrored notebook in the bin -->
-          <button
-            type="button"
-            class="delete-btn"
-            aria-label="Move selected cell to bin"
-            :disabled="!currentId"
-            @click="onSelectedCellDelete"
-          >
-            Cell &#10132; Bin
+          <!--
+          Temporarily disabled: these actions are moved to the Edit menu.
+          <button type="button" class="delete-btn" aria-label="Move selected cell to bin" :disabled="!currentId" @click="onSelectedCellDelete">
+            Cell 
+            Bin
           </button>
-          <!-- Move notebook to bin -->
-          <button
-            type="button"
-            class="delete-btn"
-            aria-label="Delete selected notebook"
-            :disabled="!currentId"
-            @click="onSelectedNotebookDelete"
-          >
-            Notebook &#10132; Bin
+          <button type="button" class="delete-btn" aria-label="Delete selected notebook" :disabled="!currentId" @click="onSelectedNotebookDelete">
+            Notebook 
+            Bin
           </button>
+          -->
         </template>
         <template v-else>
           <button
@@ -72,7 +63,7 @@
             type="button"
             class="restore-btn"
             aria-label="Restore selected notebook"
-            :disabled="!currentId"
+            :disabled="!currentId || isBinActiveNotebook"
             @click="onRestoreSelectedNotebook"
           >
             Restore notebook
@@ -261,26 +252,26 @@ function commitRename(id: string): void {
 }
 
 // Active-mode: move current notebook to Bin
+/*
 function onSelectedNotebookDelete(): void {
   if (!currentId.value) return
   const ok = window.confirm('Move this notebook to the Bin?')
   if (!ok) return
   workspaceStore.deleteNotebook(currentId.value)
 }
+*/
 
 // Active-mode: move selected cell to Bin (soft-delete)
+/*
 function onSelectedCellDelete(): void {
   const ok = workspaceStore.softDeleteSelectedCell()
   if (!ok) {
     console.warn('No cell selected or cannot delete')
     return
   }
-  // Switch to bin view and focus this notebook in bin list
-  mode.value = 'bin'
-  if (currentId.value) {
-    workspaceStore.selectNotebookInBin(currentId.value)
-  }
+  // Stay in active view per UX; selection moves to neighbor handled in store.
 }
+*/
 
 // Bin-mode: restore selected cell
 function onRestoreSelectedCell(): void {
@@ -298,7 +289,7 @@ function onRestoreSelectedNotebook(): void {
 
 function onEmptyBin(): void {
   // Use Electron native modal for confirmation
-  const electronExposed = (window.electron as unknown) as ElectronAPI & {
+  const electronExposed = window.electron as unknown as ElectronAPI & {
     confirmEmptyBin?: () => Promise<boolean>
   }
   const ask = electronExposed?.confirmEmptyBin?.()
