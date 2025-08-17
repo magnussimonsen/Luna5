@@ -7,6 +7,7 @@
 - **Use arrow functions only for:**
   - Simple one-line operations (e.g., `items.map(item => item.id)`)
   - Callback functions where context preservation is needed
+- **AVOID ARROW FUNCTIONS for anything that isn't a single one-line expression (one arrow).** Use regular functions otherwise.
 - **Avoid nested arrow functions** - use named functions or extract logic instead
 - **Prefer explicit returns** over implicit returns for multi-line functions
 
@@ -41,129 +42,16 @@
 - **Use descriptive file names** that clearly indicate the domain
 - **Import types explicitly** using `import type` for better tree-shaking
 
-**❌ Avoid - Inline type definitions:**
-```typescript
-// UserProfile.vue - types mixed with component logic
-interface User {
-  id: string
-  name: string
-  email: string
-}
+<!-- Examples omitted for brevity. Keep types in dedicated files under src/renderer/src/types and import with `import type`. -->
 
-interface UserPermissions {
-  canEdit: boolean
-  canDelete: boolean
-}
+### Architecture Example (Condensed)
 
-export default defineComponent({
-  // component logic
-})
-```
+- Avoid placing all logic in a single file; extract validation/formatting/permissions/preferences into small utilities.
+- Compose utilities in composables and keep components focused on UI.
 
-**✅ Prefer - Centralized type definitions:**
-```typescript
-// types/user-types.ts
-export interface User {
-  id: string
-  name: string
-  email: string
-}
+### Examples (Condensed)
 
-export interface UserPermissions {
-  canEdit: boolean
-  canDelete: boolean
-}
-
-export type UserWithPermissions = User & UserPermissions
-
-// UserProfile.vue - clean imports
-import type { User, UserPermissions } from '@renderer/types/user-types'
-
-export default defineComponent({
-  // component logic focused on functionality
-})
-```
-
-### Architecture Example
-
-**❌ Avoid - Everything in one file:**
-```javascript
-// UserProfile.vue - bloated component
-export default {
-  setup() {
-    const processUserData = (rawUser) => {
-      const validated = validateUserData(rawUser)
-      const formatted = formatUserDisplay(validated)
-      const permissions = calculatePermissions(formatted)
-      return addDisplayPreferences(permissions)
-    }
-    
-    const validateUserData = (user) => { /* validation logic */ }
-    const formatUserDisplay = (user) => { /* formatting logic */ }
-    // ... more functions mixed with component logic
-  }
-}
-```
-
-**✅ Prefer - Modular approach:**
-```javascript
-// utils/user-validation.ts
-export const validateUserData = (user) => { /* validation logic */ }
-
-// utils/user-formatting.ts  
-export const formatUserDisplay = (user) => { /* formatting logic */ }
-
-// utils/user-permissions.ts
-export const calculatePermissions = (user) => { /* permission logic */ }
-
-// utils/user-preferences.ts
-export const addDisplayPreferences = (user) => { /* preference logic */ }
-
-// composables/user-processing.ts
-import { validateUserData } from '@renderer/utils/user-validation'
-import { formatUserDisplay } from '@renderer/utils/user-formatting'
-import { calculatePermissions } from '@renderer/utils/user-permissions'
-import { addDisplayPreferences } from '@renderer/utils/user-preferences'
-
-export const useUserProcessing = () => {
-  const processUserData = (rawUser) => {
-    return rawUser
-      |> validateUserData
-      |> formatUserDisplay  
-      |> calculatePermissions
-      |> addDisplayPreferences
-  }
-  
-  return { processUserData }
-}
-
-// UserProfile.vue - clean component
-import { useUserProcessing } from '@renderer/composables/user-processing'
-
-export default {
-  setup() {
-    const { processUserData } = useUserProcessing()
-    // Focus only on component-specific logic
-  }
-}
-```
-
-### Examples
-
-**❌ Avoid:**
-```javascript
-const result = users.filter(u => u.active).map(u => ({...u, name: u.firstName + ' ' + u.lastName})).sort((a, b) => a.name.localeCompare(b.name))
-```
-
-**✅ Prefer:**
-```javascript
-const activeUsers = users.filter(user => user.active)
-const usersWithFullName = activeUsers.map(user => ({
-  ...user,
-  name: `${user.firstName} ${user.lastName}`
-}))
-const sortedUsers = usersWithFullName.sort((a, b) => a.name.localeCompare(b.name))
-```
+- Avoid long chained one-liners; split into named steps for readability (filter → map → sort).
 
 ## Naming Conventions
 
