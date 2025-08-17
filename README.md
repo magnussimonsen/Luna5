@@ -104,7 +104,19 @@ This project is licensed under the **MIT License**.
 ## 🖼️ Current UI Snapshot
 
 <p align="center">
-  <img src="./src/development-screenshots/Luna-UI-Screenshot-2025-08-13.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-1.png" alt="Current state of the Luna5 UI" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-08-17-2.png" alt="Current state of the Luna5 UI" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-08-17-3.png" alt="Current state of the Luna5 UI" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-08-17-4.png" alt="Current state of the Luna5 UI" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-08-17-5.png" alt="Current state of the Luna5 UI" width="900" />
 </p>
 
 <p align="center">
