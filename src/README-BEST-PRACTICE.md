@@ -51,7 +51,7 @@
 
 ### Examples (Condensed)
 
-- Avoid long chained one-liners; split into named steps for readability (filter → map → sort).
+- Avoid long, chained one-liners. Break the work into separate, clearly named steps (e.g., first filter, then map, then sort) for readability.
 
 ## Naming Conventions
 
