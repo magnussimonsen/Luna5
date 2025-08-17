@@ -6,6 +6,7 @@
       :index="idx"
       :cell-id="cellId"
       :kind="cells[cellId].kind"
+      :in-bin="workspaceStore.viewMode === 'bin'"
       :selected="selectionStore.selectedCellId === cellId"
       :soft-locked="cells[cellId].softLocked"
       :hard-locked="cells[cellId].hardLocked"
@@ -40,7 +41,29 @@ const currentNotebook = computed(() => {
   return ws.notebooks[workspaceStore.currentNotebookId] || null
 })
 
-const orderedCellIds = computed(() => currentNotebook.value?.cellOrder || [])
+// Compute ordered cell ids based on view mode and bin selection
+const orderedCellIds = computed(() => {
+  const ws = workspace.value
+  const mode = workspaceStore.viewMode
+  if (mode === 'active') {
+    const nb = currentNotebook.value
+    if (!nb) return []
+    return nb.cellOrder.filter((cid) => !ws.cells[cid]?.softDeleted)
+  }
+  // Bin mode
+  const binId = workspaceStore.binSelectedNotebookId
+  if (!binId) return []
+  // If the selected bin notebook still exists (active notebook with soft-deleted cells),
+  // show only its soft-deleted cells in original order
+  const activeNb = ws.notebooks[binId]
+  if (activeNb) {
+    return activeNb.cellOrder.filter((cid) => ws.cells[cid]?.softDeleted)
+  }
+  // Otherwise, the notebook itself was deleted. Build list from recycleBin metadata ordered by originalIndex
+  const entries = Object.values(ws.recycleBin.cells).filter((meta) => meta.notebookId === binId)
+  entries.sort((a, b) => a.originalIndex - b.originalIndex)
+  return entries.map((e) => e.id).filter((cid) => !!ws.cells[cid])
+})
 
 const cells = computed<Record<string, Cell>>(() => workspace.value.cells)
 

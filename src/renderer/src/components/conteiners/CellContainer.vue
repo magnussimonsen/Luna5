@@ -4,6 +4,7 @@
     class="cell-container"
     :class="{
       'is-selected': selected,
+      'is-in-bin': inBin,
       'is-locked': locked,
       'is-disabled': disabled
     }"
@@ -45,6 +46,7 @@ interface Props {
   cellId: string
   kind: string
   selected?: boolean
+  inBin?: boolean
   locked?: boolean
   disabled?: boolean
 }
@@ -125,6 +127,17 @@ function onKeyDown(e: KeyboardEvent): void {
   border-color: var(--active-border-color);
   border: solid 2px var(--active-border-color);
   background: var(transparent, yellow);
+}
+
+/* Bin view styling */
+.cell-container.is-in-bin {
+  border-style: dashed;
+  opacity: 0.9;
+}
+.cell-container.is-in-bin.is-selected {
+  opacity: 1;
+  border-color: var(--active-border-color);
+  background: var(--active-background-color, rgba(37, 99, 235, 0.08));
 }
 
 /* Left bar removed for simpler visual; reintroduce if stronger affordance needed */

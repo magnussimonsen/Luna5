@@ -1,11 +1,12 @@
 <template>
   <div class="notebooks-panel">
     <div class="header">
-      <div class="toggle-group" role="tablist" aria-label="Notebook views">
+      <!-- Row 1: view toggles + move up/down -->
+      <div class="row" role="tablist" aria-label="Notebook views">
         <button
           type="button"
-          :class="mode === 'active' && 'is-active'"
           class="toggle-btn"
+          :class="mode === 'active' && 'is-active'"
           role="tab"
           :aria-selected="mode === 'active'"
           @click="mode = 'active'"
@@ -14,8 +15,8 @@
         </button>
         <button
           type="button"
-          :class="mode === 'bin' && 'is-active'"
           class="toggle-btn"
+          :class="mode === 'bin' && 'is-active'"
           role="tab"
           :aria-selected="mode === 'bin'"
           @click="mode = 'bin'"
@@ -30,39 +31,59 @@
         </button>
       </div>
 
-      <div v-if="mode === 'active'" class="actions">
-        <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
-          New
-        </button>
-        <button
-          type="button"
-          class="delete-btn"
-          aria-label="Delete selected notebook"
-          :disabled="!currentId"
-          @click="onDelete"
-        >
-          Move to Bin
-        </button>
-      </div>
-      <div v-else class="actions">
-        <button
-          type="button"
-          class="restore-btn"
-          aria-label="Restore selected notebook"
-          :disabled="!currentId"
-          @click="onRestore"
-        >
-          Restore
-        </button>
-        <button type="button" class="empty-bin-btn" aria-label="Empty bin" @click="onEmptyBin">
-          Empty Bin
-        </button>
-        <!-- Placeholder for future restore / empty bin actions -->
+      <!-- Row 2: action buttons (depends on mode) -->
+      <div class="row">
+        <template v-if="mode === 'active'">
+          <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
+            New notebook
+          </button>
+          <!-- Move selected cell to the mirrored notebook in the bin -->
+          <button
+            type="button"
+            class="delete-btn"
+            aria-label="Move selected cell to bin"
+            :disabled="!currentId"
+            @click="onSelectedCellDelete"
+          >
+            Cell &#10132; Bin
+          </button>
+          <!-- Move notebook to bin -->
+          <button
+            type="button"
+            class="delete-btn"
+            aria-label="Delete selected notebook"
+            :disabled="!currentId"
+            @click="onSelectedNotebookDelete"
+          >
+            Notebook &#10132; Bin
+          </button>
+        </template>
+        <template v-else>
+          <button
+            type="button"
+            class="restore-btn"
+            aria-label="Restore selected notebook"
+            :disabled="!currentId || !isBinActiveNotebook"
+            @click="onRestoreSelectedCell"
+          >
+            Restore cell
+          </button>
+          <button
+            type="button"
+            class="restore-btn"
+            aria-label="Restore selected notebook"
+            :disabled="!currentId"
+            @click="onRestoreSelectedNotebook"
+          >
+            Restore notebook
+          </button>
+          <button type="button" class="empty-bin-btn" aria-label="Empty bin" @click="onEmptyBin">
+            Empty Bin
+          </button>
+        </template>
       </div>
     </div>
-    <!-- Here we need a v-if that toggles between rendering the notebook-list of noteooks that are not deleted
-     and the notebook-list of notebooks that are deleted, plus a notbook that is on top that contains all the cells that are
-     deleted without deleting a notebook -->
+    <!-- Active notebooks list -->
     <ul v-if="mode === 'active' && activeNotebooks.length" class="notebook-list" role="list">
       <li
         v-for="nb in activeNotebooks"
@@ -109,10 +130,16 @@
         class="notebook-item is-deleted"
         role="listitem"
       >
-        <div class="nb-btn deleted" :title="nb.title">
+        <button
+          type="button"
+          class="nb-btn deleted"
+          :class="[nb.id === currentId && 'is-active']"
+          :title="nb.title"
+          @click="workspaceStore.selectNotebookInBin(nb.id)"
+        >
           <span class="nb-title">{{ nb.title }}</span>
           <span class="nb-meta">{{ formatDate(nb.deletedAt) }}</span>
-        </div>
+        </button>
       </li>
     </ul>
     <div v-else-if="mode === 'bin'" class="empty">Bin is empty.</div>
@@ -123,13 +150,26 @@
 import { computed, nextTick, ref } from 'vue'
 import type { ComponentPublicInstance } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
+import type { ElectronAPI } from '@electron-toolkit/preload'
 
 const workspaceStore = useWorkspaceStore()
 
 const workspace = computed(() => workspaceStore.getWorkspace())
-const currentId = computed(() => workspaceStore.currentNotebookId)
-// Mode toggle: active notebooks vs recycle bin list
-const mode = ref<'active' | 'bin'>('active')
+// Bind mode to store viewMode
+const mode = computed<'active' | 'bin'>({
+  get: () => workspaceStore.viewMode,
+  set: (m) => workspaceStore.setViewMode(m)
+})
+const currentId = computed(() =>
+  mode.value === 'bin' ? workspaceStore.binSelectedNotebookId : workspaceStore.currentNotebookId
+)
+// In bin mode, only allow restoring a cell if the selected bin notebook still exists (active)
+const isBinActiveNotebook = computed(() => {
+  if (mode.value !== 'bin') return false
+  const id = workspaceStore.binSelectedNotebookId
+  if (!id) return false
+  return !!workspace.value.notebooks[id]
+})
 // Inline rename state
 const editingId = ref<string | null>(null)
 const editingTitle = ref('')
@@ -141,10 +181,39 @@ function setRenameInputRef(el: Element | ComponentPublicInstance | null): void {
 
 // Active notebooks ordered by workspace.notebookOrder (with fallback handled in store)
 const activeNotebooks = computed(() => workspaceStore.getNotebookList)
-// Deleted notebooks come from recycle bin order for stable display
-const deletedNotebooks = computed(() => {
+// Bin notebooks list = deleted notebooks + active notebooks that have soft-deleted cells
+type BinListItem = { id: string; title: string; deletedAt?: string }
+const deletedNotebooks = computed<BinListItem[]>(() => {
   const ws = workspace.value
-  return ws.recycleBin.notebookOrder.map((id) => ws.recycleBin.notebooks[id])
+  const binDeleted: BinListItem[] = ws.recycleBin.notebookOrder.map(
+    (id) => ws.recycleBin.notebooks[id]
+  )
+  // Active notebooks which have at least one soft-deleted cell
+  const activeWithDeleted: BinListItem[] = activeNotebooks.value
+    .filter((nb) => nb.cellOrder.some((cid) => ws.cells[cid]?.softDeleted))
+    .map((nb) => {
+      // Compute latest deletedAt from recycleBin entries for this notebook
+      let latest: string | undefined
+      for (const cid of nb.cellOrder) {
+        const meta = ws.recycleBin.cells[cid]
+        if (meta && meta.notebookId === nb.id) {
+          const ts = meta.deletedAt
+          if (!latest || ts > latest) latest = ts
+        }
+      }
+      return { id: nb.id, title: nb.title, deletedAt: latest }
+    })
+  // Merge by id, prefer deleted notebook meta (it has a deletedAt)
+  const seen = new Set<string>()
+  const merged: BinListItem[] = []
+  for (const item of binDeleted) {
+    merged.push(item)
+    seen.add(item.id)
+  }
+  for (const item of activeWithDeleted) {
+    if (!seen.has(item.id)) merged.push(item)
+  }
+  return merged
 })
 
 function select(id: string): void {
@@ -162,16 +231,6 @@ function onAdd(): void {
     title = `${base} ${idx} ${baseRename}`
   }
   workspaceStore.createNotebook(title)
-}
-
-function onDelete(): void {
-  if (!currentId.value) return
-  // Simple confirm for now; replace with modal later
-  const ok = window.confirm(
-    'Delete this notebook? It will move to the Bin and can be restored later.'
-  )
-  if (!ok) return
-  workspaceStore.deleteNotebook(currentId.value)
 }
 
 function moveNotebookUp(): void {
@@ -201,12 +260,57 @@ function commitRename(id: string): void {
   editingTitle.value = ''
 }
 
-// Bin actions (placeholders)
-function onRestore(): void {
-  console.log('Restore clicked (placeholder)')
+// Active-mode: move current notebook to Bin
+function onSelectedNotebookDelete(): void {
+  if (!currentId.value) return
+  const ok = window.confirm('Move this notebook to the Bin?')
+  if (!ok) return
+  workspaceStore.deleteNotebook(currentId.value)
 }
+
+// Active-mode: move selected cell to Bin (soft-delete)
+function onSelectedCellDelete(): void {
+  const ok = workspaceStore.softDeleteSelectedCell()
+  if (!ok) {
+    console.warn('No cell selected or cannot delete')
+    return
+  }
+  // Switch to bin view and focus this notebook in bin list
+  mode.value = 'bin'
+  if (currentId.value) {
+    workspaceStore.selectNotebookInBin(currentId.value)
+  }
+}
+
+// Bin-mode: restore selected cell
+function onRestoreSelectedCell(): void {
+  const ok = workspaceStore.restoreSelectedCellFromBin()
+  if (!ok) console.warn('No cell selected to restore')
+}
+
+// Bin-mode: restore selected notebook (from recycle bin)
+function onRestoreSelectedNotebook(): void {
+  const id = currentId.value
+  if (!id) return
+  const ok = workspaceStore.restoreNotebookFromBin(id)
+  if (!ok) console.warn('No notebook to restore for id:', id)
+}
+
 function onEmptyBin(): void {
-  console.log('Empty Bin clicked (placeholder)')
+  // Use Electron native modal for confirmation
+  const electronExposed = (window.electron as unknown) as ElectronAPI & {
+    confirmEmptyBin?: () => Promise<boolean>
+  }
+  const ask = electronExposed?.confirmEmptyBin?.()
+  if (!ask) {
+    // Fallback to web confirm if API missing
+    const ok = window.confirm('Permanently delete all items in the Bin? This cannot be undone.')
+    if (ok) workspaceStore.emptyRecycleBin()
+    return
+  }
+  ask.then((ok) => {
+    if (ok) workspaceStore.emptyRecycleBin()
+  })
 }
 
 function formatDate(iso?: string): string {
@@ -232,16 +336,18 @@ function formatDate(iso?: string): string {
 }
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.4rem;
 }
+
 .title {
   margin: 0;
   font-size: 0.85rem;
   font-weight: 600;
 }
-.toggle-group {
+.row {
   display: flex;
+  align-items: center;
   gap: 0.25rem;
 }
 .toggle-btn {
@@ -269,11 +375,6 @@ function formatDate(iso?: string): string {
   color: var(--text-color);
   border-color: var(--button-border-hover-color, #1d4ed8);
 }
-.actions {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-}
 .add-btn,
 .restore-btn {
   cursor: pointer;
@@ -287,6 +388,11 @@ function formatDate(iso?: string): string {
   /*Bold text*/
   font-weight: bold;
   font: inherit;
+}
+.restore-btn:disabled {
+  opacity: 0.45;
+  filter: grayscale(0.6) blur(0.5px);
+  cursor: not-allowed;
 }
 .add-btn:hover,
 .restore-btn:hover {
@@ -364,10 +470,14 @@ function formatDate(iso?: string): string {
   background: var(--active-background-color, rgba(37, 99, 235, 0.08));
   border-color: var(--active-border-color, #2563eb);
 }
+.nb-btn.is-active {
+  background: var(--active-background-color, rgba(37, 99, 235, 0.08));
+  border-color: var(--active-border-color, #2563eb);
+}
 .notebook-item.is-deleted .nb-btn,
 .nb-btn.deleted {
   opacity: 0.7;
-  cursor: default;
+  cursor: pointer;
   border: var(--border-thickness, 2px) dashed var(--button-border-color, #ccc);
 }
 .nb-meta {

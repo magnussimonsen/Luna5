@@ -12,7 +12,8 @@ if (process.contextIsolated) {
     console.log('Exposing quitApp in contextBridge')
     contextBridge.exposeInMainWorld('electron', {
       ...electronAPI,
-      quitApp: () => ipcRenderer.invoke('quit-app')
+      quitApp: () => ipcRenderer.invoke('quit-app'),
+      confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin')
     })
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
@@ -23,7 +24,8 @@ if (process.contextIsolated) {
   // @ts-ignore (define in dts)
   window.electron = {
     ...electronAPI,
-    quitApp: () => ipcRenderer.invoke('quit-app')
+    quitApp: () => ipcRenderer.invoke('quit-app'),
+    confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin')
   }
   // @ts-ignore (define in dts)
   window.api = api

@@ -1,16 +1,22 @@
-# To-do
+# To‑do
 
 ## Cell Container
 - Allow deselecting a cell by clicking the cell margin (outside the cell content).
 
-## Notebook Management
-- In the Bin panel, mirror the notebook list structure but render only deleted cells.
-- Ensure deleted notebooks appear at the bottom of the notebook list.
-- Persist and restore the last selected cell for each notebook when switching between notebooks (currently implemented but not working).
-- For the side panel’s Notebooks and Bin toggle buttons, disable the hover background color when the button is selected; show a hover background only when it’s not selected.
-- In the Bin, provide separate restore actions: (1) restore the entire notebook; (2) restore only the selected cell within a deleted notebook. Decide on the UI for these controls. One option is to use two rows of controls in the Notebooks side panel:
-		- When the Bin is selected, the second row shows: “Restore cell,” “Restore notebook,” “Delete cell,” and “Delete notebook.”
-		- When Notebooks is selected, the second row shows: “New,” “Move selected cell to the Bin,” and “Move notebook to the Bin.”
-- Implement restore actions for deleted cells and deleted notebooks. For simplicity and consistency, restored cells should be appended to the end of the cell order in the selected notebook, and restored notebooks should be appended to the end of the notebook order.
-- Implement a “Hide cell” button in the menu bar.
-- Implement a “Lock cell” button in the menu bar.
+## Notebook & Bin UX
+
+- Do not auto-switch focus from the Notebooks panel to the Bin when moving items to Bin.
+	- After moving a notebook to Bin: stay in Notebooks view and select the next/previous notebook.
+	- After moving a cell to Bin: stay in Notebooks view and maintain a sensible cell selection (next/none).
+
+## Menu bar tidy‑up
+- Move “Cell → Bin” and “Notebook → Bin” actions from the Notebooks side panel into the Edit menu to reduce accidental clicks.
+	- For now, comment out the side‑panel buttons (keep code paths intact) in case we choose to re‑enable them later.
+
+## Operations behavior
+- Restoring a cell should keep it in place (was previously append); confirm final rule and update tests/notes.
+- Restored notebooks should be appended to the end of the notebook order.
+
+## Extras
+- Add a “Hide cell” command in the menu bar.
+- Add a “Lock cell” command in the menu bar.
