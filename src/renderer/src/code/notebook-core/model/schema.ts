@@ -34,6 +34,11 @@ export interface RecycleBin {
   // Optional ordering arrays (most recent deletion first, etc.)
   cellOrder: string[]
   notebookOrder: string[]
+  // UI/session metadata for Bin view
+  // Remember the last selected notebook when viewing the Bin
+  lastSelectedNotebookId?: string
+  // Remember the last selected Bin cell per notebook (active or deleted)
+  lastSelectedBinCellIdByNotebook?: Record<string, string | null>
 }
 
 export interface Workspace {
@@ -43,4 +48,7 @@ export interface Workspace {
   // Order of active notebooks for stable display and reordering
   notebookOrder: string[]
   recycleBin: RecycleBin
+  // UI/session metadata for Notebooks view
+  // Remember which notebook was last selected in the Notebooks view
+  lastSelectedNotebookIdNotebooks?: string
 }

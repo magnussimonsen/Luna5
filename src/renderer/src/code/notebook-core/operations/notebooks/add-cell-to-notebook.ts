@@ -12,14 +12,14 @@ export function addCellToNotebook(
 	cell: Cell,
 	position?: number
 ): void {
-	const nb = workspace.notebooks[notebookId]
-	if (!nb) throw new Error(`Notebook ${notebookId} not found`)
+	const notebook = workspace.notebooks[notebookId]
+	if (!notebook) throw new Error(`Notebook ${notebookId} not found`)
 	// Register cell object (create or overwrite same id)
 	workspace.cells[cell.id] = cell
 	// Insert into order
-	if (typeof position === 'number' && position >= 0 && position <= nb.cellOrder.length) {
-		nb.cellOrder.splice(position, 0, cell.id)
+	if (typeof position === 'number' && position >= 0 && position <= notebook.cellOrder.length) {
+		notebook.cellOrder.splice(position, 0, cell.id)
 	} else {
-		nb.cellOrder.push(cell.id)
+		notebook.cellOrder.push(cell.id)
 	}
 }

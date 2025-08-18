@@ -134,7 +134,14 @@
       <strong>Move cell down</strong>
     </div>
     <div class="toggle-button">Hide</div>
-    <div class="toggle-button">Lock</div>
+    <div
+      class="toggle-button lock-toggle"
+      :class="{ active: isSelectedCellSoftLocked }"
+      :title="isSelectedCellSoftLocked ? 'Unlock selected cell' : 'Lock selected cell'"
+      @click="handleToggleSoftLock"
+    >
+      {{ isSelectedCellSoftLocked ? 'Lock' : 'Lock' }}
+    </div>
 
     <!-- Workspace Layout Toggle -->
     <div
@@ -207,6 +214,7 @@ import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { computed } from 'vue'
 
 const modalStore = useModalStore()
@@ -216,9 +224,15 @@ const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
 const menubarStore = useMenubarStore()
 const workspaceStore = useWorkspaceStore()
+const cellSelectionStore = useCellSelectionStore()
 // Computed properties
 const isA4Preview = computed(() => menubarStore.isA4Preview)
 const isDarkMode = computed(() => themeStore.isDarkMode)
+const isSelectedCellSoftLocked = computed(() => {
+  const ws = workspaceStore.getWorkspace()
+  const id = cellSelectionStore.selectedCellId
+  return id ? !!ws.cells[id]?.softLocked : false
+})
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
   menubarStore.toggleA4Preview()
@@ -315,6 +329,12 @@ const handleTogglePanel = (panel: string): void => {
 
 const handleToggleDark = (): void => {
   themeStore.toggleIsDarkMode()
+}
+
+// Toggle soft lock on selected cell
+const handleToggleSoftLock = (): void => {
+  const ok = workspaceStore.toggleSoftLockSelectedCell()
+  if (!ok) console.warn('No cell selected to lock/unlock')
 }
 
 // Edit → Bin actions
@@ -425,6 +445,12 @@ const handleMoveNotebookToBin = (): void => {
 .toggle-button.active {
   background: var(--button-on-color, #43a047);
   color: var(--text-color, #fff);
+}
+
+/* Locked button uses soft-locked theme color when active */
+.toggle-button.lock-toggle.active {
+  background: var(--soft-locked-border-color, orange);
+  color: var(--ui-text-color, #fff);
 }
 
 .toggle-button:hover {

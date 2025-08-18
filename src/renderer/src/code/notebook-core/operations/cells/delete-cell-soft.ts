@@ -6,11 +6,11 @@ import type { Workspace } from '../../model/schema'
  * in the workspace.recycleBin.cells map for the given notebook.
  */
 export function deleteCellSoft(workspace: Workspace, notebookId: string, cellId: string): boolean {
-  const nb = workspace.notebooks[notebookId]
+  const notebook = workspace.notebooks[notebookId]
   const cell = workspace.cells[cellId]
-  if (!nb || !cell) return false
+  if (!notebook || !cell) return false
 
-  const idx = nb.cellOrder.indexOf(cellId)
+  const idx = notebook.cellOrder.indexOf(cellId)
   if (idx === -1) return false
 
   const deletedAt = new Date().toISOString()

@@ -17,7 +17,7 @@
     @keydown="onKeyDown"
     @blur="emit('blur', cellId)"
   >
-    <div class="cell-margin">
+    <div class="cell-margin" @click.stop="onMarginClick">
       <div class="cell-index" :title="`Cell ${displayIndex}`">{{ displayIndex }}</div>
     </div>
     <div class="cell-body">
@@ -55,6 +55,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'select', cellId: string): void
+  (e: 'deselect'): void
   (e: 'focus', cellId: string): void
   (e: 'blur', cellId: string): void
   (e: 'moveUp', cellId: string): void // Dont need this. Movement of cells is handled by buttons in menubar-component
@@ -76,6 +77,17 @@ function onSelect(): void {
   if (!props.disabled) {
     emit('select', props.cellId)
     // ensure focus for keyboard navigation + visible outline
+    nextTick(() => rootEl.value?.focus())
+  }
+}
+
+function onMarginClick(): void {
+  // Click in the margin toggles selection: deselect if selected, otherwise select this cell
+  if (props.disabled) return
+  if (props.selected) {
+    emit('deselect')
+  } else {
+    emit('select', props.cellId)
     nextTick(() => rootEl.value?.focus())
   }
 }
@@ -129,6 +141,12 @@ function onKeyDown(e: KeyboardEvent): void {
   background: var(transparent, yellow);
 }
 
+/* When a cell is locked and selected, highlight with softLockedColor */
+.cell-container.is-locked.is-selected {
+  border-color: var(--soft-locked-border-color, orange);
+  border: solid 2px var(--soft-locked-border-color, orange);
+}
+
 /* Bin view styling */
 .cell-container.is-in-bin {
   border-style: dashed;
@@ -167,6 +185,16 @@ function onKeyDown(e: KeyboardEvent): void {
   gap: 0rem;
   background: var(--cell-margin-background-color, black);
   border-right: 1px solid var(--cell-border-color);
+  cursor: pointer;
+}
+
+/* Subtle affordance on hover; disabled state shows not-allowed */
+.cell-container.is-disabled .cell-margin {
+  cursor: not-allowed;
+}
+
+.cell-margin:hover {
+  border-right-color: var(--active-border-color);
 }
 
 .cell-index {

@@ -32,6 +32,8 @@ export type ThemeColorTypes = {
   activeBorderColor: string
   activeBorderColorHover: string
 
+  softLockedColor: string
+
   focusVisibleBorderColor: string
 
   sliderBackground: string

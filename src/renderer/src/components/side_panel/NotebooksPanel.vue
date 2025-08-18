@@ -6,10 +6,10 @@
         <button
           type="button"
           class="toggle-btn"
-          :class="mode === 'active' && 'is-active'"
+          :class="mode === 'notebooks' && 'is-active'"
           role="tab"
-          :aria-selected="mode === 'active'"
-          @click="mode = 'active'"
+          :aria-selected="mode === 'notebooks'"
+          @click="onClickNotebooksTab"
         >
           Notebooks
         </button>
@@ -19,7 +19,7 @@
           :class="mode === 'bin' && 'is-active'"
           role="tab"
           :aria-selected="mode === 'bin'"
-          @click="mode = 'bin'"
+          @click="onClickBinTab"
         >
           Bin
         </button>
@@ -33,7 +33,7 @@
 
       <!-- Row 2: action buttons (depends on mode) -->
       <div class="row">
-        <template v-if="mode === 'active'">
+        <template v-if="mode === 'notebooks'">
           <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
             New notebook
           </button>
@@ -75,23 +75,23 @@
       </div>
     </div>
     <!-- Active notebooks list -->
-    <ul v-if="mode === 'active' && activeNotebooks.length" class="notebook-list" role="list">
+    <ul v-if="mode === 'notebooks' && activeNotebooks.length" class="notebook-list" role="list">
       <li
-        v-for="nb in activeNotebooks"
-        :key="nb.id"
-        :class="['notebook-item', nb.id === currentId && 'is-active']"
+        v-for="notebook in activeNotebooks"
+        :key="notebook.id"
+        :class="['notebook-item', notebook.id === currentId && 'is-active']"
         role="listitem"
       >
         <button
-          v-if="editingId !== nb.id"
+          v-if="editingId !== notebook.id"
           type="button"
           class="nb-btn"
-          :title="nb.title"
-          :aria-current="nb.id === currentId ? 'true' : undefined"
-          @click="select(nb.id)"
-          @dblclick="startEditing(nb.id, nb.title)"
+          :title="notebook.title"
+          :aria-current="notebook.id === currentId ? 'true' : undefined"
+          @click="select(notebook.id)"
+          @dblclick="startEditing(notebook.id, notebook.title)"
         >
-          <span class="nb-title">{{ nb.title }}</span>
+          <span class="nb-title">{{ notebook.title }}</span>
         </button>
         <div v-else class="nb-btn">
           <input
@@ -101,13 +101,13 @@
             type="text"
             @keydown.stop
             @click.stop
-            @keyup.enter="commitRename(nb.id)"
-            @blur="commitRename(nb.id)"
+            @keyup.enter="commitRename(notebook.id)"
+            @blur="commitRename(notebook.id)"
           />
         </div>
       </li>
     </ul>
-    <div v-else-if="mode === 'active'" class="empty">No notebooks yet.</div>
+    <div v-else-if="mode === 'notebooks'" class="empty">No notebooks yet.</div>
 
     <ul
       v-if="mode === 'bin' && deletedNotebooks.length"
@@ -116,20 +116,20 @@
       aria-label="Deleted notebooks"
     >
       <li
-        v-for="nb in deletedNotebooks"
-        :key="nb.id"
+        v-for="notebook in deletedNotebooks"
+        :key="notebook.id"
         class="notebook-item is-deleted"
         role="listitem"
       >
         <button
           type="button"
           class="nb-btn deleted"
-          :class="[nb.id === currentId && 'is-active']"
-          :title="nb.title"
-          @click="workspaceStore.selectNotebookInBin(nb.id)"
+          :class="[notebook.id === currentId && 'is-active']"
+          :title="notebook.title"
+          @click="workspaceStore.selectNotebookInBin(notebook.id)"
         >
-          <span class="nb-title">{{ nb.title }}</span>
-          <span class="nb-meta">{{ formatDate(nb.deletedAt) }}</span>
+          <span class="nb-title">{{ notebook.title }}</span>
+          <span class="nb-meta">{{ formatDate(notebook.deletedAt) }}</span>
         </button>
       </li>
     </ul>
@@ -147,7 +147,7 @@ const workspaceStore = useWorkspaceStore()
 
 const workspace = computed(() => workspaceStore.getWorkspace())
 // Bind mode to store viewMode
-const mode = computed<'active' | 'bin'>({
+const mode = computed<'notebooks' | 'bin'>({
   get: () => workspaceStore.viewMode,
   set: (m) => workspaceStore.setViewMode(m)
 })
@@ -181,18 +181,18 @@ const deletedNotebooks = computed<BinListItem[]>(() => {
   )
   // Active notebooks which have at least one soft-deleted cell
   const activeWithDeleted: BinListItem[] = activeNotebooks.value
-    .filter((nb) => nb.cellOrder.some((cid) => ws.cells[cid]?.softDeleted))
-    .map((nb) => {
+    .filter((notebook) => notebook.cellOrder.some((cid) => ws.cells[cid]?.softDeleted))
+    .map((notebook) => {
       // Compute latest deletedAt from recycleBin entries for this notebook
       let latest: string | undefined
-      for (const cid of nb.cellOrder) {
+      for (const cid of notebook.cellOrder) {
         const meta = ws.recycleBin.cells[cid]
-        if (meta && meta.notebookId === nb.id) {
+        if (meta && meta.notebookId === notebook.id) {
           const ts = meta.deletedAt
           if (!latest || ts > latest) latest = ts
         }
       }
-      return { id: nb.id, title: nb.title, deletedAt: latest }
+      return { id: notebook.id, title: notebook.title, deletedAt: latest }
     })
   // Merge by id, prefer deleted notebook meta (it has a deletedAt)
   const seen = new Set<string>()
@@ -209,6 +209,20 @@ const deletedNotebooks = computed<BinListItem[]>(() => {
 
 function select(id: string): void {
   workspaceStore.selectNotebook(id)
+}
+
+// Explicit handlers for tabs to enforce restore-or-clear selection logic
+function onClickNotebooksTab(): void {
+  workspaceStore.setViewMode('notebooks')
+}
+function onClickBinTab(): void {
+  // Prefer the remembered bin notebook if available, otherwise let store decide
+  const ws = workspace.value
+  const rememberedBinId = ws.recycleBin.lastSelectedNotebookId || null
+  workspaceStore.setViewMode('bin')
+  if (rememberedBinId) {
+    workspaceStore.selectNotebookInBin(rememberedBinId)
+  }
 }
 
 function onAdd(): void {

@@ -9,20 +9,20 @@ export function deleteNotebookSoft(
 	workspace: Workspace,
 	notebookId: string
 ): { nextNotebookId: string | null } {
-	const nb = workspace.notebooks[notebookId]
-	if (!nb) return { nextNotebookId: null }
+	const notebook = workspace.notebooks[notebookId]
+	if (!notebook) return { nextNotebookId: null }
 
 	const deletedAt = new Date().toISOString()
 	// Move notebook meta into recycle bin
 	workspace.recycleBin.notebooks[notebookId] = {
 		id: notebookId,
-		title: nb.title,
+		title: notebook.title,
 		deletedAt
 	}
 	workspace.recycleBin.notebookOrder.unshift(notebookId)
 
 	// Record each cell position for potential future restore
-	nb.cellOrder.forEach((cellId, index) => {
+	notebook.cellOrder.forEach((cellId, index) => {
 		if (!workspace.recycleBin.cells[cellId]) {
 			workspace.recycleBin.cells[cellId] = {
 				id: cellId,

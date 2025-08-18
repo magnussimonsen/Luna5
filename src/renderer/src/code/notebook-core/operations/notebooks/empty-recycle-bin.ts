@@ -35,11 +35,11 @@ export function emptyRecycleBin(workspace: Workspace): void {
   for (const cellId of [...rb.cellOrder]) {
     const meta = rb.cells[cellId]
     if (!meta) continue
-    const nb = workspace.notebooks[meta.notebookId]
-    if (nb) {
+    const notebook = workspace.notebooks[meta.notebookId]
+    if (notebook) {
       // Remove from notebook order if present
-      const idx = nb.cellOrder.indexOf(cellId)
-      if (idx !== -1) nb.cellOrder.splice(idx, 1)
+      const idx = notebook.cellOrder.indexOf(cellId)
+      if (idx !== -1) notebook.cellOrder.splice(idx, 1)
     }
     // Remove the actual cell
     delete workspace.cells[cellId]

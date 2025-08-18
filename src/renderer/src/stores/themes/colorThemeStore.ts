@@ -36,6 +36,8 @@ export const useThemeStore = defineStore('theme', {
       activeBackgroundColor: 'lightgreen',
       activeBorderColor: 'lightgreen',
       activeBorderColorHover: 'lightgreen',
+      // Soft locked
+      softLockedColor: 'orange',
       // Focus-visible (for tab key outline)
       focusVisibleBorderColor: 'blue',
       // Slider colors
@@ -84,6 +86,8 @@ export const useThemeStore = defineStore('theme', {
       activeBackgroundColor: 'green',
       activeBorderColor: 'green',
       activeBorderColorHover: 'green',
+      // Soft locked
+      softLockedColor: 'orange',
       // Focus-visible (for tab key outline)
       focusVisibleBorderColor: 'blue',
       // Slider colors
@@ -140,6 +144,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--active-background-color', colors.activeBackgroundColor)
       root.style.setProperty('--active-border-color', colors.activeBorderColor)
       root.style.setProperty('--active-border-color-hover', colors.activeBorderColorHover)
+      root.style.setProperty('--soft-locked-border-color', colors.softLockedColor)
       root.style.setProperty('--focus-visible-border-color', colors.focusVisibleBorderColor)
       root.style.setProperty('--slider-background', colors.sliderBackground)
       root.style.setProperty('--dropdown-divider-color', colors.dropdownDividerColor)

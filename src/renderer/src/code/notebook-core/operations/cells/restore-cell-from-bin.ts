@@ -13,8 +13,8 @@ export function restoreCellFromBin(
   cellId: string
 ): boolean {
   const cell = workspace.cells[cellId]
-  const nb = workspace.notebooks[notebookId]
-  if (!cell || !nb) return false
+  const notebook = workspace.notebooks[notebookId]
+  if (!cell || !notebook) return false
   const meta = workspace.recycleBin.cells[cellId]
   if (!meta || meta.notebookId !== notebookId) return false
 
@@ -26,6 +26,6 @@ export function restoreCellFromBin(
   const idx = workspace.recycleBin.cellOrder.indexOf(cellId)
   if (idx !== -1) workspace.recycleBin.cellOrder.splice(idx, 1)
 
-  // Note: nb.cellOrder retains the id; we filtered it out while soft-deleted.
+  // Note: notebook.cellOrder retains the id; we filtered it out while soft-deleted.
   return true
 }
