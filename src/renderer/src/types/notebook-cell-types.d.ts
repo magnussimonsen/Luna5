@@ -15,34 +15,34 @@ export interface BaseCell {
   hidden?: boolean
   softDeleted?: boolean
   hardDeleted?: boolean // If true the cell is listed for permanent deletion
-  baseInputContent?: string // Mostly for development
-  baseOutputContent?: string // Mostly for development
+  baseCellInputContent?: string // Mostly for development
+  baseCellOutputContent?: string // Mostly for development
   metadata?: Record<string, unknown>
 }
 
 export interface TextCell extends BaseCell {
   kind: 'text-cell'
   source: string
-  inputContent?: string
-  outputContent?: string
-  errorContent?: string
+  cellInputContent?: string
+  cellOutputContent?: string // Intended for rendered output like markdown or katex (to be decided)
+  cellErrorContent?: string
 }
 
 export interface MarkdownCell extends BaseCell {
   kind: 'markdown-cell'
   source: string
-  inputContent?: string
-  outputContent?: string
-  errorContent?: string
+  cellInputContent?: string
+  cellOutputContent?: string
+  cellErrorContent?: string
 }
 
 export interface PythonCell extends BaseCell {
   kind: 'python-cell'
   language: 'python'
   source: string
-  inputContent?: string
-  outputContent?: string // this can be for example stdout from pyodide (inc. errors this must be captured)
-  errorContent?: string
+  cellInputContent?: string
+  cellOutputContent?: string // this can be for example stdout from pyodide (inc. errors this must be captured)
+  cellErrorContent?: string
 }
 
 export type Cell = TextCell | MarkdownCell | PythonCell

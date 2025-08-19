@@ -13,8 +13,7 @@
     :aria-label="ariaLabel"
     :aria-selected="selected ? 'true' : 'false'"
     tabindex="0"
-    @click="onSelect"
-    @keydown="onKeyDown"
+    @click="onSelect($event)"
     @blur="emit('blur', cellId)"
   >
     <div class="cell-margin" @click.stop="onMarginClick">
@@ -73,12 +72,32 @@ const ariaLabel = computed(
   () => `Cell ${displayIndex.value}, type ${props.kind}${props.locked ? ' (locked)' : ''}`
 )
 
-function onSelect(): void {
-  if (!props.disabled) {
-    emit('select', props.cellId)
-    // ensure focus for keyboard navigation + visible outline
-    nextTick(() => rootEl.value?.focus())
-  }
+function onSelect(e?: MouseEvent): void {
+  if (props.disabled) return
+  // Always mark as selected
+  emit('select', props.cellId)
+  // If the click originated inside an interactive/editable element, don't steal focus
+  const target = (e?.target as HTMLElement | null) || null
+  // Prefer an explicit primary editor marker, then fall back to generic editors
+  const primarySelector = '[data-primary-editor="true"]'
+  const fallbackSelector = '[contenteditable="true"], input, textarea, [role="textbox"]'
+  // Expand interactive detection so clicks on controls don't get overridden by container focus
+  const detectionSelector = `${primarySelector}, ${fallbackSelector}, button, [role="button"], a[href], select, [tabindex]:not([tabindex="-1"])`
+  const interactive = target?.closest(detectionSelector)
+  if (interactive) return
+  // Otherwise, try to focus the first inner editor; fallback to container for keyboard nav
+  nextTick(() => {
+    const contentRootEl = rootEl.value?.querySelector('.cell-content') as HTMLElement | null
+    const contentRoot = contentRootEl || rootEl.value
+    const editor =
+      (contentRoot?.querySelector(primarySelector) as HTMLElement | null) ||
+      (contentRoot?.querySelector(fallbackSelector) as HTMLElement | null)
+    if (editor) {
+      editor.focus({ preventScroll: true })
+    } else {
+      rootEl.value?.focus()
+    }
+  })
 }
 
 function onMarginClick(): void {
@@ -89,32 +108,6 @@ function onMarginClick(): void {
   } else {
     emit('select', props.cellId)
     nextTick(() => rootEl.value?.focus())
-  }
-}
-// Should be handled by buttons in menubar-component
-function onKeyDown(e: KeyboardEvent): void {
-  if (e.defaultPrevented) return
-  switch (e.key) {
-    case 'ArrowUp':
-    case 'PageUp':
-      emit('requestFocusAbove', props.cellId)
-      e.preventDefault()
-      break
-    case 'ArrowDown':
-    case 'PageDown':
-      emit('requestFocusBelow', props.cellId)
-      e.preventDefault()
-      break
-    case 'Delete':
-      emit('delete', props.cellId)
-      e.preventDefault()
-      break
-    case 'd':
-      if (e.ctrlKey || e.metaKey) {
-        emit('duplicate', props.cellId)
-        e.preventDefault()
-      }
-      break
   }
 }
 </script>

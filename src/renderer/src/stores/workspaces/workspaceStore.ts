@@ -476,9 +476,15 @@ export const useWorkspaceStore = defineStore('workspace', {
           cellSelectionStore.setSelectCell(id, workspace.cells[id]?.kind)
           this.setNotebookLastSelectedCell(notebookId, id)
           // Switch back to active mode and keep the same notebook selected
-          this.setViewMode('notebooks')
-          this.currentNotebookId = notebookId
-          this.setLastSelectedNotebookIdNotebooks(notebookId)
+          // --------------------
+          // Note: this is a UX decision to return to the active notebook view after restoring.
+          // Uncomment the following lines to enable this behavior
+          // --------------------
+          // TO THINK ABOUT: Should focus behavior Focus set from bin deleted cell -> active notebook restored cell
+          // and similar cases when moving cells and notebooks between notebooks and bin be an option in settings menu?
+          // this.setViewMode('notebooks')
+          // this.currentNotebookId = notebookId
+          // this.setLastSelectedNotebookIdNotebooks(notebookId)
         }
         return ok
       } catch {
@@ -522,6 +528,19 @@ export const useWorkspaceStore = defineStore('workspace', {
       const cell = workspace.cells[id]
       if (!cell) return false
       cell.softLocked = !cell.softLocked
+      cell.updatedAt = new Date().toISOString()
+      return true
+    },
+    // --- Set content for a given cell (e.g., from TextCell input) ---
+    setCellInputContent(cellId: string, content: string): boolean {
+      const workspace = this.getWorkspace()
+      const cell = workspace.cells[cellId]
+      if (!cell) return false
+      // Prevent writes when cell is hidden, locked or deleted (soft and hard policy)
+      if (cell.hidden || cell.hardLocked || cell.softLocked || cell.softDeleted || cell.hardDeleted)
+        return false
+      // All current cell kinds define optional cellInputContent
+      cell.cellInputContent = content
       cell.updatedAt = new Date().toISOString()
       return true
     }

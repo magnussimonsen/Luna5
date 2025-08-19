@@ -20,3 +20,6 @@
 ## Extras
 - Add a “Hide cell” command in the menu bar.
 - Add a “Lock cell” command in the menu bar.
+
+## To consider
+- Should automatic focus switching after restore/move operations between Notebooks and the Bin be configurable in Settings? For example, when restoring a deleted cell from the Bin, automatically switch to its notebook and select the restored cell. See  restoreSelectedCellFromBin() in src\renderer\src\stores\workspaces\workspaceStore.ts
