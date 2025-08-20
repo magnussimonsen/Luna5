@@ -105,8 +105,11 @@ This project is licensed under the **MIT License**.
 
 ---
 
-## 🖼️ Current UI Snapshot
+## 🖼️ Current UI Snapshots
 
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-08-20.png" alt="Hidden cell functionality added" width="900" />
+</p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-08-19.png" alt="Current state of the Luna5 UI" width="900" />
 </p>

@@ -531,6 +531,18 @@ export const useWorkspaceStore = defineStore('workspace', {
       cell.updatedAt = new Date().toISOString()
       return true
     },
+    // --- Toggle hidden on selected cell ---
+    toggleHiddenSelectedCell(): boolean {
+      const workspace = this.getWorkspace()
+      const cellSelectionStore = useCellSelectionStore()
+      const id = cellSelectionStore.selectedCellId
+      if (!id) return false
+      const cell = workspace.cells[id]
+      if (!cell) return false
+      cell.hidden = !cell.hidden
+      cell.updatedAt = new Date().toISOString()
+      return true
+    },
     // --- Set content for a given cell (e.g., from TextCell input) ---
     setCellInputContent(cellId: string, content: string): boolean {
       const workspace = this.getWorkspace()

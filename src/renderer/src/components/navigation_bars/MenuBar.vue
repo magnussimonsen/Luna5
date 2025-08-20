@@ -24,7 +24,8 @@
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item" @click="handleSaveFileForSubmission">
-        <strong>Save File For Submission</strong> <span class="shortcut-not-implemented">Ctrl + Alt + s</span>
+        <strong>Save File For Submission</strong>
+        <span class="shortcut-not-implemented">Ctrl + Alt + s</span>
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-divider"></div>
@@ -61,33 +62,51 @@
       </div>
       <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleUndo">
-        Undo <span class="shortcut-not-implemented">Ctrl + z</span> <ImplementedMark :implemented="false" />
+        Undo
+        <span class="shortcut-not-implemented">Ctrl + z</span>
+        <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item" @click="handleRedo">
-        Redo <span class="shortcut-not-implemented">Ctrl + y</span> <ImplementedMark :implemented="false" />
+        Redo
+        <span class="shortcut-not-implemented">Ctrl + y</span>
+        <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item" @click="handleCut">
-        Cut <span class="shortcut-not-implemented">Ctrl + x</span> <ImplementedMark :implemented="false" />
+        Cut
+        <span class="shortcut-not-implemented">Ctrl + x</span>
+        <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item" @click="handleCopy">
-        Copy <span class="shortcut-not-implemented">Ctrl + c</span> <ImplementedMark :implemented="false" />
+        Copy
+        <span class="shortcut-not-implemented">Ctrl + c</span>
+        <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item" @click="handlePaste">
-        Paste <span class="shortcut-not-implemented">Ctrl + v</span> <ImplementedMark :implemented="false" />
+        Paste
+        <span class="shortcut-not-implemented">Ctrl + v</span>
+        <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleFind">
-        Find <span class="shortcut-not-implemented">Ctrl + f</span> <ImplementedMark :implemented="false" />
+        Find
+        <span class="shortcut-not-implemented">Ctrl + f</span>
+        <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item" @click="handleReplace">
-        Replace <span class="shortcut-not-implemented">Ctrl + h</span> <ImplementedMark :implemented="false" />
+        Replace
+        <span class="shortcut-not-implemented">Ctrl + h</span>
+        <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleMoveCellToBin">
-        Move cell to Bin <span class="shortcut-not-implemented">Ctrl + 0</span> <ImplementedMark :implemented="true" />
+        Move cell to Bin
+        <span class="shortcut-not-implemented">Ctrl + 0</span>
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item" @click="handleMoveNotebookToBin">
-        Move notebook to Bin <span class="shortcut-not-implemented">Ctrl + Shift + 0</span><ImplementedMark :implemented="true" />
+        Move notebook to Bin
+        <span class="shortcut-not-implemented">Ctrl + Shift + 0</span>
+        <ImplementedMark :implemented="true" />
       </div>
     </DropdownMenu>
     <DropdownMenu label="Insert">
@@ -100,7 +119,8 @@
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item">
-        Insert CAS (Computer Algebra System) Cell <span class="shortcut-not-implemented">Ctrl + 3</span>
+        Insert CAS (Computer Algebra System) Cell
+        <span class="shortcut-not-implemented">Ctrl + 3</span>
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item">
@@ -123,13 +143,19 @@
         Insert Markdown Cell <span class="shortcut-not-implemented">Ctrl + 8</span>
         <ImplementedMark :implemented="false" />
       </div>
-      
     </DropdownMenu>
     <div class="toggle-button" @click="handleMoveCellUp"><strong>Move cell up </strong></div>
     <div class="toggle-button" @click="handleMoveCellDown">
       <strong>Move cell down</strong>
     </div>
-    <div class="toggle-button">Hide</div>
+    <div
+      class="toggle-button"
+      :class="{ active: isSelectedCellHidden }"
+      :title="isSelectedCellHidden ? 'Show selected cell' : 'Hide selected cell'"
+      @click="handleToggleHidden"
+    >
+      {{ isSelectedCellHidden ? 'Hide' : 'Hide' }}
+    </div>
     <div
       class="toggle-button lock-toggle"
       :class="{ active: isSelectedCellSoftLocked }"
@@ -228,6 +254,11 @@ const isSelectedCellSoftLocked = computed(() => {
   const ws = workspaceStore.getWorkspace()
   const id = cellSelectionStore.selectedCellId
   return id ? !!ws.cells[id]?.softLocked : false
+})
+const isSelectedCellHidden = computed(() => {
+  const ws = workspaceStore.getWorkspace()
+  const id = cellSelectionStore.selectedCellId
+  return id ? !!ws.cells[id]?.hidden : false
 })
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
@@ -331,6 +362,12 @@ const handleToggleDark = (): void => {
 const handleToggleSoftLock = (): void => {
   const ok = workspaceStore.toggleSoftLockSelectedCell()
   if (!ok) console.warn('No cell selected to lock/unlock')
+}
+
+// Toggle hidden on selected cell
+const handleToggleHidden = (): void => {
+  const ok = workspaceStore.toggleHiddenSelectedCell()
+  if (!ok) console.warn('No cell selected to hide/show')
 }
 
 // Edit → Bin actions

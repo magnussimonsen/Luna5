@@ -24,7 +24,7 @@ export const useThemeStore = defineStore('theme', {
       sidePanelBackground: '#f0f0f0',
       // Cell
       cellBackground: '#ffffff',
-      cellBorderColor: '#444444',
+      cellBorderColor: 'whitesmoke',
       cellMarginBackgroundColor: '#f0f0f0',
       // Text colors
       textColor: '#222222',
@@ -38,6 +38,8 @@ export const useThemeStore = defineStore('theme', {
       activeBorderColorHover: 'lightgreen',
       // Soft locked
       softLockedColor: 'orange',
+      // Hidden cell color
+      hideCellColor: 'whitesmoke',
       // Focus-visible (for tab key outline)
       focusVisibleBorderColor: 'blue',
       // Slider colors
@@ -87,7 +89,9 @@ export const useThemeStore = defineStore('theme', {
       activeBorderColor: 'green',
       activeBorderColorHover: 'green',
       // Soft locked
-      softLockedColor: 'orange',
+      softLockedColor: 'saddlebrown',
+      // Hidden cell color
+      hideCellColor: '#555555',
       // Focus-visible (for tab key outline)
       focusVisibleBorderColor: 'blue',
       // Slider colors
@@ -145,6 +149,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--active-border-color', colors.activeBorderColor)
       root.style.setProperty('--active-border-color-hover', colors.activeBorderColorHover)
       root.style.setProperty('--soft-locked-border-color', colors.softLockedColor)
+      root.style.setProperty('--hide-cell-color', colors.hideCellColor)
       root.style.setProperty('--focus-visible-border-color', colors.focusVisibleBorderColor)
       root.style.setProperty('--slider-background', colors.sliderBackground)
       root.style.setProperty('--dropdown-divider-color', colors.dropdownDividerColor)

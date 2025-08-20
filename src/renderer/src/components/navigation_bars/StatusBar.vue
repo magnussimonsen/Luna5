@@ -18,9 +18,9 @@ For now only placeholders for the buttons and sliders are implemented.
     }"
   >
     <div class="status-section left">
-      <span class="cell-type">Text Cell</span>
+      <span class="cell-type">{{ cellTypeLabel }}</span>
       <span class="divider">|</span>
-      <span class="cell-state">Editable</span>
+      <span class="cell-state">{{ cellStateLabel }}</span>
       <span class="divider">|</span>
       <span class="file-path">/path/to/current/file.luna</span>
       <button class="save-btn">Save/Not Saved</button>
@@ -35,11 +35,53 @@ For now only placeholders for the buttons and sliders are implemented.
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
+const cellSelection = useCellSelectionStore()
+const workspaceStore = useWorkspaceStore()
+
+const cellTypeLabel = computed(() => {
+  const kind = cellSelection.selectedCellKind as string | null
+  switch (kind) {
+    case 'text-cell':
+      return 'Text Cell'
+    case 'markdown-cell':
+      return 'Markdown'
+    case 'python-cell':
+      return 'Python'
+    case null:
+    default:
+      return 'No cell selected'
+  }
+})
+
+const selectedCell = computed(() => {
+  const id = cellSelection.selectedCellId as string | null
+  const ws = workspaceStore.workspace
+  if (!id || !ws) return null
+  return ws.cells[id] || null
+})
+
+const cellStateLabel = computed(() => {
+  const c = selectedCell.value as null | {
+    hidden?: boolean
+    softLocked?: boolean
+    hardLocked?: boolean
+    softDeleted?: boolean
+    hardDeleted?: boolean
+  }
+  if (!c) return 'No cell selected'
+  if (c.hidden) return 'Hidden'
+  if (c.softLocked || c.hardLocked) return 'Locked'
+  if (c.softDeleted || c.hardDeleted) return 'Deleted'
+  return 'Editable'
+})
 </script>
 
 <style scoped>

@@ -9,6 +9,7 @@
       :in-bin="workspaceStore.viewMode === 'bin'"
       :selected="selectionStore.selectedCellId === cellId"
       :locked="!!cells[cellId].softLocked"
+      :hidden="!!cells[cellId].hidden"
       @select="onSelect"
       @deselect="onDeselect"
     >

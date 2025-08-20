@@ -24,7 +24,7 @@ const { cell } = defineProps<{ cell: TextCell }>()
 const workspaceStore = useWorkspaceStore()
 const elRef = ref<HTMLDivElement | null>(null)
 const isLocked = computed<boolean>(
-  () => !!cell.softLocked || !!cell.hardLocked || !!cell.softDeleted
+  () => !!cell.hidden || !!cell.softLocked || !!cell.hardLocked || !!cell.softDeleted
 )
 
 // Keep a simple local mirror to avoid cursor jumps when external updates occur

@@ -6,7 +6,8 @@
       'is-selected': selected,
       'is-in-bin': inBin,
       'is-locked': locked,
-      'is-disabled': disabled
+      'is-disabled': disabled,
+      'is-hidden': hidden
     }"
     :data-kind="kind"
     role="group"
@@ -26,7 +27,12 @@
       -->
       <!-- Main cell content -->
       <div class="cell-content">
-        <slot />
+        <template v-if="!hidden">
+          <slot />
+        </template>
+        <template v-else>
+          <div class="cell-hidden-placeholder" aria-label="Hidden cell placeholder"></div>
+        </template>
       </div>
       <!-- 
       Optional status/footer slot 
@@ -48,6 +54,7 @@ interface Props {
   inBin?: boolean
   locked?: boolean
   disabled?: boolean
+  hidden?: boolean
 }
 
 const props = defineProps<Props>()
@@ -151,6 +158,13 @@ function onMarginClick(): void {
   background: var(--active-background-color, rgba(37, 99, 235, 0.08));
 }
 
+.cell-container.is-hidden {
+  background: var(--hide-cell-color, cyan);
+}
+.cell-container.is-hidden .cell-body {
+  padding: 0;
+}
+
 /* Left bar removed for simpler visual; reintroduce if stronger affordance needed */
 
 .cell-container {
@@ -236,6 +250,21 @@ function onMarginClick(): void {
   min-width: 0;
   padding: 0.75rem 0.9rem 0.9rem;
   gap: 0.5rem;
+}
+
+.cell-hidden-placeholder {
+  height: 1.4rem;
+  width: 100%;
+  /* Base fill color */
+  background-color: var(--hide-cell-color, red);
+  /* Diagonal stripe overlay */
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--hide-cell-stripe-color, rgba(0, 0, 0, 0.15)) 0 var(--hide-cell-stripe-size, 6px),
+    transparent var(--hide-cell-stripe-size, 6px) calc(var(--hide-cell-stripe-size, 6px) * 2)
+  );
+  opacity: 1;
+  border-radius: var(--border-radius, 0px);
 }
 
 .cell-tools {

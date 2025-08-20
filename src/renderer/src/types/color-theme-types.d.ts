@@ -33,6 +33,7 @@ export type ThemeColorTypes = {
   activeBorderColorHover: string
 
   softLockedColor: string
+  hideCellColor: string
 
   focusVisibleBorderColor: string
 
