@@ -1,0 +1,11 @@
+/* Shared hidden cell stripe style */
+.hidden-stripes-bg {
+  /* Base fill color */
+  background-color: var(--hide-cell-color, red);
+  /* Diagonal stripe overlay */
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--hide-cell-stripe-color, rgba(0, 0, 0, 0.15)) 0 var(--hide-cell-stripe-size, 6px),
+    transparent var(--hide-cell-stripe-size, 6px) calc(var(--hide-cell-stripe-size, 6px) * 2)
+  );
+}

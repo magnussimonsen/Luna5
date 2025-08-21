@@ -397,6 +397,10 @@ export const useWorkspaceStore = defineStore('workspace', {
         const cellSelectionStore = useCellSelectionStore()
         const id = cellSelectionStore.selectedCellId
         if (!id) return false
+        // Block moving to Bin when the cell is locked or hidden
+        const cell = workspace.cells[id]
+        if (!cell) return false
+        if (cell.softLocked || cell.hardLocked || cell.hidden) return false
         const ok = operationsDeleteCellSoft(workspace, notebookId, id)
         if (ok) {
           // Remember this cell as the last-selected for this notebook in bin view

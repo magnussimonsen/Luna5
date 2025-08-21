@@ -9,6 +9,8 @@ export function deleteCellSoft(workspace: Workspace, notebookId: string, cellId:
   const notebook = workspace.notebooks[notebookId]
   const cell = workspace.cells[cellId]
   if (!notebook || !cell) return false
+  // Do not allow soft-delete when locked or hidden
+  if (cell.softLocked || cell.hardLocked || cell.hidden) return false
 
   const idx = notebook.cellOrder.indexOf(cellId)
   if (idx === -1) return false

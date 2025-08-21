@@ -98,7 +98,17 @@
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-divider"></div>
-      <div class="dropdown-menu-item" @click="handleMoveCellToBin">
+      <div
+        class="dropdown-menu-item"
+        :class="{
+          disabled: isSelectedCellLocked || isSelectedCellHidden,
+          'cell-is-locked-menubar-option': isSelectedCellLocked,
+          'cell-is-hidden-menubar-option': isSelectedCellHidden,
+          'hidden-stripes-bg': isSelectedCellHidden
+        }"
+        :aria-disabled="isSelectedCellLocked || isSelectedCellHidden ? 'true' : undefined"
+        @click="handleMoveCellToBin"
+      >
         Move cell to Bin
         <span class="shortcut-not-implemented">Ctrl + 0</span>
         <ImplementedMark :implemented="true" />
@@ -260,6 +270,13 @@ const isSelectedCellHidden = computed(() => {
   const id = cellSelectionStore.selectedCellId
   return id ? !!ws.cells[id]?.hidden : false
 })
+const isSelectedCellLocked = computed(() => {
+  const ws = workspaceStore.getWorkspace()
+  const id = cellSelectionStore.selectedCellId
+  if (!id) return false
+  const c = ws.cells[id]
+  return !!(c?.softLocked || c?.hardLocked)
+})
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
   menubarStore.toggleA4Preview()
@@ -372,6 +389,10 @@ const handleToggleHidden = (): void => {
 
 // Edit → Bin actions
 const handleMoveCellToBin = (): void => {
+  if (isSelectedCellLocked.value || isSelectedCellHidden.value) {
+    console.warn('Cannot move locked/hidden cell to Bin')
+    return
+  }
   const ok = workspaceStore.softDeleteSelectedCell()
   if (!ok) console.warn('No cell selected or cannot move to Bin')
 }
@@ -464,6 +485,51 @@ const handleMoveNotebookToBin = (): void => {
 .dropdown-menu-item:hover {
   background-color: var(--button-hover-color, red);
   border: var(--border-thickness, 2px) solid var(--button-border-hover-color, red);
+}
+
+/* Disabled state: cursor only; visual styles are controlled by specific state classes */
+.dropdown-menu-item.disabled,
+.dropdown-menu-item.cell-is-locked-menubar-option,
+.dropdown-menu-item.cell-is-hidden-menubar-option {
+  cursor: not-allowed !important;
+}
+.dropdown-menu-item.disabled *,
+.dropdown-menu-item.cell-is-locked-menubar-option *,
+.dropdown-menu-item.cell-is-hidden-menubar-option * {
+  cursor: not-allowed !important;
+}
+
+/* Locked: use soft-locked theme color, keep disabled cursor */
+.dropdown-menu-item.cell-is-locked-menubar-option {
+  opacity: 0.85;
+  background-color: var(--soft-locked-border-color, orange);
+  border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
+}
+.dropdown-menu-item.cell-is-locked-menubar-option:hover {
+  background-color: var(--soft-locked-border-color, orange);
+  border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
+}
+
+/* Hidden: reuse hidden-cell stripe pattern and color tokens */
+.dropdown-menu-item.cell-is-hidden-menubar-option {
+  opacity: 0.9;
+  border: var(--border-thickness, 2px) solid var(--hide-cell-color, red);
+}
+.dropdown-menu-item.cell-is-hidden-menubar-option:hover {
+  border: var(--border-thickness, 2px) solid var(--hide-cell-color, red);
+}
+
+/* Combined state: hidden + locked.
+   - Keep hidden stripes background
+   - Use locked color for border
+   - Add a left accent bar with the locked color */
+.dropdown-menu-item.cell-is-hidden-menubar-option.cell-is-locked-menubar-option {
+  border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
+  box-shadow: inset 6px 0 0 0 var(--soft-locked-border-color, orange);
+}
+.dropdown-menu-item.cell-is-hidden-menubar-option.cell-is-locked-menubar-option:hover {
+  border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
+  box-shadow: inset 6px 0 0 0 var(--soft-locked-border-color, orange);
 }
 
 .dropdown-menu-divider {

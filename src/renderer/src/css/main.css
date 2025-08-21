@@ -2,6 +2,7 @@
 @import './main-imports-this-css/color-theme.css';
 @import './main-imports-this-css/design.css';
 @import './main-imports-this-css/fonts.css';
+@import './hidden-cell-linear-gradient-style.css';
 
 #app {
   /*Layout*/

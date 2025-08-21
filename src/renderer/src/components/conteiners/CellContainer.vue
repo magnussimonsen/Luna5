@@ -31,7 +31,10 @@
           <slot />
         </template>
         <template v-else>
-          <div class="cell-hidden-placeholder" aria-label="Hidden cell placeholder"></div>
+          <div
+            class="cell-hidden-placeholder hidden-stripes-bg"
+            aria-label="Hidden cell placeholder"
+          ></div>
         </template>
       </div>
       <!-- 
@@ -255,14 +258,6 @@ function onMarginClick(): void {
 .cell-hidden-placeholder {
   height: 1.4rem;
   width: 100%;
-  /* Base fill color */
-  background-color: var(--hide-cell-color, red);
-  /* Diagonal stripe overlay */
-  background-image: repeating-linear-gradient(
-    45deg,
-    var(--hide-cell-stripe-color, rgba(0, 0, 0, 0.15)) 0 var(--hide-cell-stripe-size, 6px),
-    transparent var(--hide-cell-stripe-size, 6px) calc(var(--hide-cell-stripe-size, 6px) * 2)
-  );
   opacity: 1;
   border-radius: var(--border-radius, 0px);
 }
