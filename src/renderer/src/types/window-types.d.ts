@@ -14,6 +14,7 @@ declare global {
         send: (channel: string, ...args: unknown[]) => void
         // Add other ipcRenderer methods as needed
       }
+      confirmYesNo?: (message: string) => Promise<boolean>
       quitApp?: () => Promise<void>
     }
   }

@@ -1,9 +1,11 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { registerQuitAppHandler } from '../renderer/src/code/ipc-main-handle-functions/quitAppHandler'
 import { registerConfirmEmptyBinHandler } from '../renderer/src/code/ipc-main-handle-functions/confirmEmptyBinHandler'
+import { registerConfirmYesNoHandler } from '../renderer/src/code/ipc-main-handle-functions/show-confirm-yes-no-dialog'
+import fs from 'fs'
 
 function createWindow(): void {
   // Create the browser window.
@@ -57,6 +59,70 @@ app.whenReady().then(() => {
   // Register IPC handlers
   registerQuitAppHandler()
   registerConfirmEmptyBinHandler()
+  registerConfirmYesNoHandler()
+
+  // Show Save dialog (default: Desktop, .luna)
+  ipcMain.handle('show-save-dialog', async () => {
+    const desktopPath = app.getPath('desktop')
+    const result = await dialog.showSaveDialog({
+      title: 'Save Luna File',
+      defaultPath: join(desktopPath, 'untitled.luna'),
+      filters: [{ name: 'Luna Files', extensions: ['luna'] }],
+      properties: ['createDirectory']
+    })
+    return result
+  })
+
+  // Save to an explicit file path
+  ipcMain.handle(
+    'save-to-existing-file',
+    async (_event, opts: { filePath: string; content: string | Buffer }) => {
+      try {
+        let dataToWrite: string | Buffer
+        if (typeof opts.content === 'string' && opts.content.match(/^[A-Za-z0-9+/=]+$/)) {
+          // Try base64 decode first
+          try {
+            dataToWrite = Buffer.from(opts.content, 'base64')
+          } catch {
+            dataToWrite = opts.content
+          }
+        } else {
+          dataToWrite = opts.content
+        }
+
+        await fs.promises.writeFile(opts.filePath, dataToWrite)
+        return { success: true, filePath: opts.filePath }
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error)
+        return { success: false, error: message }
+      }
+    }
+  )
+
+  // Save using a chosen path
+  ipcMain.handle(
+    'save-file',
+    async (_event, { filePath, content }: { filePath: string; content: string | Buffer }) => {
+      try {
+        let dataToWrite: string | Buffer
+        if (typeof content === 'string' && content.match(/^[A-Za-z0-9+/=]+$/)) {
+          try {
+            dataToWrite = Buffer.from(content, 'base64')
+          } catch {
+            dataToWrite = content
+          }
+        } else {
+          dataToWrite = content
+        }
+
+        await fs.promises.writeFile(filePath, dataToWrite)
+        return { success: true, filePath }
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error)
+        return { success: false, error: message }
+      }
+    }
+  )
 
   createWindow()
 

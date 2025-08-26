@@ -13,7 +13,9 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', {
       ...electronAPI,
       quitApp: () => ipcRenderer.invoke('quit-app'),
-      confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin')
+      confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin'),
+      confirmYesNo: (message: string): Promise<boolean> =>
+        ipcRenderer.invoke('confirm-yes-no', message)
     })
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
@@ -25,7 +27,9 @@ if (process.contextIsolated) {
   window.electron = {
     ...electronAPI,
     quitApp: () => ipcRenderer.invoke('quit-app'),
-    confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin')
+    confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin'),
+    confirmYesNo: (message: string): Promise<boolean> =>
+      ipcRenderer.invoke('confirm-yes-no', message)
   }
   // @ts-ignore (define in dts)
   window.api = api
