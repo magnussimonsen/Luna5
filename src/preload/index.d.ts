@@ -10,7 +10,9 @@ declare global {
     api: {
       // File saving and loading
       showSaveDialog: () => Promise<Electron.SaveDialogReturnValue>
-      showOpenDialog: () => Promise<Electron.OpenDialogReturnValue>
+      showOpenDialog: (options?: {
+        properties: string[]
+      }) => Promise<Electron.OpenDialogReturnValue>
       readFile: (opts: { filePath: string }) => Promise<{
         success: boolean
         filePath?: string

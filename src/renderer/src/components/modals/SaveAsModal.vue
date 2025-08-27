@@ -1,51 +1,53 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay">
-    <div class="save-as-modal">
-      <h2>Save File As</h2>
+  <teleport to="body">
+    <div v-if="isOpen" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="save-as-modal">
+        <h2>Save File As</h2>
 
-      <div class="form-group">
-        <label for="fileName">File Name:</label>
-        <div class="file-name-container">
-          <input
-            id="fileName"
-            v-model="fileName"
-            type="text"
-            placeholder="Enter file name"
-            @input="handleFileNameInput"
-          />
-          <span class="file-extension">.luna5</span>
+        <div class="form-group">
+          <label for="fileName">File Name:</label>
+          <div class="file-name-container">
+            <input
+              id="fileName"
+              v-model="fileName"
+              type="text"
+              placeholder="Enter file name"
+              @input="handleFileNameInput"
+            />
+            <span class="file-extension">.luna5</span>
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="directory">Save Location:</label>
-        <div class="directory-selector">
-          <input
-            id="directory"
-            v-model="savePath"
-            type="text"
-            readonly
-            placeholder="Select directory"
-          />
-          <button class="browse-button" @click="handleBrowseDirectory">Browse...</button>
+        <div class="form-group">
+          <label for="directory">Save Location:</label>
+          <div class="directory-selector">
+            <input
+              id="directory"
+              v-model="savePath"
+              type="text"
+              readonly
+              placeholder="Select directory"
+            />
+            <button class="browse-button" @click="handleBrowseDirectory">Browse...</button>
+          </div>
         </div>
-      </div>
 
-      <div class="preview-path">
-        <span>File will be saved as:</span>
-        <span class="full-path">{{ fullPath }}</span>
-      </div>
+        <div class="preview-path">
+          <span>File will be saved as:</span>
+          <span class="full-path">{{ fullPath }}</span>
+        </div>
 
-      <div class="modal-actions">
-        <button class="cancel-button" @click="handleCancel">Cancel</button>
-        <button class="save-button" :disabled="!isValid" @click="handleSave">Save</button>
+        <div class="modal-actions">
+          <button class="cancel-button" @click="handleCancel">Cancel</button>
+          <button class="save-button" :disabled="!isValid" @click="handleSave">Save</button>
+        </div>
       </div>
     </div>
-  </div>
+  </teleport>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { serializeAndCompress } from '@renderer/code/notebook-core/utils/compression-utils'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
@@ -58,6 +60,37 @@ const isOpen = computed(() => modalStore.isSaveAsModalOpen)
 const fileName = ref('')
 const savePath = ref('')
 const errorMessage = ref('')
+
+// Local UI lock (self-contained): prevents background interaction while modal is open
+const appRoot = (): HTMLElement | null => document.getElementById('app')
+const previousOverflow = ref<string>('')
+const lockUI = (): void => {
+  // Lock body scroll
+  previousOverflow.value = document.body.style.overflow
+  document.body.style.overflow = 'hidden'
+  // Dim and disable pointer events on the app behind the modal
+  const root = appRoot()
+  if (root) {
+    root.setAttribute('aria-hidden', 'true')
+    // inert is supported in Chromium; safe in Electron
+    try {
+      root.setAttribute('inert', '')
+    } catch {
+      // No-op: inert attribute not supported in this environment
+    }
+    ;(root as HTMLElement).style.pointerEvents = 'none'
+  }
+}
+
+const unlockUI = (): void => {
+  document.body.style.overflow = previousOverflow.value
+  const root = appRoot()
+  if (root) {
+    root.removeAttribute('aria-hidden')
+    root.removeAttribute('inert')
+    ;(root as HTMLElement).style.pointerEvents = ''
+  }
+}
 
 // Get desktop path as default save location
 const initializeDefaultPath = async (): Promise<void> => {
@@ -91,10 +124,22 @@ const initializeDefaultPath = async (): Promise<void> => {
 }
 
 // Watch for modal open to initialize default values
-watch(isOpen, (newValue): void => {
-  if (newValue) {
-    initializeDefaultPath()
-  }
+watch(
+  isOpen,
+  (newValue): void => {
+    if (newValue) {
+      lockUI()
+      initializeDefaultPath()
+    } else {
+      unlockUI()
+    }
+  },
+  { immediate: true }
+)
+
+onUnmounted((): void => {
+  // Safety: ensure lock is released if component unmounts while open
+  unlockUI()
 })
 
 // Remove invalid characters from filename
@@ -179,7 +224,7 @@ const handleSave = async (): Promise<void> => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
 }
 
 .save-as-modal {

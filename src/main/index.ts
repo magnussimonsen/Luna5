@@ -1,3 +1,8 @@
+// Electron "main" entry point. Runs in the main process (Node/Electron context).
+// Responsibilities:
+// - Create the BrowserWindow and load the renderer
+// - Register IPC handlers used by the renderer (dialogs, file I/O, etc.)
+// - Keep security-sensitive work (filesystem, dialogs) in main; expose via preload
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -10,7 +15,7 @@ import { registerDecompressDataHandler } from '../renderer/src/code/ipc-main-han
 import fs from 'fs'
 
 function createWindow(): void {
-  // Create the browser window.
+  // Create the browser window (the UI lives in the renderer process).
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -18,7 +23,10 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
+      // Preload runs in an isolated context; it exposes safe APIs on window.api/window.electron
       preload: join(__dirname, '../preload/index.js'),
+      // Sandbox false here because we rely on preload and Node APIs in this template.
+      // If you enable sandbox, ensure your preload does not depend on Node integration.
       sandbox: false
     }
   })
@@ -32,8 +40,9 @@ function createWindow(): void {
     return { action: 'deny' }
   })
 
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // Dev vs. Prod loading:
+  // - In dev, electron-vite starts a Vite server; we load its URL for HMR.
+  // - In prod, load the built index.html bundled with the app.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
@@ -55,10 +64,13 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
+  // IPC test (example): renderer can send 'ping' and we log 'pong'.
   ipcMain.on('ping', () => console.log('pong'))
 
   // Register IPC handlers
+  // These functions are imported from the renderer repo folder but execute here in main
+  // so they can use Electron's main-process-only APIs (dialogs, fs, etc.).
+  // Preload (src/preload/index.ts) exposes window.api.* methods that invoke these handlers.
   registerQuitAppHandler()
   registerConfirmEmptyBinHandler()
   registerConfirmYesNoHandler()
@@ -66,6 +78,8 @@ app.whenReady().then(() => {
   registerDecompressDataHandler()
 
   // Show Save dialog (default: Desktop, .luna)
+  // Used by renderer via window.api.showSaveDialog().
+  // defaultPath is set to the user's Desktop and filename 'untitled.luna'.
   ipcMain.handle('show-save-dialog', async () => {
     const desktopPath = app.getPath('desktop')
     const result = await dialog.showSaveDialog({
@@ -78,6 +92,7 @@ app.whenReady().then(() => {
   })
 
   // Show Open dialog (default: Desktop, .luna)
+  // Renderer calls window.api.showOpenDialog(options?) to select a file (or directory with properties override).
   ipcMain.handle('show-open-dialog', async (_event, options) => {
     const desktopPath = app.getPath('desktop')
 
@@ -85,7 +100,8 @@ app.whenReady().then(() => {
     const dialogOptions: Electron.OpenDialogOptions = {
       title: 'Open Luna File',
       defaultPath: desktopPath,
-      filters: [{ name: 'Luna Files', extensions: ['luna', 'luna5'] }],
+      // Only allow .luna files
+      filters: [{ name: 'Luna Files', extensions: ['luna'] }],
       properties: ['openFile']
     }
 
@@ -97,7 +113,10 @@ app.whenReady().then(() => {
 
     const result = await dialog.showOpenDialog(dialogOptions)
     return result
-  }) // Read file contents
+  })
+
+  // Read file contents
+  // Returns base64 string so we can safely move binary data across IPC to the renderer.
   ipcMain.handle('read-file', async (_event, { filePath }: { filePath: string }) => {
     try {
       const data = await fs.promises.readFile(filePath)
@@ -116,6 +135,7 @@ app.whenReady().then(() => {
   })
 
   // Save to an explicit file path
+  // When the renderer already knows the target path and wants to overwrite it.
   ipcMain.handle(
     'save-to-existing-file',
     async (_event, opts: { filePath: string; content: string | Buffer }) => {
@@ -142,6 +162,7 @@ app.whenReady().then(() => {
   )
 
   // Save using a chosen path
+  // Typically used after a Save As dialog; writes new content to the provided path.
   ipcMain.handle(
     'save-file',
     async (_event, { filePath, content }: { filePath: string; content: string | Buffer }) => {

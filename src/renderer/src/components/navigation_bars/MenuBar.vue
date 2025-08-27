@@ -248,6 +248,8 @@ import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { computed } from 'vue'
+import { saveAsCurrentWorkspace } from '@renderer/code/files/save-as'
+import { openWorkspaceFromDisk } from '@renderer/code/files/open-file'
 
 const modalStore = useModalStore()
 const sidePanelStore = useSidePanelStore()
@@ -287,16 +289,22 @@ const handleNewFile = (): void => {
   console.log('New File clicked')
 }
 
-const handleOpenFile = (): void => {
-  console.log('Open File clicked')
+const handleOpenFile = async (): Promise<void> => {
+  const res = await openWorkspaceFromDisk()
+  if (!res.success) {
+    console.warn('Open canceled or failed', res.error)
+  }
 }
 
 const handleSaveFile = (): void => {
   console.log('Save File clicked')
 }
 
-const handleSaveFileAs = (): void => {
-  modalStore.openSaveAsModal()
+const handleSaveFileAs = async (): Promise<void> => {
+  const res = await saveAsCurrentWorkspace()
+  if (!res.success) {
+    console.warn('Save As canceled or failed', res.error)
+  }
 }
 
 const handleSaveFileForSubmission = (): void => {
