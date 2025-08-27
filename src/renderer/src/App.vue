@@ -6,6 +6,7 @@ import CellList from '@renderer/components/conteiners/CellList.vue'
 import StatusBar from '@renderer/components/navigation_bars/StatusBar.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 import GeneralSettingsModal from '@renderer/components/modals/settings_modals/SettingsModal.vue'
+import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
 import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 
@@ -36,6 +37,7 @@ const modalStore = useModalStore()
   <div v-if="modalStore.isSettingsModalOpen" class="modal-container">
     <GeneralSettingsModal />
   </div>
+  <SaveAsModal v-if="modalStore.isSaveAsModalOpen" />
 </template>
 
 <style scoped>

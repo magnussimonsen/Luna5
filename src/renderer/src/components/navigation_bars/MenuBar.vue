@@ -296,7 +296,7 @@ const handleSaveFile = (): void => {
 }
 
 const handleSaveFileAs = (): void => {
-  console.log('Save File As clicked')
+  modalStore.openSaveAsModal()
 }
 
 const handleSaveFileForSubmission = (): void => {

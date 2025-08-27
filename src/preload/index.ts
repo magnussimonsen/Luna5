@@ -5,7 +5,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
   // File saving and loading handlers
   showSaveDialog: () => ipcRenderer.invoke('show-save-dialog'),
-  showOpenDialog: () => ipcRenderer.invoke('show-open-dialog'),
+  showOpenDialog: (options?: { properties: string[] }) =>
+    ipcRenderer.invoke('show-open-dialog', options),
   readFile: (opts: { filePath: string }) => ipcRenderer.invoke('read-file', opts),
   saveToExistingFile: (opts: { filePath: string; content: string | Buffer }) =>
     ipcRenderer.invoke('save-to-existing-file', opts),

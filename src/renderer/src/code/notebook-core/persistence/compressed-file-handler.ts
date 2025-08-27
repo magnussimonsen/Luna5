@@ -5,10 +5,7 @@
  * workspace data when saving/loading files.
  */
 
-import {
-  serializeAndCompress,
-  decompressAndDeserialize
-} from '../utils/compression-utils'
+import { serializeAndCompress, decompressAndDeserialize } from '../utils/compression-utils'
 import type { Workspace } from '../model/schema'
 
 /**

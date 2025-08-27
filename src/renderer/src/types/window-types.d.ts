@@ -1,22 +1,53 @@
-// filepath: C:\Users\magnus.simonsen\luna\luna\src\renderer\src\assets\types\window.d.ts
-declare global {
-  interface Window {
-    electron: {
-      process: {
-        versions: {
-          electron: string
-          chrome: string
-          node: string
-          [key: string]: string
-        }
-      }
-      ipcRenderer: {
-        send: (channel: string, ...args: unknown[]) => void
-        // Add other ipcRenderer methods as needed
-      }
-      confirmYesNo?: (message: string) => Promise<boolean>
-      quitApp?: () => Promise<void>
+// This file adds custom types to the global Window interface
+interface ElectronAPI {
+  process: {
+    versions: {
+      electron: string
+      chrome: string
+      node: string
+      [key: string]: string
     }
   }
+  ipcRenderer: {
+    send: (channel: string, ...args: unknown[]) => void
+    // Add other ipcRenderer methods as needed
+  }
+  confirmYesNo?: (message: string) => Promise<boolean>
+  quitApp?: () => Promise<void>
 }
+
+interface AppAPI {
+  // File saving and loading
+  showSaveDialog: () => Promise<Electron.SaveDialogReturnValue>
+  showOpenDialog: (options?: {
+    properties: ('openFile' | 'openDirectory' | 'multiSelections')[]
+  }) => Promise<Electron.OpenDialogReturnValue>
+  readFile: (opts: { filePath: string }) => Promise<{
+    success: boolean
+    filePath?: string
+    content?: string
+    error?: string
+    encoding?: string
+  }>
+  saveToExistingFile: (opts: {
+    filePath: string
+    content: string | Buffer
+  }) => Promise<{ success: boolean; filePath?: string; error?: string }>
+  saveFile: (opts: {
+    filePath: string
+    content: string | Buffer
+  }) => Promise<{ success: boolean; filePath?: string; error?: string }>
+
+  // Compression and decompression
+  compressData: (opts: { data: string }) => Promise<string>
+  decompressData: (opts: { data: string }) => Promise<string>
+}
+
+declare global {
+  interface Window {
+    electron: ElectronAPI
+    api: AppAPI
+  }
+}
+
 export {}

@@ -35,6 +35,10 @@ interface LunaState {
   currentNotebookId: string | null
   viewMode: 'notebooks' | 'bin'
   binSelectedNotebookId: string | null
+  // File save state
+  isSaved: boolean
+  lastSavedAtDateTime: string | null
+  currentFilePath: string | null
 }
 
 /** EXPLANATION (main structure)
@@ -61,7 +65,11 @@ export const useWorkspaceStore = defineStore('workspace', {
     currentNotebookId: null, // Current notebook ID is null until set
     // Add example: currentBinNotebookId ? in order to keep track of the currently selected notebook in the bin
     viewMode: 'notebooks', // 'notebooks' or 'bin' view mode
-    binSelectedNotebookId: null
+    binSelectedNotebookId: null,
+    // File save state
+    isSaved: false, // Workspace starts as unsaved
+    lastSavedAtDateTime: null, // No save timestamp initially
+    currentFilePath: null // No file path initially
   }),
   getters: {
     getCurrentNotebook: (LunaState): Notebook | null => {
@@ -82,6 +90,16 @@ export const useWorkspaceStore = defineStore('workspace', {
       const order = workspace.notebookOrder || []
       if (!order.length) return Object.values(workspace.notebooks)
       return order.map((id) => workspace.notebooks[id]).filter(Boolean) as Notebook[]
+    },
+    // File status getters
+    getIsSaved: (LunaState): boolean => {
+      return LunaState.isSaved
+    },
+    getLastSavedAtDateTime: (LunaState): string | null => {
+      return LunaState.lastSavedAtDateTime
+    },
+    getCurrentFilePath: (LunaState): string | null => {
+      return LunaState.currentFilePath
     }
   },
   actions: {
@@ -296,6 +314,9 @@ export const useWorkspaceStore = defineStore('workspace', {
         this.initialized = true
         // Clear current notebook selection; a caller can ensure/create one as needed.
         this.currentNotebookId = null
+
+        // Reset save state for a new workspace
+        this.resetSaveState()
       }
       return workspace
     },
@@ -332,6 +353,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       const workspace = this.getWorkspace()
       const newNotebook = operationsCreateNotebook(workspace, title)
       this.currentNotebookId = newNotebook.id
+      this.markAsUnsaved()
       return newNotebook.id
     },
     // --- Delete Notebook ---
@@ -347,26 +369,39 @@ export const useWorkspaceStore = defineStore('workspace', {
           /* ignore */
         }
       }
+      this.markAsUnsaved()
     },
     // --- Notebook order movement ---
     moveCurrentNotebookUp(): boolean {
       const workspace = this.getWorkspace()
       const id = this.currentNotebookId
       if (!id) return false
-      return operationsMoveNotebookIdUp(workspace, id)
+      const result = operationsMoveNotebookIdUp(workspace, id)
+      if (result) {
+        this.markAsUnsaved()
+      }
+      return result
     },
     moveCurrentNotebookDown(): boolean {
       const workspace = this.getWorkspace()
       const id = this.currentNotebookId
       if (!id) return false
-      return operationsMoveNotebookIdDown(workspace, id)
+      const result = operationsMoveNotebookIdDown(workspace, id)
+      if (result) {
+        this.markAsUnsaved()
+      }
+      return result
     },
     // --- Rename Notebook ---
     renameNotebook(newTitle: string, id?: string): boolean {
       const workspace = this.getWorkspace()
       const targetId = id || this.currentNotebookId
       if (!targetId) return false
-      return operationsRenameNotebook(workspace, targetId, newTitle)
+      const result = operationsRenameNotebook(workspace, targetId, newTitle)
+      if (result) {
+        this.markAsUnsaved()
+      }
+      return result
     },
     // --- Select Notebook ---
     selectNotebook(id: string): void {
@@ -413,6 +448,9 @@ export const useWorkspaceStore = defineStore('workspace', {
             const idx = order.indexOf(id)
             let nextId: string | null = null
             // Look forward for the next non-soft-deleted cell
+
+            // Mark workspace as unsaved after deleting a cell
+            this.markAsUnsaved()
             for (let i = idx + 1; i < order.length; i++) {
               const cid = order[i]
               if (!workspace.cells[cid]?.softDeleted) {
@@ -503,7 +541,11 @@ export const useWorkspaceStore = defineStore('workspace', {
       const cellSelectionStore = useCellSelectionStore()
       const id = cellId || cellSelectionStore.selectedCellId
       if (!id) return false
-      return operationsMoveCellIdUp(workspace, notebookId, id)
+      const result = operationsMoveCellIdUp(workspace, notebookId, id)
+      if (result) {
+        this.markAsUnsaved()
+      }
+      return result
     },
     // Move selected (or provided) cell down one position in the current notebook.
     moveSelectedCellDown(cellId?: string): boolean {
@@ -512,7 +554,11 @@ export const useWorkspaceStore = defineStore('workspace', {
       const cellSelectionStore = useCellSelectionStore()
       const id = cellId || cellSelectionStore.selectedCellId
       if (!id) return false
-      return operationsMoveCellIdDown(workspace, notebookId, id)
+      const result = operationsMoveCellIdDown(workspace, notebookId, id)
+      if (result) {
+        this.markAsUnsaved()
+      }
+      return result
     },
     //--- Cell Creation ---
     addTextCell(content = 'function: addTextCell in workspaceStore.ts'): TextCell {
@@ -521,6 +567,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       const newCell = operationsCreateTextCell(content)
       operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
       this.insertCellGeneric(newCell)
+      this.markAsUnsaved()
       return newCell
     },
     // --- Toggle soft lock on selected cell ---
@@ -533,6 +580,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       if (!cell) return false
       cell.softLocked = !cell.softLocked
       cell.updatedAt = new Date().toISOString()
+      this.markAsUnsaved()
       return true
     },
     // --- Toggle hidden on selected cell ---
@@ -545,6 +593,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       if (!cell) return false
       cell.hidden = !cell.hidden
       cell.updatedAt = new Date().toISOString()
+      this.markAsUnsaved()
       return true
     },
     // --- Set content for a given cell (e.g., from TextCell input) ---
@@ -558,7 +607,44 @@ export const useWorkspaceStore = defineStore('workspace', {
       // All current cell kinds define optional cellInputContent
       cell.cellInputContent = content
       cell.updatedAt = new Date().toISOString()
+
+      // Mark workspace as unsaved when content changes
+      this.markAsUnsaved()
+
       return true
+    },
+
+    // --- File Save State Management ---
+
+    /**
+     * Mark the workspace as unsaved
+     * This should be called whenever a change is made to the workspace
+     */
+    markAsUnsaved(): void {
+      this.isSaved = false
+    },
+
+    /**
+     * Mark the workspace as saved and update the save timestamp and file path
+     * @param filePath - Optional file path to update the current file path
+     */
+    markAsSaved(filePath?: string): void {
+      this.isSaved = true
+      this.lastSavedAtDateTime = new Date().toISOString()
+
+      // Update file path if provided
+      if (filePath) {
+        this.currentFilePath = filePath
+      }
+    },
+
+    /**
+     * Reset file save state (for new workspaces)
+     */
+    resetSaveState(): void {
+      this.isSaved = false
+      this.lastSavedAtDateTime = null
+      this.currentFilePath = null
     }
   }
 })

@@ -78,18 +78,26 @@ app.whenReady().then(() => {
   })
 
   // Show Open dialog (default: Desktop, .luna)
-  ipcMain.handle('show-open-dialog', async () => {
+  ipcMain.handle('show-open-dialog', async (_event, options) => {
     const desktopPath = app.getPath('desktop')
-    const result = await dialog.showOpenDialog({
+
+    // Default options
+    const dialogOptions: Electron.OpenDialogOptions = {
       title: 'Open Luna File',
       defaultPath: desktopPath,
-      filters: [{ name: 'Luna Files', extensions: ['luna'] }],
+      filters: [{ name: 'Luna Files', extensions: ['luna', 'luna5'] }],
       properties: ['openFile']
-    })
-    return result
-  })
+    }
 
-  // Read file contents
+    // Add user options if provided
+    if (options && Array.isArray(options.properties)) {
+      // TypeScript's type system ensures properties contains valid values at runtime
+      dialogOptions.properties = options.properties
+    }
+
+    const result = await dialog.showOpenDialog(dialogOptions)
+    return result
+  }) // Read file contents
   ipcMain.handle('read-file', async (_event, { filePath }: { filePath: string }) => {
     try {
       const data = await fs.promises.readFile(filePath)

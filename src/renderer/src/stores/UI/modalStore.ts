@@ -7,6 +7,8 @@ export const useModalStore = defineStore('modal', () => {
   const isAboutLunaModalOpen = ref(false)
   // State for Settings modal
   const isSettingsModalOpen = ref(false)
+  // State for Save As modal
+  const isSaveAsModalOpen = ref(false)
 
   // Actions
   function openAboutLunaModal(): void {
@@ -21,6 +23,12 @@ export const useModalStore = defineStore('modal', () => {
   function closeSettingsModal(): void {
     isSettingsModalOpen.value = false
   }
+  function openSaveAsModal(): void {
+    isSaveAsModalOpen.value = true
+  }
+  function closeSaveAsModal(): void {
+    isSaveAsModalOpen.value = false
+  }
 
   return {
     isAboutLunaModalOpen,
@@ -28,6 +36,9 @@ export const useModalStore = defineStore('modal', () => {
     closeAboutLunaModal,
     isSettingsModalOpen,
     openSettingsModal,
-    closeSettingsModal
+    closeSettingsModal,
+    isSaveAsModalOpen,
+    openSaveAsModal,
+    closeSaveAsModal
   }
 })
