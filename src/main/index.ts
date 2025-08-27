@@ -5,6 +5,8 @@ import icon from '../../resources/icon.png?asset'
 import { registerQuitAppHandler } from '../renderer/src/code/ipc-main-handle-functions/quitAppHandler'
 import { registerConfirmEmptyBinHandler } from '../renderer/src/code/ipc-main-handle-functions/confirmEmptyBinHandler'
 import { registerConfirmYesNoHandler } from '../renderer/src/code/ipc-main-handle-functions/show-confirm-yes-no-dialog'
+import { registerCompressDataHandler } from '../renderer/src/code/ipc-main-handle-functions/compress-data'
+import { registerDecompressDataHandler } from '../renderer/src/code/ipc-main-handle-functions/decompress-data'
 import fs from 'fs'
 
 function createWindow(): void {
@@ -60,6 +62,8 @@ app.whenReady().then(() => {
   registerQuitAppHandler()
   registerConfirmEmptyBinHandler()
   registerConfirmYesNoHandler()
+  registerCompressDataHandler()
+  registerDecompressDataHandler()
 
   // Show Save dialog (default: Desktop, .luna)
   ipcMain.handle('show-save-dialog', async () => {
@@ -71,6 +75,36 @@ app.whenReady().then(() => {
       properties: ['createDirectory']
     })
     return result
+  })
+
+  // Show Open dialog (default: Desktop, .luna)
+  ipcMain.handle('show-open-dialog', async () => {
+    const desktopPath = app.getPath('desktop')
+    const result = await dialog.showOpenDialog({
+      title: 'Open Luna File',
+      defaultPath: desktopPath,
+      filters: [{ name: 'Luna Files', extensions: ['luna'] }],
+      properties: ['openFile']
+    })
+    return result
+  })
+
+  // Read file contents
+  ipcMain.handle('read-file', async (_event, { filePath }: { filePath: string }) => {
+    try {
+      const data = await fs.promises.readFile(filePath)
+      // Convert binary data to base64 string for safe transport over IPC
+      const base64Data = data.toString('base64')
+      return {
+        success: true,
+        filePath,
+        content: base64Data,
+        encoding: 'base64' // Add encoding info so we know how to handle it
+      }
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error)
+      return { success: false, error: message }
+    }
   })
 
   // Save to an explicit file path

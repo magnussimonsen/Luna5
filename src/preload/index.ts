@@ -2,7 +2,20 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  // File saving and loading handlers
+  showSaveDialog: () => ipcRenderer.invoke('show-save-dialog'),
+  showOpenDialog: () => ipcRenderer.invoke('show-open-dialog'),
+  readFile: (opts: { filePath: string }) => ipcRenderer.invoke('read-file', opts),
+  saveToExistingFile: (opts: { filePath: string; content: string | Buffer }) =>
+    ipcRenderer.invoke('save-to-existing-file', opts),
+  saveFile: (opts: { filePath: string; content: string | Buffer }) =>
+    ipcRenderer.invoke('save-file', opts),
+
+  // Compression and decompression handlers
+  compressData: (opts: { data: string }) => ipcRenderer.invoke('compress-data', opts),
+  decompressData: (opts: { data: string }) => ipcRenderer.invoke('decompress-data', opts)
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
