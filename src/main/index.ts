@@ -187,6 +187,16 @@ app.whenReady().then(() => {
     }
   )
 
+  // Check if a file path exists (used by Save to current file without prompting)
+  ipcMain.handle('file-exists', async (_event, { filePath }: { filePath: string }) => {
+    try {
+      await fs.promises.access(filePath, fs.constants.F_OK)
+      return { exists: true }
+    } catch {
+      return { exists: false }
+    }
+  })
+
   createWindow()
 
   app.on('activate', function () {

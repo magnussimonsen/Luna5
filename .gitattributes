@@ -1,0 +1,36 @@
+# Normalize line endings to LF for all text-based source files
+# This prevents CRLF churn on Windows and satisfies linters.
+
+# Core code and config
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.cjs text eol=lf
+*.mjs text eol=lf
+*.vue text eol=lf
+*.json text eol=lf
+*.jsonc text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.sass text eol=lf
+*.html text eol=lf
+*.d.ts text eol=lf
+*.env text eol=lf
+*.txt text eol=lf
+*.svg text eol=lf
+
+# Treat common binaries properly
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.icns binary
+*.pdf binary
+*.zip binary
+
+# Default behavior for others (don’t force CRLF)
+* text=auto

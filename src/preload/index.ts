@@ -12,6 +12,7 @@ const api = {
     ipcRenderer.invoke('save-to-existing-file', opts),
   saveFile: (opts: { filePath: string; content: string | Buffer }) =>
     ipcRenderer.invoke('save-file', opts),
+  fileExists: (opts: { filePath: string }) => ipcRenderer.invoke('file-exists', opts),
 
   // Compression and decompression handlers
   compressData: (opts: { data: string }) => ipcRenderer.invoke('compress-data', opts),

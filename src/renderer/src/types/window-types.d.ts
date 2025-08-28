@@ -37,6 +37,7 @@ interface AppAPI {
     filePath: string
     content: string | Buffer
   }) => Promise<{ success: boolean; filePath?: string; error?: string }>
+  fileExists: (opts: { filePath: string }) => Promise<{ exists: boolean }>
 
   // Compression and decompression
   compressData: (opts: { data: string }) => Promise<string>
