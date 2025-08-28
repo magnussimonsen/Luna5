@@ -249,6 +249,7 @@ import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { computed } from 'vue'
 import { saveAsCurrentWorkspace } from '@renderer/code/files/save-as'
+import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { openWorkspaceFromDisk } from '@renderer/code/files/open-file'
 
 const modalStore = useModalStore()
@@ -296,8 +297,11 @@ const handleOpenFile = async (): Promise<void> => {
   }
 }
 
-const handleSaveFile = (): void => {
-  console.log('Save File clicked')
+const handleSaveFile = async (): Promise<void> => {
+  const res = await saveOrSaveAs()
+  if (!res.success) {
+    console.warn('Save canceled or failed', res.error)
+  }
 }
 
 const handleSaveFileAs = async (): Promise<void> => {

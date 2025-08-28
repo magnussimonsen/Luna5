@@ -22,8 +22,8 @@ For now only placeholders for the buttons and sliders are implemented.
       <span class="divider">|</span>
       <span class="cell-state">{{ cellStateLabel }}</span>
       <span class="divider">|</span>
-      <span class="file-path">/path/to/current/file.luna</span>
-      <button class="save-btn">Save/Not Saved</button>
+      <span class="file-path">{{ filePathLabel }}</span>
+      <button class="save-btn" :style="saveBtnStyle">{{ saveBtnLabel }}</button>
       <button class="autosave-btn">Autosave: Off</button>
     </div>
     <div class="status-section right">
@@ -82,6 +82,19 @@ const cellStateLabel = computed(() => {
   if (c.softDeleted || c.hardDeleted) return 'Deleted'
   return 'Editable'
 })
+
+// Save indicator (subtle autosave toast style)
+const isSaved = computed(() => workspaceStore.isSaved)
+const saveBtnLabel = computed(() => (isSaved.value ? 'Saved' : 'Not Saved'))
+const saveBtnStyle = computed(() => ({
+  backgroundColor: isSaved.value
+    ? 'var(--button-on-color, #43a047)'
+    : 'var(--button-hard-off-color, #f44336)',
+  color: 'var(--ui-text-color, #fff)'
+}))
+
+// Current file path label
+const filePathLabel = computed(() => workspaceStore.currentFilePath || 'Unsaved file')
 </script>
 
 <style scoped>

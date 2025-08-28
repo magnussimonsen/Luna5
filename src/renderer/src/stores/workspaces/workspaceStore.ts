@@ -604,11 +604,22 @@ export const useWorkspaceStore = defineStore('workspace', {
       // Prevent writes when cell is hidden, locked or deleted (soft and hard policy)
       if (cell.hidden || cell.hardLocked || cell.softLocked || cell.softDeleted || cell.hardDeleted)
         return false
+      // Normalize content to avoid false diffs (CRLF, NBSP, trailing newlines)
+      const normalize = (s: string): string =>
+        s
+          .replace(/\r\n/g, '\n')
+          .replace(/\u00A0/g, ' ')
+          .replace(/\n+$/g, '')
+      const next = normalize(content)
+      const prev = normalize(cell.cellInputContent ?? '')
+      if (prev === next) {
+        return true
+      }
       // All current cell kinds define optional cellInputContent
-      cell.cellInputContent = content
+      cell.cellInputContent = next
       cell.updatedAt = new Date().toISOString()
 
-      // Mark workspace as unsaved when content changes
+      // Mark workspace as unsaved only when content actually changes
       this.markAsUnsaved()
 
       return true
