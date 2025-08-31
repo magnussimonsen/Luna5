@@ -44,12 +44,12 @@
 
 <!-- Examples omitted for brevity. Keep types in dedicated files under src/renderer/src/types and import with `import type`. -->
 
-### Architecture Example (Condensed)
+### Architecture Example 
 
 - Avoid placing all logic in a single file; extract validation/formatting/permissions/preferences into small utilities.
 - Compose utilities in composables and keep components focused on UI.
 
-### Examples (Condensed)
+### Examples 
 
 - Avoid long, chained one-liners. Break the work into separate, clearly named steps (e.g., first filter, then map, then sort) for readability.
 
