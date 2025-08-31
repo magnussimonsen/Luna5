@@ -16,7 +16,7 @@ Modern classrooms often depend on a mix of disconnected tools — Python editors
 
 Luna5 offers a streamlined alternative, combining symbolic algebra, geometry, programming, and rich text editing — all within one intuitive application.
 
-As an educational app, Luna5 will also include spaced-repetition flashcards—with support for text, images, audio and IPA (International Phonetic Alphabet) input tools.
+Luna5 can also be used for language learning, thanks to its built-in flashcard functionality supporting text, images, audio, and IPA (International Phonetic Alphabet) input tools.
 
 ---
 
@@ -28,8 +28,8 @@ As an educational app, Luna5 will also include spaced-repetition flashcards—wi
 * ➗ CAS (Computer Algebra System) with a custom, student-friendly syntax (backed by SymPy)
 * 🔒 Ability to hide or lock cells — perfect for creating tests with embedded solutions
 * 🧠 Sidebar with table of contents and contextual help (syntax tips and examples)
-* 🖨️ Export full notebooks to PDF
-* 🗂️ Flashcards with spaced repetition (planned) — add cards with text, images, and audio
+* 🖨️ Export complete notebooks to PDF, automatically including the student's name and the saved date and time in the header. 
+* 🗂️ Flashcards with spaced repetition (for use in language learning) — add cards with text, images, and audio
 
 ---
 
