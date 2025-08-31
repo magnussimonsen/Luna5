@@ -197,6 +197,22 @@ app.whenReady().then(() => {
     }
   })
 
+  // Confirm before opening a new file when there are unsaved changes
+  ipcMain.handle('confirm-unsaved-before-open', async () => {
+    const result = await dialog.showMessageBox({
+      type: 'warning',
+      buttons: ['Save', "Don't Save", 'Cancel'],
+      defaultId: 0,
+      cancelId: 2,
+      title: 'Unsaved changes',
+      message: 'You have unsaved changes.',
+      detail: 'Opening a different file will discard those changes. What would you like to do?'
+    })
+    if (result.response === 0) return 'save'
+    if (result.response === 1) return 'dont-save'
+    return 'cancel'
+  })
+
   createWindow()
 
   app.on('activate', function () {

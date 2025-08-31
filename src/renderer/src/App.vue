@@ -9,8 +9,36 @@ import GeneralSettingsModal from '@renderer/components/modals/settings_modals/Se
 import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
 import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
+import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
+import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
+import { computed, ref, watch } from 'vue'
+import { saveOrSaveAs } from '@renderer/code/files/save-file'
 
 const modalStore = useModalStore()
+const workspaceStore = useWorkspaceStore()
+const generalSettingsStore = useGeneralSettingsStore()
+
+// Autosave: save after N input changes if enabled (N > 0)
+const autosaveInterval = computed(() => generalSettingsStore.autosaveChangeIntervalGetter)
+const changeCount = computed(() => workspaceStore.inputChangesSinceLastSave)
+const isSaving = ref(false)
+
+watch([autosaveInterval, changeCount], async ([interval, count]) => {
+  if (!interval || interval <= 0) return
+  if (count < interval) return
+  if (isSaving.value) return
+  isSaving.value = true
+  try {
+    const res = await saveOrSaveAs()
+    if (!res.success) {
+      // Leave counter as-is; user may continue editing, and Save As may be canceled
+      // Optionally log in dev
+      // console.warn('Autosave failed or canceled:', res.error)
+    }
+  } finally {
+    isSaving.value = false
+  }
+})
 // Example of how to use the IPC mechanism if needed
 // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 </script>

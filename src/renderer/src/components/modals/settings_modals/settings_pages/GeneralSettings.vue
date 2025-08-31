@@ -60,7 +60,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-         <div class="setting-row">
+        <div class="setting-row">
           <label for="toolbar-font-size-select">Toolbar Font Size:</label>
           <select
             id="toolbar-font-size-select"
@@ -101,7 +101,7 @@
           </select>
           <ImplementedMark :implemented="false" />
         </div>
-       <div class="setting-row">
+        <div class="setting-row">
           <label for="side-panel-font-size-select">Side Panel Font Size:</label>
           <select
             id="side-panel-font-size-select"
@@ -137,8 +137,6 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        
-
         <div class="setting-row">
           <label for="default-cell-font-size-select">Default Cell Font Size:</label>
           <select
@@ -242,6 +240,7 @@ const themeStore = useThemeStore()
 
 const autosaveOptions: { label: string; value: AutosaveOption }[] = [
   { label: 'Off', value: 0 },
+  { label: 'After 1 change', value: 1 },
   { label: 'After 5 changes', value: 5 },
   { label: 'After 10 changes', value: 10 },
   { label: 'After 15 changes', value: 15 },

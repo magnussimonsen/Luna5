@@ -7,7 +7,7 @@ import { AutosaveOption } from '@renderer/types/auto-save-options-types'
 
 export const useGeneralSettingsStore = defineStore('generalSettings', {
   state: () => ({
-    autosaveChangeIntervalState: 0 as AutosaveOption, // 0 = off, 5/10/25/50 = save after N changes
+    autosaveChangeIntervalState: 0 as AutosaveOption, // 0 = off, 1/5/10/15/25/50/100 = save after N changes
     warnOnDeleteCellState: true,
     showCellIndexNumbersState: true,
     enableCodeLintingState: true,

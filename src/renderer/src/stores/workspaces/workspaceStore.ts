@@ -39,6 +39,8 @@ interface LunaState {
   isSaved: boolean
   lastSavedAtDateTime: string | null
   currentFilePath: string | null
+  // Autosave support
+  inputChangesSinceLastSave: number
 }
 
 /** EXPLANATION (main structure)
@@ -69,7 +71,9 @@ export const useWorkspaceStore = defineStore('workspace', {
     // File save state
     isSaved: false, // Workspace starts as unsaved
     lastSavedAtDateTime: null, // No save timestamp initially
-    currentFilePath: null // No file path initially
+    currentFilePath: null, // No file path initially
+    // Autosave support
+    inputChangesSinceLastSave: 0
   }),
   getters: {
     getCurrentNotebook: (LunaState): Notebook | null => {
@@ -633,6 +637,8 @@ export const useWorkspaceStore = defineStore('workspace', {
      */
     markAsUnsaved(): void {
       this.isSaved = false
+      // Increment autosave change counter on any change
+      this.inputChangesSinceLastSave = (this.inputChangesSinceLastSave || 0) + 1
     },
 
     /**
@@ -642,6 +648,8 @@ export const useWorkspaceStore = defineStore('workspace', {
     markAsSaved(filePath?: string): void {
       this.isSaved = true
       this.lastSavedAtDateTime = new Date().toISOString()
+      // Reset autosave change counter on successful save
+      this.inputChangesSinceLastSave = 0
 
       // Update file path if provided
       if (filePath) {
@@ -656,6 +664,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.isSaved = false
       this.lastSavedAtDateTime = null
       this.currentFilePath = null
+      this.inputChangesSinceLastSave = 0
     }
   }
 })

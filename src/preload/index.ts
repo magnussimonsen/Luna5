@@ -13,6 +13,7 @@ const api = {
   saveFile: (opts: { filePath: string; content: string | Buffer }) =>
     ipcRenderer.invoke('save-file', opts),
   fileExists: (opts: { filePath: string }) => ipcRenderer.invoke('file-exists', opts),
+  confirmUnsavedBeforeOpen: () => ipcRenderer.invoke('confirm-unsaved-before-open'),
 
   // Compression and decompression handlers
   compressData: (opts: { data: string }) => ipcRenderer.invoke('compress-data', opts),
@@ -27,7 +28,8 @@ if (process.contextIsolated) {
     console.log('Exposing quitApp in contextBridge')
     contextBridge.exposeInMainWorld('electron', {
       ...electronAPI,
-      quitApp: () => ipcRenderer.invoke('quit-app'),
+      quitApp: (opts?: { isSaved?: boolean; isEffectivelyEmpty?: boolean }) =>
+        ipcRenderer.invoke('quit-app', opts),
       confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin'),
       confirmYesNo: (message: string): Promise<boolean> =>
         ipcRenderer.invoke('confirm-yes-no', message)
@@ -41,7 +43,8 @@ if (process.contextIsolated) {
   // @ts-ignore (define in dts)
   window.electron = {
     ...electronAPI,
-    quitApp: () => ipcRenderer.invoke('quit-app'),
+    quitApp: (opts?: { isSaved?: boolean; isEffectivelyEmpty?: boolean }) =>
+      ipcRenderer.invoke('quit-app', opts),
     confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin'),
     confirmYesNo: (message: string): Promise<boolean> =>
       ipcRenderer.invoke('confirm-yes-no', message)

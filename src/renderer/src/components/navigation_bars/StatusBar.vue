@@ -23,8 +23,22 @@ For now only placeholders for the buttons and sliders are implemented.
       <span class="cell-state">{{ cellStateLabel }}</span>
       <span class="divider">|</span>
       <span class="file-path">{{ filePathLabel }}</span>
-      <button class="save-btn" :style="saveBtnStyle">{{ saveBtnLabel }}</button>
-      <button class="autosave-btn">Autosave: Off</button>
+      <button
+        class="save-btn"
+        :style="saveBtnStyle"
+        :title="saveBtnTitle"
+        @click="handleSaveClick()"
+      >
+        {{ saveBtnLabel }}
+      </button>
+      <button
+        class="autosave-btn"
+        :style="autosaveBtnStyle"
+        :title="autosaveTooltip"
+        @click="cycleAutosave()"
+      >
+        {{ autosaveLabel }}
+      </button>
     </div>
     <div class="status-section right">
       <label class="zoom-label" for="zoom-slider">Zoom slider:</label>
@@ -35,16 +49,20 @@ For now only placeholders for the buttons and sliders are implemented.
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
+import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
+import type { AutosaveOption } from '@renderer/types/auto-save-options-types'
 
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
 const cellSelection = useCellSelectionStore()
 const workspaceStore = useWorkspaceStore()
+const generalSettingsStore = useGeneralSettingsStore()
 
 const cellTypeLabel = computed(() => {
   const kind = cellSelection.selectedCellKind as string | null
@@ -83,18 +101,85 @@ const cellStateLabel = computed(() => {
   return 'Editable'
 })
 
-// Save indicator (subtle autosave toast style)
+// Save indicator (avoid flicker when autosave interval is 1)
 const isSaved = computed(() => workspaceStore.isSaved)
-const saveBtnLabel = computed(() => (isSaved.value ? 'Saved' : 'Not Saved'))
+const displayIsSaved = ref<boolean>(isSaved.value)
+
+let flickerTimer: ReturnType<typeof setTimeout> | null = null
+
+watch(
+  [isSaved, () => generalSettingsStore.autosaveChangeIntervalGetter],
+  ([saved, interval]) => {
+    // When interval is 1, typing triggers autosave immediately. Debounce the switch to Not Saved
+    // to avoid a brief flicker if a save turns it back to Saved right away.
+    if (interval === 1 && !saved) {
+      if (flickerTimer) clearTimeout(flickerTimer)
+      flickerTimer = setTimeout(() => {
+        displayIsSaved.value = false
+        flickerTimer = null
+      }, 200)
+    } else {
+      if (flickerTimer) {
+        clearTimeout(flickerTimer)
+        flickerTimer = null
+      }
+      displayIsSaved.value = saved
+    }
+  },
+  { immediate: true }
+)
+
+onBeforeUnmount(() => {
+  if (flickerTimer) clearTimeout(flickerTimer)
+})
+
+const saveBtnLabel = computed(() => (displayIsSaved.value ? 'Saved' : 'Not Saved'))
 const saveBtnStyle = computed(() => ({
-  backgroundColor: isSaved.value
+  backgroundColor: displayIsSaved.value
     ? 'var(--button-on-color, #43a047)'
     : 'var(--button-hard-off-color, #f44336)',
   color: 'var(--ui-text-color, #fff)'
 }))
+const saveBtnTitle = computed(() => 'Click to save')
+
+async function handleSaveClick(): Promise<void> {
+  await saveOrSaveAs()
+}
 
 // Current file path label
 const filePathLabel = computed(() => workspaceStore.currentFilePath || 'Unsaved file')
+
+// Autosave status from settings
+const autosaveInterval = computed(() => generalSettingsStore.autosaveChangeIntervalGetter)
+const autosaveEnabled = computed(() => autosaveInterval.value > 0)
+const autosaveLabel = computed(() => {
+  if (!autosaveEnabled.value) return 'Autosave: Off'
+  const n = autosaveInterval.value
+  const unit = n === 1 ? 'change' : 'changes'
+  return `Autosave: ${n} ${unit}`
+})
+const autosaveBtnStyle = computed(() => ({
+  backgroundColor: autosaveEnabled.value
+    ? 'var(--button-on-color, #43a047)'
+    : 'var(--button-hard-off-color, #f44336)',
+  color: 'var(--ui-text-color, #fff)'
+}))
+const autosaveTooltip = computed(() =>
+  autosaveEnabled.value
+    ? `Saves after ${autosaveInterval.value} input ${
+        autosaveInterval.value === 1 ? 'change' : 'changes'
+      }`
+    : 'Autosave is off — click to cycle (Off/1/5/10/15/25/50/100)'
+)
+
+// Click to cycle autosave options: Off -> 1 -> 5 -> 10 -> 15 -> 25 -> 50 -> 100 -> Off
+function cycleAutosave(): void {
+  const order: number[] = [0, 1, 5, 10, 15, 25, 50, 100]
+  const current = autosaveInterval.value
+  const idx = order.indexOf(current)
+  const next = order[(idx + 1) % order.length]
+  generalSettingsStore.setAutosaveChangeInterval(next as AutosaveOption)
+}
 </script>
 
 <style scoped>

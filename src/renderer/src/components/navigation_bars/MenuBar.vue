@@ -9,19 +9,19 @@
     <DropdownMenu label="File">
       <div class="dropdown-menu-item" @click="handleNewFile">
         New File <span class="shortcut-not-implemented">Ctrl + n</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item" @click="handleOpenFile">
         Open File <span class="shortcut-not-implemented">Ctrl + o</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item" @click="handleSaveFile">
         Save File <span class="shortcut-not-implemented">Ctrl + s</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item" @click="handleSaveFileAs">
         Save File As <span class="shortcut-not-implemented">Ctrl + Shift + s</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item" @click="handleSaveFileForSubmission">
         <strong>Save File For Submission</strong>
@@ -40,7 +40,7 @@
       <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleQuitLuna">
         Quit Luna <span class="shortcut-not-implemented">Ctrl + Shift + Q</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
     </DropdownMenu>
     <DropdownMenu label="Edit">
@@ -237,6 +237,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import DropdownMenu from '@renderer/components/UI/DropdownMenu.vue'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
@@ -251,6 +252,7 @@ import { computed } from 'vue'
 import { saveAsCurrentWorkspace } from '@renderer/code/files/save-as'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { openWorkspaceFromDisk } from '@renderer/code/files/open-file'
+import { createNewWorkspaceWithPrompt } from '@renderer/code/files/new-file'
 
 const modalStore = useModalStore()
 const sidePanelStore = useSidePanelStore()
@@ -285,9 +287,30 @@ function handleToggleWorkspaceLayout(): void {
   menubarStore.toggleA4Preview()
 }
 
+function isWorkspaceEffectivelyEmpty(): boolean {
+  const ws: Workspace | null = workspaceStore.workspace
+  if (!ws) return true
+  const notebookIds = Object.keys(ws.notebooks || {})
+  if (notebookIds.length !== 1) return false
+  const nb = ws.notebooks[notebookIds[0]]
+  if (!nb) return false
+  const hasActiveCells = (nb.cellOrder || []).some((cid: string) => {
+    const c = ws.cells?.[cid]
+    return c && !c.softDeleted && !c.hardDeleted
+  })
+  if (hasActiveCells) return false
+  const binHasCells = Object.keys(ws.recycleBin?.cells || {}).length > 0
+  const binHasNotebooks = Object.keys(ws.recycleBin?.notebooks || {}).length > 0
+  if (binHasCells || binHasNotebooks) return false
+  return true
+}
+
 // Placeholder handlers
-const handleNewFile = (): void => {
-  console.log('New File clicked')
+const handleNewFile = async (): Promise<void> => {
+  const res = await createNewWorkspaceWithPrompt()
+  if (!res.success) {
+    if (!res.canceled) console.warn('New File failed', res.error)
+  }
 }
 
 const handleOpenFile = async (): Promise<void> => {
@@ -324,9 +347,13 @@ const handleAboutLuna = (): void => {
 }
 
 const handleQuitLuna = async (): Promise<void> => {
+  const opts = {
+    isSaved: workspaceStore.isSaved,
+    isEffectivelyEmpty: isWorkspaceEffectivelyEmpty()
+  }
   if (window.electron && typeof window.electron.quitApp === 'function') {
     try {
-      await window.electron.quitApp()
+      await window.electron.quitApp(opts)
     } catch (e) {
       console.error('Failed to quit Luna:', e)
     }

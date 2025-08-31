@@ -1,6 +1,7 @@
 import { decompressAndDeserialize } from '@renderer/code/notebook-core/utils/compression-utils'
 import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
+import { saveOrSaveAs, trySaveToCurrentFile } from './save-file'
 
 export type OpenFileResult =
   | { success: true; filePath: string }
@@ -11,6 +12,40 @@ export type OpenFileResult =
  */
 export async function openWorkspaceFromDisk(): Promise<OpenFileResult> {
   try {
+    // Helper: consider the workspace effectively empty if it has exactly one notebook,
+    // no active (non-deleted) cells, and an empty recycle bin (no cells, no notebooks).
+    const isEffectivelyEmpty = (ws: Workspace | null | undefined): boolean => {
+      if (!ws) return true
+      const notebookIds = Object.keys(ws.notebooks || {})
+      if (notebookIds.length !== 1) return false
+      const nb = ws.notebooks[notebookIds[0]]
+      if (!nb) return false
+      const hasActiveCells = (nb.cellOrder || []).some((cid) => {
+        const c = ws.cells?.[cid]
+        return c && !c.softDeleted && !c.hardDeleted
+      })
+      if (hasActiveCells) return false
+      const binHasCells = Object.keys(ws.recycleBin?.cells || {}).length > 0
+      const binHasNotebooks = Object.keys(ws.recycleBin?.notebooks || {}).length > 0
+      if (binHasCells || binHasNotebooks) return false
+      return true
+    }
+
+    // 0) If there are unsaved changes and workspace is not effectively empty, ask the user what to do
+    const storeCheck = useWorkspaceStore()
+    if (!storeCheck.isSaved && !isEffectivelyEmpty(storeCheck.workspace)) {
+      const choice = await window.api.confirmUnsavedBeforeOpen()
+      if (choice === 'cancel') return { success: false }
+      if (choice === 'save') {
+        const res = await trySaveToCurrentFile()
+        if (!res.success) {
+          // Fall back to Save As if no path yet
+          const alt = await saveOrSaveAs()
+          if (!alt.success) return { success: false, error: alt.error || 'Save canceled' }
+        }
+      }
+      // 'dont-save' continues
+    }
     // 1) Ask for a .luna file
     const dlg = await window.api.showOpenDialog({ properties: ['openFile'] })
     if (dlg.canceled || !dlg.filePaths?.length) {
@@ -33,6 +68,13 @@ export async function openWorkspaceFromDisk(): Promise<OpenFileResult> {
     store.workspace = workspace
     store.initialized = true
     store.markAsSaved(filePath)
+
+    // 5) Auto-select the first notebook if available
+    const order = workspace.notebookOrder || Object.keys(workspace.notebooks || {})
+    const firstId = order[0]
+    if (firstId && workspace.notebooks[firstId]) {
+      store.selectNotebook(firstId)
+    }
 
     return { success: true, filePath }
   } catch (err) {

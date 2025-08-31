@@ -5,7 +5,7 @@ declare global {
     electron: ElectronAPI & {
       confirmEmptyBin: () => Promise<boolean>
       confirmYesNo: (message: string) => Promise<boolean>
-      quitApp: () => Promise<void>
+      quitApp: (opts?: { isSaved?: boolean; isEffectivelyEmpty?: boolean }) => Promise<void>
     }
     api: {
       // File saving and loading
@@ -29,6 +29,7 @@ declare global {
         content: string | Buffer
       }) => Promise<{ success: boolean; filePath?: string; error?: string }>
       fileExists: (opts: { filePath: string }) => Promise<{ exists: boolean }>
+      confirmUnsavedBeforeOpen: () => Promise<'save' | 'dont-save' | 'cancel'>
 
       // Compression and decompression
       compressData: (opts: { data: string }) => Promise<string>
