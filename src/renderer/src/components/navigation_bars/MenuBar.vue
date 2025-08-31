@@ -23,8 +23,8 @@
         Save File As <span class="shortcut-not-implemented">Ctrl + Shift + s</span>
         <ImplementedMark :implemented="true" />
       </div>
-      <div class="dropdown-menu-item" @click="handleSaveFileForSubmission">
-        <strong>Save File For Submission</strong>
+      <div class="dropdown-menu-item" @click="handleSavePDFForSubmission">
+        <strong>Save PDF For Submission</strong>
         <span class="shortcut-not-implemented">Ctrl + Alt + s</span>
         <ImplementedMark :implemented="false" />
       </div>
@@ -334,8 +334,8 @@ const handleSaveFileAs = async (): Promise<void> => {
   }
 }
 
-const handleSaveFileForSubmission = (): void => {
-  console.log('Save File For Submission clicked')
+const handleSavePDFForSubmission = (): void => {
+  console.log('Save PDF For Submission clicked')
 }
 
 const handleSettings = (): void => {
