@@ -14,9 +14,9 @@ Thanks as well to the [Pyodide](https://pyodide.org/) project and community for 
 
 **Luna5** is an educational notebook-style application designed to simplify and unify digital workflows for both students and teachers. It brings together essential STEM tools in a clean, pedagogically structured interface — eliminating the need to switch between multiple, complex programs.
 
-Modern classrooms often depend on a mix of disconnected tools — Python editors, GeoGebra, Word, Excel — each with its own interface and file formats. This constant "software jumping" slows learning and creates unnecessary friction. While GeoGebra is an excellent tool, it's not built around a document-based notebook workflow. Luna5 is.
+Modern classrooms often depend on a mix of disconnected tools (Python editors, GeoGebra, Word, Excel) each with its own interface and file formats. This constant "software jumping" slows learning and creates unnecessary friction. While GeoGebra is an excellent tool, it's not built around a document-based notebook workflow. Luna5 is.
 
-Luna5 offers a streamlined alternative, combining symbolic algebra, geometry, programming, and rich text editing — all within one intuitive application.
+Luna5 offers a streamlined alternative, combining symbolic algebra, geometry, programming, and rich text editing all within one intuitive application.
 
 Luna5 can also be used for language learning, thanks to its built-in flashcard functionality supporting text, images, audio, and IPA (International Phonetic Alphabet) input tools.
 
@@ -28,10 +28,10 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 * 📝 Rich Text and Markdown editing support
 * 🐍 Live Python execution powered by Pyodide
 * ➗ CAS (Computer Algebra System) with a custom, student-friendly syntax (backed by SymPy)
-* 🔒 Ability to hide or lock cells — perfect for creating tests with embedded solutions
+* 🔒 Ability to hide or lock cells, perfect for creating tests with embedded solutions
 * 🧠 Sidebar with table of contents and contextual help (syntax tips and examples)
 * 🖨️ Export complete notebooks to PDF, automatically including the student's name and the saved date and time in the header. 
-* 🗂️ Flashcards with spaced repetition (for use in language learning) — add cards with text, images, and audio
+* 🗂️ Flashcards with spaced repetition (for use in language learning), add cards with text, images, and audio
 
 ---
 
@@ -48,7 +48,7 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 
 * Use Luna as an all-in-one notebook: take notes, write Python code, and solve algebraic or geometric problems
 * Explore geometrical concepts in a natural, visual way
-* Focus on learning — not navigating bloated menus or juggling apps
+* Focus on learning, not navigating bloated menus or juggling apps
 * Get syntax examples and contextual help via the built-in help sidebar
 * Share or export your work easily
 
@@ -74,11 +74,11 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 ### Core Libraries & Frameworks
 
 * Electron (via Chromium & Node.js)
-* Vue 3 – MIT License
-* Vite – MIT License
-* Pinia – MIT License
-* TypeScript – MIT License
-* Pyodide – MPL-2.0 License
+* Vue 3. MIT License
+* Vite. MIT License
+* Pinia. MIT License
+* TypeScript. MIT License
+* Pyodide. MPL-2.0 License
 
 ### Planned Core Libraries / Components
 
@@ -94,11 +94,11 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 
 ## 🅰️ Fonts Used
 
-* **Comic Neue** – SIL Open Font License 1.1
-* **Roboto** – Apache License 2.0
-* **OpenDyslexic** – SIL Open Font License 1.1
-* **Fira Code** – SIL Open Font License 1.1
-* **Arimo** – Apache License 2.0
+* **Comic Neue.** SIL Open Font License 1.1
+* **Roboto.** Apache License 2.0
+* **OpenDyslexic.** SIL Open Font License 1.1
+* **Fira Code.** SIL Open Font License 1.1
+* **Arimo.** Apache License 2.0
 
 ---
 
