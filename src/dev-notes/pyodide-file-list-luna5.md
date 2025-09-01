@@ -4,7 +4,7 @@ Folder: `public/pyodide/`
 
 List snapshot (manually captured):
 
-> **Note:** The `public/pyodide/` folder is excluded from git version control and is not tracked in commits.
+> **Note:** The `public/pyodide/` folder may be excluded from git version control.
 
 - contourpy-1.3.1-cp313-cp313-pyodide_2025_0_wasm32.whl
 - cycler-0.12.1-py3-none-any.whl
