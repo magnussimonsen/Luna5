@@ -8,6 +8,8 @@ Built using **Electron**, **Vite**, **Vue 3**, **Pinia**, and **TypeScript**, al
 
 Special thanks to the [electron-vite](https://electron-vite.org/guide/) team for creating the excellent `npm create @quick-start/electron@latest` starter tool that jumpstarted this project.
 
+Thanks as well to the [Pyodide](https://pyodide.org/) project and community for making Python run in the browser. Luna5 vendors Pyodide assets under `public/pyodide` and follows its MPL-2.0 licensing.
+
 ## 📚 What is Luna?
 
 **Luna5** is an educational notebook-style application designed to simplify and unify digital workflows for both students and teachers. It brings together essential STEM tools in a clean, pedagogically structured interface — eliminating the need to switch between multiple, complex programs.
@@ -76,10 +78,11 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 * Vite – MIT License
 * Pinia – MIT License
 * TypeScript – MIT License
+* Pyodide – MPL-2.0 License
 
 ### Planned Core Libraries / Components
 
-* Rich Text editor with math input support (Vue component)
+* Rich Text editor with math input support
 * Markdown editor with KaTeX rendering
 * Code editor (evaluating **CodeMirror** and **Monaco**)
 * Pyodide integration (via a background worker)
@@ -102,6 +105,12 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 ## 📜 License
 
 This project is licensed under the **MIT License**.
+
+Third-party components are licensed separately. Notably:
+- Pyodide is licensed under the Mozilla Public License 2.0 (MPL-2.0).
+  See: https://github.com/pyodide/pyodide/blob/main/LICENSE
+
+See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated list of third-party dependencies and their licenses.
 
 ---
 

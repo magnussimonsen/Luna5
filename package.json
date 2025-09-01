@@ -13,13 +13,15 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
+  "prebuild": "node scripts/gen-third-party-notices.mjs",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
   "build:linux": "npm run build && electron-builder --linux",
-  "gen:pyodide:list": "node scripts/gen-pyodide-file-list.mjs"
+  "gen:pyodide:list": "node scripts/gen-pyodide-file-list.mjs",
+  "gen:thirdparty": "node scripts/gen-third-party-notices.mjs"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
