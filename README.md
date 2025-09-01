@@ -82,11 +82,11 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 
 ### Planned Core Libraries / Components
 
-* Rich Text editor with math input support
+* Rich-text editor with math input support (considering Tiptap, MathLive, and KaTeX)
 * Markdown editor with KaTeX rendering
 * Code editor (evaluating **CodeMirror** and **Monaco**)
 * Pyodide integration (via a background worker)
-* Numerical math library (TBD)
+* Numerical computation library (either in-house or a vetted JS/TS package)
 * Custom tokenizer and parser for Luna’s CAS syntax
   *(considering Moo + Nearley for parsing; powered by SymPy for computation)*
 
