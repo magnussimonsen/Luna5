@@ -35,7 +35,7 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 
 ---
 
-## 👩‍🏫 For Teachers
+## 🥷 For Teachers
 
 * Create both questions and solutions in the same file using **Hide Cell** and **Lock Cell**
 * Export test versions that hide answers; students can insert their responses in the same file
