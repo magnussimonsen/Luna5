@@ -2,13 +2,10 @@
 
 Folder: `public/pyodide/`
 
-List snapshot (manually captured):
-
-> **Note:** The `public/pyodide/` folder may be excluded from git version control.
+Generated: 2025-09-01T17:55:46.969Z
 
 - contourpy-1.3.1-cp313-cp313-pyodide_2025_0_wasm32.whl
 - cycler-0.12.1-py3-none-any.whl
-- desktop.ini
 - ffi.d.ts
 - fonttools-4.56.0-py3-none-any.whl
 - gmpy2-2.1.5-cp313-cp313-pyodide_2025_0_wasm32.whl
@@ -31,11 +28,12 @@ List snapshot (manually captured):
 - pyodide.js
 - pyparsing-3.2.1-py3-none-any.whl
 - pyparsing-3.2.1-py3-none-any.whl.metadata
-- python/ (directory)
+- python
 - python_cli_entry.mjs
 - python_dateutil-2.9.0.post0-py2.py3-none-any.whl
 - python_stdlib.zip
 - pytz-2025.2-py2.py3-none-any.whl
+- README.md
 - scipy-1.14.1-cp313-cp313-pyodide_2025_0_wasm32.whl
 - scipy-1.14.1-cp313-cp313-pyodide_2025_0_wasm32.whl.metadata
 - six-1.17.0-py2.py3-none-any.whl
@@ -43,5 +41,4 @@ List snapshot (manually captured):
 - tzdata-2025.2-py2.py3-none-any.whl
 
 Notes:
-- This list is for quick reference while bundling Pyodide offline with Electron.
-- If files change, update this snapshot to match `public/pyodide/`. 
+- This list is auto-generated. Run `npm run gen:pyodide:list` to refresh.
