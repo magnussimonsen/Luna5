@@ -9,6 +9,7 @@ import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communicati
 import {
   createNotebook as operationsCreateNotebook,
   createTextCell as operationsCreateTextCell,
+  createPythonCell as operationsCreatePythonCell,
   addCellToNotebook as operationsAddCellToNotebook,
   deleteNotebookSoft as operationsDeleteNotebookSoft,
   moveCellIdUp as operationsMoveCellIdUp,
@@ -569,6 +570,15 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.getWorkspace() // ensure initialized
       this.ensureDefaultNotebook()
       const newCell = operationsCreateTextCell(content)
+      operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
+      this.insertCellGeneric(newCell)
+      this.markAsUnsaved()
+      return newCell
+    },
+    addPythonCell(source = '# Python cell placeholder'): Cell {
+      this.getWorkspace()
+      this.ensureDefaultNotebook()
+      const newCell = operationsCreatePythonCell(source)
       operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
       this.insertCellGeneric(newCell)
       this.markAsUnsaved()

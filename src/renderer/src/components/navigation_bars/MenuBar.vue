@@ -145,9 +145,9 @@
         Insert Probability Calculator Cell <span class="shortcut-not-implemented">Ctrl + 6</span>
         <ImplementedMark :implemented="false" />
       </div>
-      <div class="dropdown-menu-item">
+      <div class="dropdown-menu-item" @click="handleInsertPythonCell">
         Insert Python Cell <span class="shortcut-not-implemented">Ctrl + 7</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item">
         Insert Markdown Cell <span class="shortcut-not-implemented">Ctrl + 8</span>
@@ -404,6 +404,11 @@ const handleReplace = (): void => {
 const handleInsertTextCell = (): void => {
   const cell = workspaceStore.addTextCell()
   console.log('Inserted text cell', cell.id)
+}
+
+const handleInsertPythonCell = (): void => {
+  const cell = workspaceStore.addPythonCell()
+  console.log('Inserted python cell', cell.id)
 }
 
 const handleTogglePanel = (panel: string): void => {

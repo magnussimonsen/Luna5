@@ -24,6 +24,7 @@ import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import CellContainer from './CellContainer.vue'
 import TextCell from '@renderer/components/cells/TextCell.vue'
+import PythonCell from '@renderer/components/cells/PythonCell.vue'
 import type { Cell } from '@renderer/types/notebook-cell-types'
 
 const workspaceStore = useWorkspaceStore()
@@ -74,6 +75,8 @@ function resolveCellComponent(kind: string): Component {
   switch (kind) {
     case 'text-cell':
       return TextCell
+    case 'python-cell':
+      return PythonCell
     default:
       return TextCell // fallback
   }

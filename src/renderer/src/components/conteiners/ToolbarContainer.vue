@@ -10,6 +10,7 @@ import { computed } from 'vue'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { useSidePanelStore } from '@renderer/stores/UI/sidePanelStore'
 import TextCellToolbar from '@renderer/components/toolbars/TextCellToolbar.vue'
+import PythonCellToolbar from '@renderer/components/toolbars/PythonCellToolbar.vue'
 
 const selectionStore = useCellSelectionStore()
 const sidePanelStore = useSidePanelStore()
@@ -21,8 +22,9 @@ const FlashcardsToolbar = {
 }
 
 const toolbarComponents = {
-  'text-cell': TextCellToolbar
-  // future: code: CodeCellToolbar, markdown: MarkdownCellToolbar, etc.
+  'text-cell': TextCellToolbar,
+  'python-cell': PythonCellToolbar
+  // future: markdown: MarkdownCellToolbar, etc.
 } as const
 
 const currentToolbarComponent = computed(() => {
