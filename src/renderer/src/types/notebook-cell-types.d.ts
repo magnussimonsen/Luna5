@@ -36,13 +36,64 @@ export interface MarkdownCell extends BaseCell {
   cellErrorContent?: string
 }
 
+/**
+ * Structured error information from Python (Pyodide) execution.
+ * Keeps a plain-text traceback for quick rendering.
+ */
+export interface PythonErrorInfo {
+  name?: string
+  message: string
+  tracebackText?: string
+}
+
+/**
+ * A generic display item for rich outputs (future-friendly, Jupyter-like).
+ * Example mimes: 'text/plain', 'text/markdown', 'image/png', 'image/svg+xml', 'text/html'.
+ */
+export interface PythonDisplayItem {
+  mime: string
+  data: string // For images, prefer data URLs; for text, raw text; for html/markdown, raw string
+}
+
+/**
+ * Execution metadata to track status and timing for a run.
+ */
+export interface PythonExecutionMeta {
+  status: 'idle' | 'running' | 'ok' | 'error'
+  startedAt?: string
+  endedAt?: string
+  durationMs?: number
+  runCount?: number // Similar to Jupyter execution_count
+  packages?: string[] // Packages requested/loaded for this run
+}
+
 export interface PythonCell extends BaseCell {
   kind: 'python-cell'
   language: 'python'
   source: string
   cellInputContent?: string
-  cellOutputContent?: string // this can be for example stdout from pyodide (inc. errors this must be captured)
-  cellErrorContent?: string
+  /**
+   * Structured outputs from Pyodide execution.
+   */
+  stdoutText?: string // Full captured stdout
+  stderrText?: string // Full captured stderr
+  stdoutImages?: string[] // Data URLs extracted from stdout (e.g., matplotlib PNGs)
+  displayItems?: PythonDisplayItem[] // Rich display bundle (future-friendly)
+
+  /**
+   * Error channels.
+   * - workerError: errors from our JS worker plumbing
+   * - pyError: structured Python exception details
+   */
+  workerError?: string
+  pyError?: PythonErrorInfo
+
+  /**
+   * Helpful execution context for UI features.
+   */
+  pythonFunctions?: string[] // Names of functions discovered in the user namespace
+  pythonVariablesObjectString?: string // Stringified preview of selected variables
+  exec?: PythonExecutionMeta
 }
 
 export type Cell = TextCell | MarkdownCell | PythonCell

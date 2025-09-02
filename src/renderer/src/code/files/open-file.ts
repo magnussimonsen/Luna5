@@ -1,4 +1,4 @@
-import { decompressAndDeserialize } from '@renderer/code/notebook-core/utils/compression-utils'
+import { decompressAndDeserialize } from '@renderer/utils/core/compression-utils'
 import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { saveOrSaveAs, trySaveToCurrentFile } from './save-file'

@@ -1,5 +1,5 @@
 import type { Workspace, Notebook } from '../../model/schema'
-import { uuid } from '../../utils/id-utils'
+import { uuid } from '@renderer/utils/core/id-utils'
 
 /**
  * Create a new notebook and append it to the workspace.

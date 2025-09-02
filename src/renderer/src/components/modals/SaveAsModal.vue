@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
-import { serializeAndCompress } from '@renderer/code/notebook-core/utils/compression-utils'
+import { serializeAndCompress } from '@renderer/utils/core/compression-utils'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
 const modalStore = useModalStore()

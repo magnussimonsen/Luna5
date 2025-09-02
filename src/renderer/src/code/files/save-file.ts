@@ -1,4 +1,4 @@
-import { serializeAndCompress } from '@renderer/code/notebook-core/utils/compression-utils'
+import { serializeAndCompress } from '@renderer/utils/core/compression-utils'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
 export type SaveResult = { success: true; filePath: string } | { success: false; error?: string }

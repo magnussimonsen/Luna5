@@ -14,7 +14,7 @@
  * - File I/O happens in main; preload exposes window.api methods to the renderer.
  * - The compression utility encapsulates the chosen format/encoding for the payload.
  */
-import { serializeAndCompress } from '@renderer/code/notebook-core/utils/compression-utils'
+import { serializeAndCompress } from '@renderer/utils/core/compression-utils'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
 /**
