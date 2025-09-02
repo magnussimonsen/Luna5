@@ -114,7 +114,12 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 
 ---
 
+
 ## 🖼️ Current UI Progress Snapshots
+
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-02.png" alt="Python cell framework" width="900" />
+</p>
 
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-08-31.png" alt="Save and load file functionality with autosave" width="900" />
