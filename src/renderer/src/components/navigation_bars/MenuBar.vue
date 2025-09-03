@@ -119,7 +119,7 @@
         <ImplementedMark :implemented="true" />
       </div>
     </DropdownMenu>
-    <DropdownMenu label="Insert">
+    <DropdownMenu ref="insertMenu" label="Insert">
       <div class="dropdown-menu-item" @click="handleInsertTextCell">
         Insert Text Cell <span class="shortcut-not-implemented">Ctrl + 1</span>
         <ImplementedMark :implemented="true" />
@@ -248,7 +248,7 @@ import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { saveAsCurrentWorkspace } from '@renderer/code/files/save-as'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { openWorkspaceFromDisk } from '@renderer/code/files/open-file'
@@ -262,6 +262,8 @@ const fontSizeStore = useFontSizeStore()
 const menubarStore = useMenubarStore()
 const workspaceStore = useWorkspaceStore()
 const cellSelectionStore = useCellSelectionStore()
+// ref to Insert dropdown menu to programmatically close after action
+const insertMenu = ref<{ closeDropdown: () => void } | null>(null)
 // Computed properties
 const isA4Preview = computed(() => menubarStore.isA4Preview)
 const isDarkMode = computed(() => themeStore.isDarkMode)
@@ -308,35 +310,27 @@ function isWorkspaceEffectivelyEmpty(): boolean {
 // Placeholder handlers
 const handleNewFile = async (): Promise<void> => {
   const res = await createNewWorkspaceWithPrompt()
-  if (!res.success) {
-    if (!res.canceled) console.warn('New File failed', res.error)
+  if (!res.success && !res.canceled) {
+    console.warn('New File failed', res.error)
   }
 }
 
 const handleOpenFile = async (): Promise<void> => {
   const res = await openWorkspaceFromDisk()
-  if (!res.success) {
-    console.warn('Open canceled or failed', res.error)
-  }
+  if (!res.success) console.warn('Open canceled or failed', res.error)
 }
 
 const handleSaveFile = async (): Promise<void> => {
   const res = await saveOrSaveAs()
-  if (!res.success) {
-    console.warn('Save canceled or failed', res.error)
-  }
+  if (!res.success) console.warn('Save canceled or failed', res.error)
 }
 
 const handleSaveFileAs = async (): Promise<void> => {
   const res = await saveAsCurrentWorkspace()
-  if (!res.success) {
-    console.warn('Save As canceled or failed', res.error)
-  }
+  if (!res.success) console.warn('Save As canceled or failed', res.error)
 }
 
-const handleSavePDFForSubmission = (): void => {
-  console.log('Save PDF For Submission clicked')
-}
+const handleSavePDFForSubmission = (): void => {}
 
 const handleSettings = (): void => {
   modalStore.openSettingsModal()
@@ -372,43 +366,35 @@ const handleMoveCellDown = (): void => {
   if (!ok) console.warn('Cannot move cell down: no selection or at bottom')
 }
 
-const handleMoveFocusToCellAbove = (): void => {
-  console.log('Move focus to cell above clicked')
-}
-const handleMoveFocusToCellBelow = (): void => {
-  console.log('Move focus to cell below clicked')
-}
+const handleMoveFocusToCellAbove = (): void => {}
+const handleMoveFocusToCellBelow = (): void => {}
 
-const handleUndo = (): void => {
-  console.log('Undo clicked')
-}
-const handleRedo = (): void => {
-  console.log('Redo clicked')
-}
-const handleCut = (): void => {
-  console.log('Cut clicked')
-}
-const handleCopy = (): void => {
-  console.log('Copy clicked')
-}
-const handlePaste = (): void => {
-  console.log('Paste clicked')
-}
-const handleFind = (): void => {
-  console.log('Find clicked')
-}
-const handleReplace = (): void => {
-  console.log('Replace clicked')
-}
+const handleUndo = (): void => {}
+const handleRedo = (): void => {}
+const handleCut = (): void => {}
+const handleCopy = (): void => {}
+const handlePaste = (): void => {}
+const handleFind = (): void => {}
+const handleReplace = (): void => {}
 
 const handleInsertTextCell = (): void => {
-  const cell = workspaceStore.addTextCell()
-  console.log('Inserted text cell', cell.id)
+  workspaceStore.addTextCell()
+  // Close Insert menu after action
+  try {
+    insertMenu.value?.closeDropdown()
+  } catch {
+    /* ignore */
+  }
 }
 
 const handleInsertPythonCell = (): void => {
-  const cell = workspaceStore.addPythonCell()
-  console.log('Inserted python cell', cell.id)
+  workspaceStore.addPythonCell()
+  // Close Insert menu after action
+  try {
+    insertMenu.value?.closeDropdown()
+  } catch {
+    /* ignore */
+  }
 }
 
 const handleTogglePanel = (panel: string): void => {
@@ -472,7 +458,7 @@ const handleMoveNotebookToBin = (): void => {
   padding: var(--menu-bar-padding, 0.5em);
   /* top, right, bottom, left */
   box-sizing: border-box;
-  z-index: 3000;
+  z-index: 10010;
   /* Higher than toolbar, consistent with dropdown z-index */
   position: relative;
   /* Ensure z-index works correctly */

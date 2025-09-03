@@ -69,7 +69,7 @@ defineExpose({
 .dropdown {
   position: relative;
   display: inline-block;
-  z-index: 3000;
+  z-index: 10020;
   /* Higher than toolbar's z-index */
 }
 
@@ -105,7 +105,7 @@ defineExpose({
   padding: 0.5em 0.5em 0.5em 0.5em;
   /* top, right, bottom, left */
   border-radius: var(--border-radius);
-  z-index: 3001;
+  z-index: 10030;
   /* Higher than the .dropdown z-index */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   /* Add shadow for better visibility */

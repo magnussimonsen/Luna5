@@ -78,6 +78,7 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 * Vite. MIT License
 * Pinia. MIT License
 * TypeScript. MIT License
+* Monaco Editor. MIT License
 * Pyodide. MPL-2.0 License
 
 ### Planned Core Libraries / Components
@@ -109,6 +110,8 @@ This project is licensed under the **MIT License**.
 Third-party components are licensed separately. Notably:
 - Pyodide is licensed under the Mozilla Public License 2.0 (MPL-2.0).
   See: https://github.com/pyodide/pyodide/blob/main/LICENSE
+- Monaco Editor is licensed under the MIT License.
+  See: https://github.com/microsoft/monaco-editor/blob/main/LICENSE
 
 See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated list of third-party dependencies and their licenses.
 
@@ -116,7 +119,9 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 
 
 ## 🖼️ Current UI Progress Snapshots
-
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-03.png" alt="Monaco code editor implemented (work in progrss)" width="900" />
+</p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-02.png" alt="Python cell framework" width="900" />
 </p>

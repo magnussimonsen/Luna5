@@ -575,7 +575,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.markAsUnsaved()
       return newCell
     },
-    addPythonCell(source = '# Python cell placeholder'): Cell {
+    addPythonCell(source = `# Python demo\nfor i in range(5):\n    print(f"Item {i}")`): Cell {
       this.getWorkspace()
       this.ensureDefaultNotebook()
       const newCell = operationsCreatePythonCell(source)
