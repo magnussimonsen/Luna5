@@ -220,17 +220,24 @@
       </div>
       <div
         class="side-panel-toggle-button"
-        :class="{ active: sidePanelStore.activePanel === 'help' }"
-        @click="handleTogglePanel('help')"
-      >
-        <strong>Help</strong>
-      </div>
-      <div
-        class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'flashcards' }"
         @click="handleTogglePanel('flashcards')"
       >
         Flashcards
+      </div>
+      <div
+        class="side-panel-toggle-button"
+        :class="{ active: sidePanelStore.activePanel === 'settings' }"
+        @click="handleTogglePanel('settings')"
+      >
+        Settings
+      </div>
+      <div
+        class="side-panel-toggle-button"
+        :class="{ active: sidePanelStore.activePanel === 'help' }"
+        @click="handleTogglePanel('help')"
+      >
+        <strong>Help</strong>
       </div>
     </div>
   </nav>

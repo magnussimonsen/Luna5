@@ -21,20 +21,35 @@ function writeToLS(key: string, value: string): void {
   }
 }
 
+// Normalize incoming theme IDs to a safe, kebab-case form to match monaco-theme ids
+function normalizeThemeId(id: string): string {
+  try {
+    return id
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  } catch {
+    return 'vs'
+  }
+}
+
 export const useCodeSettingsStore = defineStore('codeSettings', {
   state: () => ({
     // Load persisted values if available, otherwise default to Monaco built-ins
-    lightCodeEditorTheme: readFromLS(LS_LIGHT, 'vs') as string,
-    darkCodeEditorTheme: readFromLS(LS_DARK, 'vs-dark') as string
+    lightCodeEditorTheme: normalizeThemeId(readFromLS(LS_LIGHT, 'vs')) as string,
+    darkCodeEditorTheme: normalizeThemeId(readFromLS(LS_DARK, 'vs-dark')) as string
   }),
   actions: {
     setLightCodeEditorTheme(theme: string) {
-      this.lightCodeEditorTheme = theme
-      writeToLS(LS_LIGHT, theme)
+      const t = normalizeThemeId(theme)
+      this.lightCodeEditorTheme = t
+      writeToLS(LS_LIGHT, t)
     },
     setDarkCodeEditorTheme(theme: string) {
-      this.darkCodeEditorTheme = theme
-      writeToLS(LS_DARK, theme)
+      const t = normalizeThemeId(theme)
+      this.darkCodeEditorTheme = t
+      writeToLS(LS_DARK, t)
     }
   }
 })

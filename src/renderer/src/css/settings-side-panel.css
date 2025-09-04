@@ -1,0 +1,61 @@
+/*
+	Shared styles for the Settings side panel and its pages.
+	Imported once in renderer main.ts so all Settings components share a consistent look.
+
+	Keep these selectors unscoped so every settings page can rely on them.
+*/
+
+:root {
+	/* Fallbacks; can be overridden by app theme */
+	--settings-divider-color: var(--dropdown-divider-color, #ccc);
+	--settings-section-gap: 8px;
+	--settings-padding: 8px;
+}
+
+/* Container for the entire settings sidebar */
+.settings-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+}
+
+/* Content area under the selector row */
+.settings-panel-content {
+	flex: 1 1 auto;
+	min-height: 0; /* allow children to scroll if needed */
+}
+
+/* Top selector row (tabs/links) */
+.settings-selector-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5em;
+	padding: 0.25em 0.25em 0.5em 0.25em;
+	border-bottom: 1px solid var(--settings-divider-color);
+}
+
+.settings-selector-row button {
+	background: transparent;
+	border: none;
+	padding: 4px 6px;
+	cursor: pointer;
+	color: var(--text-color, whitesmoke);
+	background-color: var(--button-transparent-off-color);
+	font-weight: 400;
+	text-decoration: none;
+}
+
+.settings-selector-row button.active {
+	color: var(--text-color, whitesmoke);
+	background-color: var(--button-on-color);
+	font-weight: 400;
+	text-decoration: none;
+}
+
+/* Generic page block spacing */
+/* Generic settings page padding */
+.settings-page,
+.general-settings-panel {
+	padding: 0.5em 0.25em;
+}

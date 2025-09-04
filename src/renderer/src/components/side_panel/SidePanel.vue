@@ -24,6 +24,7 @@ import FlashcardsPanel from './FlashcardsPanel.vue'
 import NotebooksPanel from './NotebooksPanel.vue'
 import TOCPanel from './TOCPanel.vue'
 import VariablesPanel from './VariablesPanel.vue'
+import SettingsPanel from './SettingsPanel.vue'
 
 const sidePanelStore = useSidePanelStore()
 const panelWidth = ref(sidePanelStore.lastPanelWidth)
@@ -40,7 +41,8 @@ const panelComponents = {
   help: HelpPanel,
   notebooks: NotebooksPanel,
   toc: TOCPanel,
-  variables: VariablesPanel
+  variables: VariablesPanel,
+  settings: SettingsPanel
 }
 
 // Dynamically select the current panel component based on active panel in store

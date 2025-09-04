@@ -20,6 +20,7 @@
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
     "build:linux": "npm run build && electron-builder --linux",
+  "themes:sync": "node scripts/sync-monaco-themes.mjs",
     "gen:pyodide:list": "node scripts/gen-pyodide-file-list.mjs",
     "gen:thirdparty": "node scripts/gen-third-party-notices.mjs"
   },
