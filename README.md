@@ -12,7 +12,7 @@ Thanks as well to the [Pyodide](https://pyodide.org/) project and community for 
 
 ## 📚 What is Luna?
 
-**Luna5** is an educational notebook-style application designed to simplify and unify digital workflows for both students and teachers. It brings together essential STEM tools in a clean, pedagogically structured interface — eliminating the need to switch between multiple, complex programs.
+**Luna5** is an educational notebook-style application designed to simplify and unify digital workflows for both students and teachers. It brings together essential STEM tools in a clean, pedagogically structured interface, eliminating the need to switch between multiple, complex programs.
 
 Modern classrooms often depend on a mix of disconnected tools (Python editors, GeoGebra, Word, Excel) each with its own interface and file formats. This constant "software jumping" slows learning and creates unnecessary friction. While GeoGebra is an excellent tool, it's not built around a document-based notebook workflow. Luna5 is.
 
