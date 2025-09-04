@@ -116,7 +116,6 @@ Third-party components are licensed separately. Notably:
 See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated list of third-party dependencies and their licenses.
 
 ---
-Luna5-2025-09-04
 
 ## 🖼️ Current UI Progress Snapshots
 <p align="center">
