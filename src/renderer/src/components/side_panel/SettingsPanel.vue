@@ -14,6 +14,8 @@
       <CasSettingsPanel v-else-if="currentPage === 'cas'" />
       <GenometrySettingsPanel v-else-if="currentPage === 'geometry'" />
       <GraphicalCalculatorSettingsPanel v-else-if="currentPage === 'graphical-calculator'" />
+      <SpreadsheetsSettingsPanel v-else-if="currentPage === 'spreadsheets'" />
+      <ProbabilitySettingsPanel v-else-if="currentPage === 'probability'" />
       <TextEditorPanel v-else-if="currentPage === 'text-editor'" />
     </div>
   </div>
@@ -27,10 +29,20 @@ import CodeSettingsPanel from './settings-components/CodeSettingsPanel.vue'
 import CasSettingsPanel from './settings-components/CasSettingsPanel.vue'
 import GenometrySettingsPanel from './settings-components/GenometrySettingsPanel.vue'
 import GraphicalCalculatorSettingsPanel from './settings-components/GraphicalCalculatorSettingsPanel.vue'
+import SpreadsheetsSettingsPanel from './settings-components/SpreadsheetsSettingsPanel.vue'
+import ProbabilitySettingsPanel from './settings-components/ProbabilitySettingsPanel.vue'
 import TextEditorPanel from './settings-components/TextEditorPanel.vue'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 
-type SettingsPage = 'general' | 'code' | 'cas' | 'geometry' | 'graphical-calculator' | 'text-editor'
+type SettingsPage =
+  | 'general'
+  | 'code'
+  | 'cas'
+  | 'geometry'
+  | 'graphical-calculator'
+  | 'spreadsheets'
+  | 'probability'
+  | 'text-editor'
 
 const currentPage: Ref<SettingsPage> = ref('general')
 const fontSizeStore = useFontSizeStore()
