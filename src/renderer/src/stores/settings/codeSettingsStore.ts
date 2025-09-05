@@ -1,4 +1,9 @@
 import { defineStore } from 'pinia'
+import {
+  getCuratedLightMonacoThemeIds,
+  getCuratedDarkMonacoThemeIds,
+  builtinMonacoThemes
+} from '@renderer/code/monaco/monaco-theme'
 
 // Local storage keys for persistence
 const LS_LIGHT = 'codeSettings.lightCodeEditorTheme'
@@ -34,11 +39,33 @@ function normalizeThemeId(id: string): string {
   }
 }
 
+function pickCuratedOrSaved(saved: string, curated: string[]): string {
+  const accepted = new Set<string>([...curated, ...builtinMonacoThemes])
+  if (accepted.has(saved)) return saved
+  return curated.length ? (curated[0] ?? saved) : saved
+}
+
+const initialLightThemeId = (() => {
+  const saved = normalizeThemeId(readFromLS(LS_LIGHT, 'vs'))
+  const curated = getCuratedLightMonacoThemeIds()
+  const picked = pickCuratedOrSaved(saved, curated)
+  if (picked !== saved) writeToLS(LS_LIGHT, picked)
+  return picked
+})()
+
+const initialDarkThemeId = (() => {
+  const saved = normalizeThemeId(readFromLS(LS_DARK, 'vs-dark'))
+  const curated = getCuratedDarkMonacoThemeIds()
+  const picked = pickCuratedOrSaved(saved, curated)
+  if (picked !== saved) writeToLS(LS_DARK, picked)
+  return picked
+})()
+
 export const useCodeSettingsStore = defineStore('codeSettings', {
   state: () => ({
-    // Load persisted values if available, otherwise default to Monaco built-ins
-    lightCodeEditorTheme: normalizeThemeId(readFromLS(LS_LIGHT, 'vs')) as string,
-    darkCodeEditorTheme: normalizeThemeId(readFromLS(LS_DARK, 'vs-dark')) as string
+    // Use curated defaults if saved values aren't curated; ensures selects have a value on startup
+    lightCodeEditorTheme: initialLightThemeId as string,
+    darkCodeEditorTheme: initialDarkThemeId as string
   }),
   actions: {
     setLightCodeEditorTheme(theme: string) {

@@ -17,6 +17,8 @@ import type { PythonCell } from '@renderer/types/notebook-cell-types'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useCodeSettingsStore } from '@renderer/stores/settings/codeSettingsStore'
+import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
+import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { ensureAllMonacoThemesDefined, applyMonacoTheme } from '@renderer/code/monaco/monaco-theme'
 
 // Monaco ESM API + CSS + worker (Vite-friendly)
@@ -39,12 +41,24 @@ const props = defineProps<{ cell: PythonCell }>()
 const workspaceStore = useWorkspaceStore()
 const themeStore = useThemeStore()
 const codeSettingsStore = useCodeSettingsStore()
+const fontStore = useFontStore()
+const fontSizeStore = useFontSizeStore()
 
 const editorEl = ref<HTMLDivElement | null>(null)
 let editor: monaco.editor.IStandaloneCodeEditor | null = null
 let disposables: Array<{ dispose: () => void }> = []
 let ro: ResizeObserver | null = null
 let isApplyingLocalEdit = false
+
+function pxToNumber(px: string | undefined, fallback = 14): number {
+  try {
+    if (!px) return fallback
+    const m = /([0-9]+(?:\.[0-9]+)?)/.exec(px)
+    return m ? Number(m[1]) : fallback
+  } catch {
+    return fallback
+  }
+}
 
 // Cells can be locked/hidden via several flags; reflect that in editor readOnly state
 const isLocked = computed(
@@ -85,7 +99,10 @@ function initEditor(): void {
     wordWrap: 'on',
     scrollbar: { vertical: 'hidden' },
     overviewRulerLanes: 0,
-    automaticLayout: true
+    automaticLayout: true,
+    // Monaco font settings
+    fontFamily: fontStore.fonts.codingFont,
+    fontSize: pxToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
   })
   // Propagate edits into the workspace
   disposables.push(
@@ -104,6 +121,15 @@ function initEditor(): void {
   )
   // Now switch to the desired theme
   applyMonacoTheme(desiredTheme.value)
+  // Ensure font options are respected after creation as well
+  try {
+    editor.updateOptions({
+      fontFamily: fontStore.fonts.codingFont,
+      fontSize: pxToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
+    })
+  } catch {
+    /* ignore */
+  }
   // Defensive: ensure placeholder source appears if model started empty
   try {
     if (editor && !editor.getValue() && props.cell.source) {
@@ -167,6 +193,33 @@ watch(
     ensureCustomThemesDefined()
     applyMonacoTheme(desiredTheme.value)
     if (editor) editor.layout()
+  }
+)
+
+// Font reactivity: update Monaco options when coding font or size changes
+watch(
+  () => fontStore.fonts.codingFont,
+  () => {
+    if (!editor) return
+    try {
+      editor.updateOptions({ fontFamily: fontStore.fonts.codingFont })
+      editor.layout()
+    } catch {
+      /* ignore */
+    }
+  }
+)
+
+watch(
+  () => fontSizeStore.fontSizes.codeEditorCellFontSize,
+  () => {
+    if (!editor) return
+    try {
+      editor.updateOptions({ fontSize: pxToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize) })
+      editor.layout()
+    } catch {
+      /* ignore */
+    }
   }
 )
 

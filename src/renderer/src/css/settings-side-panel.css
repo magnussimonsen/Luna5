@@ -23,6 +23,7 @@
 .settings-panel-content {
 	flex: 1 1 auto;
 	min-height: 0; /* allow children to scroll if needed */
+	overflow-y: auto; /* make settings page scroll vertically */
 }
 
 /* Top selector row (tabs/links) */
@@ -42,6 +43,8 @@
 	cursor: pointer;
 	color: var(--text-color, whitesmoke);
 	background-color: var(--button-transparent-off-color);
+	font-size: inherit; /* inherit from selector row so sidePanelMenuBarFontSize applies to text */
+	font-family: inherit;
 	font-weight: 400;
 	text-decoration: none;
 }
@@ -58,4 +61,28 @@
 .settings-page,
 .general-settings-panel {
 	padding: 0.5em 0.25em;
+}
+
+/* Common layout helpers for settings pages */
+.settings-columns {
+	display: flex;
+	gap: 1.25em;
+}
+
+.settings-column {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+.setting-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	margin-bottom: 0.75em;
+}
+
+/* Optional dark-mode select styling hook used by modal; still works here */
+select.dark-mode {
+	background-color: black;
+	color: #cccccc;
 }

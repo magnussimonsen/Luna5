@@ -4,7 +4,8 @@ import { computed } from 'vue'
 //
 // This settings page presents theme IDs from our curated Monaco themes loader
 // ('@renderer/code/monaco/monaco-theme'). Place JSON files in
-// src/renderer/src/code/monaco/monaco-curated-themes and they will auto-register.
+// src/renderer/src/code/monaco/monaco-curated-light-themes and
+// src/renderer/src/code/monaco/monaco-curated-dark-themes and they will auto-register.
 //
 // The selected theme is stored in Pinia (lightCodeEditorTheme/darkCodeEditorTheme).
 // PythonCell.vue and a global watcher in main.ts observe those values and call
@@ -17,7 +18,11 @@ import { useFontSizeStore, fontSizeOptions } from '@renderer/stores/fonts/fontSi
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
 import { useCodeSettingsStore } from '@renderer/stores/settings/codeSettingsStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
-import { getAllMonacoThemeIds } from '@renderer/code/monaco/monaco-theme'
+import {
+  getCuratedLightMonacoThemeIds,
+  getCuratedDarkMonacoThemeIds,
+  builtinMonacoThemes
+} from '@renderer/code/monaco/monaco-theme'
 // Theme registration/application is handled globally; no direct apply calls here.
 
 const generalSettingsStore = useGeneralSettingsStore()
@@ -27,9 +32,9 @@ const codeSettingsStore = useCodeSettingsStore()
 const themeStore = useThemeStore()
 // Build options from Monaco theme registry (built-ins + curated JSON filenames)
 // Note: IDs are normalized (kebab-case). We reuse the same list for light/dark.
-const allThemeOptions = getAllMonacoThemeIds()
-const lightThemeOptions = allThemeOptions
-const darkThemeOptions = allThemeOptions
+const lightThemeOptions = ['vs', ...getCuratedLightMonacoThemeIds()]
+const darkBuiltins = builtinMonacoThemes.filter((t) => t === 'vs-dark' || t === 'hc-black')
+const darkThemeOptions = [...darkBuiltins, ...getCuratedDarkMonacoThemeIds()]
 
 // Show the theme that would be applied right now based on app mode
 const currentThemeId = computed(() =>

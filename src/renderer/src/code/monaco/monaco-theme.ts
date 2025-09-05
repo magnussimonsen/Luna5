@@ -4,7 +4,9 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
  * Monaco theme management (curated, simple, well-documented).
  *
  * How it works:
- * - Place JSON theme files under: src/renderer/src/code/monaco/monaco-curated-themes
+ * - Place JSON theme files under the split folders:
+ *   - src/renderer/src/code/monaco/monaco-curated-light-themes
+ *   - src/renderer/src/code/monaco/monaco-curated-dark-themes
  * - We eagerly import those JSON files at build time (fast and synchronous)
  * - We define each theme in Monaco using a sanitized, safe theme id
  * - Consumers can call applyMonacoTheme('friendly id') without worrying about exact filenames
@@ -15,13 +17,17 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
  * - Clarity: the folder clearly shows what ships with the app
  */
 
-// Discover curated JSON themes (place files here via the sync script or manually).
+// Discover curated JSON themes (split into light and dark collections).
 // NOTE: Vite alias @renderer points to src/renderer/src
-const curatedThemeModules = import.meta.glob<{
+const curatedLightThemeModules = import.meta.glob<{
   default: monaco.editor.IStandaloneThemeData
-}>('@renderer/code/monaco/monaco-curated-themes/*.json', {
-  eager: true
-})
+}>('@renderer/code/monaco/monaco-curated-light-themes/*.json', { eager: true })
+
+const curatedDarkThemeModules = import.meta.glob<{
+  default: monaco.editor.IStandaloneThemeData
+}>('@renderer/code/monaco/monaco-curated-dark-themes/*.json', { eager: true })
+
+// No legacy fallback: curated themes must live in the split folders above
 
 let themesDefined = false
 
@@ -41,9 +47,24 @@ export const builtinMonacoThemes: string[] = ['vs', 'vs-dark', 'hc-black']
  * Return the list of curated theme IDs derived from JSON filenames in the curated folder.
  * IDs are normalized via toSafeId (e.g., "GitHub Dark" -> "github-dark").
  */
-export function getCuratedMonacoThemeIds(): string[] {
+export function getCuratedLightMonacoThemeIds(): string[] {
   const ids = new Set<string>()
-  for (const p of Object.keys(curatedThemeModules)) {
+  // New split folder
+  for (const p of Object.keys(curatedLightThemeModules)) {
+    const rawId =
+      p
+        .split('/')
+        .pop()
+        ?.replace(/\.json$/, '') || 'custom-theme'
+    ids.add(toSafeId(rawId))
+  }
+  return Array.from(ids).sort()
+}
+
+export function getCuratedDarkMonacoThemeIds(): string[] {
+  const ids = new Set<string>()
+  // New split folder
+  for (const p of Object.keys(curatedDarkThemeModules)) {
     const rawId =
       p
         .split('/')
@@ -55,21 +76,14 @@ export function getCuratedMonacoThemeIds(): string[] {
 }
 
 /**
- * Built-in + curated IDs. Useful for populating dropdowns.
- */
-export function getAllMonacoThemeIds(): string[] {
-  return [...builtinMonacoThemes, ...getCuratedMonacoThemeIds()]
-}
-
-/**
  * Define all curated themes once per app lifetime.
  * Safe to call multiple times.
  */
 export function ensureAllMonacoThemesDefined(): void {
   if (themesDefined) return
 
-  // 1) Curated local JSON themes
-  for (const [p, mod] of Object.entries(curatedThemeModules)) {
+  // 1) Curated local JSON themes (light)
+  for (const [p, mod] of Object.entries(curatedLightThemeModules)) {
     const rawId =
       p
         .split('/')
@@ -85,6 +99,26 @@ export function ensureAllMonacoThemesDefined(): void {
       // ignore define errors for individual themes
     }
   }
+
+  // 2) Curated local JSON themes (dark)
+  for (const [p, mod] of Object.entries(curatedDarkThemeModules)) {
+    const rawId =
+      p
+        .split('/')
+        .pop()
+        ?.replace(/\.json$/, '') || 'custom-theme'
+    const data = mod.default
+    if (!data) continue
+    const themeData = data as unknown as monaco.editor.IStandaloneThemeData
+    const safeId = toSafeId(rawId)
+    try {
+      monaco.editor.defineTheme(safeId, themeData)
+    } catch {
+      // ignore define errors for individual themes
+    }
+  }
+
+  // 3) No legacy folder is supported anymore; themes must be present in the split folders
 
   themesDefined = true
 }

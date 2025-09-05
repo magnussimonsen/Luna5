@@ -1,9 +1,10 @@
 <template>
   <div class="settings-page">
-    <em>Geometry settings (coming soon)</em>
+    <h3>Geometry Settings</h3>
+    <p>Geometry settings content goes here.</p>
   </div>
 </template>
 
 <script setup lang="ts">
-// stub
+// placeholder content aligned with modal
 </script>

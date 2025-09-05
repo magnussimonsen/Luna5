@@ -1,9 +1,10 @@
 <template>
   <div class="settings-page">
-    <em>Graphical calculator settings (coming soon)</em>
+    <h3>Graphical Calculator Settings</h3>
+    <p>Graphical calculator settings content goes here.</p>
   </div>
 </template>
 
 <script setup lang="ts">
-// stub
+// placeholder content aligned with modal
 </script>
