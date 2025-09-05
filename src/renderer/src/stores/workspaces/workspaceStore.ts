@@ -657,6 +657,119 @@ export const useWorkspaceStore = defineStore('workspace', {
       return true
     },
 
+    // --- Python cell execution/update helpers ---
+    resetPythonOutputs(cellId: string): boolean {
+      const workspace = this.getWorkspace()
+      const cell = workspace.cells[cellId]
+      if (!cell || cell.kind !== 'python-cell') return false
+      // Clear outputs and errors
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.stdoutText = undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.stderrText = undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.stdoutImages = undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.displayItems = undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.workerError = undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.pyError = undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.pythonFunctions = undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.pythonVariablesObjectString = undefined
+      // Exec state
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.exec = { status: 'idle' }
+      cell.updatedAt = new Date().toISOString()
+      this.markAsUnsaved()
+      return true
+    },
+    setPythonRunBegin(cellId: string, packages?: string[]): boolean {
+      const workspace = this.getWorkspace()
+      const cell = workspace.cells[cellId]
+      if (!cell || cell.kind !== 'python-cell') return false
+      const now = new Date().toISOString()
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.exec = {
+        status: 'running',
+        startedAt: now,
+        runCount: (cell.exec?.runCount || 0) + 1,
+        packages
+      }
+      // Clear previous errors but keep prior stdout until replaced
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.workerError = undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.pyError = undefined
+      cell.updatedAt = now
+      return true
+    },
+    setPythonRunSuccess(
+      cellId: string,
+      payload: {
+        stdoutText: string
+        stderrText: string
+        stdoutImages: string[]
+        pythonFunctions?: string[]
+        pythonVariablesObjectString?: string
+      }
+    ): boolean {
+      const workspace = this.getWorkspace()
+      const cell = workspace.cells[cellId]
+      if (!cell || cell.kind !== 'python-cell') return false
+      const endedAt = new Date().toISOString()
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      const startedAt = cell.exec?.startedAt
+      const durationMs = startedAt ? Date.parse(endedAt) - Date.parse(startedAt) : undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.stdoutText = payload.stdoutText
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.stderrText = payload.stderrText
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.stdoutImages = payload.stdoutImages
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.pythonFunctions = payload.pythonFunctions
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.pythonVariablesObjectString = payload.pythonVariablesObjectString
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.exec = {
+        status: 'ok',
+        startedAt,
+        endedAt,
+        durationMs,
+        // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+        runCount: cell.exec?.runCount
+      }
+      cell.updatedAt = endedAt
+      this.markAsUnsaved()
+      return true
+    },
+    setPythonRunFailure(cellId: string, message: string): boolean {
+      const workspace = this.getWorkspace()
+      const cell = workspace.cells[cellId]
+      if (!cell || cell.kind !== 'python-cell') return false
+      const endedAt = new Date().toISOString()
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      const startedAt = cell.exec?.startedAt
+      const durationMs = startedAt ? Date.parse(endedAt) - Date.parse(startedAt) : undefined
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.workerError = message
+      // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+      cell.exec = {
+        status: 'error',
+        startedAt,
+        endedAt,
+        durationMs,
+        // @ts-ignore: runtime narrowing to PythonCell; property exists on PythonCell only
+        runCount: cell.exec?.runCount
+      }
+      cell.updatedAt = endedAt
+      this.markAsUnsaved()
+      return true
+    },
+
     // --- File Save State Management ---
 
     /**

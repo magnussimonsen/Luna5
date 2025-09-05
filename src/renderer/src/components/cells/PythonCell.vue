@@ -8,6 +8,14 @@
       :aria-readonly="isCellLocked ? 'true' : 'false'"
       tabindex="0"
     ></div>
+    <!-- Outputs -->
+    <PythonOutputText :text="props.cell.stdoutText ?? ''" />
+    <PythonOutputImages :images="props.cell.stdoutImages ?? []" />
+    <div v-if="props.cell.workerError || props.cell.stderrText" class="py-out-error" role="alert">
+      <div class="section-title">Errors</div>
+      <pre v-if="props.cell.stderrText" class="stderr">{{ props.cell.stderrText }}</pre>
+      <pre v-if="props.cell.workerError" class="stderr">{{ props.cell.workerError }}</pre>
+    </div>
   </div>
 </template>
 
@@ -27,6 +35,8 @@ import 'monaco-editor/min/vs/editor/editor.main.css'
 import 'monaco-editor/esm/vs/basic-languages/python/python.contribution'
 // Editor worker: required for Monaco to function under Vite
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import PythonOutputText from './python-output/PythonOutputText.vue'
+import PythonOutputImages from './python-output/PythonOutputImages.vue'
 
 // Configure worker factory (safe to set multiple times)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -293,6 +303,30 @@ onBeforeUnmount(() => {
   height: auto;
   overflow: hidden;
   border: 1px solid var(--cell-border-color);
+}
+.py-out-error {
+  margin-top: 0.5rem;
+  border: 1px solid var(--error-border, #d92c2c);
+  background: var(--error-bg, #fff1f1);
+  color: var(--error-fg, #7a1010);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+}
+.section-title {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+.stderr {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+  cursor: text;
+}
+.py-out-error,
+.py-out-error * {
+  user-select: text;
 }
 .python-cell[data-locked='true'] {
   opacity: 0.9;

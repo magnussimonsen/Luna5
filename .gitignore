@@ -5,3 +5,4 @@ out
 .eslintcache
 *.log*
 src/renderer/ignore/**
+public/pyodide-0.28.2/**
