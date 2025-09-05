@@ -7,15 +7,16 @@ import { initializeFontSizes } from './initialize-font-size'
 import { initializeWorkspace } from './initialize-workspace'
 
 export function initializeApp(): void {
-  // Initialize new empty data workspace data structure schema first
+  // App bootstrap sequence (renderer). Order matters.
+  // 1) Initialize a new empty workspace state/schema first
   initializeWorkspace()
-  // Preload fonts and set font families
+  // 2) Preload fonts and set font-family CSS variables
   preloadCriticalFonts(preloadFonts)
   setFontFamilies(fonts.family)
-  // Initialize the theme
+  // 3) Initialize the theme
   initializeTheme()
-  // Initialize font sizes
+  // 4) Initialize font sizes
   initializeFontSizes()
-  // Initialize shortcuts globally
+  // 5) Initialize shortcuts globally
   initializeShortcutsGlobal()
 }

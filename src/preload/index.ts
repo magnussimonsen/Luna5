@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-// Custom APIs for renderer
-const api = {
+// Bridge: Renderer-facing API (safe subset of ipcRenderer exposed to window.api)
+const rendererApi = {
   // File saving and loading handlers
   showSaveDialog: () => ipcRenderer.invoke('show-save-dialog'),
   showOpenDialog: (options?: { properties: string[] }) =>
@@ -23,9 +23,11 @@ const api = {
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
+// If context isolation is ON, we must use contextBridge to expose APIs.
+// Otherwise, we attach them directly to the window object (dev-only scenarios).
 if (process.contextIsolated) {
   try {
-    console.log('Exposing quitApp in contextBridge')
+    console.log('Preload: exposing APIs via contextBridge')
     contextBridge.exposeInMainWorld('electron', {
       ...electronAPI,
       quitApp: (opts?: { isSaved?: boolean; isEffectivelyEmpty?: boolean }) =>
@@ -34,12 +36,12 @@ if (process.contextIsolated) {
       confirmYesNo: (message: string): Promise<boolean> =>
         ipcRenderer.invoke('confirm-yes-no', message)
     })
-    contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('api', rendererApi)
   } catch (error) {
     console.error('Error exposing APIs in contextBridge:', error)
   }
 } else {
-  console.log('Exposing quitApp directly on window object')
+  console.log('Preload: exposing APIs directly on window (no contextIsolation)')
   // @ts-ignore (define in dts)
   window.electron = {
     ...electronAPI,
@@ -50,5 +52,5 @@ if (process.contextIsolated) {
       ipcRenderer.invoke('confirm-yes-no', message)
   }
   // @ts-ignore (define in dts)
-  window.api = api
+  window.api = rendererApi
 }

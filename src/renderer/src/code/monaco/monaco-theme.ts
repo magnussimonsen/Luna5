@@ -19,21 +19,23 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 
 // Discover curated JSON themes (split into light and dark collections).
 // NOTE: Vite alias @renderer points to src/renderer/src
-const curatedLightThemeModules = import.meta.glob<{
+// We eagerly import theme JSON files so we can synchronously enumerate and define them.
+const curatedLightThemeModuleMap = import.meta.glob<{
   default: monaco.editor.IStandaloneThemeData
 }>('@renderer/code/monaco/monaco-curated-light-themes/*.json', { eager: true })
 
-const curatedDarkThemeModules = import.meta.glob<{
+const curatedDarkThemeModuleMap = import.meta.glob<{
   default: monaco.editor.IStandaloneThemeData
 }>('@renderer/code/monaco/monaco-curated-dark-themes/*.json', { eager: true })
 
 // No legacy fallback: curated themes must live in the split folders above
 
-let themesDefined = false
+// Guard to define curated themes only once
+let themesRegistered = false
 
-function toSafeId(id: string): string {
+function toSafeThemeId(themeId: string): string {
   // Lowercase, replace any non-alphanumeric with hyphens, collapse repeats, trim edges
-  return id
+  return themeId
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/-+/g, '-')
@@ -48,31 +50,31 @@ export const builtinMonacoThemes: string[] = ['vs', 'vs-dark', 'hc-black']
  * IDs are normalized via toSafeId (e.g., "GitHub Dark" -> "github-dark").
  */
 export function getCuratedLightMonacoThemeIds(): string[] {
-  const ids = new Set<string>()
+  const themeIds = new Set<string>()
   // New split folder
-  for (const p of Object.keys(curatedLightThemeModules)) {
-    const rawId =
-      p
+  for (const filePath of Object.keys(curatedLightThemeModuleMap)) {
+    const rawThemeId =
+      filePath
         .split('/')
         .pop()
         ?.replace(/\.json$/, '') || 'custom-theme'
-    ids.add(toSafeId(rawId))
+    themeIds.add(toSafeThemeId(rawThemeId))
   }
-  return Array.from(ids).sort()
+  return Array.from(themeIds).sort()
 }
 
 export function getCuratedDarkMonacoThemeIds(): string[] {
-  const ids = new Set<string>()
+  const themeIds = new Set<string>()
   // New split folder
-  for (const p of Object.keys(curatedDarkThemeModules)) {
-    const rawId =
-      p
+  for (const filePath of Object.keys(curatedDarkThemeModuleMap)) {
+    const rawThemeId =
+      filePath
         .split('/')
         .pop()
         ?.replace(/\.json$/, '') || 'custom-theme'
-    ids.add(toSafeId(rawId))
+    themeIds.add(toSafeThemeId(rawThemeId))
   }
-  return Array.from(ids).sort()
+  return Array.from(themeIds).sort()
 }
 
 /**
@@ -80,39 +82,40 @@ export function getCuratedDarkMonacoThemeIds(): string[] {
  * Safe to call multiple times.
  */
 export function ensureAllMonacoThemesDefined(): void {
-  if (themesDefined) return
+  // Define curated themes one time per app lifetime. Safe to call repeatedly.
+  if (themesRegistered) return
 
   // 1) Curated local JSON themes (light)
-  for (const [p, mod] of Object.entries(curatedLightThemeModules)) {
-    const rawId =
-      p
+  for (const [filePath, module] of Object.entries(curatedLightThemeModuleMap)) {
+    const rawThemeId =
+      filePath
         .split('/')
         .pop()
         ?.replace(/\.json$/, '') || 'custom-theme'
-    const data = mod.default
-    if (!data) continue
-    const themeData = data as unknown as monaco.editor.IStandaloneThemeData
-    const safeId = toSafeId(rawId)
+    const imported = module.default
+    if (!imported) continue
+    const themeData = imported as unknown as monaco.editor.IStandaloneThemeData
+    const safeThemeId = toSafeThemeId(rawThemeId)
     try {
-      monaco.editor.defineTheme(safeId, themeData)
+      monaco.editor.defineTheme(safeThemeId, themeData)
     } catch {
       // ignore define errors for individual themes
     }
   }
 
   // 2) Curated local JSON themes (dark)
-  for (const [p, mod] of Object.entries(curatedDarkThemeModules)) {
-    const rawId =
-      p
+  for (const [filePath, module] of Object.entries(curatedDarkThemeModuleMap)) {
+    const rawThemeId =
+      filePath
         .split('/')
         .pop()
         ?.replace(/\.json$/, '') || 'custom-theme'
-    const data = mod.default
-    if (!data) continue
-    const themeData = data as unknown as monaco.editor.IStandaloneThemeData
-    const safeId = toSafeId(rawId)
+    const imported = module.default
+    if (!imported) continue
+    const themeData = imported as unknown as monaco.editor.IStandaloneThemeData
+    const safeThemeId = toSafeThemeId(rawThemeId)
     try {
-      monaco.editor.defineTheme(safeId, themeData)
+      monaco.editor.defineTheme(safeThemeId, themeData)
     } catch {
       // ignore define errors for individual themes
     }
@@ -120,7 +123,7 @@ export function ensureAllMonacoThemesDefined(): void {
 
   // 3) No legacy folder is supported anymore; themes must be present in the split folders
 
-  themesDefined = true
+  themesRegistered = true
 }
 
 /**
@@ -129,14 +132,14 @@ export function ensureAllMonacoThemesDefined(): void {
  */
 export function applyMonacoTheme(id: string): void {
   ensureAllMonacoThemesDefined()
-  const safeId = toSafeId(id)
+  const safeThemeId = toSafeThemeId(id)
   try {
     monaco.editor.setTheme('vs')
   } catch {
     /* ignore */
   }
   try {
-    monaco.editor.setTheme(safeId)
+    monaco.editor.setTheme(safeThemeId)
   } catch {
     /* ignore */
   }

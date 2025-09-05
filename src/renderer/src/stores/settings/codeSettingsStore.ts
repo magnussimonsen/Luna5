@@ -5,29 +5,39 @@ import {
   builtinMonacoThemes
 } from '@renderer/code/monaco/monaco-theme'
 
-// Local storage keys for persistence
-const LS_LIGHT = 'codeSettings.lightCodeEditorTheme'
-const LS_DARK = 'codeSettings.darkCodeEditorTheme'
+/**
+ * Code settings store
+ * - Persists the selected Monaco Editor theme for light and dark app modes.
+ * - On startup, normalizes any previously saved theme IDs and falls back to a curated default.
+ * - Public API (state keys + action names) is stable to avoid breaking existing consumers.
+ */
 
-function readFromLS(key: string, fallback: string): string {
+// LocalStorage keys used for persistence of the user's theme selections
+const LOCAL_STORAGE_LIGHT_THEME_KEY = 'codeSettings.lightCodeEditorTheme'
+const LOCAL_STORAGE_DARK_THEME_KEY = 'codeSettings.darkCodeEditorTheme'
+
+// Safe LocalStorage read with fallback; trims empty strings to fallback
+function readLocalStorageString(key: string, fallback: string): string {
   try {
-    const v = window.localStorage?.getItem(key)
-    return v && v.trim() ? v : fallback
+    const value = window.localStorage?.getItem(key)
+    return value && value.trim() ? value : fallback
   } catch {
+    // In private mode or blocked storage, just use fallback
     return fallback
   }
 }
 
-function writeToLS(key: string, value: string): void {
+// Safe LocalStorage write; ignore failures (private mode, quotas, etc.)
+function writeLocalStorageString(key: string, value: string): void {
   try {
     window.localStorage?.setItem(key, value)
   } catch {
-    // ignore storage failures (e.g., private mode)
+    // Intentionally ignored
   }
 }
 
-// Normalize incoming theme IDs to a safe, kebab-case form to match monaco-theme ids
-function normalizeThemeId(id: string): string {
+// Normalize incoming theme IDs to a safe, kebab-case form to match monaco-theme IDs
+function normalizeThemeIdToSafeKebab(id: string): string {
   try {
     return id
       .toLowerCase()
@@ -35,48 +45,60 @@ function normalizeThemeId(id: string): string {
       .replace(/-+/g, '-')
       .replace(/^-+|-+$/g, '')
   } catch {
+    // Default to a known-good built-in theme
     return 'vs'
   }
 }
 
-function pickCuratedOrSaved(saved: string, curated: string[]): string {
-  const accepted = new Set<string>([...curated, ...builtinMonacoThemes])
-  if (accepted.has(saved)) return saved
-  return curated.length ? (curated[0] ?? saved) : saved
+// Choose a valid theme ID: if a saved one is accepted, keep it; else pick the first curated or fall back to saved
+function chooseBestAvailableThemeId(savedThemeId: string, curatedThemeIds: string[]): string {
+  const acceptedThemesSet = new Set<string>([...curatedThemeIds, ...builtinMonacoThemes])
+  if (acceptedThemesSet.has(savedThemeId)) return savedThemeId
+  return curatedThemeIds.length ? (curatedThemeIds[0] ?? savedThemeId) : savedThemeId
 }
 
-const initialLightThemeId = (() => {
-  const saved = normalizeThemeId(readFromLS(LS_LIGHT, 'vs'))
-  const curated = getCuratedLightMonacoThemeIds()
-  const picked = pickCuratedOrSaved(saved, curated)
-  if (picked !== saved) writeToLS(LS_LIGHT, picked)
-  return picked
+// Compute initial light theme: normalize saved -> validate against curated/built-ins -> persist correction if needed
+const initialLightMonacoThemeId = (() => {
+  const savedThemeId = normalizeThemeIdToSafeKebab(
+    readLocalStorageString(LOCAL_STORAGE_LIGHT_THEME_KEY, 'vs')
+  )
+  const curatedThemeIds = getCuratedLightMonacoThemeIds()
+  const pickedThemeId = chooseBestAvailableThemeId(savedThemeId, curatedThemeIds)
+  if (pickedThemeId !== savedThemeId) {
+    writeLocalStorageString(LOCAL_STORAGE_LIGHT_THEME_KEY, pickedThemeId)
+  }
+  return pickedThemeId
 })()
 
-const initialDarkThemeId = (() => {
-  const saved = normalizeThemeId(readFromLS(LS_DARK, 'vs-dark'))
-  const curated = getCuratedDarkMonacoThemeIds()
-  const picked = pickCuratedOrSaved(saved, curated)
-  if (picked !== saved) writeToLS(LS_DARK, picked)
-  return picked
+// Compute initial dark theme: normalize saved -> validate -> persist correction if needed
+const initialDarkMonacoThemeId = (() => {
+  const savedThemeId = normalizeThemeIdToSafeKebab(
+    readLocalStorageString(LOCAL_STORAGE_DARK_THEME_KEY, 'vs-dark')
+  )
+  const curatedThemeIds = getCuratedDarkMonacoThemeIds()
+  const pickedThemeId = chooseBestAvailableThemeId(savedThemeId, curatedThemeIds)
+  if (pickedThemeId !== savedThemeId) {
+    writeLocalStorageString(LOCAL_STORAGE_DARK_THEME_KEY, pickedThemeId)
+  }
+  return pickedThemeId
 })()
 
 export const useCodeSettingsStore = defineStore('codeSettings', {
   state: () => ({
     // Use curated defaults if saved values aren't curated; ensures selects have a value on startup
-    lightCodeEditorTheme: initialLightThemeId as string,
-    darkCodeEditorTheme: initialDarkThemeId as string
+    lightCodeEditorTheme: initialLightMonacoThemeId as string,
+    darkCodeEditorTheme: initialDarkMonacoThemeId as string
   }),
   actions: {
-    setLightCodeEditorTheme(theme: string) {
-      const t = normalizeThemeId(theme)
-      this.lightCodeEditorTheme = t
-      writeToLS(LS_LIGHT, t)
+    setLightCodeEditorTheme(themeId: string) {
+      const normalizedThemeId = normalizeThemeIdToSafeKebab(themeId)
+      this.lightCodeEditorTheme = normalizedThemeId
+      writeLocalStorageString(LOCAL_STORAGE_LIGHT_THEME_KEY, normalizedThemeId)
     },
-    setDarkCodeEditorTheme(theme: string) {
-      const t = normalizeThemeId(theme)
-      this.darkCodeEditorTheme = t
-      writeToLS(LS_DARK, t)
+    setDarkCodeEditorTheme(themeId: string) {
+      const normalizedThemeId = normalizeThemeIdToSafeKebab(themeId)
+      this.darkCodeEditorTheme = normalizedThemeId
+      writeLocalStorageString(LOCAL_STORAGE_DARK_THEME_KEY, normalizedThemeId)
     }
   }
 })

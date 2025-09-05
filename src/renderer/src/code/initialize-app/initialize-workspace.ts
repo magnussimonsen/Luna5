@@ -3,6 +3,7 @@ import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 
 export function initializeWorkspace(force = false): Workspace {
   const workspaceStore = useWorkspaceStore()
+  // Create a new empty workspace state. When force=true, resets even if one exists.
   return workspaceStore.initEmpty(force)
 }
 

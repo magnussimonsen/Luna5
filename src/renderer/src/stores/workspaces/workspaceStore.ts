@@ -77,68 +77,68 @@ export const useWorkspaceStore = defineStore('workspace', {
     inputChangesSinceLastSave: 0
   }),
   getters: {
-    getCurrentNotebook: (LunaState): Notebook | null => {
+    getCurrentNotebook: (state): Notebook | null => {
       // The currently active notebook object, or null when not initialized or available.
-      // Note: the input parameter is the Pinia store state (LunaState), not the Workspace itself.
+      // Note: the input parameter is the Pinia store state, not the Workspace itself.
       // Guard: no workspace initialized or no current notebook id.
-      if (!LunaState.workspace || !LunaState.currentNotebookId) {
+      if (!state.workspace || !state.currentNotebookId) {
         return null
       }
       // Lookup the notebook by id. If not found (e.g., was deleted), return null.
-      return LunaState.workspace.notebooks[LunaState.currentNotebookId] ?? null
+      return state.workspace.notebooks[state.currentNotebookId] ?? null
     },
     // A flat list of all active notebooks (excludes recycle bin entries).
-    getNotebookList: (LunaState): Notebook[] => {
+    getNotebookList: (state): Notebook[] => {
       // Ordered list of active notebooks based on workspace.notebookOrder
-      if (!LunaState.workspace) return []
-      const workspace = LunaState.workspace
+      if (!state.workspace) return []
+      const workspace = state.workspace
       const order = workspace.notebookOrder || []
       if (!order.length) return Object.values(workspace.notebooks)
       return order.map((id) => workspace.notebooks[id]).filter(Boolean) as Notebook[]
     },
     // File status getters
-    getIsSaved: (LunaState): boolean => {
-      return LunaState.isSaved
+    getIsSaved: (state): boolean => {
+      return state.isSaved
     },
-    getLastSavedAtDateTime: (LunaState): string | null => {
-      return LunaState.lastSavedAtDateTime
+    getLastSavedAtDateTime: (state): string | null => {
+      return state.lastSavedAtDateTime
     },
-    getCurrentFilePath: (LunaState): string | null => {
-      return LunaState.currentFilePath
+    getCurrentFilePath: (state): string | null => {
+      return state.currentFilePath
     }
   },
   actions: {
     // Persist notebooks-view last selection on the notebook itself
     setNotebookLastSelectedCell(notebookId: string, cellId: string | null): void {
-      const ws = this.getWorkspace()
-      const nb = ws.notebooks[notebookId]
-      if (!nb) return
-      nb.lastSelectedCellId = cellId ?? undefined
+      const workspace = this.getWorkspace()
+      const notebook = workspace.notebooks[notebookId]
+      if (!notebook) return
+      notebook.lastSelectedCellId = cellId ?? undefined
     },
     // Persist last selected notebook id for notebooks view
     setLastSelectedNotebookIdNotebooks(notebookId: string | null): void {
-      const ws = this.getWorkspace()
-      if (notebookId && ws.notebooks[notebookId]) {
-        ws.lastSelectedNotebookIdNotebooks = notebookId
+      const workspace = this.getWorkspace()
+      if (notebookId && workspace.notebooks[notebookId]) {
+        workspace.lastSelectedNotebookIdNotebooks = notebookId
       } else {
-        ws.lastSelectedNotebookIdNotebooks = undefined
+        workspace.lastSelectedNotebookIdNotebooks = undefined
       }
     },
     // Persist last selected notebook id for bin view
     setLastSelectedNotebookIdBin(notebookId: string | null): void {
-      const ws = this.getWorkspace()
-      if (!ws.recycleBin) return
+      const workspace = this.getWorkspace()
+      if (!workspace.recycleBin) return
       if (notebookId) {
-        ws.recycleBin.lastSelectedNotebookId = notebookId
+        workspace.recycleBin.lastSelectedNotebookId = notebookId
       } else {
-        ws.recycleBin.lastSelectedNotebookId = undefined
+        workspace.recycleBin.lastSelectedNotebookId = undefined
       }
     },
     // Helper: first non-soft-deleted cell id in a notebook
     _getFirstActiveCellId(workspace: Workspace, notebookId: string): string | null {
-      const nb = workspace.notebooks[notebookId]
-      if (!nb) return null
-      return nb.cellOrder.find((cid) => !workspace.cells[cid]?.softDeleted) || null
+      const notebook = workspace.notebooks[notebookId]
+      if (!notebook) return null
+      return notebook.cellOrder.find((cellId) => !workspace.cells[cellId]?.softDeleted) || null
     },
     // Internal helper: set selection if cell exists
     _selectIfPossible(cellId: string | null): void {
@@ -163,44 +163,53 @@ export const useWorkspaceStore = defineStore('workspace', {
     // --- View Mode ---
     setViewMode(mode: 'notebooks' | 'bin'): void {
       this.viewMode = mode
-      const ws = this.getWorkspace()
+      const workspace = this.getWorkspace()
       const cellSelectionStore = useCellSelectionStore()
       if (mode === 'notebooks') {
         // Choose notebook: prefer remembered notebooks-view id
-        let nbId = ws.lastSelectedNotebookIdNotebooks || this.currentNotebookId
-        if (!nbId || !ws.notebooks[nbId]) nbId = this.ensureDefaultNotebook()
-        this.currentNotebookId = nbId
-        this.setLastSelectedNotebookIdNotebooks(nbId)
+        let selectedNotebookId = workspace.lastSelectedNotebookIdNotebooks || this.currentNotebookId
+        if (!selectedNotebookId || !workspace.notebooks[selectedNotebookId])
+          selectedNotebookId = this.ensureDefaultNotebook()
+        this.currentNotebookId = selectedNotebookId
+        this.setLastSelectedNotebookIdNotebooks(selectedNotebookId)
         // Select lastSelectedCellId if set; else clear selection
-        const remembered = ws.notebooks[nbId]?.lastSelectedCellId || null
-        const valid = remembered && !ws.cells[remembered]?.softDeleted ? remembered : null
-        if (valid) {
-          const cell = ws.cells[valid]!
-          cellSelectionStore.setSelectCell(valid, cell.kind)
-          this.setNotebookLastSelectedCell(nbId, valid)
+        const rememberedCellId = workspace.notebooks[selectedNotebookId]?.lastSelectedCellId || null
+        const validCellId =
+          rememberedCellId && !workspace.cells[rememberedCellId]?.softDeleted
+            ? rememberedCellId
+            : null
+        if (validCellId) {
+          const cell = workspace.cells[validCellId]!
+          cellSelectionStore.setSelectCell(validCellId, cell.kind)
+          this.setNotebookLastSelectedCell(selectedNotebookId, validCellId)
         } else {
           cellSelectionStore.clearSelection()
-          this.setNotebookLastSelectedCell(nbId, null)
+          this.setNotebookLastSelectedCell(selectedNotebookId, null)
         }
       } else if (mode === 'bin') {
         // Choose bin notebook: prefer remembered bin notebook id
-        let binId = ws.recycleBin.lastSelectedNotebookId || this.binSelectedNotebookId || null
-        if (binId && !this._isNotebookRepresentedInBin(ws, binId)) {
-          binId = null
+        let selectedBinNotebookId =
+          workspace.recycleBin.lastSelectedNotebookId || this.binSelectedNotebookId || null
+        if (
+          selectedBinNotebookId &&
+          !this._isNotebookRepresentedInBin(workspace, selectedBinNotebookId)
+        ) {
+          selectedBinNotebookId = null
         }
-        this.binSelectedNotebookId = binId
-        this.setLastSelectedNotebookIdBin(binId)
-        if (binId) {
-          const rememberedBinMap = ws.recycleBin.lastSelectedBinCellIdByNotebook || {}
-          const rememberedCell = rememberedBinMap[binId] || null
-          const valid = rememberedCell && ws.cells[rememberedCell] ? rememberedCell : null
-          if (valid) {
-            const cell = ws.cells[valid]!
-            cellSelectionStore.setSelectCell(valid, cell.kind)
-            this.setBinLastSelectedCell(binId, valid)
+        this.binSelectedNotebookId = selectedBinNotebookId
+        this.setLastSelectedNotebookIdBin(selectedBinNotebookId)
+        if (selectedBinNotebookId) {
+          const rememberedBinMap = workspace.recycleBin.lastSelectedBinCellIdByNotebook || {}
+          const rememberedCellId = rememberedBinMap[selectedBinNotebookId] || null
+          const validCellId =
+            rememberedCellId && workspace.cells[rememberedCellId] ? rememberedCellId : null
+          if (validCellId) {
+            const cell = workspace.cells[validCellId]!
+            cellSelectionStore.setSelectCell(validCellId, cell.kind)
+            this.setBinLastSelectedCell(selectedBinNotebookId, validCellId)
           } else {
             cellSelectionStore.clearSelection()
-            this.setBinLastSelectedCell(binId, null)
+            this.setBinLastSelectedCell(selectedBinNotebookId, null)
           }
         } else {
           cellSelectionStore.clearSelection()
@@ -212,21 +221,22 @@ export const useWorkspaceStore = defineStore('workspace', {
       if (workspace.recycleBin.notebooks[notebookId]) return true
       const notebook = workspace.notebooks[notebookId]
       if (!notebook) return false
-      return notebook.cellOrder.some((cid) => workspace.cells[cid]?.softDeleted)
+      return notebook.cellOrder.some((cellId) => workspace.cells[cellId]?.softDeleted)
     },
     selectNotebookInBin(id: string): void {
       this.viewMode = 'bin'
-      const ws = this.getWorkspace()
+      const workspace = this.getWorkspace()
       this.binSelectedNotebookId = id
       this.setLastSelectedNotebookIdBin(id)
       try {
-        const map = ws.recycleBin.lastSelectedBinCellIdByNotebook || {}
-        const remembered = map[id] || null
-        const targetId = remembered && ws.cells[remembered] ? remembered : null
+        const rememberedMap = workspace.recycleBin.lastSelectedBinCellIdByNotebook || {}
+        const rememberedCellId = rememberedMap[id] || null
+        const targetCellId =
+          rememberedCellId && workspace.cells[rememberedCellId] ? rememberedCellId : null
         const cellSelectionStore = useCellSelectionStore()
-        if (targetId) {
-          cellSelectionStore.setSelectCell(targetId, ws.cells[targetId]!.kind)
-          this.setBinLastSelectedCell(id, targetId)
+        if (targetCellId) {
+          cellSelectionStore.setSelectCell(targetCellId, workspace.cells[targetCellId]!.kind)
+          this.setBinLastSelectedCell(id, targetCellId)
         } else {
           cellSelectionStore.clearSelection()
           this.setBinLastSelectedCell(id, null)
@@ -236,11 +246,11 @@ export const useWorkspaceStore = defineStore('workspace', {
       }
     },
     setBinLastSelectedCell(notebookId: string, cellId: string | null): void {
-      const ws = this.getWorkspace()
-      if (!ws.recycleBin.lastSelectedBinCellIdByNotebook) {
-        ws.recycleBin.lastSelectedBinCellIdByNotebook = {}
+      const workspace = this.getWorkspace()
+      if (!workspace.recycleBin.lastSelectedBinCellIdByNotebook) {
+        workspace.recycleBin.lastSelectedBinCellIdByNotebook = {}
       }
-      ws.recycleBin.lastSelectedBinCellIdByNotebook[notebookId] = cellId ?? null
+      workspace.recycleBin.lastSelectedBinCellIdByNotebook[notebookId] = cellId ?? null
     },
     // --- Restore Notebook from Bin ---
     restoreNotebookFromBin(id: string): boolean {
@@ -300,12 +310,12 @@ export const useWorkspaceStore = defineStore('workspace', {
       const workspace = this.getWorkspace()
       try {
         const cellSelectionStore = useCellSelectionStore()
-        const selectedId = cellSelectionStore.selectedCellId
-        if (!selectedId) return undefined
+        const selectedCellId = cellSelectionStore.selectedCellId
+        if (!selectedCellId) return undefined
         const notebook = workspace.notebooks[notebookId]
-        const idx = notebook.cellOrder.indexOf(selectedId)
-        if (idx === -1) return undefined
-        return idx + 1
+        const index = notebook.cellOrder.indexOf(selectedCellId)
+        if (index === -1) return undefined
+        return index + 1
       } catch {
         return undefined
       }
@@ -416,11 +426,14 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.setLastSelectedNotebookIdNotebooks(id)
       try {
         const cellSelectionStore = useCellSelectionStore()
-        const remembered = workspace.notebooks[id]?.lastSelectedCellId || null
-        const valid = remembered && !workspace.cells[remembered]?.softDeleted ? remembered : null
-        if (valid) {
-          cellSelectionStore.setSelectCell(valid, workspace.cells[valid]!.kind)
-          this.setNotebookLastSelectedCell(id, valid)
+        const rememberedCellId = workspace.notebooks[id]?.lastSelectedCellId || null
+        const validCellId =
+          rememberedCellId && !workspace.cells[rememberedCellId]?.softDeleted
+            ? rememberedCellId
+            : null
+        if (validCellId) {
+          cellSelectionStore.setSelectCell(validCellId, workspace.cells[validCellId]!.kind)
+          this.setNotebookLastSelectedCell(id, validCellId)
         } else {
           cellSelectionStore.clearSelection()
           this.setNotebookLastSelectedCell(id, null)
@@ -435,47 +448,50 @@ export const useWorkspaceStore = defineStore('workspace', {
       const notebookId = this.ensureDefaultNotebook()
       try {
         const cellSelectionStore = useCellSelectionStore()
-        const id = cellSelectionStore.selectedCellId
-        if (!id) return false
+        const cellId = cellSelectionStore.selectedCellId
+        if (!cellId) return false
         // Block moving to Bin when the cell is locked or hidden
-        const cell = workspace.cells[id]
+        const cell = workspace.cells[cellId]
         if (!cell) return false
         if (cell.softLocked || cell.hardLocked || cell.hidden) return false
-        const ok = operationsDeleteCellSoft(workspace, notebookId, id)
-        if (ok) {
+        const deleted = operationsDeleteCellSoft(workspace, notebookId, cellId)
+        if (deleted) {
           // Remember this cell as the last-selected for this notebook in bin view
-          this.setBinLastSelectedCell(notebookId, id)
+          this.setBinLastSelectedCell(notebookId, cellId)
           // Do NOT switch to Bin; keep user in Active view per UX.
           // Update selection to a nearby non-deleted cell (next, else previous), or clear if none.
           try {
             const notebook = workspace.notebooks[notebookId]
             const order = notebook?.cellOrder || []
-            const idx = order.indexOf(id)
-            let nextId: string | null = null
+            const index = order.indexOf(cellId)
+            let nextSelectableId: string | null = null
             // Look forward for the next non-soft-deleted cell
 
             // Mark workspace as unsaved after deleting a cell
             this.markAsUnsaved()
-            for (let i = idx + 1; i < order.length; i++) {
-              const cid = order[i]
-              if (!workspace.cells[cid]?.softDeleted) {
-                nextId = cid
+            for (let i = index + 1; i < order.length; i++) {
+              const candidateCellId = order[i]
+              if (!workspace.cells[candidateCellId]?.softDeleted) {
+                nextSelectableId = candidateCellId
                 break
               }
             }
-            if (!nextId) {
+            if (!nextSelectableId) {
               // Look backward if no next available
-              for (let i = idx - 1; i >= 0; i--) {
-                const cid = order[i]
-                if (!workspace.cells[cid]?.softDeleted) {
-                  nextId = cid
+              for (let i = index - 1; i >= 0; i--) {
+                const candidateCellId = order[i]
+                if (!workspace.cells[candidateCellId]?.softDeleted) {
+                  nextSelectableId = candidateCellId
                   break
                 }
               }
             }
-            if (nextId && workspace.cells[nextId]?.kind) {
-              cellSelectionStore.setSelectCell(nextId, workspace.cells[nextId]!.kind)
-              this.setNotebookLastSelectedCell(notebookId, nextId)
+            if (nextSelectableId && workspace.cells[nextSelectableId]?.kind) {
+              cellSelectionStore.setSelectCell(
+                nextSelectableId,
+                workspace.cells[nextSelectableId]!.kind
+              )
+              this.setNotebookLastSelectedCell(notebookId, nextSelectableId)
               this.setLastSelectedNotebookIdNotebooks(notebookId)
             } else {
               cellSelectionStore.clearSelection()
@@ -486,7 +502,7 @@ export const useWorkspaceStore = defineStore('workspace', {
             /* ignore */
           }
         }
-        return ok
+        return deleted
       } catch {
         return false
       }
@@ -494,17 +510,19 @@ export const useWorkspaceStore = defineStore('workspace', {
 
     // Helper: Find the first soft-deleted cell id for a given notebook id
     getFirstSoftDeletedCellId(workspace: Workspace, notebookId: string): string | null {
-      const activeNb = workspace.notebooks[notebookId]
-      if (activeNb) {
-        const found = activeNb.cellOrder.find((cid) => workspace.cells[cid]?.softDeleted)
-        return found || null
+      const activeNotebook = workspace.notebooks[notebookId]
+      if (activeNotebook) {
+        const foundCellId = activeNotebook.cellOrder.find(
+          (cellId) => workspace.cells[cellId]?.softDeleted
+        )
+        return foundCellId || null
       }
       // Deleted notebook: look into recycle bin metadata ordered by originalIndex
-      const entries = Object.values(workspace.recycleBin.cells)
+      const binEntries = Object.values(workspace.recycleBin.cells)
         .filter((meta) => meta.notebookId === notebookId)
         .sort((a, b) => a.originalIndex - b.originalIndex)
-      for (const e of entries) {
-        if (workspace.cells[e.id]) return e.id
+      for (const entry of binEntries) {
+        if (workspace.cells[entry.id]) return entry.id
       }
       return null
     },
@@ -515,13 +533,13 @@ export const useWorkspaceStore = defineStore('workspace', {
         this.binSelectedNotebookId || this.currentNotebookId || this.ensureDefaultNotebook()
       try {
         const cellSelectionStore = useCellSelectionStore()
-        const id = cellSelectionStore.selectedCellId
-        if (!id || !notebookId) return false
-        const ok = operationsRestoreCellFromBin(workspace, notebookId, id)
+        const cellId = cellSelectionStore.selectedCellId
+        if (!cellId || !notebookId) return false
+        const ok = operationsRestoreCellFromBin(workspace, notebookId, cellId)
         if (ok) {
           // Keep selection on the restored cell
-          cellSelectionStore.setSelectCell(id, workspace.cells[id]?.kind)
-          this.setNotebookLastSelectedCell(notebookId, id)
+          cellSelectionStore.setSelectCell(cellId, workspace.cells[cellId]?.kind)
+          this.setNotebookLastSelectedCell(notebookId, cellId)
           // Switch back to active mode and keep the same notebook selected
           // --------------------
           // Note: this is a UX decision to return to the active notebook view after restoring.
@@ -544,9 +562,9 @@ export const useWorkspaceStore = defineStore('workspace', {
       const workspace = this.getWorkspace()
       const notebookId = this.ensureDefaultNotebook()
       const cellSelectionStore = useCellSelectionStore()
-      const id = cellId || cellSelectionStore.selectedCellId
-      if (!id) return false
-      const result = operationsMoveCellIdUp(workspace, notebookId, id)
+      const selectedCellId = cellId || cellSelectionStore.selectedCellId
+      if (!selectedCellId) return false
+      const result = operationsMoveCellIdUp(workspace, notebookId, selectedCellId)
       if (result) {
         this.markAsUnsaved()
       }
@@ -557,9 +575,9 @@ export const useWorkspaceStore = defineStore('workspace', {
       const workspace = this.getWorkspace()
       const notebookId = this.ensureDefaultNotebook()
       const cellSelectionStore = useCellSelectionStore()
-      const id = cellId || cellSelectionStore.selectedCellId
-      if (!id) return false
-      const result = operationsMoveCellIdDown(workspace, notebookId, id)
+      const selectedCellId = cellId || cellSelectionStore.selectedCellId
+      if (!selectedCellId) return false
+      const result = operationsMoveCellIdDown(workspace, notebookId, selectedCellId)
       if (result) {
         this.markAsUnsaved()
       }
@@ -588,9 +606,9 @@ export const useWorkspaceStore = defineStore('workspace', {
     toggleSoftLockSelectedCell(): boolean {
       const workspace = this.getWorkspace()
       const cellSelectionStore = useCellSelectionStore()
-      const id = cellSelectionStore.selectedCellId
-      if (!id) return false
-      const cell = workspace.cells[id]
+      const cellId = cellSelectionStore.selectedCellId
+      if (!cellId) return false
+      const cell = workspace.cells[cellId]
       if (!cell) return false
       cell.softLocked = !cell.softLocked
       cell.updatedAt = new Date().toISOString()
@@ -601,9 +619,9 @@ export const useWorkspaceStore = defineStore('workspace', {
     toggleHiddenSelectedCell(): boolean {
       const workspace = this.getWorkspace()
       const cellSelectionStore = useCellSelectionStore()
-      const id = cellSelectionStore.selectedCellId
-      if (!id) return false
-      const cell = workspace.cells[id]
+      const cellId = cellSelectionStore.selectedCellId
+      if (!cellId) return false
+      const cell = workspace.cells[cellId]
       if (!cell) return false
       cell.hidden = !cell.hidden
       cell.updatedAt = new Date().toISOString()
@@ -619,8 +637,8 @@ export const useWorkspaceStore = defineStore('workspace', {
       if (cell.hidden || cell.hardLocked || cell.softLocked || cell.softDeleted || cell.hardDeleted)
         return false
       // Normalize content to avoid false diffs (CRLF, NBSP, trailing newlines)
-      const normalize = (s: string): string =>
-        s
+      const normalize = (text: string): string =>
+        text
           .replace(/\r\n/g, '\n')
           .replace(/\u00A0/g, ' ')
           .replace(/\n+$/g, '')

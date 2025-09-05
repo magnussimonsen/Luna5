@@ -1,11 +1,11 @@
 <template>
-  <div class="python-cell" :data-locked="isLocked ? 'true' : null">
+  <div class="python-cell" :data-locked="isCellLocked ? 'true' : null">
     <div
-      ref="editorEl"
+      ref="editorElementRef"
       class="python-cell-editor"
       data-primary-editor="true"
       role="textbox"
-      :aria-readonly="isLocked ? 'true' : 'false'"
+      :aria-readonly="isCellLocked ? 'true' : 'false'"
       tabindex="0"
     ></div>
   </div>
@@ -44,13 +44,19 @@ const codeSettingsStore = useCodeSettingsStore()
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
 
-const editorEl = ref<HTMLDivElement | null>(null)
+// DOM reference to the Monaco editor container
+const editorElementRef = ref<HTMLDivElement | null>(null)
+// Monaco editor instance
 let editor: monaco.editor.IStandaloneCodeEditor | null = null
+// Collect Monaco disposables so we can clean up on unmount
 let disposables: Array<{ dispose: () => void }> = []
-let ro: ResizeObserver | null = null
+// Resize observer to re-layout the editor when the container size changes
+let resizeObserver: ResizeObserver | null = null
+// Guard flag to avoid echoing local edits back into the model watcher
 let isApplyingLocalEdit = false
 
-function pxToNumber(px: string | undefined, fallback = 14): number {
+// Convert CSS pixel string values (e.g., "14px") to a numeric value for Monaco options
+function parsePixelsToNumber(px: string | undefined, fallback = 14): number {
   try {
     if (!px) return fallback
     const m = /([0-9]+(?:\.[0-9]+)?)/.exec(px)
@@ -61,7 +67,7 @@ function pxToNumber(px: string | undefined, fallback = 14): number {
 }
 
 // Cells can be locked/hidden via several flags; reflect that in editor readOnly state
-const isLocked = computed(
+const isCellLocked = computed(
   () =>
     !!props.cell.hidden ||
     !!props.cell.softLocked ||
@@ -70,29 +76,30 @@ const isLocked = computed(
 )
 
 // Resolve theme id from settings + dark mode; falls back to Monaco built-ins
-const desiredTheme = computed(() =>
+// The actively selected Monaco theme id, derived from light/dark mode and settings
+const selectedMonacoThemeId = computed(() =>
   themeStore.isDarkMode
     ? codeSettingsStore.darkCodeEditorTheme
     : codeSettingsStore.lightCodeEditorTheme
 )
 
 // Ensure themes are globally registered once
-function ensureCustomThemesDefined(): void {
+function registerCuratedMonacoThemesIfNeeded(): void {
   ensureAllMonacoThemesDefined()
 }
 
-function initEditor(): void {
-  if (!editorEl.value) return
+function initializeMonacoEditor(): void {
+  if (!editorElementRef.value) return
   const initialValue = props.cell.cellInputContent ?? props.cell.source ?? ''
   // Make sure any custom themes are registered before creating editor
   // (built-ins like 'vs' / 'vs-dark' work without this).
-  ensureCustomThemesDefined()
-  editor = monaco.editor.create(editorEl.value, {
+  registerCuratedMonacoThemesIfNeeded()
+  editor = monaco.editor.create(editorElementRef.value, {
     value: initialValue,
     language: 'python',
     // Start with a safe built-in theme; we'll apply the selected theme right after init
     theme: 'vs',
-    readOnly: isLocked.value,
+    readOnly: isCellLocked.value,
     lineNumbers: 'on',
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
@@ -102,7 +109,7 @@ function initEditor(): void {
     automaticLayout: true,
     // Monaco font settings
     fontFamily: fontStore.fonts.codingFont,
-    fontSize: pxToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
+    fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
   })
   // Propagate edits into the workspace
   disposables.push(
@@ -120,12 +127,12 @@ function initEditor(): void {
     })
   )
   // Now switch to the desired theme
-  applyMonacoTheme(desiredTheme.value)
+  applyMonacoTheme(selectedMonacoThemeId.value)
   // Ensure font options are respected after creation as well
   try {
     editor.updateOptions({
       fontFamily: fontStore.fonts.codingFont,
-      fontSize: pxToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
+      fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
     })
   } catch {
     /* ignore */
@@ -143,42 +150,42 @@ function initEditor(): void {
     /* ignore */
   }
   // Sync editor container height to content height for auto-grow
-  const applyHeight = (): void => {
-    if (!editor || !editorEl.value) return
+  const updateEditorHeightToContent = (): void => {
+    if (!editor || !editorElementRef.value) return
     const contentHeight = editor.getContentHeight()
-    let minH = 0
+    let minHeightPx = 0
     try {
-      const cs = window.getComputedStyle(editorEl.value)
-      const mh = cs.minHeight || '0px'
-      if (mh.endsWith('px')) {
-        minH = parseFloat(mh)
+      const computedStyle = window.getComputedStyle(editorElementRef.value)
+      const minHeightCss = computedStyle.minHeight || '0px'
+      if (minHeightCss.endsWith('px')) {
+        minHeightPx = parseFloat(minHeightCss)
       }
     } catch {
       /* ignore */
     }
-    const h = Math.max(contentHeight, minH)
-    editorEl.value.style.height = `${Math.ceil(h)}px`
+    const targetHeight = Math.max(contentHeight, minHeightPx)
+    editorElementRef.value.style.height = `${Math.ceil(targetHeight)}px`
     editor.layout()
   }
   // Update on content size changes
   disposables.push(
     editor.onDidContentSizeChange(() => {
-      applyHeight()
+      updateEditorHeightToContent()
     })
   )
   // Initial apply
-  applyHeight()
+  updateEditorHeightToContent()
   // Re-layout on container width changes
-  if (editorEl.value && 'ResizeObserver' in window) {
-    ro = new ResizeObserver(() => {
-      applyHeight()
+  if (editorElementRef.value && 'ResizeObserver' in window) {
+    resizeObserver = new ResizeObserver(() => {
+      updateEditorHeightToContent()
     })
-    ro.observe(editorEl.value)
+    resizeObserver.observe(editorElementRef.value)
   }
 }
 
 onMounted(() => {
-  initEditor()
+  initializeMonacoEditor()
 })
 
 // Theme reactivity: when dark mode or selected theme changes,
@@ -190,9 +197,11 @@ watch(
     () => codeSettingsStore.darkCodeEditorTheme
   ],
   () => {
-    ensureCustomThemesDefined()
-    applyMonacoTheme(desiredTheme.value)
-    if (editor) editor.layout()
+    registerCuratedMonacoThemesIfNeeded()
+    applyMonacoTheme(selectedMonacoThemeId.value)
+    if (editor) {
+      editor.layout()
+    }
   }
 )
 
@@ -215,7 +224,9 @@ watch(
   () => {
     if (!editor) return
     try {
-      editor.updateOptions({ fontSize: pxToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize) })
+      editor.updateOptions({
+        fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
+      })
       editor.layout()
     } catch {
       /* ignore */
@@ -245,7 +256,7 @@ watch(
 )
 
 // Lock state changes -> toggle readOnly
-watch(isLocked, (locked) => {
+watch(isCellLocked, (locked) => {
   if (!editor) return
   editor.updateOptions({ readOnly: locked })
 })
@@ -253,13 +264,13 @@ watch(isLocked, (locked) => {
 onBeforeUnmount(() => {
   disposables.forEach((d) => d.dispose())
   disposables = []
-  if (ro) {
+  if (resizeObserver) {
     try {
-      ro.disconnect()
+      resizeObserver.disconnect()
     } catch {
       /* ignore */
     }
-    ro = null
+    resizeObserver = null
   }
   if (editor) {
     const model = editor.getModel()

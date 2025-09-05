@@ -1,5 +1,6 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 
+// Global declarations for the API objects exposed by the preload script.
 declare global {
   interface Window {
     electron: ElectronAPI & {

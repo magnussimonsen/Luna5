@@ -26,6 +26,10 @@ export type SaveAsResult = { success: true; filePath: string } | { success: fals
 
 /**
  * Opens the native Save dialog, appends .luna if missing, saves compressed workspace, and marks as saved.
+ * Behavior
+ * - Uses preload's window.api to call into main for dialogs and filesystem access
+ * - Always ensures the .luna extension for consistency
+ * - On success, updates the store so subsequent Save writes without prompting
  */
 export async function saveAsCurrentWorkspace(): Promise<SaveAsResult> {
   try {
@@ -37,26 +41,29 @@ export async function saveAsCurrentWorkspace(): Promise<SaveAsResult> {
     const compressedData = await serializeAndCompress(workspaceData)
 
     // 3) Ask the user where to save via the native Save dialog (preload -> main IPC)
-    const dialog = await window.api.showSaveDialog()
-    if (dialog.canceled || !dialog.filePath) {
+    const saveDialogResult = await window.api.showSaveDialog()
+    if (saveDialogResult.canceled || !saveDialogResult.filePath) {
       // User canceled the dialog — not an error, just a no-op
       return { success: false }
     }
 
     // 4) Ensure we end with the expected .luna extension
-    let filePath = dialog.filePath
-    if (!filePath.toLowerCase().endsWith('.luna')) {
-      filePath = `${filePath}.luna`
+    let selectedFilePath = saveDialogResult.filePath
+    if (!selectedFilePath.toLowerCase().endsWith('.luna')) {
+      selectedFilePath = `${selectedFilePath}.luna`
     }
 
     // 5) Write the compressed content to disk through IPC handled in main
-    const res = await window.api.saveFile({ filePath, content: compressedData })
-    if (res.success && res.filePath) {
+    const saveResult = await window.api.saveFile({
+      filePath: selectedFilePath,
+      content: compressedData
+    })
+    if (saveResult.success && saveResult.filePath) {
       // 6) Update app state with the saved location for future Save (no prompt)
-      workspaceStore.markAsSaved(res.filePath)
-      return { success: true, filePath: res.filePath }
+      workspaceStore.markAsSaved(saveResult.filePath)
+      return { success: true, filePath: saveResult.filePath }
     }
-    return { success: false, error: res.error || 'Failed to save file' }
+    return { success: false, error: saveResult.error || 'Failed to save file' }
   } catch (err) {
     // Normalize error to a message string for the UI/logs
     const message = err instanceof Error ? err.message : String(err)

@@ -47,7 +47,7 @@
           <ImplementedMark :implemented="false" />
         </div>
 
-        <h3>User Interface & Editor Options</h3>
+        <h3>User Interface Options</h3>
         <!-- Font Family Selectors -->
         <div class="setting-row">
           <label for="ui-font-select">User Interface Font:</label>
@@ -65,7 +65,7 @@
               {{ font.label }}
             </option>
           </select>
-          <ImplementedMark :implemented="false" />
+          <ImplementedMark :implemented="true" />
         </div>
         <div class="setting-row">
           <label for="default-font-select">Default Cell Font:</label>
@@ -143,7 +143,7 @@
               {{ size }} px
             </option>
           </select>
-          <ImplementedMark :implemented="false" />
+          <ImplementedMark :implemented="true" />
         </div>
         <div class="setting-row">
           <label for="side-panel-font-size-select">Side Panel Font Size:</label>

@@ -3,25 +3,31 @@ import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { saveOrSaveAs, trySaveToCurrentFile } from './save-file'
 import { saveAsCurrentWorkspace } from './save-as'
 
+/**
+ * Result union for creating a new workspace.
+ * - success:true: new workspace initialized (user may or may not have saved it yet)
+ * - success:false: includes optional error message and canceled flag when user aborts
+ */
 export type NewFileResult =
   | { success: true }
   | { success: false; error?: string; canceled?: boolean }
 
-// Determine if the current workspace is effectively empty (skip warning in this case)
-function isEffectivelyEmpty(ws: Workspace | null | undefined): boolean {
-  if (!ws) return true
-  const notebookIds = Object.keys(ws.notebooks || {})
+// Determine if the current workspace is effectively empty (skip unsaved warning in this case).
+function isEffectivelyEmpty(currentWorkspace: Workspace | null | undefined): boolean {
+  if (!currentWorkspace) return true
+  const notebookIds = Object.keys(currentWorkspace.notebooks || {})
   if (notebookIds.length !== 1) return false
-  const nb = ws.notebooks[notebookIds[0]]
-  if (!nb) return false
-  const hasActiveCells = (nb.cellOrder || []).some((cid) => {
-    const c = ws.cells?.[cid]
-    return c && !c.softDeleted && !c.hardDeleted
+  const onlyNotebook = currentWorkspace.notebooks[notebookIds[0]]
+  if (!onlyNotebook) return false
+  const hasActiveCells = (onlyNotebook.cellOrder || []).some((cellId) => {
+    const cell = currentWorkspace.cells?.[cellId]
+    return cell && !cell.softDeleted && !cell.hardDeleted
   })
   if (hasActiveCells) return false
-  const binHasCells = Object.keys(ws.recycleBin?.cells || {}).length > 0
-  const binHasNotebooks = Object.keys(ws.recycleBin?.notebooks || {}).length > 0
-  if (binHasCells || binHasNotebooks) return false
+  const recycleBinHasCells = Object.keys(currentWorkspace.recycleBin?.cells || {}).length > 0
+  const recycleBinHasNotebooks =
+    Object.keys(currentWorkspace.recycleBin?.notebooks || {}).length > 0
+  if (recycleBinHasCells || recycleBinHasNotebooks) return false
   return true
 }
 
@@ -36,26 +42,30 @@ function isEffectivelyEmpty(ws: Workspace | null | undefined): boolean {
  * - Prompt Save As immediately so the new workspace gets a path (user may cancel)
  */
 export async function createNewWorkspaceWithPrompt(): Promise<NewFileResult> {
-  const store = useWorkspaceStore()
+  const workspaceStore = useWorkspaceStore()
 
   try {
-    if (!store.isSaved && !isEffectivelyEmpty(store.workspace)) {
+    if (!workspaceStore.isSaved && !isEffectivelyEmpty(workspaceStore.workspace)) {
       const choice = await window.api.confirmUnsavedBeforeOpen()
       if (choice === 'cancel') return { success: false, canceled: true }
       if (choice === 'save') {
-        const res = await trySaveToCurrentFile()
-        if (!res.success) {
-          const alt = await saveOrSaveAs()
-          if (!alt.success)
-            return { success: false, error: alt.error || 'Save canceled', canceled: true }
+        const saveResult = await trySaveToCurrentFile()
+        if (!saveResult.success) {
+          const fallbackSaveResult = await saveOrSaveAs()
+          if (!fallbackSaveResult.success)
+            return {
+              success: false,
+              error: fallbackSaveResult.error || 'Save canceled',
+              canceled: true
+            }
         }
       }
       // 'dont-save' continues
     }
 
     // Initialize a new empty workspace and ensure one default notebook exists
-    store.initEmpty(true)
-    store.ensureDefaultNotebook()
+    workspaceStore.initEmpty(true)
+    workspaceStore.ensureDefaultNotebook()
 
     // Immediately prompt to Save As for the new workspace (optional; user may cancel)
     await saveAsCurrentWorkspace()
