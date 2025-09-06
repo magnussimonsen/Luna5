@@ -111,6 +111,7 @@ function initializeMonacoEditor(): void {
     theme: 'vs',
     readOnly: isCellLocked.value,
     lineNumbers: 'on',
+    renderLineHighlightOnlyWhenFocus: true,
     lineNumbersMinChars: 3,
     lineDecorationsWidth: 1,
     minimap: { enabled: false },

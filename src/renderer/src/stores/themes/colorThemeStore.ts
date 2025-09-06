@@ -27,7 +27,7 @@ export const useThemeStore = defineStore('theme', {
       cellBorderColor: 'whitesmoke',
       cellMarginBackgroundColor: '#f0f0f0',
       // Python cell
-      pythonStdOutBackground: 'whitesmoke',
+      pythonStdOutBackground: '#ffffff',
       pythonImageBackground: '#ffffff',
       // Markdown cell background
       // Text colors
@@ -88,7 +88,7 @@ export const useThemeStore = defineStore('theme', {
       cellBorderColor: '#444444',
       cellMarginBackgroundColor: '#333333',
       // Python cell
-      pythonStdOutBackground: '#333333',
+      pythonStdOutBackground: '#222222',
       pythonImageBackground: 'black',
       // Text colors
       textColor: '#cccccc',
@@ -97,9 +97,9 @@ export const useThemeStore = defineStore('theme', {
       borderColor: '#111111',
       dropdownBorderColor: '#555555',
       // Active
-      activeBackgroundColor: 'green',
-      activeBorderColor: 'green',
-      activeBorderColorHover: 'green',
+      activeBackgroundColor: 'darkgreen',
+      activeBorderColor: 'darkgreen',
+      activeBorderColorHover: 'darkgreen',
       // Soft locked
       softLockedColor: 'saddlebrown',
       // Locked overlay
@@ -118,7 +118,7 @@ export const useThemeStore = defineStore('theme', {
       buttonBorderHoverColor: '#FFFFFF',
       buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
-      buttonOnColor: 'green',
+      buttonOnColor: 'darkgreen',
       buttonHardOffColor: 'firebrick',
       deleteButtonHoverColor: 'red',
       // Python worker Reset button colors

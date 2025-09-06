@@ -42,7 +42,7 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   min-height: 0; /* critical for Chrome flex overflow */
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0.20rem 0.25rem;
+  padding: 0rem 0.25rem 0.25rem 0.25rem; /* top right bottom left */
   box-sizing: border-box;
 }
 
