@@ -67,24 +67,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <div class="setting-row">
-          <label for="default-font-select">Default Cell Font:</label>
-          <select
-            id="default-font-select"
-            v-model="fontStore.fonts.defaultCellFont"
-            :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontStore.setDefaultCellFont(fontStore.fonts.defaultCellFont)"
-          >
-            <option
-              v-for="font in fontStore.availableFonts"
-              :key="'textFont-' + font.value"
-              :value="font.value"
-            >
-              {{ font.label }}
-            </option>
-          </select>
-          <ImplementedMark :implemented="false" />
-        </div>
+
         <!-- Font Size Selectors -->
         <div class="setting-row">
           <label for="menu-bar-font-size-select">Menu Bar Font Size:</label>
@@ -120,7 +103,7 @@
               {{ size }} px
             </option>
           </select>
-          <ImplementedMark :implemented="false" />
+          <ImplementedMark :implemented="true" />
         </div>
         <!-- Set the font size for side panel menu bar -->
         <div class="setting-row">
@@ -161,7 +144,7 @@
               {{ size }} px
             </option>
           </select>
-          <ImplementedMark :implemented="false" />
+          <ImplementedMark :implemented="true" />
         </div>
         <div class="setting-row">
           <label for="status-bar-font-size-select">Status Bar Font Size:</label>
@@ -181,7 +164,40 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <div class="setting-row">
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
+import { useLanguageStore } from '@renderer/stores/language/languageStore'
+import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
+import { AutosaveOption } from '@renderer/types/auto-save-options-types'
+import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
+import { fontSizeOptions, useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
+import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
+
+const generalSettingsStore = useGeneralSettingsStore()
+const languageStore = useLanguageStore()
+const themeStore = useThemeStore()
+const fontSizeStore = useFontSizeStore()
+const fontStore = useFontStore()
+
+const autosaveOptions: { label: string; value: AutosaveOption }[] = [
+  { label: 'Off', value: 0 },
+  { label: 'After 1 change', value: 1 },
+  { label: 'After 5 changes', value: 5 },
+  { label: 'After 10 changes', value: 10 },
+  { label: 'After 15 changes', value: 15 },
+  { label: 'After 25 changes', value: 25 },
+  { label: 'After 50 changes', value: 50 },
+  { label: 'After 100 changes', value: 100 }
+]
+
+/**
+ *  DEPRECATED FONT SIZE OPTIONS - MAY BE REINTRODUCED LATER
+ *  <div class="setting-row">
           <label for="default-cell-font-size-select">Default Cell Font Size:</label>
           <select
             id="default-cell-font-size-select"
@@ -220,33 +236,23 @@
           <ImplementedMark :implemented="false" />
         </div>
       </div>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
-import { useLanguageStore } from '@renderer/stores/language/languageStore'
-import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
-import { AutosaveOption } from '@renderer/types/auto-save-options-types'
-import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
-import { fontSizeOptions, useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
-import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
-
-const generalSettingsStore = useGeneralSettingsStore()
-const languageStore = useLanguageStore()
-const themeStore = useThemeStore()
-const fontSizeStore = useFontSizeStore()
-const fontStore = useFontStore()
-
-const autosaveOptions: { label: string; value: AutosaveOption }[] = [
-  { label: 'Off', value: 0 },
-  { label: 'After 1 change', value: 1 },
-  { label: 'After 5 changes', value: 5 },
-  { label: 'After 10 changes', value: 10 },
-  { label: 'After 15 changes', value: 15 },
-  { label: 'After 25 changes', value: 25 },
-  { label: 'After 50 changes', value: 50 },
-  { label: 'After 100 changes', value: 100 }
-]
+      <div class="setting-row">
+          <label for="default-font-select">Default Cell Font:</label>
+          <select
+            id="default-font-select"
+            v-model="fontStore.fonts.defaultCellFont"
+            :class="{ 'dark-mode': themeStore.isDarkMode }"
+            @change="fontStore.setDefaultCellFont(fontStore.fonts.defaultCellFont)"
+          >
+            <option
+              v-for="font in fontStore.availableFonts"
+              :key="'textFont-' + font.value"
+              :value="font.value"
+            >
+              {{ font.label }}
+            </option>
+          </select>
+          <ImplementedMark :implemented="false" />
+        </div>
+ */
 </script>
