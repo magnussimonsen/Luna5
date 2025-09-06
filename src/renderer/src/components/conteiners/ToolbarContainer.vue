@@ -57,6 +57,7 @@ const currentToolbarComponent = computed(() => {
   /* Lower than MenuBar dropdown (3000) */
   position: relative;
   /* Ensure z-index works correctly */
+  margin-bottom: 2px; /* Space below toolbar */
 }
 
 .toolbar-placeholder {

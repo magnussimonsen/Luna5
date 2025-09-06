@@ -78,6 +78,7 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   min-width: 0;
   overflow: hidden;
   /* Prevent layout from expanding beyond viewport */
+  background: var(--main-panel-background, #f0f0f0);
 }
 
 .workspace-container {
@@ -91,6 +92,7 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   flex-direction: row;
   /* Allow inner areas to manage their own overflow; do not clip scrollbars */
   overflow: visible;
+  background: var(--main-panel-background, #f0f0f0);
 }
 
 .main-panel {
