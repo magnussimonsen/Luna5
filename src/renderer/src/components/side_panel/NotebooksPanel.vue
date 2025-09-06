@@ -35,7 +35,7 @@
       <div class="row">
         <template v-if="mode === 'notebooks'">
           <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
-           Create a new notebook
+            Create new notebook
           </button>
           <!--
           Temporarily disabled: these actions are moved to the Edit menu.
