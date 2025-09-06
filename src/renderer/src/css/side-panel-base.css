@@ -1,0 +1,74 @@
+/**
+Base styles for side panels
+
+Purpose
+- Provide consistent background and text colors
+- Provide consistent font families and sizes for menu bar and content
+- Offer small layout utilities (padding/margin + vertical scrolling)
+
+Current usage
+- Applied in: Help panel (and all help sub-panels), Settings panel (and sub-panels),
+  TOC panel, Variables panel, Flashcards panel. The SidePanel container also uses
+  the same background variables to align visuals.
+- Notebooks panel has custom layout/styles and may not use all utilities.
+
+Key classes
+- .side-panel.menu-bar        → UI font for the side panel selector rows
+- .side-panel-base            → Text font for side panel content
+- .side-panel-ui-base         → UI font variant for side panel content
+- .side-panel-padding-margin-base → Shared padding/margin for panel content blocks
+- .side-panel-y-scrolling     → Utility to enable vertical scrolling in flex layouts
+
+Theme variables
+- --side-panel-background, --text-color
+- --ui-font, --text-font
+- --side-panel-menu-bar-font-size, --side-panel-font-size
+
+Dev helper
+- Falls back to --debug-color when a variable is missing, to surface gaps during development.
+*/
+
+ 
+
+.side-panel.menu-bar {
+	font-family: var(--ui-font, Inter, sans-serif);
+	font-size: var(--side-panel-menu-bar-font-size, 12px);
+	background: var(--side-panel-background, var(--debug-color, #f0f0f0));
+	color: var(--text-color, var(--debug-color, #222));
+}
+
+.side-panel-base {
+	font-family: var(--text-font, Georgia, serif);
+	font-size: var(--side-panel-font-size, 12px);
+	background: var(--side-panel-background, var(--debug-color, #f0f0f0));
+	color: var(--text-color, var(--debug-color, #222));
+}
+
+/* Use UI font for headings in side panel content */
+.side-panel-base h1,
+.side-panel-base h2,
+.side-panel-base h3,
+.side-panel-base h4,
+.side-panel-base h5,
+.side-panel-base h6 {
+	font-family: var(--ui-font, Inter, sans-serif);
+}
+
+/* Variant that uses the UI font for content instead of the text font */
+.side-panel-ui-base {
+	font-family: var(--ui-font, Inter, sans-serif);
+	font-size: var(--side-panel-font-size, 12px);
+	background: var(--side-panel-background, var(--debug-color, #f0f0f0));
+	color: var(--text-color, var(--debug-color, #222));
+}
+
+.side-panel-padding-margin-base {
+    padding: 0.5em 0.25em;
+    margin: 0.5em 0.25em;
+}
+
+/* Utility: make inner panel content vertically scrollable when space is constrained */
+.side-panel-y-scrolling {
+	overflow-y: auto;
+	min-height: 0; /* allow flex parents to shrink */
+}

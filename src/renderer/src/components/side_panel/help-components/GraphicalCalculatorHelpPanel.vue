@@ -1,15 +1,15 @@
 <template>
   <div class="side-panel-ui-base side-panel-padding-margin-base">
     <h2>🚧 Work in progres</h2>
-    <h3>Table of Contents</h3>
-    <p>Placeholder for table of contents for the text cells in this notebook.</p>
+    <h3>Graphical calculator help</h3>
+    <span>Placeholder...</span>
   </div>
 </template>
 
 <script setup lang="ts">
-// Add any TOCPanel-specific logic here if needed
+// Side panel placeholder aligned with existing settings layout
 </script>
 
-<style>
+<style scoped>
 @import '@renderer/css/side-panel-base.css';
 </style>

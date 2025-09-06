@@ -136,7 +136,7 @@ onBeforeUnmount(() => {
 const saveBtnLabel = computed(() => (displayIsSaved.value ? 'Saved' : 'Not Saved'))
 const saveBtnStyle = computed(() => ({
   backgroundColor: displayIsSaved.value
-    ? 'var(--button-on-color, #43a047)'
+    ? 'var(--button-on-color, lightgreen)'
     : 'var(--button-hard-off-color, #f44336)',
   color: 'var(--ui-text-color, #fff)'
 }))
@@ -160,7 +160,7 @@ const autosaveLabel = computed(() => {
 })
 const autosaveBtnStyle = computed(() => ({
   backgroundColor: autosaveEnabled.value
-    ? 'var(--button-on-color, #43a047)'
+    ? 'var(--button-on-color, lightgreen)'
     : 'var(--button-hard-off-color, #f44336)',
   color: 'var(--ui-text-color, #fff)'
 }))

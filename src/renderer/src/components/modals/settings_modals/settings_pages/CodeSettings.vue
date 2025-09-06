@@ -12,11 +12,10 @@ import { computed } from 'vue'
 // monaco.editor.setTheme(id) after registering curated themes.
 //
 // Tip: The theme ID is the normalized filename (kebab-case), e.g., 'github-dark'.
-import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
+import { useCodeSettingsStore } from '@renderer/stores/settings/codeSettingsStore'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore, fontSizeOptions } from '@renderer/stores/fonts/fontSizeStore'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
-import { useCodeSettingsStore } from '@renderer/stores/settings/codeSettingsStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import {
   getCuratedLightMonacoThemeIds,
@@ -25,10 +24,9 @@ import {
 } from '@renderer/code/monaco/monaco-theme'
 // Theme registration/application is handled globally; no direct apply calls here.
 
-const generalSettingsStore = useGeneralSettingsStore()
+const codeSettingsStore = useCodeSettingsStore()
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
-const codeSettingsStore = useCodeSettingsStore()
 const themeStore = useThemeStore()
 // Build options from Monaco theme registry (built-ins + curated JSON filenames)
 // Note: IDs are normalized (kebab-case). We reuse the same list for light/dark.
@@ -92,19 +90,19 @@ const currentThemeId = computed(() =>
         <h3>Code Quality Options</h3>
         <div class="setting-row">
           <label>
-            <input v-model="generalSettingsStore.enableCodeLintingState" type="checkbox" />
+            <input v-model="codeSettingsStore.enableCodeLintingState" type="checkbox" />
             Enable code linting <ImplementedMark :implemented="false" />
           </label>
         </div>
         <div class="setting-row">
           <label>
-            <input v-model="generalSettingsStore.enableCodeFormattingState" type="checkbox" />
+            <input v-model="codeSettingsStore.enableCodeFormattingState" type="checkbox" />
             Enable code formatting <ImplementedMark :implemented="false" />
           </label>
         </div>
         <div class="setting-row">
           <label>
-            <input v-model="generalSettingsStore.enableCodeSuggestionsState" type="checkbox" />
+            <input v-model="codeSettingsStore.enableCodeSuggestionsState" type="checkbox" />
             Enable code suggestions <ImplementedMark :implemented="false" />
           </label>
         </div>

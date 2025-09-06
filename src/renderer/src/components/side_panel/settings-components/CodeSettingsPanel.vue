@@ -1,5 +1,5 @@
 <template>
-  <div class="code-settings-content">
+  <div class="code-settings-content side-panel-ui-base">
     <div class="settings-column">
       <h3>Coding Font Options</h3>
       <div class="setting-row">
@@ -42,19 +42,25 @@
       <h3>Code Quality Options</h3>
       <div class="setting-row">
         <label>
-          <input v-model="generalSettingsStore.enableCodeLintingState" type="checkbox" />
+          <input v-model="codeSettingsStore.enableLineNumbersState" type="checkbox" />
+          Enable line numbers <ImplementedMark :implemented="false" />
+        </label>
+      </div>
+      <div class="setting-row">
+        <label>
+          <input v-model="codeSettingsStore.enableCodeLintingState" type="checkbox" />
           Enable code linting <ImplementedMark :implemented="false" />
         </label>
       </div>
       <div class="setting-row">
         <label>
-          <input v-model="generalSettingsStore.enableCodeFormattingState" type="checkbox" />
+          <input v-model="codeSettingsStore.enableCodeFormattingState" type="checkbox" />
           Enable code formatting <ImplementedMark :implemented="false" />
         </label>
       </div>
       <div class="setting-row">
         <label>
-          <input v-model="generalSettingsStore.enableCodeSuggestionsState" type="checkbox" />
+          <input v-model="codeSettingsStore.enableCodeSuggestionsState" type="checkbox" />
           Enable code suggestions <ImplementedMark :implemented="false" />
         </label>
       </div>
@@ -83,7 +89,6 @@
 </template>
 
 <script setup lang="ts">
-import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore, fontSizeOptions } from '@renderer/stores/fonts/fontSizeStore'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
@@ -94,7 +99,6 @@ import {
   builtinMonacoThemes
 } from '@renderer/code/monaco/monaco-theme'
 
-const generalSettingsStore = useGeneralSettingsStore()
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
 const codeSettingsStore = useCodeSettingsStore()
@@ -109,4 +113,5 @@ const darkThemeOptions = [...darkBuiltins, ...getCuratedDarkMonacoThemeIds()]
 .code-settings-content {
   width: 100%;
 }
+@import '@renderer/css/side-panel-base.css';
 </style>

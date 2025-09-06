@@ -1,5 +1,5 @@
 <template>
-  <div class="general-settings-panel">
+  <div class="general-settings-panel side-panel-ui-base">
     <div class="settings-columns">
       <div class="settings-column">
         <h3>General Options</h3>
@@ -256,3 +256,7 @@ const autosaveOptions: { label: string; value: AutosaveOption }[] = [
         </div>
  */
 </script>
+
+<style scoped>
+@import '@renderer/css/side-panel-base.css';
+</style>

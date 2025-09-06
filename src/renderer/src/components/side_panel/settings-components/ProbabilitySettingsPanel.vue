@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-column">
+  <div class="settings-column side-panel-ui-base">
     <h3>Probability Settings</h3>
     <div class="setting-row" style="opacity: 0.8">
       <span>Placeholder: probability and statistics options will appear here.</span>
@@ -21,4 +21,5 @@
   align-items: center;
   gap: 0.5em;
 }
+@import '@renderer/css/side-panel-base.css';
 </style>

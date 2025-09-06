@@ -1,7 +1,7 @@
 <template>
   <aside
     v-if="sidePanelStore.activePanel"
-    class="side-panel"
+    class="side-panel side-panel-ui-base"
     :style="{ width: panelWidth + 'px', flex: '0 0 ' + panelWidth + 'px' }"
   >
     <div
@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
   position: relative; /* participate in flex layout of parent */
   min-width: 1em;
   max-width: calc(100vw * maxWidthScalingFactor);
-  background: var(--menu-background, #f9f9f9);
+  background: var(--side-panel-background, #f0f0f0);
   color: var(--text-color, #222);
   display: flex;
   flex-direction: row;

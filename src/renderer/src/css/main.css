@@ -1,3 +1,9 @@
+/*
+Main CSS entry for the renderer
+- Aggregates base styles (body, theme, design tokens, fonts)
+- Keep file lightweight; most rules live in imported partials
+*/
+
 @import './main-imports-this-css/body.css';
 @import './main-imports-this-css/color-theme.css';
 @import './main-imports-this-css/design.css';
@@ -5,17 +11,18 @@
 @import './hidden-cell-linear-gradient-style.css';
 
 #app {
-  /*Layout*/
+  /* App root layout */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Font */
+  /* Root font size (wired via settings store) */
   font-size: var(--main-app-font-size, 1.1em);
 }
 
 
+/* Small responsive tweaks */
 @media (max-width: 720px) {
   .text {
     font-size: 20px;

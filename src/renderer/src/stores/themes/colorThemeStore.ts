@@ -12,6 +12,8 @@ export const useThemeStore = defineStore('theme', {
       lunaPalatte2: '',
       lunaPalatte3: '',
       lunaPalatte4: '',
+      // Development debug color
+      debugColor: 'red',
       // Background colors
       appBackground: '#ffffff',
       // Menu background colors
@@ -73,6 +75,8 @@ export const useThemeStore = defineStore('theme', {
       lunaPalatte2: '',
       lunaPalatte3: '',
       lunaPalatte4: '',
+      // Development debug color
+      debugColor: 'red',
       // Background colors
       appBackground: '#222222',
       // Menu background colors
@@ -150,6 +154,7 @@ export const useThemeStore = defineStore('theme', {
     },
     applyTheme(colors: ThemeColorTypes) {
       const root = document.documentElement
+      root.style.setProperty('--debug-color', colors.debugColor)
       root.style.setProperty('--app-background', colors.appBackground)
       root.style.setProperty('--menu-background', colors.menuBackground)
       root.style.setProperty('--toolbar-background', colors.toolbarBackground)

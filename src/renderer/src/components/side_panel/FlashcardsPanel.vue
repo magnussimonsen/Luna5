@@ -1,6 +1,7 @@
 <template>
-  <div class="flashcards-panel">
-    <h3 class="title">Flashcards</h3>
+  <div class="flashcards-panel side-panel-ui-base side-panel-padding-margin-base">
+    <h2>🚧 Work in progres</h2>
+  <h3>Flashcards</h3>
     <p class="hint">This is a placeholder panel. Design and features to come.</p>
     <div class="actions">
       <button class="btn" disabled>New deck</button>
@@ -14,18 +15,11 @@
 </script>
 
 <style scoped>
+@import '@renderer/css/side-panel-base.css';
 .flashcards-panel {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0.6rem 0.6rem 1rem;
-  font-family: var(--ui-font, 'Arial', sans-serif);
-  font-size: var(--side-panel-menu-bar-font-size, 1em);
-}
-.title {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 700;
 }
 .hint {
   margin: 0;

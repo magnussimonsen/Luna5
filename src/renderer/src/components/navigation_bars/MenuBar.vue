@@ -189,7 +189,10 @@
       class="toggle-button"
       :style="
         isDarkMode
-          ? { background: 'var(--button-on-color, #43a047)', color: 'var(--ui-text-color, #fff)' }
+          ? {
+              background: 'var(--button-on-color, lightgreen)',
+              color: 'var(--ui-text-color, #fff)'
+            }
           : {}
       "
       @click="handleToggleDark"
@@ -587,7 +590,7 @@ const handleMoveNotebookToBin = (): void => {
 }
 
 .toggle-button.active {
-  background: var(--button-on-color, #43a047);
+  background: var(--button-on-color, lightgreen);
   color: var(--text-color, #fff);
 }
 
@@ -614,7 +617,7 @@ const handleMoveNotebookToBin = (): void => {
 }
 
 .side-panel-toggle-button.active {
-  background: var(--button-on-color, #43a047);
+  background: var(--button-on-color, lightgreen);
   color: var(--text-color, #fff);
 }
 .side-panel-toggle-button:hover {

@@ -1,13 +1,15 @@
 <template>
   <div class="settings-panel">
+    <!-- Menu bar selection row (component) -->
     <SettingsPanelSelectorRow
       :current-page="currentPage"
-      :style="{ fontSize: fontSizeStore.fontSizes.sidePanelMenuBarFontSize }"
+      :font-size="fontSizeStore.fontSizes.sidePanelMenuBarFontSize"
       @update:current-page="onUpdatePage"
     />
+    <!-- Content area -->
     <div
-      class="settings-panel-content"
-      :style="{ fontSize: fontSizeStore.fontSizes.sidePanelFontSize }"
+      class="settings-panel-content side-panel-padding-margin-base side-panel-y-scrolling"
+      :style="contentStyle"
     >
       <GeneralSettingsPanel v-if="currentPage === 'general'" />
       <CodeSettingsPanel v-else-if="currentPage === 'code'" />
@@ -22,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, computed, type Ref } from 'vue'
 import SettingsPanelSelectorRow from './settings-components/SettingsPanelSelectorRow.vue'
 import GeneralSettingsPanel from './settings-components/GeneralSettingsPanel.vue'
 import CodeSettingsPanel from './settings-components/CodeSettingsPanel.vue'
@@ -47,7 +49,22 @@ type SettingsPage =
 const currentPage: Ref<SettingsPage> = ref('general')
 const fontSizeStore = useFontSizeStore()
 
+const contentStyle = computed(() => ({
+  fontSize: fontSizeStore.fontSizes.sidePanelFontSize
+}))
+
 function onUpdatePage(page: SettingsPage): void {
   currentPage.value = page
 }
 </script>
+<style scoped>
+.settings-panel {
+  display: flex;
+  flex-direction: column;
+}
+.settings-panel-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+</style>

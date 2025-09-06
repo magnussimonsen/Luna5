@@ -9,12 +9,9 @@ export const useGeneralSettingsStore = defineStore('generalSettings', {
   state: () => ({
     autosaveChangeIntervalState: 0 as AutosaveOption, // 0 = off, 1/5/10/15/25/50/100 = save after N changes
     warnOnDeleteCellState: true,
-    showCellIndexNumbersState: true,
-    enableCodeLintingState: true,
-    enableCodeFormattingState: true,
-    enableCodeSuggestionsState: true,
-    enableCodeNavigationState: true
+    showCellIndexNumbersState: true
   }),
+  // Code editor specific toggles moved to codeSettingsStore.ts
   actions: {
     setAutosaveChangeInterval(option: AutosaveOption) {
       this.autosaveChangeIntervalState = option
@@ -24,15 +21,6 @@ export const useGeneralSettingsStore = defineStore('generalSettings', {
     },
     setShowCellIndexNumbers(value: boolean) {
       this.showCellIndexNumbersState = value
-    },
-    setEnableCodeLinting(value: boolean) {
-      this.enableCodeLintingState = value
-    },
-    setEnableCodeFormatting(value: boolean) {
-      this.enableCodeFormattingState = value
-    },
-    setEnableCodeSuggestions(value: boolean) {
-      this.enableCodeSuggestionsState = value
     }
   },
   getters: {
@@ -44,15 +32,6 @@ export const useGeneralSettingsStore = defineStore('generalSettings', {
     },
     showCellIndexNumbersGetter: (state) => {
       return state.showCellIndexNumbersState
-    },
-    enableCodeLintingGetter: (state) => {
-      return state.enableCodeLintingState
-    },
-    enableCodeFormattingGetter: (state) => {
-      return state.enableCodeFormattingState
-    },
-    enableCodeSuggestionsGetter: (state) => {
-      return state.enableCodeSuggestionsState
     }
   }
 })

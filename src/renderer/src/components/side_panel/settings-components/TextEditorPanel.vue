@@ -1,5 +1,5 @@
 <template>
-  <div class="text-editor-settings">
+  <div class="text-editor-settings side-panel-ui-base">
     <h3>Text Editor Settings</h3>
     <div class="setting-row">
       <label for="text-font-select">Text Editor Font:</label>
@@ -53,4 +53,5 @@ const fontSizeStore = useFontSizeStore()
 .text-editor-settings {
   width: 100%;
 }
+@import '@renderer/css/side-panel-base.css';
 </style>

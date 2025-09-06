@@ -1,0 +1,11 @@
+/* Base styles for all cells */
+
+/* THIS IS NOT IMPLEMENTED YET AND STYLES NEED TO BE ADJUSTED */
+.cell-base{
+  background: var(--cell-background, #fff);
+  border: 1px solid var(--cell-border-color, #eee);
+  color: var(--text-color, #222);
+  padding: 1em;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

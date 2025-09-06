@@ -8,18 +8,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
-import { useSidePanelStore } from '@renderer/stores/UI/sidePanelStore'
 import TextCellToolbar from '@renderer/components/toolbars/TextCellToolbar.vue'
 import PythonCellToolbar from '@renderer/components/toolbars/PythonCellToolbar.vue'
 
 const selectionStore = useCellSelectionStore()
-const sidePanelStore = useSidePanelStore()
-
-// Inline empty toolbar for Flashcards panel to avoid external SFC dependency for now
-const FlashcardsToolbar = {
-  name: 'FlashcardsToolbar',
-  template: '<div class="flashcards-toolbar" aria-label="Flashcards toolbar"></div>'
-}
 
 const toolbarComponents = {
   'text-cell': TextCellToolbar,
@@ -28,10 +20,6 @@ const toolbarComponents = {
 } as const
 
 const currentToolbarComponent = computed(() => {
-  // When Flashcards panel is active, show the flashcards toolbar (currently empty)
-  if (sidePanelStore.activePanel === 'flashcards') {
-    return FlashcardsToolbar
-  }
   const kind = selectionStore.selectedCellKind
   if (!kind) return null
   return toolbarComponents[kind as keyof typeof toolbarComponents] || null

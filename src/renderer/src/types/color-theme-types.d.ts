@@ -9,6 +9,8 @@ export type ThemeColorTypes = {
   lunaPalatte3: string
   lunaPalatte4: string
 
+  debugColor: string
+
   appBackground: string
   menuBackground: string
   menuBackgroundHover: string

@@ -1,5 +1,5 @@
 <template>
-  <div class="notebooks-panel">
+  <div class="notebooks-panel side-panel-padding-margin-base">
     <div class="header">
       <!-- Row 1: view toggles + move up/down -->
       <div class="row" role="tablist" aria-label="Notebook views">
@@ -371,7 +371,7 @@ function formatDate(iso?: string): string {
   border-color: var(--button-border-hover-color, #2563eb);
 }
 .toggle-btn.is-active {
-  background: var(--active-background-color, #2563eb);
+  background: var(--button-on-color, #2563eb);
   color: var(--text-color);
   border-color: var(--active-border-color, #2563eb);
 }

@@ -1,16 +1,70 @@
-/* filepath: c:\Users\magnus.simonsen\luna\luna\src\renderer\src\css\color-theme.css */
-/* THIS NEEDS TO BE SYNCED WITH THE THEME STORE */
+/* color-theme.css
+Purpose: Provide initial :root CSS variables so the UI renders correctly before
+the Pinia theme store initializes. The theme store will override these at runtime.
+Keep this file aligned with ThemeColorTypes and colorThemeStore.
+*/
+
 :root {
+    /* Dev helper */
+    --debug-color: red;
+
+    /* Backgrounds */
     --app-background: #ffffff;
-    --menu-background: #f0f0f0;
-    --menu-background-hover: #e0e0e0;
+    --main-panel-background: #ffffff;
+    --side-panel-background: #f0f0f0;
+    --menu-background: whitesmoke;
+    --toolbar-background: whitesmoke;
+
+    /* Text */
     --text-color: #222222;
-    --border-color: #cccccc;
-    --border-color-divider: #dddddd;
-    --button-hover-color: lightgreen;
-    --button-on-color: '#81C784';
+    --ui-text-color: #222222;
+
+    /* Borders/dividers */
+    --border-color: #dddddd;
+    --dropdown-border-color: #cccccc;
+    --dropdown-divider-color: #cccccc;
+
+    /* Cells */
+    --cell-background: #ffffff;
+    --cell-border-color: whitesmoke;
+    --cell-margin-background-color: #f0f0f0;
+    --cell-locked-overlay: rgba(0, 0, 0, 0.06);
+    --hide-cell-color: whitesmoke;
+
+    /* Python cell */
+    --python-stdout-background: #ffffff;
+    --python-image-background: #ffffff;
+
+    /* Active/selection */
+    --active-background-color: lightgreen;
+    --active-border-color: lightgreen;
+    --active-border-color-hover: lightgreen;
+    --soft-locked-border-color: orange;
+
+    /* Buttons */
+    --button-background-color: transparent;
+    --button-border-color: #cccccc;
+    --button-hover-color: lightgray;
+    --button-border-hover-color: black;
+    --button-on-color: lightgreen;
     --button-transparent-off-color: transparent;
-    --button-hard-off-color: red;
-    --cell-selected-border: var(--button-on-color);
+    --button-hard-off-color: salmon;
+    --delete-button-hover-color: lightcoral;
+
+    /* Python worker reset button */
+    --button-reset-python-worker-color: transparent;
+    --button-reset-python-worker-hover-color: lightcoral;
+
+    /* Zoom reset */
+    --reset-zoom-button-color: lightblue;
+
+    /* Focus/slider */
+    --focus-visible-border-color: blue;
+    --slider-background: #cccccc;
+
+    /* Legacy/aliases (kept for existing CSS; prefer new tokens above) */
+    --color-text: var(--text-color);
+    --color-background: var(--app-background);
+    --cell-selected-border: var(--active-border-color);
     --cell-selected-bg: transparent;
 }

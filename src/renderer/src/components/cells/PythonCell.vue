@@ -117,7 +117,8 @@ function initializeMonacoEditor(): void {
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
     wordWrap: 'on',
-    scrollbar: { vertical: 'hidden' },
+    // Let mouse wheel scroll bubble to the outer container (so the page scrolls)
+    scrollbar: { vertical: 'hidden', alwaysConsumeMouseWheel: false },
     overviewRulerLanes: 0,
     automaticLayout: true,
     // Monaco font settings

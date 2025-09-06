@@ -1,3 +1,9 @@
+/*
+Design tokens (layout/spacing)
+- Default sizes, paddings, gaps, radii, and z-index values
+- Colors are defined in color-theme.css; this file focuses on metrics
+- Later definitions override earlier ones (e.g., border radius below)
+*/
 :root {
     /* General design variables */
     --border-radius: 6px;
@@ -10,7 +16,7 @@
     --menu-bar-button-border-radius: 0px;
     --menu-bar-z-index: 3000; /* Ensure menu bar is above other UI elements */
 
-    /* Toolbar container*/
+    /* Toolbar container */
     --toolbar-container-padding: 0.2rem 0.1rem; /* top, right, bottom, left */
 
     /* Toolbar */
@@ -32,8 +38,8 @@
     --dropdown-trigger-border-radius: var(--menu-bar-button-border-radius);
     --dropdown-transition-duration: 0.1s;
 
-    /* UI Border */
-    --border-radius: 2px;
+    /* UI Border (overrides general border radius above) */
+    --border-radius: 2px; /* override */
     --border-thickness: 1px;
 
     /* Cell container styling */
@@ -43,8 +49,8 @@
     --cell-container-border-left-not-selected: 0.5rem solid transparent;
     --cell-container-border-left-selected: 0.5rem solid var(--active-border-color);
 
-    /* Buttons (not used?)*/
-    --button-border-radius: 20px;
-    --button-padding: 3.1em 4.3em 4.1em 4.3em; /* top, right, bottom, left */
+    /* Legacy button tokens (not used by current toolbars) */
+    --button-border-radius: 20px; /* legacy */
+    --button-padding: 3.1em 4.3em 4.1em 4.3em; /* legacy; top, right, bottom, left */
 
 }

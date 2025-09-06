@@ -1,6 +1,7 @@
 <template>
-  <div class="variables-panel">
-    <h2>Variables Panel</h2>
+  <div class="variables-panel side-panel-ui-base side-panel-padding-margin-base">
+    <h2>🚧 Work in progres</h2>
+    <h3>Variables Panel</h3>
     <p>This is the Variables panel. Show your variables here.</p>
   </div>
 </template>
@@ -10,9 +11,8 @@
 </script>
 
 <style scoped>
+@import '@renderer/css/side-panel-base.css';
 .variables-panel {
-  /* Add custom styles if needed */
-  padding: 10px;
-  background-color: red;
+  background-color: transparent;
 }
 </style>

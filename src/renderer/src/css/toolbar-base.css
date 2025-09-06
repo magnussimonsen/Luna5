@@ -1,13 +1,46 @@
-/* Shared base styles for all toolbars */
+/*
+Toolbar base
+- Shared layout for toolbars
+- Uses CSS variables; falls back to --debug-color in dev when tokens are missing
+*/
 .python-cell-toolbar,
 .text-cell-toolbar,
 .flashcards-toolbar {
   display: flex;
   align-items: center;
-  gap: 0.0rem;
-  font-size: 0.8rem; /* TO DO: Wire this to toolbar font size in settings side panel */
-  padding: var(--toolbar-padding);
-  background: var(--toolbar-background);
-  gap: var(--toolbar-button-gap); /* Space between buttons */
-  
+  padding: var(--toolbar-padding, 0.0em 0.0em 0.0em 0.0em);
+  background: var(--toolbar-background, var(--debug-color, transparent)); /* dev debug fallback */
+  gap: var(--toolbar-button-gap, 0.5em); /* Space between buttons */
+}
+
+/* Shared toolbar button styles */
+.btn {
+  appearance: none;
+  /* Base colors with debug fallback */
+  border: 1px solid var(--button-border-color, var(--debug-color, #ccc));
+  background: var(--button-background-color, var(--debug-color, transparent));
+  color: var(--ui-text-color, var(--debug-color, #222));
+  padding: var(--toolbar-button-padding, 0.1em 0.4em 0.1em 0.4em);
+  border-radius: var(--toolbar-button-radius, 2px);
+  cursor: pointer;
+  /* UI font family from font store */
+  font-family: var(--ui-font, system-ui, sans-serif);
+  /* Toolbar font size from font store */
+  font-size: var(--toolbar-font-size, 14px);
+}
+.btn:hover {
+  /* Hover colors with debug fallback */
+  background: var(--button-hover-color, var(--debug-color, #e6f0ff));
+  border-color: var(--button-border-hover-color, var(--debug-color, #2563eb));
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn:focus-visible {
+  outline: normal;
+}
+.btn:disabled {
+  opacity: 1;
+  transform: scale(0.98);
+  cursor: not-allowed;
 }

@@ -30,7 +30,12 @@ export const useCodeSettingsStore = defineStore('codeSettings', {
   state: () => ({
     // Use curated defaults if saved values aren't curated; ensures selects have a value on startup
     lightCodeEditorTheme: initialLightMonacoThemeId as string,
-    darkCodeEditorTheme: initialDarkMonacoThemeId as string
+    darkCodeEditorTheme: initialDarkMonacoThemeId as string,
+    // Code quality toggles (moved from generalSettingsStore)
+    enableLineNumbersState: true,
+    enableCodeLintingState: false,
+    enableCodeFormattingState: false,
+    enableCodeSuggestionsState: false
   }),
   actions: {
     setLightCodeEditorTheme(themeId: string) {
@@ -40,6 +45,19 @@ export const useCodeSettingsStore = defineStore('codeSettings', {
     setDarkCodeEditorTheme(themeId: string) {
       const normalizedThemeId = normalizeThemeIdToSafeKebab(themeId)
       this.darkCodeEditorTheme = normalizedThemeId
+    },
+    // Setters for code quality toggles
+    setEnableLineNumbers(value: boolean) {
+      this.enableLineNumbersState = value
+    },
+    setEnableCodeLinting(value: boolean) {
+      this.enableCodeLintingState = value
+    },
+    setEnableCodeFormatting(value: boolean) {
+      this.enableCodeFormattingState = value
+    },
+    setEnableCodeSuggestions(value: boolean) {
+      this.enableCodeSuggestionsState = value
     }
   }
 })

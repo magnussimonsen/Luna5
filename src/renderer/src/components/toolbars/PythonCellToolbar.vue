@@ -157,31 +157,11 @@ function onReset(): void {
 </script>
 
 <style scoped>
+@import '../../css/main-imports-this-css/design.css';
 @import '../../css/toolbar-base.css';
-.btn {
-  appearance: none;
-  border: 1px solid var(--button-border-color);
-  background: var(--button-background-color);
-  color: var(--ui-text-color, #222);
-  padding: var(--toolbar-button-padding);
-  border-radius: 2px;
-  cursor: pointer;
-  /* UI font family from font store */
-  font-family: var(--ui-font);
-  /* Toolbar font size from font store */
-  font-size: var(--toolbar-font-size);
-}
-.btn:hover {
-  background: var(--button-hover-color);
-  border-color: var(--button-border-hover-color);
-}
-.btn:active {
-  transform: scale(0.98);
-}
-.btn:focus-visible {
-  outline: normal;
-}
-
+/*--------------------------------------------------------*/
+/* COMPONENT SPECIFIC STYLES (NOT BASE CSS)
+/*--------------------------------------------------------*/
 /* Run button constant width with reserved spinner space */
 .btn.run {
   display: inline-flex;
@@ -199,7 +179,7 @@ function onReset(): void {
   justify-content: center;
 }
 .btn.run.is-running {
-  background: var(--button-on-color, #d1fadf); /* uses theme var; light green fallback */
+  background: var(--button-on-color, lightgreen); /* uses theme var; light green fallback */
 }
 
 /* ASCII spinner styles */

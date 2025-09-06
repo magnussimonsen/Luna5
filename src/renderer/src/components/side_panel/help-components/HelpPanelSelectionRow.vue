@@ -17,7 +17,6 @@
       <button :class="{ active: currentPage === 'geometry' }" @click="emitUpdate('geometry')">
         Geometry
       </button>
-
       <button
         :class="{ active: currentPage === 'spreadsheets' }"
         @click="emitUpdate('spreadsheets')"
@@ -36,7 +35,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-type SettingsPage =
+export type HelpPage =
   | 'general'
   | 'code'
   | 'cas'
@@ -46,15 +45,12 @@ type SettingsPage =
   | 'probability'
   | 'text-editor'
 
-const props = defineProps<{ currentPage: SettingsPage; fontSize?: string }>()
-/* TO DO: Store the current page in a ref and update the settings store
-with the state of which page is currently active. State might have to be added to
-the settings store */
-const emit = defineEmits<{ (e: 'update:current-page', value: SettingsPage): void }>()
+const props = defineProps<{ currentPage: HelpPage; fontSize?: string }>()
+const emit = defineEmits<{ (e: 'update:current-page', value: HelpPage): void }>()
 
 const fontSize = computed(() => props.fontSize ?? '12px')
 
-function emitUpdate(page: SettingsPage): void {
+function emitUpdate(page: HelpPage): void {
   emit('update:current-page', page)
 }
 </script>
