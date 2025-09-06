@@ -21,8 +21,10 @@ function normalizeThemeIdToSafeKebab(id: string): string {
 }
 
 // Initial themes: use Monaco built-ins (no persistence)
-const initialLightMonacoThemeId = 'vs'
-const initialDarkMonacoThemeId = 'vs-dark'
+// const initialLightMonacoThemeId = 'vs'
+// const initialDarkMonacoThemeId = 'vs-dark'
+const initialLightMonacoThemeId = 'slush-and-poppies' // from monaco-themes
+const initialDarkMonacoThemeId = 'hc-black'
 
 export const useCodeSettingsStore = defineStore('codeSettings', {
   state: () => ({
