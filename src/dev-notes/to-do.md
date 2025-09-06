@@ -1,25 +1,18 @@
-# To‑do
+# To‑Do
 
-## Cell Container
-- Allow deselecting a cell by clicking the cell margin (outside the cell content).
+## UI and Navigation
+- Clean up the Settings side panel; remove unused selectors.
+- Remove the Settings option from the File menu (settings now lives in the side panel).
 
-## Notebook & Bin UX
+## Panels and Help
+- Add a "Planned / Work in Progress" label to unfinished side panels: Table of Contents, Help, Variables.
+- Add a list of shipped Python modules to the Help side panel and to About (File menu).
 
-- Do not auto-switch focus from the Notebooks panel to the Bin when moving items to Bin.
-	- After moving a notebook to Bin: stay in Notebooks view and select the next/previous notebook.
-	- After moving a cell to Bin: stay in Notebooks view and maintain a sensible cell selection (next/none).
+## Text Cells
+- Add a placeholder to text cells (e.g., "This is a simple editable div. A proper text editor is in development").
 
-## Menu bar tidy‑up
-- Move “Cell → Bin” and “Notebook → Bin” actions from the Notebooks side panel into the Edit menu to reduce accidental clicks.
-	- For now, comment out the side‑panel buttons (keep code paths intact) in case we choose to re‑enable them later.
+## Major Projects
+- Standardize and organize CSS custom properties (`var(--*)`): naming, grouping, and file structure.
 
-## Operations behavior
-- Restoring a cell should keep it in place (was previously append); confirm final rule and update tests/notes.
-- Restored notebooks should be appended to the end of the notebook order.
-
-## Extras
-- Add a “Hide cell” command in the menu bar.
-- Add a “Lock cell” command in the menu bar.
-
-## To consider
-- Should automatic focus switching after restore/move operations between Notebooks and the Bin be configurable in Settings? For example, when restoring a deleted cell from the Bin, automatically switch to its notebook and select the restored cell. See  restoreSelectedCellFromBin() in src\renderer\src\stores\workspaces\workspaceStore.ts
+## Idea for stucturing the help library
+In help sidebar, add options to load help notebooks on spesific subjects. For example: Load help notebook Plotting in python, Load help notebook Statistics in python and so on.
