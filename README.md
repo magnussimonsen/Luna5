@@ -160,11 +160,9 @@ Luna5-2025-09-05-2
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-05-4.png" alt="Moving settings from modal to sidebar" width="900" />
 </p>
+
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-05-3.png" alt="Moving settings from modal to sidebar" width="900" />
-</p>
-<p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-09-05-1.png" alt="Moving settings from modal to sidebar" width="900" />
 </p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-05-1.png" alt="Moving settings from modal to sidebar" width="900" />
