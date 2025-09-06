@@ -73,7 +73,7 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 
 These packages can be imported directly in Python cells. Most work fully offline when their wheels are present under `public/pyodide`.
 
-- Core: numpy, scipy, matplotlib (incl. pylab). pandas, sympy, pillow
+- Core: numpy, scipy, matplotlib (incl. pylab) pandas, sympy, pillow
 - Extras: seaborn, networkx
 - Units and uncertainties: pint, uncertainties
 
