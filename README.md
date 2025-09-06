@@ -18,7 +18,7 @@ Modern classrooms often depend on a mix of disconnected tools (Python editors, G
 
 Luna5 offers a streamlined alternative, combining symbolic algebra, geometry, programming, and rich text editing all within one intuitive application.
 
-Luna5 can also be used for language learning, thanks to its built-in flashcard functionality supporting text, images, audio, and IPA (International Phonetic Alphabet) input tools.
+Built-in flashcard functionality supporting text, images, audio, and IPA (International Phonetic Alphabet) input tools are also planned.
 
 ---
 
