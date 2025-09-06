@@ -104,7 +104,9 @@ function onDeselect(): void {
 .cell-list {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0em 0.5em 0em 0em /* top right bottom left */;
   box-sizing: border-box;
+  border-radius: 0px;
+  border: 0px solid red; /* debug */
 }
 </style>

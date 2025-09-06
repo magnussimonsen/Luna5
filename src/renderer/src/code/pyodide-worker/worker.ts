@@ -33,7 +33,16 @@ const KNOWN_PYODIDE_PACKAGES = new Set([
   'sympy',
   'scipy',
   'pandas',
-  'pillow'
+  'pillow',
+  // STEM extras
+  'seaborn',
+  'networkx',
+  'pint',
+  'uncertainties',
+  // Pint deps (pure-Python)
+  'flexparser',
+  'flexcache',
+  'platformdirs'
 ])
 
 // Local package filenames curated under public/pyodide. Used as an offline fallback
@@ -60,7 +69,19 @@ const LOCAL_PACKAGE_FILES: Record<string, string> = {
   ipython: 'ipython-9.0.2-py3-none-any.whl',
   gmpy2: 'gmpy2-2.1.5-cp313-cp313-pyodide_2025_0_wasm32.whl',
   openblas: 'openblas-0.3.26.zip',
-  libopenblas: 'libopenblas-0.3.26.zip'
+  libopenblas: 'libopenblas-0.3.26.zip',
+  // Pint deps
+  flexparser: 'flexparser-0.4-py3-none-any.whl',
+  flexcache: 'flexcache-0.3-py3-none-any.whl',
+  platformdirs: 'platformdirs-4.4.0-py3-none-any.whl',
+  // Extras present in full distro; copy to curated folder to enable offline
+  networkx: 'networkx-3.4.2-py3-none-any.whl',
+  uncertainties: 'uncertainties-3.2.2-py3-none-any.whl',
+  // Download source:
+  // https://pypi.org/project/seaborn/#files
+  // https://pypi.org/project/Pint/#files
+  seaborn: 'seaborn-0.13.2-py3-none-any.whl',
+  pint: 'pint-0.25-py3-none-any.whl'
 }
 
 // Minimal dependency graph for offline install fallback
@@ -69,6 +90,7 @@ const PACKAGE_DEPS: Record<string, string[]> = {
   numpy: ['libopenblas', 'openblas'],
   scipy: ['numpy', 'libopenblas', 'openblas'],
   pandas: ['numpy', 'python_dateutil', 'pytz', 'tzdata'],
+  python_dateutil: ['six'],
   matplotlib: [
     'numpy',
     'contourpy',
@@ -76,11 +98,17 @@ const PACKAGE_DEPS: Record<string, string[]> = {
     'kiwisolver',
     'fonttools',
     'packaging',
+    'python_dateutil',
     'pyparsing',
     'pillow'
   ],
   sympy: ['mpmath', 'gmpy2'],
-  pillow: []
+  pillow: [],
+  // Extras
+  seaborn: ['numpy', 'matplotlib', 'pandas'],
+  pint: ['flexparser', 'flexcache', 'packaging', 'platformdirs'],
+  uncertainties: [],
+  networkx: []
 }
 
 function detectRequiredPackagesFromCode(code: string): string[] {
@@ -135,9 +163,20 @@ async function initPyodide(assetsBaseUrl?: string): Promise<Pyodide> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const viteBase: string = ((import.meta as any)?.env?.BASE_URL as string) || '/'
     const base = (assetsBaseUrl || viteBase).replace(/\/?$/, '/')
+    //------------------------------------------------------------------
+    //  IMPORTANT PART FOR PYODIDE ASSET PATHS
+    //  IMPORTANT PART FOR PYODIDE ASSET PATHS
+    //  IMPORTANT PART FOR PYODIDE ASSET PATHS
+    //  IMPORTANT PART FOR PYODIDE ASSET PATHS
+    //  IMPORTANT PART FOR PYODIDE ASSET PATHS
+    //  IMPORTANT PART FOR PYODIDE ASSET PATHS
+    //  IMPORTANT PART FOR PYODIDE ASSET PATHS
+    //  Many comments such that it is easily spotted
+    //------------------------------------------------------------------
     // Prefer full dist if present; fallback to curated
-    const candidates = [`${base}pyodide-0.28.2/pyodide`, `${base}pyodide`]
-    //const candidates = [`${base}pyodide`]
+    // const candidates = [`${base}pyodide-0.28.2/pyodide`, `${base}pyodide`]
+    const candidates = [`${base}pyodide`]
+    //------------------------------------------------------------------
 
     let lastErr: unknown
     for (const indexURL of candidates) {
@@ -227,7 +266,20 @@ async function execute(req: Extract<WorkerRequest, { type: 'execute' }>): Promis
     const basePackages = ['matplotlib']
     const inferred = detectRequiredPackagesFromCode(req.code)
     const set = new Set<string>([...(req.packages || []), ...basePackages, ...inferred])
-    const packages = Array.from(set)
+    // Pre-expand simple dependency graph to avoid missing curated deps (e.g., python_dateutil for matplotlib)
+    const requireSet = new Set<string>(Array.from(set))
+    const expandDeps = (name: string): void => {
+      const deps = PACKAGE_DEPS[name]
+      if (!deps) return
+      for (const d of deps) {
+        if (!requireSet.has(d)) {
+          requireSet.add(d)
+          expandDeps(d)
+        }
+      }
+    }
+    for (const p of Array.from(set)) expandDeps(p)
+    const packages = Array.from(requireSet)
     // Compute base path for curated/full offline wheels from the chosen indexURL
     const pyodideBase = (selectedIndexURL || '').replace(/\/?$/, '/')
     const usingFullDist = /pyodide-0.28.2\/pyodide\/?$/.test(pyodideBase)
@@ -256,26 +308,29 @@ async function execute(req: Extract<WorkerRequest, { type: 'execute' }>): Promis
       for (const p of packages) expandDeps(p)
 
       // Map to URLs; filter out ones we don't have filenames for
-      let urls: string[] = []
+      const allUrls: string[] = []
       for (const p of requireSet) {
         const file = LOCAL_PACKAGE_FILES[p]
-        if (file) urls.push(pyodideBase + file)
+        if (file) allUrls.push(pyodideBase + file)
       }
-      // Ensure BLAS zips go first when present (libopenblas preferred), then others
-      urls = urls.sort((a, b) => {
-        const aLib = /libopenblas-/.test(a)
-        const bLib = /libopenblas-/.test(b)
-        if (aLib && !bLib) return -1
-        if (!aLib && bLib) return 1
-        const aOpen = /openblas-/.test(a)
-        const bOpen = /openblas-/.test(b)
-        if (aOpen && !bOpen) return -1
-        if (!aOpen && bOpen) return 1
-        return 0
-      })
-      if (urls.length > 0) {
-        await pyodide.loadPackage(urls)
-      } else {
+      // Partition BLAS zips to load them separately first to avoid URL-name confusion
+      const isLibBlas = (u: string): boolean => /(^|\/)libopenblas-/.test(u)
+      const isBlas = (u: string): boolean => isLibBlas(u) || /(^|\/)openblas-/.test(u)
+      const blasUrls = allUrls
+        .filter((u) => isBlas(u))
+        .sort((a, b) => (isLibBlas(a) === isLibBlas(b) ? 0 : isLibBlas(a) ? -1 : 1))
+      const wheelUrls = allUrls.filter((u) => !isBlas(u))
+      // Load BLAS first, one-by-one (best-effort)
+      for (const url of blasUrls) {
+        try {
+          await pyodide.loadPackage(url)
+        } catch {
+          // ignore; wheels may still load and a later explicit BLAS ensure runs
+        }
+      }
+      if (wheelUrls.length > 0) {
+        await pyodide.loadPackage(wheelUrls)
+      } else if (blasUrls.length === 0) {
         throw pkgErr
       }
     }
@@ -343,15 +398,19 @@ async function execute(req: Extract<WorkerRequest, { type: 'execute' }>): Promis
     })
   } catch (err) {
     let message = err instanceof Error ? err.message : String(err)
-    // Heuristic: missing dynlibs (e.g., BLAS) or unknown package names indicate vendor/runtime issues
-    const libLoadFailure =
-      /Could not load dynamic lib|bad export type|No known package with name/.test(message)
-    if (libLoadFailure) {
+    // Heuristic: clarify BLAS vs. missing vendored wheel
+    const dynlibFailure = /Could not load dynamic lib|bad export type/.test(message)
+    const unknownName = /No known package with name/.test(message)
+    if (dynlibFailure) {
       message +=
         '\n\nHint: Ensure your vendored Pyodide folder includes a correct pyodide-lock.json from the matching release, and BLAS archives (libopenblas-0.3.26.zip or openblas-0.3.26.zip). With a proper lock file, dependencies like OpenBLAS are auto-loaded when installing numpy/scipy.'
+    } else if (unknownName) {
+      message +=
+        '\n\nHint: A required package may not be vendored (e.g., seaborn or pint). Add the wheel to public/pyodide and map it in the worker, or include the full Pyodide distro.'
     }
     // If we failed before or during init, treat it as internal; otherwise, user error.
-    const category: 'user' | 'internal' = preambleLoaded && !libLoadFailure ? 'user' : 'internal'
+    const category: 'user' | 'internal' =
+      preambleLoaded && !dynlibFailure && !unknownName ? 'user' : 'internal'
     ctx.postMessage({ type: 'error', cellId: req.cellId, message, category })
   }
 }

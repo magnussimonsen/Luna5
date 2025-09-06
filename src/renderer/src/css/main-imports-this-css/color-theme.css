@@ -8,7 +8,7 @@
     --border-color: #cccccc;
     --border-color-divider: #dddddd;
     --button-hover-color: lightgreen;
-    --button-on-color: '#81C784',
+    --button-on-color: '#81C784';
     --button-transparent-off-color: transparent;
     --button-hard-off-color: red;
     --cell-selected-border: var(--button-on-color);

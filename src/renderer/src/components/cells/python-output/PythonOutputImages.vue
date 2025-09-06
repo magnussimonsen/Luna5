@@ -1,9 +1,8 @@
 <template>
   <div v-if="images && images.length" class="py-out-images">
     <div class="section-title">
-      Figures
       <div class="zoom">
-        <label :for="sliderId">Zoom</label>
+        <label :for="sliderId">Figure zoom</label>
         <input
           :id="sliderId"
           v-model.number="zoom"
@@ -72,9 +71,9 @@ const imgWidthStyle = computed(() => ({ width: `${zoom.value}%` }))
 }
 .img-item {
   margin: 0 0 0.5rem 0;
-  border: 1px solid var(--cell-border-color);
-  border-radius: 4px;
-  background: var(--cell-background);
+  border: 0px solid var(--cell-border-color);
+  border-radius: 0px;
+  background: var(--python-image-background);
   overflow: visible;
 }
 img {

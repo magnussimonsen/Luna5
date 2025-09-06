@@ -10,6 +10,7 @@
 </script>
 
 <style scoped>
+@import '../../css/toolbar-base.css';
 .flashcards-toolbar {
   width: 100%;
   min-height: 2.5em;

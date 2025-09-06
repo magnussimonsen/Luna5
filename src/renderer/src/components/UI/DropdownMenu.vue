@@ -97,7 +97,7 @@ defineExpose({
   position: absolute;
   top: 100%;
   left: 0;
-  margin-top: 0.5em;
+  margin-top: 0em;
   min-width: fit-content;
   background: var(--menu-background);
   color: var(--text-color);

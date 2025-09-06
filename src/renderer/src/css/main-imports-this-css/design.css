@@ -1,24 +1,30 @@
 :root {
     /* General design variables */
-    --border-radius: 0px;
+    --border-radius: 6px;
     --transition-duration: 0.1s;
-    --button-padding: 0.1em 0.3em 0.1em 0.3em; /* top, right, bottom, left */
 
     /* Menu bar */
     --menu-bar-height: 1.0em;
     --menu-bar-padding: 0.0em 0.0em 0em 0.0em; /* top, right, bottom, left */
     --menu-bar-button-padding: 0.3em 0.4em 0.3em 0.4em;/* top, right, bottom, left */
     --menu-bar-button-border-radius: 0px;
+    --menu-bar-z-index: 3000; /* Ensure menu bar is above other UI elements */
+
+    /* Toolbar container*/
+    --toolbar-container-padding: 0.2rem 0.1rem; /* top, right, bottom, left */
 
     /* Toolbar */
     --toolbar-height: 2.5em;
-    --toolbar-padding: 0.5em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
-    --toolbar-button-padding: 0.1em 0.3em 0.1em 0.3em; /* top, right, bottom, left */
+    --toolbar-padding: 0.0em 0.0em 0em 0.0em; /* top, right, bottom, left */
+    --toolbar-button-padding: 0.1em 0.4em 0.1em 0.4em;/* top, right, bottom, left */
+    --toolbar-button-gap: 0.1em;   
+    --toolbar-z-index: 2000; /* Ensure toolbar is above other UI elements but below menu bar */
     
     /* Status bar */
     --status-bar-height: 2em;
     --status-bar-padding: 0.2em 0.5em 0.2em 0.5em; /* top, right, bottom, left */
     --status-bar-button-padding: 0.2em 0.3em 0.2em 0.3em; /* top, right, bottom, left */
+    --status-bar-z-index: 3000; /* Ensure status bar is above other UI elements but below menu bar and toolbar */
 
     /* Dropdown menu */
     --dropdown-trigger-padding: var(--menu-bar-button-padding); /* top, right, bottom, left */
@@ -26,13 +32,19 @@
     --dropdown-trigger-border-radius: var(--menu-bar-button-border-radius);
     --dropdown-transition-duration: 0.1s;
 
-    /* Border */
-    --border-radius: 4px;
-    --border-thickness: 2px;
+    /* UI Border */
+    --border-radius: 2px;
+    --border-thickness: 1px;
 
     /* Cell container styling */
     --cell-container-padding: 0.5em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
-    --cell-container-border: 1px solid var(--cell-border-color);
-    --cell-container-border-radius: 4px;
-    --cell-container-background: var(--cell-bg);
+    --cell-container-border: 0px solid var(--cell-border-color, 'red');
+    --cell-container-border-radius: 0px;
+    --cell-container-border-left-not-selected: 0.5rem solid transparent;
+    --cell-container-border-left-selected: 0.5rem solid var(--active-border-color);
+
+    /* Buttons (not used?)*/
+    --button-border-radius: 20px;
+    --button-padding: 3.1em 4.3em 4.1em 4.3em; /* top, right, bottom, left */
+
 }

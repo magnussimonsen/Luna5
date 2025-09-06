@@ -42,15 +42,18 @@ const currentToolbarComponent = computed(() => {
 .toolbar-container {
   left: 0;
   width: 100vw;
-  min-height: 2.5em;
+  min-height: 2em;
   display: flex;
   align-items: center;
   background: var(--toolbar-background, #f4f4f4);
   color: var(--ui-text-color, #333);
-  border-bottom: 1px solid var(--border-color, #ddd);
+  /* UI font family from font store */
+  font-family: var(--ui-font);
+  /* Toolbar font size from font store */
+  font-size: var(--toolbar-font-size);
   box-sizing: border-box;
-  padding: 0 1em;
-  z-index: 2000;
+  padding: var(--toolbar-container-padding, 0.2rem 0.5rem);
+  z-index: var(--toolbar-z-index, 2000);
   /* Lower than MenuBar dropdown (3000) */
   position: relative;
   /* Ensure z-index works correctly */

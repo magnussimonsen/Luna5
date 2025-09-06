@@ -9,6 +9,7 @@
 </script>
 
 <style scoped>
+@import '../../css/toolbar-base.css';
 .text-cell-toolbar {
   display: flex;
   align-items: center;

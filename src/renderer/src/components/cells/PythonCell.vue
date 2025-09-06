@@ -111,6 +111,8 @@ function initializeMonacoEditor(): void {
     theme: 'vs',
     readOnly: isCellLocked.value,
     lineNumbers: 'on',
+    lineNumbersMinChars: 3,
+    lineDecorationsWidth: 1,
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
     wordWrap: 'on',
@@ -299,17 +301,20 @@ onBeforeUnmount(() => {
 .python-cell-editor {
   width: 100%;
   /* Let the editor auto-grow with content; JS sets explicit height in px. */
-  min-height: 3em;
+  min-height: 1em;
   height: auto;
   overflow: hidden;
-  border: 1px solid var(--cell-border-color);
+  border: 0px solid var(--cell-border-color);
+  /*Right border radius*/
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .py-out-error {
-  margin-top: 0.5rem;
-  border: 1px solid var(--error-border, #d92c2c);
+  margin-top: 0rem;
+  border: 0px solid var(--error-border, #d92c2c);
   background: var(--error-bg, #fff1f1);
   color: var(--error-fg, #7a1010);
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 0.5rem 0.75rem;
 }
 .section-title {
@@ -329,6 +334,7 @@ onBeforeUnmount(() => {
   user-select: text;
 }
 .python-cell[data-locked='true'] {
+  /* WHAT DOES THIS DO? */
   opacity: 0.9;
   filter: grayscale(0.1);
 }

@@ -8,7 +8,7 @@
       :title="isRunning ? 'Run (working)…' : 'Run selected Python cell'"
       @click="onRun"
     >
-      <span class="label">Run</span>
+      <span class="label">Run python code</span>
       <span class="spin-wrap" aria-hidden="true">
         <span class="ascii-spinner" :style="{ visibility: isRunning ? 'visible' : 'hidden' }">
           {{ spinnerChar }}
@@ -16,10 +16,14 @@
       </span>
     </button>
     <button
-      class="btn"
+      class="btn reset-python-worker"
       type="button"
-      :disabled="!canReset || isRunning"
-      title="Clear outputs for selected Python cell"
+      :disabled="!canReset"
+      :title="
+        isRunning
+          ? 'Kill Python worker and clear outputs'
+          : 'Clear outputs for selected Python cell'
+      "
       @click="onReset"
     >
       Reset
@@ -153,27 +157,29 @@ function onReset(): void {
 </script>
 
 <style scoped>
-.python-cell-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  padding: 0.4rem 0.75rem;
-  background: var(--toolbar-background);
-  border-bottom: 1px solid var(--border-color);
-}
+@import '../../css/toolbar-base.css';
 .btn {
   appearance: none;
   border: 1px solid var(--button-border-color);
   background: var(--button-background-color);
   color: var(--ui-text-color, #222);
-  padding: 0.25rem 0.6rem;
-  border-radius: 4px;
+  padding: var(--toolbar-button-padding);
+  border-radius: 2px;
   cursor: pointer;
+  /* UI font family from font store */
+  font-family: var(--ui-font);
+  /* Toolbar font size from font store */
+  font-size: var(--toolbar-font-size);
 }
 .btn:hover {
   background: var(--button-hover-color);
   border-color: var(--button-border-hover-color);
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn:focus-visible {
+  outline: normal;
 }
 
 /* Run button constant width with reserved spinner space */
@@ -187,8 +193,8 @@ function onReset(): void {
 }
 .btn.run .spin-wrap {
   display: inline-flex;
-  width: 16px; /* reserve space so width stays constant */
-  height: 16px;
+  width: 0rem; /* reserve space so width stays constant */
+  height: 0rem;
   align-items: center;
   justify-content: center;
 }
@@ -201,8 +207,16 @@ function onReset(): void {
   display: inline-block;
   width: 1ch; /* reserve exactly one character width */
   text-align: center;
-  font-family: var(--coding-font, monospace);
+  font-family: var(--ui-font, monospace);
+  font-size: var(--toolbar-font-size, 12px);
   font-weight: bold;
-  line-height: 1;
+}
+
+.btn.reset-python-worker {
+  background: var(--button-reset-python-worker-color, transparent);
+}
+.btn.reset-python-worker:hover {
+  background: var(--button-reset-python-worker-hover-color, firebrick);
+  border-color: var(--button-border-hover-color);
 }
 </style>

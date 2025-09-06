@@ -1,6 +1,6 @@
 <template>
   <div v-if="text && text.length" class="py-out-text">
-    <div class="section-title">Output</div>
+    <div class="section-title">&#8628;</div>
     <pre class="stdout" data-testid="python-stdout">{{ text }}</pre>
   </div>
   <div v-else class="py-out-text empty" aria-hidden="true"></div>
@@ -12,23 +12,25 @@ defineProps<{ text: string }>()
 
 <style scoped>
 .py-out-text {
-  margin-top: 0.5rem;
+  margin-top: 0rem;
 }
 .section-title {
   font-size: 0.8rem;
-  opacity: 0.7;
-  margin-bottom: 0.25rem;
+  padding-left: 0.75rem;
+  background: var(--python-stdout-background, transparent);
+  font-family: var(--coding-font, monospace);
+  font-size: var(--code-editor-cells-font-size, 12px);
 }
 .stdout {
   margin: 0;
-  padding: 0.5rem 0.75rem;
-  background: var(--code-bg, #0f172a0d);
-  border: 1px solid var(--cell-border-color);
+  padding: 0.25rem 0.75rem;
+  background: var(--python-stdout-background, transparent);
+  border: 1px solid transparent;
   border-radius: 4px;
   white-space: pre-wrap;
   word-break: break-word;
   font-family: var(--coding-font, monospace);
-  font-size: var(--default-cells-font-size, 14px);
+  font-size: var(--code-editor-cells-font-size, 12px);
 }
 .empty {
   display: none;

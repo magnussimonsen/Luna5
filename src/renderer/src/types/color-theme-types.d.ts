@@ -17,6 +17,10 @@ export type ThemeColorTypes = {
   cellBorderColor: string
   cellMarginBackgroundColor: string
 
+  // Python cell
+  pythonStdOutBackground: string
+  pythonImageBackground: string
+
   toolbarBackground: string
 
   mainPanelBackground: string
@@ -33,6 +37,7 @@ export type ThemeColorTypes = {
   activeBorderColorHover: string
 
   softLockedColor: string
+  cellLockedOverlay: string
   hideCellColor: string
 
   focusVisibleBorderColor: string
@@ -51,6 +56,10 @@ export type ThemeColorTypes = {
   buttonHardOffColor: string
 
   deleteButtonHoverColor: string
+
+  // Python worker Reset button colors
+  buttonResetPythonWorkerColor: string
+  buttonResetPythonWorkerHoverColor: string
 
   resetZoomButtonColor: string
 }

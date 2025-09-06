@@ -1,0 +1,13 @@
+/* Shared base styles for all toolbars */
+.python-cell-toolbar,
+.text-cell-toolbar,
+.flashcards-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.0rem;
+  font-size: 0.8rem; /* TO DO: Wire this to toolbar font size in settings side panel */
+  padding: var(--toolbar-padding);
+  background: var(--toolbar-background);
+  gap: var(--toolbar-button-gap); /* Space between buttons */
+  
+}

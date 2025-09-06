@@ -456,7 +456,7 @@ const handleMoveNotebookToBin = (): void => {
   height: fit-content;
   gap: 0em;
   /* Border */
-  border-bottom: 1px solid var(--border-color, #444);
+  border-bottom: 0px solid var(--border-color, #444);
   /* Adjusted to fit button height */
   background: var(--menu-background, #222);
   color: var(--ui-text-color, #fff);
@@ -465,7 +465,7 @@ const handleMoveNotebookToBin = (): void => {
   padding: var(--menu-bar-padding, 0.5em);
   /* top, right, bottom, left */
   box-sizing: border-box;
-  z-index: 10010;
+  z-index: var(--menu-bar-z-index, 3000);
   /* Higher than toolbar, consistent with dropdown z-index */
   position: relative;
   /* Ensure z-index works correctly */

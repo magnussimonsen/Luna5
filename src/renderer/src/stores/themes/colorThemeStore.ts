@@ -15,9 +15,9 @@ export const useThemeStore = defineStore('theme', {
       // Background colors
       appBackground: '#ffffff',
       // Menu background colors
-      menuBackground: 'white',
+      menuBackground: 'whitesmoke',
       // Toolbar background
-      toolbarBackground: '#f0f0f0',
+      toolbarBackground: 'whitesmoke',
       // Main panel
       mainPanelBackground: '#ffffff',
       // Side panel
@@ -26,6 +26,10 @@ export const useThemeStore = defineStore('theme', {
       cellBackground: '#ffffff',
       cellBorderColor: 'whitesmoke',
       cellMarginBackgroundColor: '#f0f0f0',
+      // Python cell
+      pythonStdOutBackground: 'whitesmoke',
+      pythonImageBackground: '#ffffff',
+      // Markdown cell background
       // Text colors
       textColor: '#222222',
       UITextColor: '#222222',
@@ -38,6 +42,8 @@ export const useThemeStore = defineStore('theme', {
       activeBorderColorHover: 'lightgreen',
       // Soft locked
       softLockedColor: 'orange',
+      // Locked overlay
+      cellLockedOverlay: 'rgba(0, 0, 0, 0.06)',
       // Hidden cell color
       hideCellColor: 'whitesmoke',
       // Focus-visible (for tab key outline)
@@ -55,6 +61,9 @@ export const useThemeStore = defineStore('theme', {
       buttonOnColor: 'lightgreen',
       buttonHardOffColor: 'salmon',
       deleteButtonHoverColor: 'lightcoral',
+      // Python worker Reset button colors
+      buttonResetPythonWorkerColor: 'transparent',
+      buttonResetPythonWorkerHoverColor: 'lightcoral',
       /* Reset zoom button color */
       resetZoomButtonColor: 'lightblue'
     } as ThemeColorTypes,
@@ -67,22 +76,25 @@ export const useThemeStore = defineStore('theme', {
       // Background colors
       appBackground: '#222222',
       // Menu background colors
-      menuBackground: '#333333',
+      menuBackground: '#111111',
       // Toolbar background
-      toolbarBackground: '#333333',
+      toolbarBackground: '#111111',
       // Main panel
-      mainPanelBackground: '#444444',
+      mainPanelBackground: '#222222',
       //Side panel
-      sidePanelBackground: '#333333',
+      sidePanelBackground: '#222222',
       // Cell
-      cellBackground: '#555555',
+      cellBackground: '#222222',
       cellBorderColor: '#444444',
       cellMarginBackgroundColor: '#333333',
+      // Python cell
+      pythonStdOutBackground: '#333333',
+      pythonImageBackground: 'black',
       // Text colors
       textColor: '#cccccc',
       UITextColor: '#cccccc',
       // Borders
-      borderColor: '#000000',
+      borderColor: '#111111',
       dropdownBorderColor: '#555555',
       // Active
       activeBackgroundColor: 'green',
@@ -90,6 +102,8 @@ export const useThemeStore = defineStore('theme', {
       activeBorderColorHover: 'green',
       // Soft locked
       softLockedColor: 'saddlebrown',
+      // Locked overlay
+      cellLockedOverlay: 'rgba(255, 255, 255, 0.06)',
       // Hidden cell color
       hideCellColor: '#555555',
       // Focus-visible (for tab key outline)
@@ -107,6 +121,9 @@ export const useThemeStore = defineStore('theme', {
       buttonOnColor: 'green',
       buttonHardOffColor: 'firebrick',
       deleteButtonHoverColor: 'red',
+      // Python worker Reset button colors
+      buttonResetPythonWorkerColor: 'transparent',
+      buttonResetPythonWorkerHoverColor: 'firebrick',
       /* Reset zoom button color */
       resetZoomButtonColor: 'darkgreen'
     } as ThemeColorTypes
@@ -141,6 +158,8 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--cell-background', colors.cellBackground)
       root.style.setProperty('--cell-border-color', colors.cellBorderColor)
       root.style.setProperty('--cell-margin-background-color', colors.cellMarginBackgroundColor)
+      root.style.setProperty('--python-stdout-background', colors.pythonStdOutBackground)
+      root.style.setProperty('--python-image-background', colors.pythonImageBackground)
       root.style.setProperty('--text-color', colors.textColor)
       root.style.setProperty('--ui-text-color', colors.UITextColor)
       root.style.setProperty('--border-color', colors.borderColor)
@@ -150,6 +169,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--active-border-color-hover', colors.activeBorderColorHover)
       root.style.setProperty('--soft-locked-border-color', colors.softLockedColor)
       root.style.setProperty('--hide-cell-color', colors.hideCellColor)
+      root.style.setProperty('--cell-locked-overlay', colors.cellLockedOverlay)
       root.style.setProperty('--focus-visible-border-color', colors.focusVisibleBorderColor)
       root.style.setProperty('--slider-background', colors.sliderBackground)
       root.style.setProperty('--dropdown-divider-color', colors.dropdownDividerColor)
@@ -160,6 +180,14 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--button-on-color', colors.buttonOnColor)
       root.style.setProperty('--button-transparent-off-color', colors.buttonTransparentOffColor)
       root.style.setProperty('--button-hard-off-color', colors.buttonHardOffColor)
+      root.style.setProperty(
+        '--button-reset-python-worker-color',
+        colors.buttonResetPythonWorkerColor
+      )
+      root.style.setProperty(
+        '--button-reset-python-worker-hover-color',
+        colors.buttonResetPythonWorkerHoverColor
+      )
       root.style.setProperty('--delete-button-hover-color', colors.deleteButtonHoverColor)
       root.style.setProperty('--reset-zoom-button-color', colors.resetZoomButtonColor)
     },

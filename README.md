@@ -58,9 +58,9 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 
 | Tool                         | Status        |
 | ---------------------------- | ------------- |
-| Rich Text / Markdown Editor  | 🚧 Planned    |
-| Python Environment (Pyodide) | 🚧 Planned    |
-| CAS (Symbolic Math)          | 🚧 Planned    |
+| Rich Text / Markdown Editor      | 🚧 Planned        |
+| Python Environment (Pyodide)	| ✅ Implemented. Core features available. Ongoing improvements and testing |
+| CAS (Symbolic Math, via SymPy)   | 🚧 Planned   |
 | Graphical Calculator         | 🚧 Planned    |
 | Geometry Explorer            | 🚧 Planned    |
 | Spreadsheet Tool             | 🚧 Planned    |
@@ -69,7 +69,22 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 
 ---
 
-## 🔧 Open Source Stack
+##  Pyodide🐍 packages📦 available in Luna5
+
+These packages can be imported directly in Python cells. Most work fully offline when their wheels are present under `public/pyodide`.
+
+- Core: numpy, scipy, matplotlib (incl. pylab). pandas, sympy, pillow
+- Extras: seaborn, networkx
+- Units and uncertainties: pint, uncertainties
+
+Notes
+- Common dependencies (e.g., python-dateutil, six, contourpy, cycler, kiwisolver, fonttools, packaging, pyparsing, pytz, tzdata, mpmath, gmpy2) are auto-installed when needed.
+- If an import fails, add the matching wheel to `public/pyodide`, click Reset on the Python cell toolbar (kills the worker), then re-run.
+- Tip: with `uncertainties`, use functions from `uncertainties.umath` (e.g., `umath.sin(x)`) to propagate errors.
+
+---
+
+## �🔧 Open Source Stack
 
 ### Core Libraries & Frameworks
 
@@ -118,6 +133,18 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 ---
 Luna5-2025-09-05-2
 ## 🖼️ Current UI Progress Snapshots
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-06-1.png" alt="Moving settings from modal to sidebar" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-06-2.png" alt="Moving settings from modal to sidebar" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-06-3.png" alt="Moving settings from modal to sidebar" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-06-4.png" alt="Moving settings from modal to sidebar" width="900" />
+</p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-05-7.png" alt="Moving settings from modal to sidebar" width="900" />
 </p>

@@ -126,28 +126,30 @@ function onMarginClick(): void {
 .cell-container {
   display: flex;
   width: 100%;
-  border: 2px solid var(--cell-border-color);
-  border-radius: var(--border-radius, 4px);
-  background: var(--cell-background);
-  margin-block: 0.2rem;
+  border: solid 1px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
+  border-left: 0.5rem solid var(--cell-border-color, blue); /* THIS DO NOT DO ANYTHING VISIBLE ANYMORE */
+  border-radius: var(--cell-container-border-radius, 0px);
+  background: var(--cell-background, blue);
+  margin-block: 0rem;
   position: relative;
   outline: none;
 }
 
 .cell-container:focus-visible {
-  border: solid 2px var(--focus-visible-border-color, blue);
+  border-left: solid 0.5rem var(--focus-visible-border-color, blue);
 }
 
 .cell-container.is-selected {
-  border-color: var(--active-border-color);
-  border: solid 2px var(--active-border-color);
+  border: solid 1px var(--active-border-color);
+  border-left: solid 0.5rem var(--active-border-color);
   background: var(transparent, yellow);
 }
 
 /* When a cell is locked and selected, highlight with softLockedColor */
 .cell-container.is-locked.is-selected {
   border-color: var(--soft-locked-border-color, orange);
-  border: solid 2px var(--soft-locked-border-color, orange);
+  border: solid 1px var(--soft-locked-border-color, orange);
+  border-left: 0.5rem solid var(--soft-locked-border-color, blue); /* THIS DO NOT DO ANYTHING VISIBLE ANYMORE */
 }
 
 /* Bin view styling */
@@ -181,9 +183,9 @@ function onMarginClick(): void {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--cell-locked-overlay);
+  background: var(--cell-locked-overlay, rgba(0, 0, 0, 0.06));
   pointer-events: none;
-  border-radius: inherit;
+  border-radius: 0px;
 }
 
 .cell-margin {
@@ -191,10 +193,10 @@ function onMarginClick(): void {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.2rem 0.2rem 0.2rem;
+  padding: 0rem 0.1em 0em 0.1em /* top right bottom left */;
   gap: 0rem;
   background: var(--cell-margin-background-color, black);
-  border-right: 1px solid var(--cell-border-color);
+  border-right: 0px solid var(--cell-border-color);
   cursor: pointer;
 }
 
@@ -228,7 +230,7 @@ function onMarginClick(): void {
   padding: 0.15rem 0.35rem;
   font-size: 0.6rem;
   line-height: 1;
-  border-radius: 4px;
+  border-radius: 0px;
   transition:
     background-color 0.15s ease,
     color 0.15s ease,
@@ -251,15 +253,16 @@ function onMarginClick(): void {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: 0.75rem 0.9rem 0.9rem;
+  /*padding: 0.75rem 0.9rem 0.9rem;*/
+  padding: 0rem 0rem 0rem 0rem;
   gap: 0.5rem;
 }
 
 .cell-hidden-placeholder {
-  height: 1.4rem;
+  height: 1em;
   width: 100%;
   opacity: 1;
-  border-radius: var(--border-radius, 0px);
+  border-radius: 0px;
 }
 
 .cell-tools {
