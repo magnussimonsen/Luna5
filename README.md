@@ -69,7 +69,7 @@ Luna5 can also be used for language learning, thanks to its built-in flashcard f
 
 ---
 
-##  Pyodide🐍 packages📦 available in Luna5
+##  🐍📦Pyodide packages available in Luna5
 
 These packages can be imported directly in Python cells. Most work fully offline when their wheels are present under `public/pyodide`.
 
