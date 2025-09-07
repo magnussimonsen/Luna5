@@ -1,11 +1,7 @@
 
 <div align="center">
 
-<<<<<<< HEAD
 <img src="src/renderer/src/assets/icons/icon-luna-small-cropped.svg" alt="Luna 0.5 icon" width="150px" height="150px"/>
-=======
-<img src="src/renderer/src/assets/icons/icon-luna-small-cropped.svg" alt="Luna5 icon" width="150px" height="150px"/>
->>>>>>> 2077b513f6fd214e88e09a4e988b65354150f967
 </div>
 
 # Luna 0.5. ...
