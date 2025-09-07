@@ -463,6 +463,7 @@ const handleMoveNotebookToBin = (): void => {
 <style scoped>
 .brand-icon {
   /*height: var(--menu-bar-height, 1em);*/
+  padding: var(--menu-bar-button-logo-padding, 0em 0.3em 0em 0.3em); /* top, right, bottom, left */
   height: 1em;
   width: auto;
   margin-right: 0em;
