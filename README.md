@@ -1,7 +1,7 @@
 
 <div align="center">
 
-<img src="src/renderer/src/assets/icons/Luna05-logo.png" alt="Luna 0.5 icon" width="150px" height="150px"/>
+<img src="src/renderer/src/assets/icons/Luna05-logo.svg" alt="Luna 0.5 icon" width="150px" height="150px"/>
 </div>
 
 # Luna 0.5. ...
