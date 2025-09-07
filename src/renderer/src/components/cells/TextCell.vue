@@ -5,8 +5,11 @@
     :contenteditable="!isLocked"
     data-primary-editor="true"
     :data-locked="isLocked ? 'true' : null"
+    :data-empty="!localText ? 'true' : null"
+    :data-placeholder="placeholderText"
     role="textbox"
     aria-multiline="true"
+    :aria-placeholder="placeholderText"
     @input="onInput"
     @blur="onBlur"
   ></div>
@@ -18,11 +21,14 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import type { TextCell } from '@renderer/types/notebook-cell-types'
 
-// Accept the cell object as a prop
+// Accept the cell object as a pro
 const { cell } = defineProps<{ cell: TextCell }>()
 
 const workspaceStore = useWorkspaceStore()
 const elRef = ref<HTMLDivElement | null>(null)
+const placeholderText =
+  'This is a simple text cell. A proper text editor will be implemented in the future.'
+
 const isLocked = computed<boolean>(
   () => !!cell.hidden || !!cell.softLocked || !!cell.hardLocked || !!cell.softDeleted
 )
@@ -74,10 +80,24 @@ function onBlur(): void {
   outline: none;
   min-height: 1.5rem;
   border: 1px solid var(--cell-border-color); /* FOR DEV OUTLINE OF DIV ONLY */
+  position: relative; /* for placeholder positioning */
 }
 .text-cell-input[data-locked='true'] {
   cursor: not-allowed;
   opacity: 0.8;
   filter: grayscale(0.2);
+}
+
+/* Placeholder shown only when empty */
+.text-cell-input[data-empty='true']::before {
+  content: attr(data-placeholder);
+  color: var(--placeholder-color, #888);
+  pointer-events: none;
+  position: absolute;
+  top: 0.15rem;
+  left: 0.25rem;
+  right: 0.25rem;
+  white-space: pre-wrap;
+  opacity: 0.8;
 }
 </style>
