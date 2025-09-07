@@ -1,4 +1,6 @@
 // Message types for the Pyodide worker
+// Used in src/renderer/src/components/toolbars/PythonCellToolbar.vue and src/renderer/src/code/pyodide-worker/pyodideWorker.ts
+// TO DO: Move this file to src/renderer/src/types folder for consistency
 
 export type WorkerRequest = {
   type: 'execute'
