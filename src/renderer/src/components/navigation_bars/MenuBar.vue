@@ -240,7 +240,7 @@
         :class="{ active: sidePanelStore.activePanel === 'help' }"
         @click="handleTogglePanel('help')"
       >
-        <strong>Get help</strong>
+        Get help
       </div>
     </div>
   </nav>
