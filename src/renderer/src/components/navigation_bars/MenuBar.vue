@@ -258,7 +258,7 @@
 </template>
 
 <script lang="ts" setup>
-import LunaSmallIcon from '@renderer/assets/icons/icon-luna-small-cropped.svg'
+import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo.png'
 import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import DropdownMenu from '@renderer/components/UI/DropdownMenu.vue'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
