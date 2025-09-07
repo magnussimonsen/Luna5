@@ -44,6 +44,9 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   overflow-x: hidden;
   padding: 0rem 0.25rem 0.25rem 0.25rem; /* top right bottom left */
   box-sizing: border-box;
+  /* Apply zoom to the content area; default to 1 (100%) */
+  transform: scale(var(--workspace-zoom, 1));
+  transform-origin: top left;
 }
 
 .workspace-container--fluid {

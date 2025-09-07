@@ -24,7 +24,7 @@ For now only placeholders for the buttons and sliders are implemented.
       <span class="divider">|</span>
       <span class="file-path">{{ filePathLabel }}</span>
       <button
-        class="save-btn"
+        class="save-btn btn-status-bar"
         :style="saveBtnStyle"
         :title="saveBtnTitle"
         @click="handleSaveClick()"
@@ -32,7 +32,7 @@ For now only placeholders for the buttons and sliders are implemented.
         {{ saveBtnLabel }}
       </button>
       <button
-        class="autosave-btn"
+        class="autosave-btn btn-status-bar"
         :style="autosaveBtnStyle"
         :title="autosaveTooltip"
         @click="cycleAutosave()"
@@ -41,9 +41,19 @@ For now only placeholders for the buttons and sliders are implemented.
       </button>
     </div>
     <div class="status-section right">
-      <label class="zoom-label" for="zoom-slider">Zoom slider:</label>
-      <input id="zoom-slider" class="zoom-slider" type="range" min="25" max="200" value="100" />
-      <button class="reset-zoom-btn">Reset zoom</button>
+      <label class="zoom-label" for="zoom-slider">{{ zoomPercent }}%</label>
+      <input
+        id="zoom-slider"
+        v-model.number="zoomPercent"
+        class="zoom-slider"
+        type="range"
+        min="25"
+        max="200"
+        step="5"
+      />
+      <button class="reset-zoom-btn btn-status-bar" :style="resetZoomBtnStyle" @click="resetZoom">
+        Reset zoom
+      </button>
     </div>
   </footer>
 </template>
@@ -56,6 +66,7 @@ import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
+import { useZoomStatesStore } from '@renderer/stores/UI/zoomStatesStore'
 import type { AutosaveOption } from '@renderer/types/auto-save-options-types'
 
 const fontStore = useFontStore()
@@ -63,6 +74,7 @@ const fontSizeStore = useFontSizeStore()
 const cellSelection = useCellSelectionStore()
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
+const zoomStore = useZoomStatesStore()
 
 const cellTypeLabel = computed(() => {
   const kind = cellSelection.selectedCellKind as string | null
@@ -135,10 +147,10 @@ onBeforeUnmount(() => {
 
 const saveBtnLabel = computed(() => (displayIsSaved.value ? 'Saved' : 'Not Saved'))
 const saveBtnStyle = computed(() => ({
-  backgroundColor: displayIsSaved.value
+  // Drive base background via CSS var so :hover styles can override background
+  '--sb-btn-bg': displayIsSaved.value
     ? 'var(--button-on-color, lightgreen)'
-    : 'var(--button-hard-off-color, #f44336)',
-  color: 'var(--ui-text-color, #fff)'
+    : 'var(--button-hard-off-color, #f44336)'
 }))
 const saveBtnTitle = computed(() => 'Click to save')
 
@@ -159,10 +171,9 @@ const autosaveLabel = computed(() => {
   return `Autosave: ${n} ${unit}`
 })
 const autosaveBtnStyle = computed(() => ({
-  backgroundColor: autosaveEnabled.value
+  '--sb-btn-bg': autosaveEnabled.value
     ? 'var(--button-on-color, lightgreen)'
-    : 'var(--button-hard-off-color, #f44336)',
-  color: 'var(--ui-text-color, #fff)'
+    : 'var(--button-hard-off-color, #f44336)'
 }))
 const autosaveTooltip = computed(() =>
   autosaveEnabled.value
@@ -180,6 +191,23 @@ function cycleAutosave(): void {
   const next = order[(idx + 1) % order.length]
   generalSettingsStore.setAutosaveChangeInterval(next as AutosaveOption)
 }
+
+// Zoom bindings
+const zoomPercent = computed<number>({
+  get: () => zoomStore.zoomPercent,
+  set: (val: number) => zoomStore.setZoomPercent(val)
+})
+function resetZoom(): void {
+  zoomStore.resetZoom()
+}
+
+// Reset-zoom button color: Center vs OffCenter
+const isZoomCentered = computed(() => zoomStore.zoomPercent === 100)
+const resetZoomBtnStyle = computed(() => ({
+  '--sb-btn-bg': isZoomCentered.value
+    ? 'var(--reset-zoom-button-color-Center, var(--debug-color, lightgreen))'
+    : 'var(--reset-zoom-button-color-OffCenter, var(--debug-color, lightcoral))'
+}))
 </script>
 
 <style scoped>
@@ -187,13 +215,13 @@ function cycleAutosave(): void {
   position: relative;
   width: 100%;
   height: 2em;
-  background: var(--menu-background, #222);
-  color: var(--text-color, #fff);
+  background: var(--menu-background, var(--debug-color, #222));
+  color: var(--text-color, var(--debug-color, #fff));
   display: flex;
   align-items: center;
   justify-content: space-between;
   z-index: 2000;
-  border: solid 1px var(--border-color, #444);
+  border: solid 1px var(--border-color, var(--debug-color, #444));
   padding: var(--status-bar-padding, 0em);
   /* top, right, bottom, left */
   box-sizing: border-box;
@@ -221,36 +249,59 @@ function cycleAutosave(): void {
 .cell-type,
 .cell-state {
   font-weight: normal;
-  color: var(--text-color, #fff);
+  color: var(--text-color, var(--debug-color, #fff));
 }
+
+/* Base statusbar button style (local base; do not import toolbar base here) */
+.btn-status-bar {
+  border: var(--status-bar-button-border);
+  /* Base bg uses a CSS var so hover can override background without fighting inline styles */
+  background: var(--sb-btn-bg, var(--button-background-color, var(--debug-color, transparent)));
+  color: var(--ui-text-color, var(--debug-color, #222));
+  padding: var(--status-bar-button-padding, 0.1em 0.4em 0.1em 0.4em);
+  border-radius: var(--status-bar-button-radius, 2px);
+  font: inherit; /* inherit reactive ui font + size from footer */
+  cursor: pointer;
+}
+
+.btn-status-bar:hover {
+  background: var(--button-hover-color, var(--debug-color, #e6f0ff));
+  /* Keep border width constant (avoid visual shrink) */
+  border-color: var(--button-border-hover-color, var(--debug-color, #2563eb));
+}
+.btn-status-bar:active {
+  transform: scale(1);
+}
+.btn-status-bar:focus-visible {
+  outline: normal;
+}
+.btn-status-bar:disabled {
+  opacity: 1;
+  transform: scale(1);
+  cursor: not-allowed;
+}
+
+/* Status bar button styles extend local base .btn; minimal overrides only */
 
 .save-btn,
 .autosave-btn,
 .reset-zoom-btn {
-  background: var(--reset-zoom-button-color, #949494);
-  color: var(--ui-text-color, #fff);
-  border: none;
-  border-radius: var(--border-radius, 2px);
-  padding: var(--status-bar-button-padding);
-  /* top, right, bottom, left */
-  cursor: pointer;
-  font: inherit;
-  margin: 0em 0em 0em 0em;
+  color: var(--ui-text-color, var(--debug-color, #fff));
+  margin: 0;
 }
 
-.save-btn {
-  background-color: var(--button-hard-off-color, #f44336);
+.reset-zoom-btn {
+  /* Set base background via var to play nicely with :hover */
+  --sb-btn-bg: var(--reset-zoom-button-color-OffCenter, var(--debug-color, #949494));
 }
 
+/* Save/Autosave fallback base background (in case inline var isn't set yet) */
+.save-btn,
 .autosave-btn {
-  background-color: var(--button-hard-off-color, #f44336);
+  --sb-btn-bg: var(--button-hard-off-color, var(--debug-color, #f44336));
 }
 
-.save-btu:hover,
-.autosave-btn:hover,
-.reset-zoom-btn:hover {
-  background: var(--button-hover-color, #afafaf);
-}
+/* Hover color handled by .btn-status-bar:hover above */
 
 .zoom-label {
   margin-right: 0em;
@@ -263,7 +314,7 @@ function cycleAutosave(): void {
   height: 0.5em;
   appearance: none;
   -webkit-appearance: none;
-  background: var(--slider-background, #cccccc);
+  background: var(--slider-background, var(--debug-color, #cccccc));
   border-radius: var(--slider-border-radius, 5px);
   outline: none;
   cursor: pointer;

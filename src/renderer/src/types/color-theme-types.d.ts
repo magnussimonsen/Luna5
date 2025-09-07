@@ -63,5 +63,6 @@ export type ThemeColorTypes = {
   buttonResetPythonWorkerColor: string
   buttonResetPythonWorkerHoverColor: string
 
-  resetZoomButtonColor: string
+  resetZoomButtonColorCenter: string
+  resetZoomButtonColorOffCenter: string
 }

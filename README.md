@@ -133,6 +133,9 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 ---
 ## 🖼️ Current UI Progress Snapshots
 <p align="center">
+  <img src="./src/development-screenshots/Luna5-025-09-07-1.png" alt="Moving settings from modal to sidebar" width="900" />
+</p>
+<p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-06-5.png" alt="Moving settings from modal to sidebar" width="900" />
 </p>
 <p align="center">

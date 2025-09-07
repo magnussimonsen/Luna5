@@ -14,10 +14,10 @@ Toolbar base
 }
 
 /* Shared toolbar button styles */
-.btn {
+.toolbar-btn {
   appearance: none;
   /* Base colors with debug fallback */
-  border: 1px solid var(--button-border-color, var(--debug-color, #ccc));
+  border: var(--toolbar-button-border);
   background: var(--button-background-color, var(--debug-color, transparent));
   color: var(--ui-text-color, var(--debug-color, #222));
   padding: var(--toolbar-button-padding, 0.1em 0.4em 0.1em 0.4em);
@@ -28,19 +28,24 @@ Toolbar base
   /* Toolbar font size from font store */
   font-size: var(--toolbar-font-size, 14px);
 }
-.btn:hover {
+
+.toolbar-btn:hover {
   /* Hover colors with debug fallback */
   background: var(--button-hover-color, var(--debug-color, #e6f0ff));
-  border-color: var(--button-border-hover-color, var(--debug-color, #2563eb));
+  border: var(--toolbar-button-border-hover);
 }
-.btn:active {
-  transform: scale(0.98);
+
+.toolbar-btn:active {
+  /* Active colors with debug fallback */
+  background: var(--button-on-color, var(--debug-color, #cce0ff));
+  border: var(--toolbar-button-border-active);
 }
-.btn:focus-visible {
+
+.toolbar-btn:focus-visible {
   outline: normal;
 }
-.btn:disabled {
+
+.toolbar-btn:disabled {
   opacity: 1;
-  transform: scale(0.98);
   cursor: not-allowed;
 }

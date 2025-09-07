@@ -67,7 +67,8 @@ export const useThemeStore = defineStore('theme', {
       buttonResetPythonWorkerColor: 'transparent',
       buttonResetPythonWorkerHoverColor: 'lightcoral',
       /* Reset zoom button color */
-      resetZoomButtonColor: 'lightblue'
+      resetZoomButtonColorCenter: 'lightgreen',
+      resetZoomButtonColorOffCenter: 'lightcoral'
     } as ThemeColorTypes,
 
     darkTheme: {
@@ -129,7 +130,8 @@ export const useThemeStore = defineStore('theme', {
       buttonResetPythonWorkerColor: 'transparent',
       buttonResetPythonWorkerHoverColor: 'firebrick',
       /* Reset zoom button color */
-      resetZoomButtonColor: 'darkgreen'
+      resetZoomButtonColorCenter: 'darkgreen',
+      resetZoomButtonColorOffCenter: 'firebrick'
     } as ThemeColorTypes
   }),
 
@@ -194,7 +196,11 @@ export const useThemeStore = defineStore('theme', {
         colors.buttonResetPythonWorkerHoverColor
       )
       root.style.setProperty('--delete-button-hover-color', colors.deleteButtonHoverColor)
-      root.style.setProperty('--reset-zoom-button-color', colors.resetZoomButtonColor)
+      root.style.setProperty('--reset-zoom-button-color-Center', colors.resetZoomButtonColorCenter)
+      root.style.setProperty(
+        '--reset-zoom-button-color-OffCenter',
+        colors.resetZoomButtonColorOffCenter
+      )
     },
     getLightTheme() {
       return this.lightTheme

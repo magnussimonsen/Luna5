@@ -1,7 +1,7 @@
 <template>
   <div class="python-cell-toolbar" role="toolbar" aria-label="Python cell toolbar">
     <button
-      class="btn run"
+      class="toolbar-btn run"
       :class="{ 'is-running': isRunning }"
       type="button"
       :disabled="!canRun || isRunning"
@@ -16,7 +16,7 @@
       </span>
     </button>
     <button
-      class="btn reset-python-worker"
+      class="toolbar-btn reset-python-worker"
       type="button"
       :disabled="!canReset"
       :title="
@@ -163,22 +163,22 @@ function onReset(): void {
 /* COMPONENT SPECIFIC STYLES (NOT BASE CSS)
 /*--------------------------------------------------------*/
 /* Run button constant width with reserved spinner space */
-.btn.run {
+.toolbar-btn.run {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
 }
-.btn.run .label {
+.toolbar-btn.run .label {
   display: inline-block;
 }
-.btn.run .spin-wrap {
+.toolbar-btn.run .spin-wrap {
   display: inline-flex;
   width: 0rem; /* reserve space so width stays constant */
   height: 0rem;
   align-items: center;
   justify-content: center;
 }
-.btn.run.is-running {
+.toolbar-btn.run.is-running {
   background: var(--button-on-color, lightgreen); /* uses theme var; light green fallback */
 }
 
@@ -192,10 +192,10 @@ function onReset(): void {
   font-weight: bold;
 }
 
-.btn.reset-python-worker {
+.toolbar-btn.reset-python-worker {
   background: var(--button-reset-python-worker-color, transparent);
 }
-.btn.reset-python-worker:hover {
+.toolbar-btn.reset-python-worker:hover {
   background: var(--button-reset-python-worker-hover-color, firebrick);
   border-color: var(--button-border-hover-color);
 }

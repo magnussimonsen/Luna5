@@ -6,14 +6,18 @@ Design tokens (layout/spacing)
 */
 :root {
     /* General design variables */
-    --border-radius: 6px;
-    --transition-duration: 0.1s;
+    --border-radius: 0.25em;
+    --transition-duration: 0.11s;
 
     /* Menu bar */
     --menu-bar-height: 1.0em;
     --menu-bar-padding: 0.0em 0em 0em 0.0em; /* top, right, bottom, left */
     --menu-bar-button-padding: 0.3em 0.4em 0.3em 0.4em;/* top, right, bottom, left */
     --menu-bar-button-border-radius: 0px;
+    --menu-bar-button-border: 0px solid var(--button-border-color, var(--debug-color,#2563eb));
+    --menu-bar-button-border-hover: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --menu-bar-button-border-active: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --menu-bar-button-border-disabled: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --menu-bar-z-index: 3000; /* Ensure menu bar is above other UI elements */
 
     /* Toolbar container */
@@ -24,12 +28,22 @@ Design tokens (layout/spacing)
     --toolbar-padding: 0.0em 0.0em 0em 0.0em; /* top, right, bottom, left */
     --toolbar-button-padding: 0.1em 0.4em 0.1em 0.4em;/* top, right, bottom, left */
     --toolbar-button-gap: 0.25em;   
+    --toolbar-button-radius: 0.25em; 
+    --toolbar-button-border: 1px solid var(--button-border-color, var(--debug-color,#2563eb));
+    --toolbar-button-border-hover: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --toolbar-button-border-active: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --toolbar-button-border-disabled: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --toolbar-z-index: 2000; /* Ensure toolbar is above other UI elements but below menu bar */
     
     /* Status bar */
     --status-bar-height: 2em;
     --status-bar-padding: 0.2em 0.5em 0.2em 0.5em; /* top, right, bottom, left */
     --status-bar-button-padding: 0.2em 0.3em 0.2em 0.3em; /* top, right, bottom, left */
+    --status-bar-button-radius: 0.5em;
+    --status-bar-button-border: 0px solid var(--button-border-color, var(--debug-color,#2563eb));
+    --status-bar-button-border-hover: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --status-bar-button-border-active: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --status-bar-button-border-disabled: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --status-bar-z-index: 3000; /* Ensure status bar is above other UI elements but below menu bar and toolbar */
 
     /* Dropdown menu */
@@ -37,10 +51,6 @@ Design tokens (layout/spacing)
     --dropdown-items-padding: 0.3em 0.3em 0.3em 0.3em; /* top, right, bottom, left */
     --dropdown-trigger-border-radius: var(--menu-bar-button-border-radius);
     --dropdown-transition-duration: 0.1s;
-
-    /* UI Border (overrides general border radius above) */
-    --border-radius: 2px; /* override */
-    --border-thickness: 1px;
 
     /* Cell container styling */
     --cell-container-padding: 0.5em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
