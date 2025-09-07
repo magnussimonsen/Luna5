@@ -467,7 +467,7 @@ const handleMoveNotebookToBin = (): void => {
   height: 1em;
   width: auto;
   margin-right: 0em;
-  margin-left: 0.5em;
+  margin-left: 0.1em;
   display: inline-block;
   vertical-align: middle;
   cursor: pointer;

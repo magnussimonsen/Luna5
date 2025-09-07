@@ -5,6 +5,7 @@ import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { mitLicenseText } from '@renderer/assets/licence-MIT-text'
 
 const modalStore = useModalStore()
+import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-169.png'
 
 // Get Electron/Chromium/Node versions from the preload API
 const versions = reactive({ ...window.electron.process.versions })
@@ -35,6 +36,8 @@ const openSourceFonts = [
 <template>
   <div class="about-modal">
     <CloseModalButton :on-click="modalStore.closeAboutLunaModal" />
+    <!--Logo -->
+    <img :src="LunaSmallIcon" alt="Luna" class="brand-icon-about" />
     <h2>About Luna</h2>
     <p>
       <strong>Luna version {{ LunaVersion }} ({{ licenseType }})</strong> by Magnus Simonsen
@@ -75,6 +78,16 @@ const openSourceFonts = [
 </template>
 
 <style scoped>
+.brand-icon-about {
+  border: solid 1px transparent;
+  border-radius: 10px;
+  height: auto;
+  width: 16em;
+  display: block;
+  margin: 0 auto;
+  /* Center horizontally */
+  margin-bottom: 0.5em;
+}
 .about-modal {
   position: relative;
   /* Not fixed anymore as parent handles positioning */
