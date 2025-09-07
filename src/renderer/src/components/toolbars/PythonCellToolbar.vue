@@ -14,6 +14,9 @@
       <span class="label">Run python code</span>
       <span class="spin-wrap" aria-hidden="true"> </span>
     </button>
+    <button class="toolbar-btn run" type="button" :title="'Delete output (Ctrl + Shift + Enter)'">
+      <span class="label">Delete output</span>
+    </button>
     <button
       class="toolbar-btn reset-python-worker"
       type="button"

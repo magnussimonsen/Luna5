@@ -258,7 +258,7 @@
 </template>
 
 <script lang="ts" setup>
-import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo.png'
+import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-169.png'
 import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import DropdownMenu from '@renderer/components/UI/DropdownMenu.vue'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
@@ -462,7 +462,8 @@ const handleMoveNotebookToBin = (): void => {
 
 <style scoped>
 .brand-icon {
-  height: var(--menu-bar-height, 1.2em);
+  /*height: var(--menu-bar-height, 1em);*/
+  height: 1em;
   width: auto;
   margin-right: 0em;
   margin-left: 0.5em;
