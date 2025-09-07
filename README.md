@@ -1,5 +1,7 @@
 # Luna5
 
+<img src="src/renderer/src/assets/icons/icon-luna-small-cropped.svg" alt="Luna5 icon" width="100px" height="100px" />
+
 📋 **For contributors:** Please read [src/README-BEST-PRACTICE.md](src/README-BEST-PRACTICE.md) for coding guidelines and project structure.
 
 Built using **Electron**, **Vite**, **Vue 3**, **Pinia**, and **TypeScript**, along with other open-source modules.
