@@ -8,12 +8,11 @@
       :title="isRunning ? 'Run (working)…' : 'Run selected Python cell'"
       @click="onRun"
     >
-      <span class="label">Run python code</span>
-      <span class="spin-wrap" aria-hidden="true">
-        <span class="ascii-spinner" :style="{ visibility: isRunning ? 'visible' : 'hidden' }">
-          {{ spinnerChar }}
-        </span>
+      <span class="ascii-spinner" :style="{ visibility: isRunning ? 'visible' : 'hidden' }">
+        {{ spinnerChar }}
       </span>
+      <span class="label">Run python code</span>
+      <span class="spin-wrap" aria-hidden="true"> </span>
     </button>
     <button
       class="toolbar-btn reset-python-worker"
@@ -166,15 +165,15 @@ function onReset(): void {
 .toolbar-btn.run {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.2em;
 }
 .toolbar-btn.run .label {
   display: inline-block;
 }
 .toolbar-btn.run .spin-wrap {
   display: inline-flex;
-  width: 0rem; /* reserve space so width stays constant */
-  height: 0rem;
+  width: 0em; /* reserve space so width stays constant */
+  height: 0em;
   align-items: center;
   justify-content: center;
 }
@@ -197,6 +196,6 @@ function onReset(): void {
 }
 .toolbar-btn.reset-python-worker:hover {
   background: var(--button-reset-python-worker-hover-color, firebrick);
-  border-color: var(--button-border-hover-color);
+  border: var(--toolbar-button-border-hover);
 }
 </style>

@@ -16,11 +16,11 @@ export const useFontSizeStore = defineStore('fontSize', {
       statusBarFontSize: '11px',
       sidePanelMenuBarFontSize: '12px',
       sidePanelFontSize: '12px',
-      toolbarFontSize: '14px',
+      toolbarFontSize: '13px',
       defaultCellFontSize: '14px',
       codeEditorCellFontSize: '14px',
       textEditorCellFontSize: '14px',
-      fallbackFontSize: '14px'
+      fallbackFontSize: '14px' /* NOT USED */
     } as FontSizeTypes
   }),
   actions: {
