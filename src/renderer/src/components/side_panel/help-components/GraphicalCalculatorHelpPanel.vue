@@ -1,6 +1,6 @@
 <template>
   <div class="side-panel-ui-base side-panel-padding-margin-base">
-    <h2>🚧 Work in progres</h2>
+    <h2>🚧 Work in progress</h2>
     <h3>Graphical calculator help</h3>
     <span>Placeholder...</span>
   </div>
