@@ -1,10 +1,10 @@
 
 <div align="center">
 
-<img src="src/renderer/src/assets/icons/icon-luna-small-cropped.svg" alt="Luna5 icon" width="400px" height="400px"/>
+<img src="src/renderer/src/assets/icons/icon-luna-small-cropped.svg" alt="Luna 0.5 icon" width="150px" height="150px"/>
 </div>
 
-# Luna 0.5.x.x
+# Luna 0.5. ...
 
 📋 **For contributors:** Please read [src/README-BEST-PRACTICE.md](src/README-BEST-PRACTICE.md) for coding guidelines and project structure.
 
@@ -14,15 +14,15 @@ Built using **Electron**, **Vite**, **Vue 3**, **Pinia**, and **TypeScript**, al
 
 Special thanks to the [electron-vite](https://electron-vite.org/guide/) team for creating the excellent `npm create @quick-start/electron@latest` starter tool that jumpstarted this project.
 
-Thanks as well to the [Pyodide](https://pyodide.org/) project and community for making Python run in the browser. Luna5 vendors Pyodide assets under `public/pyodide` and follows its MPL-2.0 licensing.
+Thanks as well to the [Pyodide](https://pyodide.org/) project and community for making Python run in the browser. Luna 0.5 vendors Pyodide assets under `public/pyodide` and follows its MPL-2.0 licensing.
 
 ## 📚 What is Luna?
 
-**Luna5** is an educational notebook-style application designed to simplify and unify digital workflows for both students and teachers. It brings together essential STEM tools in a clean, pedagogically structured interface, eliminating the need to switch between multiple, complex programs.
+**Luna 0.5** is an educational notebook-style application designed to simplify and unify digital workflows for both students and teachers. It brings together essential STEM tools in a clean, pedagogically structured interface, eliminating the need to switch between multiple, complex programs.
 
-Modern classrooms often depend on a mix of disconnected tools (Python editors, GeoGebra, Word, Excel) each with its own interface and file formats. This constant "software jumping" slows learning and creates unnecessary friction. While GeoGebra is an excellent tool, it's not built around a document-based notebook workflow. Luna5 is.
+Modern classrooms often depend on a mix of disconnected tools (Python editors, GeoGebra, Word, Excel) each with its own interface and file formats. This constant "software jumping" slows learning and creates unnecessary friction. While GeoGebra is an excellent tool, it's not built around a document-based notebook workflow. Luna 0.5 is.
 
-Luna5 offers a streamlined alternative, combining symbolic algebra, geometry, programming, and rich text editing all within one intuitive application.
+Luna 0.5 offers a streamlined alternative, combining symbolic algebra, geometry, programming, and rich text editing all within one intuitive application.
 
 Built-in flashcard functionality supporting text, images, audio, and IPA (International Phonetic Alphabet) input tools are also planned.
 
@@ -75,7 +75,7 @@ Built-in flashcard functionality supporting text, images, audio, and IPA (Intern
 
 ---
 
-##  🐍📦Pyodide packages available in Luna5
+##  🐍📦Pyodide packages available in Luna 0.5
 
 These packages can be imported directly in Python cells. Most work fully offline when their wheels are present under `public/pyodide`.
 
@@ -199,34 +199,34 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
   <img src="./src/development-screenshots/Luna5-2025-08-20.png" alt="Hidden cell functionality added" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-19.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-19.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-17-1.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-1.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-17-2.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-2.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-17-3.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-3.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-17-4.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-4.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-17-5.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-5.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-08-11-130446.png" alt="Current state of the Luna5 UI settings modal" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-17-8.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-8.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-17-6.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-6.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-08-17-7.png" alt="Current state of the Luna5 UI" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-08-17-7.png" alt="Current state of the Luna 0.5 UI" width="900" />
 </p>
 
 <div align="center"><em>Current state of the UI (development build, subject to rapid change)</em></div>
