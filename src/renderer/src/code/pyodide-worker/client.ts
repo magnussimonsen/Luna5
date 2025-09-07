@@ -75,7 +75,7 @@ export function resetWorkerForNotebook(notebookId: string): void {
     /* ignore */
   }
   // Reject any in-flight requests
-  for (const [key, p] of entry.pending.entries()) {
+  for (const p of entry.pending.values()) {
     try {
       p.reject(new Error('Worker was reset'))
     } catch {

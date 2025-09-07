@@ -110,8 +110,8 @@ const darkThemeOptions = [...darkBuiltins, ...getCuratedDarkMonacoThemeIds()]
 </script>
 
 <style scoped>
+@import '@renderer/css/side-panel-base.css';
 .code-settings-content {
   width: 100%;
 }
-@import '@renderer/css/side-panel-base.css';
 </style>

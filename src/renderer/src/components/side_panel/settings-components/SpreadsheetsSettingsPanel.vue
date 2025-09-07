@@ -12,6 +12,7 @@
 </script>
 
 <style scoped>
+@import '@renderer/css/side-panel-base.css';
 .settings-column {
   width: 100%;
 }
@@ -21,5 +22,4 @@
   align-items: center;
   gap: 0.5em;
 }
-@import '@renderer/css/side-panel-base.css';
 </style>

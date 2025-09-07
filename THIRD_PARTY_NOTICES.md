@@ -7,6 +7,8 @@ This document lists third-party software included in this application.
 - @electron-toolkit/preload@3.0.2 — License: MIT
 - @electron-toolkit/utils@4.0.0 — License: MIT
 - electron-updater@6.6.2 — License: MIT
+- monaco-editor@0.52.0 — License: MIT
+- monaco-themes@0.4.7 — License: MIT
 - pinia@3.0.3 — License: MIT
 - @electron-toolkit/eslint-config-prettier@3.0.0 — License: MIT
 - @electron-toolkit/eslint-config-ts@3.1.0 — License: MIT
