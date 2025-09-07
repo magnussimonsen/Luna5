@@ -100,11 +100,12 @@ export async function executePythonInNotebook(
 ): Promise<Extract<WorkerResponse, { type: 'result' }>> {
   const entry = getPoolEntry(notebookId)
   const wk = entry.worker
-  // Derive absolute base for public assets (works in dev and build)
+  // Derive absolute base for public assets.
+  // In dev: use http(s) origin + BASE. In packaged (file://): use custom luna:// protocol.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const BASE = ((import.meta as any)?.env?.BASE_URL as string) || '/'
-  const origin = window.location.origin
-  const baseUrl = `${origin}${BASE}`
+  const isFile = window.location.protocol === 'file:'
+  const baseUrl = isFile ? 'luna://' : `${window.location.origin}${BASE}`
   const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`
   const enriched: WorkerRequest = { ...req, assetsBaseUrl: req.assetsBaseUrl || normalizedBase }
   // Replace any existing in-flight request for the same cell id (last-wins)

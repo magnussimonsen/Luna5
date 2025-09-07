@@ -159,10 +159,24 @@ function detectRequiredPackagesFromCode(code: string): string[] {
 async function initPyodide(assetsBaseUrl?: string): Promise<Pyodide> {
   if (pyodideReady) return pyodideReady
   pyodideReady = (async () => {
-    // Resolve asset base: prefer provided base; else vite base. Then try candidates.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const viteBase: string = ((import.meta as any)?.env?.BASE_URL as string) || '/'
-    const base = (assetsBaseUrl || viteBase).replace(/\/?$/, '/')
+    // Resolve asset base robustly for both dev (http) and packaged (file://) builds.
+    // In packaged builds, relying on BASE_URL can yield "/", which becomes file:///pyodide (wrong).
+    // Instead, derive the base from this worker's location.
+    let base: string
+    if (assetsBaseUrl) {
+      base = assetsBaseUrl.replace(/\/?$/, '/')
+    } else {
+      try {
+        const here = new URL(import.meta.url)
+        // Worker bundle typically lives in out/renderer/assets/*.js — step up to out/renderer/
+        const rendererRoot = new URL('../..' + '/', here) // ensure trailing slash
+        base = rendererRoot.toString()
+      } catch {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const viteBase: string = ((import.meta as any)?.env?.BASE_URL as string) || '/'
+        base = viteBase.replace(/\/?$/, '/')
+      }
+    }
     //------------------------------------------------------------------
     //  IMPORTANT PART FOR PYODIDE ASSET PATHS
     //  IMPORTANT PART FOR PYODIDE ASSET PATHS

@@ -3,7 +3,7 @@
 // - Create the BrowserWindow and load the renderer
 // - Register IPC handlers used by the renderer (dialogs, file I/O, etc.)
 // - Keep security-sensitive work (filesystem, dialogs) in main; expose via preload
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog, protocol } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -14,6 +14,15 @@ import { registerCompressDataHandler } from '../renderer/src/code/ipc-main-handl
 import { registerDecompressDataHandler } from '../renderer/src/code/ipc-main-handle-functions/decompress-data'
 import fs from 'fs'
 
+// Enable a custom protocol so the renderer and workers can fetch static assets in packaged builds.
+// This avoids file:// fetch issues (fetch doesn't support file URLs) by serving from luna://
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'luna',
+    privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true }
+  }
+])
+
 function createWindow(): void {
   // Create the browser window (the UI lives in the renderer process).
   const mainWindow = new BrowserWindow({
@@ -22,7 +31,8 @@ function createWindow(): void {
     show: false,
     autoHideMenuBar: true,
     title: 'Luna STEM Notebook',
-    ...(process.platform === 'linux' ? { icon } : {}),
+    // Use our app icon on Linux and Windows (in dev, Windows may still show the EXE icon in taskbar)
+    ...(process.platform === 'linux' || process.platform === 'win32' ? { icon } : {}),
     webPreferences: {
       // Preload runs in an isolated context; it exposes safe APIs on window.api/window.electron
       preload: join(__dirname, '../preload/index.js'),
@@ -218,6 +228,22 @@ app.whenReady().then(() => {
     if (result.response === 0) return 'save'
     if (result.response === 1) return 'dont-save'
     return 'cancel'
+  })
+
+  // Map luna:// URLs to files inside the packaged app (out/renderer/...)
+  // Example: luna://pyodide/pyodide.js -> <app>/resources/app.asar/out/renderer/pyodide/pyodide.js
+  protocol.registerFileProtocol('luna', (request, callback) => {
+    try {
+      const url = new URL(request.url)
+      const decodedPath = decodeURIComponent(url.pathname).replace(/^\//, '') // drop leading '/'
+      const rendererRoot = join(__dirname, '../renderer')
+      // Include host as first path segment (e.g., luna://pyodide/pyodide.js -> <root>/pyodide/pyodide.js)
+      const filePath = join(rendererRoot, url.host, decodedPath)
+      callback({ path: filePath })
+    } catch {
+      // Fallback: fail gracefully
+      callback({ error: -6 /* net::ERR_FILE_NOT_FOUND */ })
+    }
   })
 
   createWindow()
