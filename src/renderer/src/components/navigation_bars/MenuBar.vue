@@ -6,6 +6,17 @@
       fontSize: fontSizeStore.fontSizes.menuBarFontSize || '1em'
     }"
   >
+    <!-- App brand icon -->
+    <img
+      :src="LunaSmallIcon"
+      alt="Luna"
+      class="brand-icon"
+      title="About Luna"
+      tabindex="0"
+      @click.stop="handleAboutLuna"
+      @keydown.enter.stop.prevent="handleAboutLuna"
+      @keydown.space.stop.prevent="handleAboutLuna"
+    />
     <DropdownMenu label="File">
       <div class="dropdown-menu-item" @click="handleNewFile">
         New File <span class="shortcut-not-implemented">Ctrl + n</span>
@@ -247,6 +258,7 @@
 </template>
 
 <script lang="ts" setup>
+import LunaSmallIcon from '@renderer/assets/icons/icon-luna-small-cropped.svg'
 import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import DropdownMenu from '@renderer/components/UI/DropdownMenu.vue'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
@@ -449,6 +461,15 @@ const handleMoveNotebookToBin = (): void => {
 </script>
 
 <style scoped>
+.brand-icon {
+  height: var(--menu-bar-height, 1.2em);
+  width: auto;
+  margin-right: 0em;
+  margin-left: 0.5em;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
 .menu-bar {
   /* Alignment */
   display: flex;

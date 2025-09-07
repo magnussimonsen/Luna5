@@ -44,7 +44,9 @@ function createWorker(entry: PoolEntry): void {
     }
   }
   wk.onerror = (e) => {
-    const err = new Error(e.message || 'Pyodide worker error')
+    const err = new Error(e.message || 'Pyodide worker error') as Error & { category?: string }
+    // Treat generic worker errors as internal so callers can retry/reset
+    err.category = 'internal'
     for (const p of entry.pending.values()) {
       try {
         p.reject(err)
@@ -109,7 +111,11 @@ export async function executePythonInNotebook(
   if (entry.pending.has(req.cellId)) {
     const prev = entry.pending.get(req.cellId)!
     try {
-      prev.reject(new Error('Replaced by a newer execution request'))
+      const cancelErr = new Error('Replaced by a newer execution request') as Error & {
+        category?: string
+      }
+      cancelErr.category = 'canceled'
+      prev.reject(cancelErr)
     } catch {
       /* ignore */
     }

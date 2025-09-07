@@ -1,8 +1,17 @@
 <template>
   <div class="side-panel-ui-base side-panel-padding-margin-base">
-    <h2>🚧 Work in progres</h2>
-    <h3>Python help and examples</h3>
-    <p>The following imports are available in this app's offline Pyodide environment:</p>
+    <h2>🚧 Work in progress</h2>
+    <h2>Python help and examples</h2>
+    <h3>Shortcuts</h3>
+    <ul class="shortcuts-list">
+      <li>Run Python code in the selected cell: <strong>Ctrl + Enter</strong></li>
+    </ul>
+    <h3>Available Offline Python Imports</h3>
+    <p>
+      Python's standard library is available (for example: <code>math</code>, <code>json</code>,
+      <code>re</code>, <code>pathlib</code>).
+    </p>
+    <p>The following imports are also available offline:</p>
     <ul class="imports-list">
       <!-- Core scientific stack -->
       <li><code>import numpy as np # N-dimensional arrays and numerical computing</code></li>
@@ -38,10 +47,6 @@
       <li><code>import js # access the browser's JS APIs</code></li>
       <li><code>from pyodide.ffi import to_js, create_proxy # JS/Python interop helpers</code></li>
     </ul>
-    <p>
-      Python's standard library is also available (for example: <code>math</code>,
-      <code>json</code>, <code>re</code>, <code>pathlib</code>).
-    </p>
   </div>
 </template>
 

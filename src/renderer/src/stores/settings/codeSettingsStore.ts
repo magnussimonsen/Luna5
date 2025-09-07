@@ -24,7 +24,7 @@ function normalizeThemeIdToSafeKebab(id: string): string {
 // const initialLightMonacoThemeId = 'vs'
 // const initialDarkMonacoThemeId = 'vs-dark'
 const initialLightMonacoThemeId = 'slush-and-poppies' // from monaco-themes
-const initialDarkMonacoThemeId = 'hc-black'
+const initialDarkMonacoThemeId = 'vs-dark'
 
 export const useCodeSettingsStore = defineStore('codeSettings', {
   state: () => ({

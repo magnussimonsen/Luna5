@@ -21,6 +21,7 @@ function createWindow(): void {
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    title: 'Luna STEM Notebook',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       // Preload runs in an isolated context; it exposes safe APIs on window.api/window.electron
@@ -56,6 +57,12 @@ function createWindow(): void {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
+  // Set the app name for desktop environments and menus
+  try {
+    app.setName('Luna')
+  } catch {
+    // ignore platforms where setName isn't applicable
+  }
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

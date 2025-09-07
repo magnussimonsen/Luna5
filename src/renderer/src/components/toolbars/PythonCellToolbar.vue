@@ -5,8 +5,8 @@
       :class="{ 'is-running': isRunning }"
       type="button"
       :disabled="!canRun || isRunning"
-      :title="isRunning ? 'Run (working)…' : 'Run selected Python cell'"
-      @click="onRun"
+      :title="isRunning ? 'Run (working)…' : 'Run selected Python cell (Ctrl + Enter)'"
+      @click="() => onRun(false)"
     >
       <span class="ascii-spinner" :style="{ visibility: isRunning ? 'visible' : 'hidden' }">
         {{ spinnerChar }}
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
@@ -39,6 +39,7 @@ import {
   executePythonInNotebook,
   resetWorkerForNotebook
 } from '@renderer/code/pyodide-worker/client'
+import { SHORTCUT_EVENTS } from '@renderer/utils/shortcuts'
 
 const selectionStore = useCellSelectionStore()
 const workspaceStore = useWorkspaceStore()
@@ -86,7 +87,7 @@ watch(isRunning, (running) => {
 
 onUnmounted(() => stopSpinner())
 
-async function onRun(): Promise<void> {
+async function onRun(selectNext = false): Promise<void> {
   const id = selectedCellId.value
   if (!id || selectedKind.value !== 'python-cell') return
   const ws = workspaceStore.getWorkspace()
@@ -113,8 +114,27 @@ async function onRun(): Promise<void> {
         ? JSON.stringify(res.pythonVariables)
         : undefined
     })
+    if (selectNext) {
+      // After success, select the next non-deleted cell in current notebook
+      const nbId = workspaceStore.currentNotebookId || workspaceStore.ensureDefaultNotebook()
+      const ws2 = workspaceStore.getWorkspace()
+      const order = ws2.notebooks[nbId]?.cellOrder || []
+      const startIdx = order.indexOf(id)
+      for (let i = startIdx + 1; i < order.length; i++) {
+        const candidate = order[i]
+        if (!ws2.cells[candidate]?.softDeleted) {
+          const kind2 = ws2.cells[candidate]?.kind
+          if (kind2) selectionStore.setSelectCell(candidate, kind2)
+          break
+        }
+      }
+    }
   } catch (err) {
     const e = err as Error & { category?: string }
+    // Ignore benign cancellations when a newer run superseded this one
+    if (e.category === 'canceled') {
+      return
+    }
     // If the worker failed internally (e.g., after code updates), recreate and retry once
     if (e.category === 'internal') {
       try {
@@ -136,7 +156,9 @@ async function onRun(): Promise<void> {
         })
         return
       } catch (err2) {
-        const message2 = err2 instanceof Error ? err2.message : String(err2)
+        const anyErr = err2 as Error & { category?: string }
+        if (anyErr?.category === 'canceled') return
+        const message2 = anyErr?.message || String(err2)
         workspaceStore.setPythonRunFailure(id, message2)
         return
       }
@@ -153,11 +175,67 @@ function onReset(): void {
   const notebookId = workspaceStore.currentNotebookId || workspaceStore.ensureDefaultNotebook()
   resetWorkerForNotebook(notebookId)
 }
+
+// Listen for global run/reset events from the shortcuts system
+function onGlobalRunEvent(): void {
+  if (canRun.value && !isRunning.value) {
+    void onRun(false)
+  }
+}
+function onGlobalRunNextEvent(): void {
+  if (canRun.value && !isRunning.value) {
+    void onRun(true)
+  }
+}
+function onGlobalResetEvent(): void {
+  if (canReset.value) {
+    onReset()
+  }
+}
+onMounted(() => {
+  const handleRunEvent = (): void => onGlobalRunEvent()
+  const handleRunNextEvent = (): void => onGlobalRunNextEvent()
+  const handleResetEvent = (): void => onGlobalResetEvent()
+  // Store handlers on window so we can remove the exact same references
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ;(window as any).__lunaHandleRunEvent = handleRunEvent
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ;(window as any).__lunaHandleRunNextEvent = handleRunNextEvent
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ;(window as any).__lunaHandleResetEvent = handleResetEvent
+  window.addEventListener(SHORTCUT_EVENTS.RUN_ACTIVE_PYTHON_CELL, handleRunEvent)
+  window.addEventListener(SHORTCUT_EVENTS.RUN_ACTIVE_PYTHON_CELL_NEXT, handleRunNextEvent)
+  window.addEventListener(SHORTCUT_EVENTS.RESET_ACTIVE_PYTHON_CELL, handleResetEvent)
+})
+onUnmounted(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleRunEvent = (window as any).__lunaHandleRunEvent as (() => void) | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleRunNextEvent = (window as any).__lunaHandleRunNextEvent as (() => void) | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleResetEvent = (window as any).__lunaHandleResetEvent as (() => void) | undefined
+  if (handleRunEvent) {
+    window.removeEventListener(SHORTCUT_EVENTS.RUN_ACTIVE_PYTHON_CELL, handleRunEvent)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(window as any).__lunaHandleRunEvent = undefined
+  }
+  if (handleRunNextEvent) {
+    window.removeEventListener(SHORTCUT_EVENTS.RUN_ACTIVE_PYTHON_CELL_NEXT, handleRunNextEvent)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(window as any).__lunaHandleRunNextEvent = undefined
+  }
+  if (handleResetEvent) {
+    window.removeEventListener(SHORTCUT_EVENTS.RESET_ACTIVE_PYTHON_CELL, handleResetEvent)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(window as any).__lunaHandleResetEvent = undefined
+  }
+})
 </script>
 
 <style scoped>
 @import '../../css/main-imports-this-css/design.css';
 @import '../../css/toolbar-base.css';
+
 /*--------------------------------------------------------*/
 /* COMPONENT SPECIFIC STYLES (NOT BASE CSS)
 /*--------------------------------------------------------*/

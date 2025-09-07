@@ -14,36 +14,65 @@
 //   - Handlers can access Pinia stores or perform any action.
 //   - Call initializeShortcutsGlobal() once during app startup.
 
+import {
+  dlog,
+  getKeyCombo,
+  getElementContext,
+  shouldIgnoreKeydown,
+  ensureSingleRegistration,
+  SHORTCUT_EVENTS
+} from '@renderer/utils/shortcuts'
+
 import type { Shortcut } from '@renderer/types/shortcut-types'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
-
-// Utility to normalize key events to a string like "Ctrl+S"
-// Modifiers are sorted for order-insensitive matching.
-function getKeyCombo(e: KeyboardEvent): string {
-  const keys: string[] = []
-  if (e.ctrlKey) keys.push('Ctrl')
-  if (e.shiftKey) keys.push('Shift')
-  if (e.altKey) keys.push('Alt')
-  if (e.metaKey) keys.push('Meta')
-  // Only add the main key if it's not a modifier
-  const ignoreKeys = ['Control', 'Shift', 'Alt', 'Meta']
-  if (!ignoreKeys.includes(e.key)) {
-    keys.push(e.key.length === 1 ? e.key.toUpperCase() : e.key)
-  }
-  // Sort modifiers, keep main key last if present
-  if (keys.length > 1) {
-    const mainKey = keys[keys.length - 1]
-    const modifiers = keys.slice(0, -1).sort()
-    return [...modifiers, mainKey].join('+')
-  }
-  return keys.join('+')
-}
+import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+// No direct execution imports needed when delegating to the toolbar button
+import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
 // ---------------------------------------------
 // Define your global shortcuts here
 // Each shortcut can have multiple key combos
 // ---------------------------------------------
 const shortcuts: Shortcut[] = [
+  // Run active cell (Ctrl/Cmd+Enter) - currently enabled for python cells only
+  {
+    keys: ['Ctrl+Enter', 'Meta+Enter'],
+    handler: async () => {
+      dlog('Ctrl/Cmd+Enter handler invoked')
+      const selection = useCellSelectionStore()
+      const workspace = useWorkspaceStore()
+      const cellId = selection.selectedCellId as string | null
+      const kind = selection.selectedCellKind as string | null
+      // Guard: only when a python cell is selected
+      if (!cellId || kind !== 'python-cell') {
+        dlog('No python cell selected; abort', { cellId, kind })
+        return
+      }
+      // Emit a global event; the Python toolbar listens and runs if possible
+      window.dispatchEvent(new Event(SHORTCUT_EVENTS.RUN_ACTIVE_PYTHON_CELL))
+      // Fallback: ensure a notebook is selected to keep app state consistent
+      workspace.currentNotebookId || workspace.ensureDefaultNotebook()
+      dlog('Dispatched global run event and ensured a notebook is selected')
+    }
+  },
+  // Run active cell and select next (Shift+Enter) - python only for now
+  {
+    keys: ['Shift+Enter'],
+    handler: async () => {
+      dlog('Shift+Enter handler invoked')
+      const selection = useCellSelectionStore()
+      const workspace = useWorkspaceStore()
+      const cellId = selection.selectedCellId as string | null
+      const kind = selection.selectedCellKind as string | null
+      if (!cellId || kind !== 'python-cell') {
+        dlog('No python cell selected; abort run-next', { cellId, kind })
+        return
+      }
+      window.dispatchEvent(new Event(SHORTCUT_EVENTS.RUN_ACTIVE_PYTHON_CELL_NEXT))
+      workspace.currentNotebookId || workspace.ensureDefaultNotebook()
+      dlog('Dispatched global run-next event and ensured a notebook is selected')
+    }
+  },
   {
     keys: ['Ctrl+N'],
     handler: () => {
@@ -78,21 +107,42 @@ const shortcuts: Shortcut[] = [
 // Call this once during app initialization
 // ------------------------------------------------------
 export function initializeShortcutsGlobal(): void {
+  // Idempotent: avoid attaching multiple listeners on HMR or double init
+  if (!ensureSingleRegistration()) {
+    dlog('Global keydown listener already attached; skipping')
+    return
+  }
+  dlog('Attaching global keydown listener')
   window.addEventListener('keydown', (e) => {
-    // Prevent shortcuts from firing when typing in input fields, textareas, selects, or contenteditable
-    if (
-      e.target instanceof HTMLElement &&
-      (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) || e.target.isContentEditable)
-    ) {
+    // Prevent shortcuts in typical editable fields, but allow inside Monaco
+    const ctx = getElementContext(e.target)
+    if (shouldIgnoreKeydown(e.target)) {
+      dlog('Keydown ignored due to focus on editable element', ctx)
       return
+    }
+    if (ctx.insideMonaco) {
+      dlog('Keydown allowed inside Monaco editor', ctx)
     }
     // Normalize the key combo for matching
     const combo = getKeyCombo(e)
+    dlog('Keydown', {
+      key: e.key,
+      combo,
+      ctrl: e.ctrlKey,
+      shift: e.shiftKey,
+      alt: e.altKey,
+      meta: e.metaKey
+    })
     for (const shortcut of shortcuts) {
-      if (shortcut.keys.includes(combo)) {
+      const match = shortcut.keys.includes(combo)
+      if (match) {
+        dlog('Shortcut match', { combo, keys: shortcut.keys })
         e.preventDefault()
         shortcut.handler(e)
         break
+      } else {
+        // Uncomment for very verbose logging of non-matches
+        // dlog('No match for combo', { combo, candidate: shortcut.keys })
       }
     }
   })

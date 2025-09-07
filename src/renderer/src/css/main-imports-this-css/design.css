@@ -10,7 +10,7 @@ Design tokens (layout/spacing)
     --transition-duration: 0.11s;
 
     /* Menu bar */
-    --menu-bar-height: 1.0em;
+    --menu-bar-height: 1.2em;
     --menu-bar-padding: 0.0em 0em 0em 0.0em; /* top, right, bottom, left */
     --menu-bar-button-padding: 0.3em 0.4em 0.3em 0.4em;/* top, right, bottom, left */
     --menu-bar-button-border-radius: 0px;
