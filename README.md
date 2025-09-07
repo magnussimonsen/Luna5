@@ -1,6 +1,10 @@
-# Luna5
 
-<img src="src/renderer/src/assets/icons/icon-luna-small-cropped.svg" alt="Luna5 icon" width="100px" height="100px" />
+<div align="center">
+
+<img src="src/renderer/src/assets/icons/icon-luna-small-cropped.svg" alt="Luna5 icon" width="100px" height="100px"/>
+</div>
+
+# Luna5 
 
 📋 **For contributors:** Please read [src/README-BEST-PRACTICE.md](src/README-BEST-PRACTICE.md) for coding guidelines and project structure.
 
