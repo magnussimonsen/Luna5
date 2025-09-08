@@ -6,7 +6,9 @@
 import { app, shell, BrowserWindow, ipcMain, dialog, protocol } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+// import icon from '../../resources/icon.png?asset'
+// import icon from '../../resources/Luna05-logo-169.png?asset'
+// import icon from '../../resources/Luna05-logo.png?asset'
 import { registerQuitAppHandler } from '../renderer/src/code/ipc-main-handle-functions/quitAppHandler'
 import { registerConfirmEmptyBinHandler } from '../renderer/src/code/ipc-main-handle-functions/confirmEmptyBinHandler'
 import { registerConfirmYesNoHandler } from '../renderer/src/code/ipc-main-handle-functions/show-confirm-yes-no-dialog'
@@ -32,7 +34,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     title: 'Luna STEM Notebook',
     // Use our app icon on Linux and Windows (in dev, Windows may still show the EXE icon in taskbar)
-    ...(process.platform === 'linux' || process.platform === 'win32' ? { icon } : {}),
+    ...(process.platform === 'linux' || process.platform === 'win32' ? {} : {}), // { icon}
     webPreferences: {
       // Preload runs in an isolated context; it exposes safe APIs on window.api/window.electron
       preload: join(__dirname, '../preload/index.js'),

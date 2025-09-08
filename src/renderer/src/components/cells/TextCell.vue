@@ -2,6 +2,7 @@
   <div
     ref="elRef"
     class="text-cell-input"
+    :style="{ fontSize: textCellFontSize }"
     :contenteditable="!isLocked"
     data-primary-editor="true"
     :data-locked="isLocked ? 'true' : null"
@@ -18,11 +19,15 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import type { TextCell } from '@renderer/types/notebook-cell-types'
 
-// Accept the cell object as a pro
+// Accept the cell object as a prop
 const { cell } = defineProps<{ cell: TextCell }>()
+
+const fontSizeStore = useFontSizeStore()
+const textCellFontSize = computed(() => fontSizeStore.fontSizes.textEditorCellFontSize)
 
 const workspaceStore = useWorkspaceStore()
 const elRef = ref<HTMLDivElement | null>(null)

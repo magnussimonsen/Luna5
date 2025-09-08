@@ -2,21 +2,23 @@
 
 import { defineStore } from 'pinia'
 import type { FontSizeTypes } from '@renderer/types/font-size-types'
-import type { fontSizeOptionsType } from '@renderer/types/font-size-options-types'
+import type { FontSizeOptionsType } from '@renderer/types/font-size-options'
+import { fontSizeOptions as fontSizeOptionsList } from '@renderer/types/font-size-options'
 
-export const fontSizeOptions: fontSizeOptionsType[] = [
-  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42,
-  44, 46, 48
-]
+export const fontSizeOptions: FontSizeOptionsType[] = Array.from(
+  fontSizeOptionsList
+) as FontSizeOptionsType[]
 
 export const useFontSizeStore = defineStore('fontSize', {
   state: () => ({
     fontSizes: {
-      menuBarFontSize: '12px',
-      statusBarFontSize: '11px',
-      sidePanelMenuBarFontSize: '12px',
-      sidePanelFontSize: '12px',
-      toolbarFontSize: '13px',
+      menuBarFontSize: '13px',
+      statusBarFontSize: '12px',
+      sidePanelMenuBarFontSize: '14px',
+      sidePanelFontSize: '14px',
+      toolbarFontSize: '14px',
+      /* This (defaultCellFontSize)is the fontsize that will be set for the
+      selected cell when user click the "reset font size"-button in the statusbar. */
       defaultCellFontSize: '14px',
       codeEditorCellFontSize: '14px',
       textEditorCellFontSize: '14px',
@@ -44,6 +46,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       this.fontSizes.toolbarFontSize = size
       document.documentElement.style.setProperty('--toolbar-font-size', size)
     },
+    // This sets the default font size for cells when user clicks "reset font size" in statusbar
     setDefaultCellFontSize(size: string) {
       this.fontSizes.defaultCellFontSize = size
       document.documentElement.style.setProperty('--default-cells-font-size', size)
@@ -57,9 +60,23 @@ export const useFontSizeStore = defineStore('fontSize', {
       document.documentElement.style.setProperty('--text-editor-cells-font-size', size)
     },
     setFallbackFontSize(size: string) {
+      // NOT USED, Placeholder for future cell types
       this.fontSizes.fallbackFontSize = size
       document.documentElement.style.setProperty('--fallback-font-size', size)
     },
+    setFontSizeForCellType(cellType: string, size: string) {
+      if (cellType === 'python-cell') {
+        this.setCodeEditorCellFontSize(size)
+      } else if (cellType === 'text' || cellType === 'text-cell') {
+        this.setTextEditorCellFontSize(size)
+      } else {
+        console.warn(
+          `setFontSizeForCellType: Unrecognized cell type "${cellType}", applying fallback font size.`
+        )
+        this.setFallbackFontSize(size) // NOT USED, Placeholder for future cell types, cluld also return void
+      }
+    },
+
     applyFontSizes() {
       document.documentElement.style.setProperty(
         '--menu-bar-font-size',
