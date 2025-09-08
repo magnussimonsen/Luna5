@@ -41,7 +41,6 @@ For now only placeholders for the buttons and sliders are implemented.
       </button>
     </div>
     <div class="status-section right">
-      <label class="font-size-label" for="font-size-slider">{{ displayedFontSize }} px</label>
       <input
         id="font-size-slider"
         v-model.number="changeFontSizeIndex"
@@ -57,9 +56,8 @@ For now only placeholders for the buttons and sliders are implemented.
         :style="resetFontSizeBtnStyle"
         @click="onResetBtnClick"
       >
-        Reset font size {{ fontSizeStore.fontSizes.defaultCellFontSize }}
+        Font size {{ displayedFontSize }}
       </button>
-      <label class="zoom-label" for="zoom-slider">{{ zoomPercent }}%</label>
       <input
         id="zoom-slider"
         v-model.number="zoomPercent"
@@ -70,7 +68,7 @@ For now only placeholders for the buttons and sliders are implemented.
         step="5"
       />
       <button class="reset-zoom-btn btn-status-bar" :style="resetZoomBtnStyle" @click="resetZoom">
-        Reset zoom
+        {{ zoomPercent }}%
       </button>
     </div>
   </footer>

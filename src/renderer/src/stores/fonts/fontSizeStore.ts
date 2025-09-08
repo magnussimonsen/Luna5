@@ -13,7 +13,7 @@ export const useFontSizeStore = defineStore('fontSize', {
   state: () => ({
     fontSizes: {
       menuBarFontSize: '13px',
-      statusBarFontSize: '12px',
+      statusBarFontSize: '10px',
       sidePanelMenuBarFontSize: '14px',
       sidePanelFontSize: '14px',
       toolbarFontSize: '14px',

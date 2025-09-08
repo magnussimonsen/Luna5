@@ -45,10 +45,11 @@
         Settings <span class="shortcut-not-implemented">Alt + Shift + s</span>
         <ImplementedMark :implemented="true" />
       </div>
-      <div class="dropdown-menu-item" @click="handleAboutLuna">
-        About Luna <span class="shortcut-not-implemented"></span>
+      <div class="dropdown-menu-item" @click="handleHelp">
+        Get Help and Tutorials <span class="shortcut-not-implemented"></span>
         <ImplementedMark :implemented="true" />
       </div>
+
       <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleSavePDFForSubmission">
         Save FILE as Student Handout (teacher → students)
@@ -56,6 +57,10 @@
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-divider"></div>
+      <div class="dropdown-menu-item" @click="handleAboutLuna">
+        About Luna <span class="shortcut-not-implemented"></span>
+        <ImplementedMark :implemented="true" />
+      </div>
       <div class="dropdown-menu-item" @click="handleQuitLuna">
         Quit Luna <span class="shortcut-not-implemented"></span>
         <ImplementedMark :implemented="true" />
@@ -137,7 +142,7 @@
         <ImplementedMark :implemented="true" />
       </div>
     </DropdownMenu>
-    <DropdownMenu ref="insertMenu" label="Insert">
+    <DropdownMenu ref="insertMenu" label="Insert new cell">
       <div class="dropdown-menu-item" @click="handleInsertTextCell">
         Insert Text Cell <span class="shortcut-not-implemented">Ctrl + 1</span>
         <ImplementedMark :implemented="true" />
@@ -172,9 +177,9 @@
         <ImplementedMark :implemented="false" />
       </div>
     </DropdownMenu>
-    <div class="toggle-button" @click="handleMoveCellUp"><strong>Move cell up </strong></div>
-    <div class="toggle-button" @click="handleMoveCellDown">
-      <strong>Move cell down</strong>
+    <div title="Move selected cell up" class="toggle-button" @click="handleMoveCellUp">&#8679;</div>
+    <div title="Move selected cell down" class="toggle-button" @click="handleMoveCellDown">
+      &#8681;
     </div>
     <div
       class="toggle-button"
@@ -219,6 +224,7 @@
     </div>
     <div class="right-buttons">
       <div
+        title="Show list of Notebooks in this file"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'notebooks' }"
         @click="handleTogglePanel('notebooks')"
@@ -226,6 +232,7 @@
         Notebooks
       </div>
       <div
+        title="Show Table of Contents from text cells in current notebook"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'toc' }"
         @click="handleTogglePanel('toc')"
@@ -233,6 +240,7 @@
         Table of Contents
       </div>
       <div
+        title="Variables and Functions in selected notebook"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'variables' }"
         @click="handleTogglePanel('variables')"
@@ -240,25 +248,28 @@
         Variables
       </div>
       <div
+        title="Flashcards"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'flashcards' }"
         @click="handleTogglePanel('flashcards')"
       >
-        Flashcards
+        Cards
       </div>
       <div
+        title="Settings"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'settings' }"
         @click="handleTogglePanel('settings')"
       >
-        Settings
+        &#9881;
       </div>
       <div
+        title="Get Help and Tutorials"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'help' }"
         @click="handleTogglePanel('help')"
       >
-        Get help
+        <strong>?</strong>
       </div>
     </div>
   </nav>
@@ -364,11 +375,17 @@ const handleSaveFileAs = async (): Promise<void> => {
 const handleSavePDFForSubmission = (): void => {}
 
 const handleSettings = (): void => {
-  modalStore.openSettingsModal()
+  // Open/toggle the Settings side panel instead of the Settings modal
+  sidePanelStore.togglePanel('settings')
 }
 
 const handleAboutLuna = (): void => {
   modalStore.openAboutLunaModal()
+}
+
+const handleHelp = (): void => {
+  // Open/toggle the Help side panel
+  sidePanelStore.togglePanel('help')
 }
 
 const handleQuitLuna = async (): Promise<void> => {

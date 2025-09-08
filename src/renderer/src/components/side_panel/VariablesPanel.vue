@@ -2,7 +2,10 @@
   <div class="variables-panel side-panel-ui-base side-panel-padding-margin-base">
     <h2>🚧 Work in progres</h2>
     <h3>Variables Panel</h3>
-    <p>This is the Variables panel. Show your variables here.</p>
+    <p>
+      This is the Variables panel. List of variables and functions used in this notebook will be
+      shown here.
+    </p>
   </div>
 </template>
 

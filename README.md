@@ -137,7 +137,11 @@ Third-party components are licensed separately. Notably:
 See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated list of third-party dependencies and their licenses.
 
 ---
+
 ## 🖼️ Current UI Progress Snapshots
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-08.png" alt="Moving settings from modal to sidebar" width="900" />
+</p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-025-09-07-1.png" alt="Moving settings from modal to sidebar" width="900" />
 </p>

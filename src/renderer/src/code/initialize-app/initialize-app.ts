@@ -5,6 +5,7 @@ import { initializeShortcutsGlobal } from '@renderer/code/initialize-app/initial
 import { initializeTheme } from './initialize-theme'
 import { initializeFontSizes } from './initialize-font-size'
 import { initializeWorkspace } from './initialize-workspace'
+import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 
 export function initializeApp(): void {
   // App bootstrap sequence (renderer). Order matters.
@@ -13,6 +14,9 @@ export function initializeApp(): void {
   // 2) Preload fonts and set font-family CSS variables
   preloadCriticalFonts(preloadFonts)
   setFontFamilies(fonts.family)
+  // 2b) Apply current font selections to CSS variables (e.g., --ui-font)
+  const fontStore = useFontStore()
+  fontStore.applyFonts()
   // 3) Initialize the theme
   initializeTheme()
   // 4) Initialize font sizes

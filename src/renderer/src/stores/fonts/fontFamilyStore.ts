@@ -16,10 +16,10 @@ const availableFonts = [
 export const useFontStore = defineStore('fonts', {
   state: () => ({
     fonts: {
-      uiFont: 'Inter, sans-serif',
-      defaultCellFont: 'Inter, sans-serif',
-      codingFont: 'Fira Mono, monospace',
-      textFont: 'Georgia, serif'
+      uiFont: 'Arimo, Arial, sans-serif',
+      defaultCellFont: 'Arimo, Arial, sans-serif',
+      codingFont: 'Fira Code, monospace',
+      textFont: 'Arimo, Arial, sans-serif'
     } as FontTypes,
     availableFonts
   }),

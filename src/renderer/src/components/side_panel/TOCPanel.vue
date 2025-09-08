@@ -1,8 +1,11 @@
 <template>
   <div class="side-panel-ui-base side-panel-padding-margin-base">
-    <h2>🚧 Work in progres</h2>
+    <h2>🚧 Work in progress</h2>
     <h3>Table of Contents</h3>
-    <p>Placeholder for table of contents for the text cells in this notebook.</p>
+    <p>
+      This panel will show a table of contents generated from the headings in the current notebook's
+      text cells.
+    </p>
   </div>
 </template>
 

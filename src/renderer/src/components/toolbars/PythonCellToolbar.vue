@@ -14,8 +14,14 @@
       <span class="label">Run python code</span>
       <span class="spin-wrap" aria-hidden="true"> </span>
     </button>
-    <button class="toolbar-btn run" type="button" :title="'Delete output (Ctrl + Shift + Enter)'">
-      <span class="label">Delete output</span>
+    <button
+      class="toolbar-btn run"
+      type="button"
+      :disabled="!canRun"
+      :title="'Delete output (Ctrl + Shift + Enter)'"
+      @click="onClearOutputs"
+    >
+      <span class="label">Delete output from selected cell</span>
     </button>
     <button
       class="toolbar-btn reset-python-worker"
@@ -23,12 +29,12 @@
       :disabled="!canReset"
       :title="
         isRunning
-          ? 'Kill Python worker and clear outputs'
-          : 'Clear outputs for selected Python cell'
+          ? 'Reset Python worker'
+          : 'Reset Python worker and clear outputs for selected Python cell'
       "
       @click="onReset"
     >
-      Reset
+      Reset python
     </button>
   </div>
 </template>
@@ -179,6 +185,12 @@ function onReset(): void {
   resetWorkerForNotebook(notebookId)
 }
 
+function onClearOutputs(): void {
+  const id = selectedCellId.value
+  if (!id || selectedKind.value !== 'python-cell') return
+  workspaceStore.resetPythonOutputs(id)
+}
+
 // Listen for global run/reset events from the shortcuts system
 function onGlobalRunEvent(): void {
   if (canRun.value && !isRunning.value) {
@@ -242,6 +254,13 @@ onUnmounted(() => {
 /*--------------------------------------------------------*/
 /* COMPONENT SPECIFIC STYLES (NOT BASE CSS)
 /*--------------------------------------------------------*/
+/* Layout: keep actions left, move reset button to far right */
+.python-cell-toolbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-right: 0; /* ensure no right gutter so the last button touches the edge */
+}
 /* Run button constant width with reserved spinner space */
 .toolbar-btn.run {
   display: inline-flex;
@@ -274,6 +293,7 @@ onUnmounted(() => {
 
 .toolbar-btn.reset-python-worker {
   background: var(--button-reset-python-worker-color, transparent);
+  margin-left: auto; /* push to far right */
 }
 .toolbar-btn.reset-python-worker:hover {
   background: var(--button-reset-python-worker-hover-color, firebrick);

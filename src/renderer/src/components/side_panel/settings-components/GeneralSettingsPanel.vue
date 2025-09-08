@@ -70,6 +70,26 @@
 
         <!-- Font Size Selectors -->
         <div class="setting-row">
+          <label for="default-cell-reset-font-size-select"> Default Cell Font Size: </label>
+          <select
+            id="default-cell-reset-font-size-select"
+            v-model="fontSizeStore.fontSizes.defaultCellFontSize"
+            :class="{ 'dark-mode': themeStore.isDarkMode }"
+            @change="
+              fontSizeStore.setDefaultCellFontSize(fontSizeStore.fontSizes.defaultCellFontSize)
+            "
+          >
+            <option
+              v-for="size in fontSizeOptions"
+              :key="'defaultCellResetFontSize-' + size"
+              :value="size + 'px'"
+            >
+              {{ size }} px
+            </option>
+          </select>
+          <ImplementedMark :implemented="true" />
+        </div>
+        <div class="setting-row">
           <label for="menu-bar-font-size-select">Menu Bar Font Size:</label>
           <select
             id="menu-bar-font-size-select"
@@ -157,28 +177,6 @@
             <option
               v-for="size in fontSizeOptions"
               :key="'statusBarFontSize-' + size"
-              :value="size + 'px'"
-            >
-              {{ size }} px
-            </option>
-          </select>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="setting-row">
-          <label for="default-cell-reset-font-size-select">
-            Default Cell Font Size (Status Bar Reset button):
-          </label>
-          <select
-            id="default-cell-reset-font-size-select"
-            v-model="fontSizeStore.fontSizes.defaultCellFontSize"
-            :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="
-              fontSizeStore.setDefaultCellFontSize(fontSizeStore.fontSizes.defaultCellFontSize)
-            "
-          >
-            <option
-              v-for="size in fontSizeOptions"
-              :key="'defaultCellResetFontSize-' + size"
               :value="size + 'px'"
             >
               {{ size }} px
