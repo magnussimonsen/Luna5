@@ -41,22 +41,21 @@ For now only placeholders for the buttons and sliders are implemented.
       </button>
     </div>
     <div class="status-section right">
-      <label class="font-size-label" for="font-size-slider"
-        >{{ changeFontSizeForSelectedCellType }}%</label
-      >
+      <label class="font-size-label" for="font-size-slider">{{ displayedFontSize }} px</label>
       <input
-        id="zoom-slider"
-        v-model.number="changeFontSizeForSelectedCellType"
+        id="font-size-slider"
+        v-model.number="changeFontSizeIndex"
         class="zoom-slider"
         type="range"
-        min="10"
-        max="42"
-        step="5"
+        :min="0"
+        :max="fontSizeOptions.length - 1"
+        step="1"
       />
       <button
+        type="button"
         class="reset-zoom-btn btn-status-bar"
-        :style="resetZoomBtnStyle"
-        @click="resetFontSizeForSelectedCellType"
+        :style="resetFontSizeBtnStyle"
+        @click="onResetBtnClick"
       >
         Reset font size 14px
       </button>
@@ -81,7 +80,7 @@ For now only placeholders for the buttons and sliders are implemented.
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
-import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
+import { useFontSizeStore, fontSizeOptions } from '@renderer/stores/fonts/fontSizeStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
@@ -212,29 +211,67 @@ function cycleAutosave(): void {
 }
 
 // Font sizebindings
-const changeFontSizeForSelectedCellType = computed<number>({
+// const changeFontSizeForSelectedCellType = computed<number>({
+//   get: () => 0,
+//  set: () => {}
+// })
+
+// index into fontSizeOptions; slider controls this index
+const changeFontSizeIndex = computed<number>({
   get: () => {
     const kind = cellSelection.selectedCellKind as string | null
-    if (!kind) return fontSizeStore.fontSizes.defaultCellFontSize
-    return fontSizeStore.fontSizes[kind] || fontSizeStore.fontSizes.defaultCellFontSize
+    if (!kind) return 0
+    let sizeStr: string | undefined
+    if (kind === 'python-cell') sizeStr = fontSizeStore.fontSizes.codeEditorCellFontSize
+    else if (kind === 'text-cell' || kind === 'text')
+      sizeStr = fontSizeStore.fontSizes.textEditorCellFontSize
+    else sizeStr = fontSizeStore.fontSizes.defaultCellFontSize
+    const current = parseInt(sizeStr || fontSizeStore.fontSizes.defaultCellFontSize, 10)
+    const idx = fontSizeOptions.findIndex((s) => s === current)
+    return idx === -1 ? 0 : idx
   },
-  set: (val: number) => {
+  set: (idx: number) => {
     const kind = cellSelection.selectedCellKind as string | null
     if (!kind) return
+    const clamped = Math.max(0, Math.min(idx, fontSizeOptions.length - 1))
+    const value = fontSizeOptions[clamped]
     try {
-      let mappedKind = kind === 'text-cell' ? 'text' : kind;
-      fontSizeStore.setFontSizeForCellType(mappedKind, `${val}px`)
+      fontSizeStore.setFontSizeForCellType(kind, `${value}px`)
     } catch (error) {
       console.warn('Error setting font size for cell type:', error)
     }
   }
 })
 
+const displayedFontSize = computed(() => {
+  const idx = changeFontSizeIndex.value
+  return fontSizeOptions[idx] ?? parseInt(fontSizeStore.fontSizes.defaultCellFontSize, 10)
+})
+
 function resetFontSizeForSelectedCellType(): void {
+  // REMARK: This function shall reset the font size for the selected cell type to 14px
   const kind = cellSelection.selectedCellKind as string | null
   if (!kind) return
-  let mappedKind = kind === 'text-cell' ? 'text' : kind;
-  fontSizeStore.setFontSizeForCellType(mappedKind, fontSizeStore.fontSizes.defaultCellFontSize)
+  const target = 14
+  try {
+    // set store value (store expects a string with px)
+    fontSizeStore.setFontSizeForCellType(kind, `${target}px`)
+    // update slider index so the UI reflects the new value immediately
+    try {
+      const idx = fontSizeOptions.findIndex((s) => s === target)
+      changeFontSizeIndex.value = idx === -1 ? 0 : idx
+    } catch {
+      // if reactive assignment fails, ignore — store change will eventually update computed
+    }
+    console.log('resetFontSizeForSelectedCellType: set to', `${target}px`, { kind })
+  } catch (err) {
+    console.warn('resetFontSizeForSelectedCellType error', err)
+  }
+}
+
+function onResetBtnClick(): void {
+  console.log('onResetBtnClick fired')
+  resetFontSizeForSelectedCellType()
 }
 
 // Zoom bindings
@@ -250,6 +287,25 @@ function resetZoom(): void {
 const isZoomCentered = computed(() => zoomStore.zoomPercent === 100)
 const resetZoomBtnStyle = computed(() => ({
   '--sb-btn-bg': isZoomCentered.value
+    ? 'var(--reset-zoom-button-color-Center, var(--debug-color, lightgreen))'
+    : 'var(--reset-zoom-button-color-OffCenter, var(--debug-color, lightcoral))'
+}))
+
+// Reset-font-size button color: green when selected cell font size is the default (14px)
+const isFontSizeDefault = computed(() => {
+  const kind = cellSelection.selectedCellKind as string | null
+  if (!kind) return false
+  let sizeStr: string | undefined
+  if (kind === 'python-cell') sizeStr = fontSizeStore.fontSizes.codeEditorCellFontSize
+  else if (kind === 'text-cell' || kind === 'text')
+    sizeStr = fontSizeStore.fontSizes.textEditorCellFontSize
+  else sizeStr = fontSizeStore.fontSizes.defaultCellFontSize
+  const current = parseInt(sizeStr || fontSizeStore.fontSizes.defaultCellFontSize, 10)
+  return current === 14
+})
+
+const resetFontSizeBtnStyle = computed(() => ({
+  '--sb-btn-bg': isFontSizeDefault.value
     ? 'var(--reset-zoom-button-color-Center, var(--debug-color, lightgreen))'
     : 'var(--reset-zoom-button-color-OffCenter, var(--debug-color, lightcoral))'
 }))

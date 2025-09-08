@@ -2,12 +2,12 @@
 
 import { defineStore } from 'pinia'
 import type { FontSizeTypes } from '@renderer/types/font-size-types'
-import type { fontSizeOptionsType } from '@renderer/types/font-size-options-types'
+import type { FontSizeOptionsType } from '@renderer/types/font-size-options'
+import { fontSizeOptions as fontSizeOptionsList } from '@renderer/types/font-size-options'
 
-export const fontSizeOptions: fontSizeOptionsType[] = [
-  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42,
-  44, 46, 48
-]
+export const fontSizeOptions: FontSizeOptionsType[] = Array.from(
+  fontSizeOptionsList
+) as FontSizeOptionsType[]
 
 export const useFontSizeStore = defineStore('fontSize', {
   state: () => ({
@@ -63,9 +63,8 @@ export const useFontSizeStore = defineStore('fontSize', {
     },
     setFontSizeForCellType(cellType: string, size: string) {
       if (cellType === 'python-cell') {
-        // Python cell
         this.setCodeEditorCellFontSize(size)
-      } else if (cellType === 'text-cell') {
+      } else if (cellType === 'text' || cellType === 'text-cell') {
         this.setTextEditorCellFontSize(size)
       } else {
         console.warn(
