@@ -2,7 +2,7 @@
   <div class="general-settings-panel side-panel-ui-base">
     <div class="settings-columns">
       <div class="settings-column">
-        <h3>General Options</h3>
+        <h3>General Settings</h3>
 
         <div class="setting-row">
           <label>Set language:</label>
@@ -47,7 +47,7 @@
           <ImplementedMark :implemented="false" />
         </div>
 
-        <h3>User Interface Options</h3>
+        <h3>User Interface Settings</h3>
         <!-- Font Family Selectors -->
         <div class="setting-row">
           <label for="ui-font-select">User Interface Font:</label>
