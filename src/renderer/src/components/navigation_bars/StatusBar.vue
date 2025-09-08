@@ -41,6 +41,25 @@ For now only placeholders for the buttons and sliders are implemented.
       </button>
     </div>
     <div class="status-section right">
+      <label class="font-size-label" for="font-size-slider"
+        >{{ changeFontSizeForSelectedCellType }}%</label
+      >
+      <input
+        id="zoom-slider"
+        v-model.number="changeFontSizeForSelectedCellType"
+        class="zoom-slider"
+        type="range"
+        min="10"
+        max="42"
+        step="5"
+      />
+      <button
+        class="reset-zoom-btn btn-status-bar"
+        :style="resetZoomBtnStyle"
+        @click="resetFontSizeForSelectedCellType"
+      >
+        Reset font size 14px
+      </button>
       <label class="zoom-label" for="zoom-slider">{{ zoomPercent }}%</label>
       <input
         id="zoom-slider"
@@ -190,6 +209,30 @@ function cycleAutosave(): void {
   const idx = order.indexOf(current)
   const next = order[(idx + 1) % order.length]
   generalSettingsStore.setAutosaveChangeInterval(next as AutosaveOption)
+}
+
+// Font sizebindings
+const changeFontSizeForSelectedCellType = computed<number>({
+  get: () => {
+    const kind = cellSelection.selectedCellKind as string | null
+    if (!kind) return fontSizeStore.fontSizes.defaultCellFontSize
+    return fontSizeStore.fontSizes[kind] || fontSizeStore.fontSizes.defaultCellFontSize
+  },
+  set: (val: number) => {
+    const kind = cellSelection.selectedCellKind as string | null
+    if (!kind) return
+    try {
+      fontSizeStore.setFontSizeForCellType(kind, `${val}px`)
+    } catch (error) {
+      console.warn('Error setting font size for cell type:', error)
+    }
+  }
+})
+
+function resetFontSizeForSelectedCellType(): void {
+  const kind = cellSelection.selectedCellKind as string | null
+  if (!kind) return
+  fontSizeStore.setFontSizeForCellType(kind, fontSizeStore.fontSizes.defaultCellFontSize)
 }
 
 // Zoom bindings

@@ -57,9 +57,24 @@ export const useFontSizeStore = defineStore('fontSize', {
       document.documentElement.style.setProperty('--text-editor-cells-font-size', size)
     },
     setFallbackFontSize(size: string) {
+      // NOT USED, Placeholder for future cell types
       this.fontSizes.fallbackFontSize = size
       document.documentElement.style.setProperty('--fallback-font-size', size)
     },
+    setFontSizeForCellType(cellType: string, size: string) {
+      if (cellType === 'python-cell') {
+        // Python cell
+        this.setCodeEditorCellFontSize(size)
+      } else if (cellType === 'text-cell') {
+        this.setTextEditorCellFontSize(size)
+      } else {
+        console.warn(
+          `setFontSizeForCellType: Unrecognized cell type "${cellType}", applying fallback font size.`
+        )
+        this.setFallbackFontSize(size) // NOT USED, Placeholder for future cell types, cluld also return void
+      }
+    },
+
     applyFontSizes() {
       document.documentElement.style.setProperty(
         '--menu-bar-font-size',
