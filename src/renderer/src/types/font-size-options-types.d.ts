@@ -1,4 +1,6 @@
-export type fontSizeOptionsType =
+// Deprecated - use font-size-options.ts instead
+
+/*export type fontSizeOptionsType =
   | 5
   | 6
   | 7
@@ -28,3 +30,4 @@ export type fontSizeOptionsType =
   | 44
   | 46
   | 48
+*/
