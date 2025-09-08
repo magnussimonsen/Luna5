@@ -57,7 +57,7 @@ For now only placeholders for the buttons and sliders are implemented.
         :style="resetFontSizeBtnStyle"
         @click="onResetBtnClick"
       >
-        Reset font size 14px
+        Reset font size {{ fontSizeStore.fontSizes.defaultCellFontSize }}
       </button>
       <label class="zoom-label" for="zoom-slider">{{ zoomPercent }}%</label>
       <input
@@ -249,21 +249,22 @@ const displayedFontSize = computed(() => {
 })
 
 function resetFontSizeForSelectedCellType(): void {
-  // REMARK: This function shall reset the font size for the selected cell type to 14px
+  // Reset the font size for the selected cell type to the configured default
   const kind = cellSelection.selectedCellKind as string | null
   if (!kind) return
-  const target = 14
+  const defaultStr = fontSizeStore.fontSizes.defaultCellFontSize
   try {
     // set store value (store expects a string with px)
-    fontSizeStore.setFontSizeForCellType(kind, `${target}px`)
+    fontSizeStore.setFontSizeForCellType(kind, defaultStr)
     // update slider index so the UI reflects the new value immediately
     try {
-      const idx = fontSizeOptions.findIndex((s) => s === target)
+      const targetNum = parseInt(defaultStr, 10)
+      const idx = fontSizeOptions.findIndex((s) => s === targetNum)
       changeFontSizeIndex.value = idx === -1 ? 0 : idx
     } catch {
       // if reactive assignment fails, ignore — store change will eventually update computed
     }
-    console.log('resetFontSizeForSelectedCellType: set to', `${target}px`, { kind })
+    console.log('resetFontSizeForSelectedCellType: set to', defaultStr, { kind })
   } catch (err) {
     console.warn('resetFontSizeForSelectedCellType error', err)
   }
@@ -291,7 +292,7 @@ const resetZoomBtnStyle = computed(() => ({
     : 'var(--reset-zoom-button-color-OffCenter, var(--debug-color, lightcoral))'
 }))
 
-// Reset-font-size button color: green when selected cell font size is the default (14px)
+// Reset-font-size button color: green when selected cell font size equals the configured default
 const isFontSizeDefault = computed(() => {
   const kind = cellSelection.selectedCellKind as string | null
   if (!kind) return false
@@ -301,7 +302,8 @@ const isFontSizeDefault = computed(() => {
     sizeStr = fontSizeStore.fontSizes.textEditorCellFontSize
   else sizeStr = fontSizeStore.fontSizes.defaultCellFontSize
   const current = parseInt(sizeStr || fontSizeStore.fontSizes.defaultCellFontSize, 10)
-  return current === 14
+  const def = parseInt(fontSizeStore.fontSizes.defaultCellFontSize, 10)
+  return current === def
 })
 
 const resetFontSizeBtnStyle = computed(() => ({

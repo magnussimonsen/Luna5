@@ -1,4 +1,7 @@
 // Deprecated - use font-size-options.ts instead
+// Deprecated - use font-size-options.ts instead
+// Deprecated - use font-size-options.ts instead
+// Deprecated - use font-size-options.ts instead
 
 /*export type fontSizeOptionsType =
   | 5

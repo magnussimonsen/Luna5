@@ -12,11 +12,13 @@ export const fontSizeOptions: FontSizeOptionsType[] = Array.from(
 export const useFontSizeStore = defineStore('fontSize', {
   state: () => ({
     fontSizes: {
-      menuBarFontSize: '12px',
-      statusBarFontSize: '11px',
-      sidePanelMenuBarFontSize: '12px',
-      sidePanelFontSize: '12px',
-      toolbarFontSize: '13px',
+      menuBarFontSize: '13px',
+      statusBarFontSize: '12px',
+      sidePanelMenuBarFontSize: '14px',
+      sidePanelFontSize: '14px',
+      toolbarFontSize: '14px',
+      /* This (defaultCellFontSize)is the fontsize that will be set for the
+      selected cell when user click the "reset font size"-button in the statusbar. */
       defaultCellFontSize: '14px',
       codeEditorCellFontSize: '14px',
       textEditorCellFontSize: '14px',
@@ -44,6 +46,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       this.fontSizes.toolbarFontSize = size
       document.documentElement.style.setProperty('--toolbar-font-size', size)
     },
+    // This sets the default font size for cells when user clicks "reset font size" in statusbar
     setDefaultCellFontSize(size: string) {
       this.fontSizes.defaultCellFontSize = size
       document.documentElement.style.setProperty('--default-cells-font-size', size)
