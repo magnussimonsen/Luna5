@@ -140,6 +140,9 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 
 ## 🖼️ Current UI Progress Snapshots
 <p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-08-3.png" alt="UI improvments" width="900" />
+</p>
+<p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-08-2.png" alt="UI improvments" width="900" />
 </p>
 <p align="center">
