@@ -90,7 +90,7 @@ Notes
 
 ---
 
-## �🔧 Open Source Stack
+## 🔧 Open Source Stack
 
 ### Core Libraries & Frameworks
 
