@@ -34,9 +34,10 @@
         Save File As <span class="shortcut-not-implemented">Ctrl + Shift + s</span>
         <ImplementedMark :implemented="true" />
       </div>
+      <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleSavePDFForSubmission">
-        <strong>Save PDF For Submission</strong>
-        <span class="shortcut-not-implemented">Ctrl + Alt + s</span>
+        <strong>Export PDF Submission (student → teacher)</strong>
+        <span class="shortcut-not-implemented"></span>
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-divider"></div>
@@ -49,8 +50,14 @@
         <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-divider"></div>
+      <div class="dropdown-menu-item" @click="handleSavePDFForSubmission">
+        Save FILE as Student Handout (teacher → students)
+        <span class="shortcut-not-implemented"></span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleQuitLuna">
-        Quit Luna <span class="shortcut-not-implemented">Ctrl + Shift + Q</span>
+        Quit Luna <span class="shortcut-not-implemented"></span>
         <ImplementedMark :implemented="true" />
       </div>
     </DropdownMenu>
@@ -258,7 +265,9 @@
 </template>
 
 <script lang="ts" setup>
-import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-169.png'
+//import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-169.png'
+// import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-01-square.png'
+import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-square.png'
 import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import DropdownMenu from '@renderer/components/UI/DropdownMenu.vue'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
