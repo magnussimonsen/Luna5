@@ -222,7 +222,8 @@ const changeFontSizeForSelectedCellType = computed<number>({
     const kind = cellSelection.selectedCellKind as string | null
     if (!kind) return
     try {
-      fontSizeStore.setFontSizeForCellType(kind, `${val}px`)
+      let mappedKind = kind === 'text-cell' ? 'text' : kind;
+      fontSizeStore.setFontSizeForCellType(mappedKind, `${val}px`)
     } catch (error) {
       console.warn('Error setting font size for cell type:', error)
     }
@@ -232,7 +233,8 @@ const changeFontSizeForSelectedCellType = computed<number>({
 function resetFontSizeForSelectedCellType(): void {
   const kind = cellSelection.selectedCellKind as string | null
   if (!kind) return
-  fontSizeStore.setFontSizeForCellType(kind, fontSizeStore.fontSizes.defaultCellFontSize)
+  let mappedKind = kind === 'text-cell' ? 'text' : kind;
+  fontSizeStore.setFontSizeForCellType(mappedKind, fontSizeStore.fontSizes.defaultCellFontSize)
 }
 
 // Zoom bindings
