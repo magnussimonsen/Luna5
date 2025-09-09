@@ -64,7 +64,7 @@ Built-in flashcard functionality supporting text, images, audio, and IPA (Intern
 
 | Tool                         | Status        |
 | ---------------------------- | ------------- |
-| Rich Text / Markdown Editor      | 🚧 Planned        |
+| Rich Text / Markdown Editor | ✅ Core WYSIWYG (Tiptap) implemented (basic formatting). Math formula support not yet available; evaluating MathLive / KaTeX integration |
 | Python Environment (Pyodide)	| ✅ Implemented. Core features available. Ongoing improvements and testing |
 | CAS (Symbolic Math, via SymPy)   | 🚧 Planned   |
 | Graphical Calculator         | 🚧 Planned    |
