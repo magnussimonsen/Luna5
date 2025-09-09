@@ -150,7 +150,7 @@ function onMarginClick(): void {
 .cell-container.is-locked.is-selected {
   border-color: var(--soft-locked-border-color, orange);
   border: solid 1px var(--soft-locked-border-color, orange);
-  border-left: 0.5rem solid var(--soft-locked-border-color, blue); /* THIS DO NOT DO ANYTHING VISIBLE ANYMORE */
+  border-left: 0.5rem solid var(--soft-locked-border-color, blue); /* Keep left bar as-is */
 }
 
 /* When a cell is locked but NOT selected, tint top/right/bottom borders with locked color */

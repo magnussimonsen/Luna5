@@ -23,8 +23,18 @@
     >
       <span class="label">Delete output from selected cell</span>
     </button>
+    <!-- Add Button that when pressed opens a electron built in "modal" with theese options: (1)Export code from selected cell (2) Export code from selected notebook -->
     <button
-      class="toolbar-btn reset-python-worker"
+      class="toolbar-btn export"
+      type="button"
+      title="Export code from selected cell (not implemented)"
+      @click="onCodeExport"
+    >
+      <span class="label">Export code</span>
+    </button>
+
+    <button
+      class="toolbar-btn reset-python-worker-margin-left-auto"
       type="button"
       :disabled="!canReset"
       :title="
@@ -207,6 +217,21 @@ function onGlobalResetEvent(): void {
     onReset()
   }
 }
+
+function onCodeExport(): void {
+  const id = selectedCellId.value
+  if (!id || selectedKind.value !== 'python-cell') return
+  // Basic logging only (no modal yet): include notebook id, title (if available), and cell id
+  const ws = workspaceStore.getWorkspace()
+  const nbId = workspaceStore.currentNotebookId || '(none)'
+  const nbTitle = nbId && ws.notebooks[nbId] ? ws.notebooks[nbId].title : '(unknown title)'
+  console.log('[ExportCodeButton] pressed', {
+    notebookId: nbId,
+    notebookTitle: nbTitle,
+    cellId: id
+  })
+}
+
 onMounted(() => {
   const handleRunEvent = (): void => onGlobalRunEvent()
   const handleRunNextEvent = (): void => onGlobalRunNextEvent()
@@ -291,12 +316,22 @@ onUnmounted(() => {
   font-weight: bold;
 }
 
-.toolbar-btn.reset-python-worker {
+.toolbar-btn.reset-python-worker-margin-left-auto {
   background: var(--button-reset-python-worker-color, transparent);
   margin-left: auto; /* push to far right */
 }
 .toolbar-btn.reset-python-worker:hover {
   background: var(--button-reset-python-worker-hover-color, firebrick);
+  border: var(--toolbar-button-border-hover);
+}
+
+/* Class for export button not implemented cursor not allowed */
+.toolbar-btn.export {
+  background: var(--button-transparent-off-color, #3b82f6); /* blue */
+  cursor: not-allowed;
+}
+.toolbar-btn.export:hover {
+  background: var(--toolbar-button-border-hover, #2563eb); /* darker blue */
   border: var(--toolbar-button-border-hover);
 }
 </style>

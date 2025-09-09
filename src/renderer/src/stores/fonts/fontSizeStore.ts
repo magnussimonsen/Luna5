@@ -12,6 +12,7 @@ export const fontSizeOptions: FontSizeOptionsType[] = Array.from(
 export const useFontSizeStore = defineStore('fontSize', {
   state: () => ({
     fontSizes: {
+      rootFontSize: '16px', // Used to set the rem unit at app initialization, not user changeable
       menuBarFontSize: '13px',
       statusBarFontSize: '10px',
       sidePanelMenuBarFontSize: '14px',
@@ -78,6 +79,13 @@ export const useFontSizeStore = defineStore('fontSize', {
     },
 
     applyFontSizes() {
+      // Apply root font size first so any subsequent rem-based calculations use it
+      if (this.fontSizes.rootFontSize) {
+        // Directly set the <html> font-size so rem units resolve from this value
+        document.documentElement.style.fontSize = this.fontSizes.rootFontSize
+        // Also expose as a CSS variable if components want the literal value
+        document.documentElement.style.setProperty('--root-font-size', this.fontSizes.rootFontSize)
+      }
       document.documentElement.style.setProperty(
         '--menu-bar-font-size',
         this.fontSizes.menuBarFontSize

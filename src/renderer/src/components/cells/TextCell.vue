@@ -77,13 +77,13 @@ function onBlur(): void {
 
 <style scoped>
 .text-cell-input {
-  font-size: 0.9rem;
+  font-size: 1em;
   line-height: 1.4;
   font-family: var(--content-font, inherit);
   color: var(--text-color, #222);
   white-space: pre-wrap;
   outline: none;
-  min-height: 1.5rem;
+  min-height: 1.5em;
   border: 1px solid var(--cell-border-color); /* FOR DEV OUTLINE OF DIV ONLY */
   position: relative; /* for placeholder positioning */
 }
@@ -99,9 +99,9 @@ function onBlur(): void {
   color: var(--placeholder-color, #888);
   pointer-events: none;
   position: absolute;
-  top: 0.15rem;
-  left: 0.25rem;
-  right: 0.25rem;
+  top: 0.15em;
+  left: 0.25em;
+  right: 0.25em;
   white-space: pre-wrap;
   opacity: 0.8;
 }
