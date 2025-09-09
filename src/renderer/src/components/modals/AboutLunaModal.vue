@@ -18,6 +18,7 @@ const openSourceModules = [
   { name: 'Vue.js', version: '3.x', license: 'MIT' },
   { name: 'Vite', version: '4.x', license: 'MIT' },
   { name: 'Pinia', version: '2.x', license: 'MIT' },
+  { name: 'Tiptap (editor)', version: '2.x', license: 'MIT' },
   // Python runtime in the browser, vendored under public/pyodide
   { name: 'Pyodide', version: 'vendored (public/pyodide)', license: 'MPL-2.0' }
   // Add more as needed
