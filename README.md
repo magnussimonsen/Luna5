@@ -122,7 +122,7 @@ Notes
   Internal structure (write pipeline):
   1. Serialize notebook JSON (cells, metadata, etc.).
   2. Gzip compress.
-  3. Encrypt with AES‑256‑GCM using a temporary development key (to be replaced with a user/key management system before release).
+  3. Encrypt with AES‑256‑GCM using a temporary development key.
   4. Prepend a 5‑byte magic/version header: `LUNA1`.
   5. Base64 encode for storage.
 
