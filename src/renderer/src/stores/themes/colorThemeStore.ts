@@ -52,6 +52,8 @@ export const useThemeStore = defineStore('theme', {
       focusVisibleBorderColor: 'blue',
       // Slider colors
       sliderBackground: '#cccccc',
+      sliderThumbColor: '#ffffff',
+      sliderTrackColor: '#888888',
       // Divider color
       dropdownDividerColor: '#cccccc',
       // Button colors
@@ -115,6 +117,8 @@ export const useThemeStore = defineStore('theme', {
       focusVisibleBorderColor: 'blue',
       // Slider colors
       sliderBackground: '#cccccc',
+      sliderThumbColor: '#ffffff',
+      sliderTrackColor: '#888888',
       // Divider color
       dropdownDividerColor: '#555555',
       // Button colors
@@ -131,7 +135,10 @@ export const useThemeStore = defineStore('theme', {
       buttonResetPythonWorkerHoverColor: 'firebrick',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'darkgreen',
-      resetZoomButtonColorOffCenter: 'firebrick'
+      resetZoomButtonColorOffCenter: 'firebrick',
+
+
+    
     } as ThemeColorTypes
   }),
 
@@ -179,6 +186,8 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--cell-locked-overlay', colors.cellLockedOverlay)
       root.style.setProperty('--focus-visible-border-color', colors.focusVisibleBorderColor)
       root.style.setProperty('--slider-background', colors.sliderBackground)
+      root.style.setProperty('--slider-thumb-color', colors.sliderThumbColor)
+      root.style.setProperty('--slider-track-color', colors.sliderTrackColor)
       root.style.setProperty('--dropdown-divider-color', colors.dropdownDividerColor)
       root.style.setProperty('--button-background-color', colors.buttonBackgroundColor)
       root.style.setProperty('--button-border-color', colors.buttonBorderColor)
@@ -201,6 +210,9 @@ export const useThemeStore = defineStore('theme', {
         '--reset-zoom-button-color-OffCenter',
         colors.resetZoomButtonColorOffCenter
       )
+      root.style.setProperty('--slider-background', colors.sliderBackground)
+      root.style.setProperty('--slider-thumb-color', colors.sliderThumbColor)
+      root.style.setProperty('--slider-track-color', colors.sliderTrackColor)
     },
     getLightTheme() {
       return this.lightTheme

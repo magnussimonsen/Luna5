@@ -56,7 +56,7 @@ For now only placeholders for the buttons and sliders are implemented.
         :style="resetFontSizeBtnStyle"
         @click="onResetBtnClick"
       >
-        Font size {{ displayedFontSize }}
+  Font size <span class="fontsize-px-displayed-fixed">{{ displayedFontSize }}</span>
       </button>
       <input
         id="zoom-slider"
@@ -68,7 +68,7 @@ For now only placeholders for the buttons and sliders are implemented.
         step="5"
       />
       <button class="reset-zoom-btn btn-status-bar" :style="resetZoomBtnStyle" @click="resetZoom">
-        {{ zoomPercent }}%
+        <span class="zoom-percent-fixed">{{ zoomPercent }} %</span>
       </button>
     </div>
   </footer>
@@ -411,10 +411,9 @@ const resetFontSizeBtnStyle = computed(() => ({
 .zoom-slider {
   vertical-align: middle;
   margin: 0em 0em 0em 0em;
-  width: 10em;
-  height: 0.5em;
+  width: 6em; /* simpler smaller width */
+  height: 0.35em; /* slimmer track */
   appearance: none;
-  -webkit-appearance: none;
   background: var(--slider-background, var(--debug-color, #cccccc));
   border-radius: var(--slider-border-radius, 5px);
   outline: none;
@@ -424,5 +423,23 @@ const resetFontSizeBtnStyle = computed(() => ({
 .file-path {
   font-size: 0.9em;
   opacity: 1;
+}
+
+/* Fixed-width zoom percentage (digits + % sign) always reserve 4 character cells */
+.zoom-percent-fixed {
+  display: inline-block;
+  width: 5ch; 
+  text-align: right; /* Align shorter values (e.g., 25%) to the right for consistency */
+  font-variant-numeric: tabular-nums; /* Use tabular numbers if supported for consistent digit width */
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+/* Fixed-width font size (px value). Reserve 4 character cells (e.g., '100' + space). */
+.fontsize-px-displayed-fixed {
+  display: inline-block;
+  width: 2ch; /* Supports up to 3 digits comfortably */
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 </style>

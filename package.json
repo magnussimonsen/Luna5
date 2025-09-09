@@ -20,13 +20,16 @@
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
     "build:linux": "npm run build && electron-builder --linux",
-  "themes:sync": "node scripts/sync-monaco-themes.mjs",
+    "themes:sync": "node scripts/sync-monaco-themes.mjs",
     "gen:pyodide:list": "node scripts/gen-pyodide-file-list.mjs",
     "gen:thirdparty": "node scripts/gen-third-party-notices.mjs"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^4.0.0",
+    "@tiptap/extension-placeholder": "^2.8.0",
+    "@tiptap/starter-kit": "^2.8.0",
+    "@tiptap/vue-3": "^2.8.0",
     "electron-updater": "^6.3.9",
     "monaco-editor": "^0.52.0",
     "monaco-themes": "^0.4.7",

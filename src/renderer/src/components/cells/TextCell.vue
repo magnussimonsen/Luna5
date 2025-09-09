@@ -1,108 +1,113 @@
 <template>
-  <div
-    ref="elRef"
-    class="text-cell-input"
-    :style="{ fontSize: textCellFontSize }"
-    :contenteditable="!isLocked"
-    data-primary-editor="true"
-    :data-locked="isLocked ? 'true' : null"
-    :data-empty="!localText ? 'true' : null"
-    :data-placeholder="placeholderText"
-    role="textbox"
-    aria-multiline="true"
-    :aria-placeholder="placeholderText"
-    @input="onInput"
-    @blur="onBlur"
-  ></div>
-  <!-- Note: using contenteditable with plain text via innerText; no HTML rendering. -->
+  <div class="text-cell-wrapper" :data-locked="isLocked ? 'true' : null">
+    <div
+      v-if="editor"
+      class="tiptap-editor"
+      :class="{ 'is-locked': isLocked }"
+      :style="{ fontSize: textCellFontSize }"
+      data-primary-editor="true"
+    >
+      <EditorContent :editor="editor" />
+    </div>
+    <div v-else class="tiptap-loading" :style="{ fontSize: textCellFontSize }">Loading editor…</div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, watch } from 'vue'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import type { TextCell } from '@renderer/types/notebook-cell-types'
+import { Editor, EditorContent } from '@tiptap/vue-3'
+import StarterKit from '@tiptap/starter-kit'
+import Placeholder from '@tiptap/extension-placeholder'
+import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 
-// Accept the cell object as a prop
 const { cell } = defineProps<{ cell: TextCell }>()
 
 const fontSizeStore = useFontSizeStore()
 const textCellFontSize = computed(() => fontSizeStore.fontSizes.textEditorCellFontSize)
-
 const workspaceStore = useWorkspaceStore()
-const elRef = ref<HTMLDivElement | null>(null)
-const placeholderText =
-  'This is a simple text cell. A proper text editor will be implemented in the future.'
 
 const isLocked = computed<boolean>(
   () => !!cell.hidden || !!cell.softLocked || !!cell.hardLocked || !!cell.softDeleted
 )
 
-// Keep a simple local mirror to avoid cursor jumps when external updates occur
-const localText = ref<string>(cell.cellInputContent ?? '')
+// Initialize Tiptap editor
+const textEditorsStore = useTextEditorsStore()
 
-// Sync prop -> DOM on mount and when external changes happen
-onMounted(() => {
-  if (elRef.value) elRef.value.innerText = localText.value
+const editor = new Editor({
+  editable: !isLocked.value,
+  content: cell.cellInputContent || '',
+  extensions: [
+    StarterKit.configure({}),
+    Placeholder.configure({
+      placeholder: 'Rich text (Markdown-like) — start typing…'
+    })
+  ],
+  onUpdate: ({ editor }) => {
+    if (isLocked.value) return
+    const html = editor.getHTML()
+    workspaceStore.setCellInputContent(cell.id, html)
+  }
 })
+
+// Register for toolbar access
+textEditorsStore.register(cell.id, editor)
+
+// React to lock state changes
+watch(isLocked, (locked) => {
+  editor.setEditable(!locked)
+})
+
+// React to external model updates for this cell
 watch(
   () => cell.cellInputContent,
   (next) => {
-    const value = next ?? ''
-    if (value !== localText.value) {
-      localText.value = value
-      if (elRef.value && elRef.value.innerText !== value) {
-        elRef.value.innerText = value
-      }
+    const current = editor.getHTML()
+    const incoming = next || ''
+    if (incoming !== current) {
+      // Attempt minimal update (avoid resetting selection if unchanged)
+      editor.commands.setContent(incoming, false)
     }
   }
 )
 
-function commit(value: string): void {
-  // Store in canonical workspace state (no-op if locked/deleted)
-  workspaceStore.setCellInputContent(cell.id, value)
-}
-
-function onInput(e: Event): void {
-  const target = e.target as HTMLDivElement
-  const value = target.innerText
-  localText.value = value
-  commit(value)
-}
-
-function onBlur(): void {
-  commit(localText.value)
-}
+onBeforeUnmount(() => {
+  textEditorsStore.unregister(cell.id)
+  editor.destroy()
+})
 </script>
 
 <style scoped>
-.text-cell-input {
-  font-size: 1em;
+.text-cell-wrapper {
+  position: relative;
+  border: 1px solid var(--cell-border-color);
+  background: var(--cell-background, #fff);
+  border-radius: 2px;
+}
+.tiptap-editor.is-locked {
+  opacity: 0.75;
+  pointer-events: none;
+  filter: grayscale(0.15);
+}
+.tiptap-editor :deep(.ProseMirror) {
+  outline: none;
+  min-height: 1.5em;
   line-height: 1.4;
   font-family: var(--content-font, inherit);
   color: var(--text-color, #222);
-  white-space: pre-wrap;
-  outline: none;
-  min-height: 1.5em;
-  border: 1px solid var(--cell-border-color); /* FOR DEV OUTLINE OF DIV ONLY */
-  position: relative; /* for placeholder positioning */
+  padding: 0.25rem 0.4rem;
 }
-.text-cell-input[data-locked='true'] {
-  cursor: not-allowed;
-  opacity: 0.8;
-  filter: grayscale(0.2);
+.tiptap-editor :deep(.ProseMirror p) {
+  margin: 0 0 0.5em;
 }
-
-/* Placeholder shown only when empty */
-.text-cell-input[data-empty='true']::before {
-  content: attr(data-placeholder);
-  color: var(--placeholder-color, #888);
-  pointer-events: none;
-  position: absolute;
-  top: 0.15em;
-  left: 0.25em;
-  right: 0.25em;
-  white-space: pre-wrap;
-  opacity: 0.8;
+.tiptap-editor :deep(.ProseMirror p:last-child) {
+  margin-bottom: 0;
+}
+.tiptap-loading {
+  font-style: italic;
+  opacity: 0.7;
+  padding: 0.25rem 0.4rem;
 }
 </style>

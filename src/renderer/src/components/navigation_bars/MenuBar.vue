@@ -165,11 +165,12 @@
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item">
-        Insert Probability Calculator Cell <span class="shortcut-not-implemented">Ctrl + 6</span>
+        &#127922; Insert Probability Calculator Cell
+        <span class="shortcut-not-implemented">Ctrl + 6</span>
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item" @click="handleInsertPythonCell">
-        Insert Python Cell <span class="shortcut-not-implemented">Ctrl + 7</span>
+        &#128013; Insert Python Cell <span class="shortcut-not-implemented">Ctrl + 7</span>
         <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item">
@@ -177,9 +178,11 @@
         <ImplementedMark :implemented="false" />
       </div>
     </DropdownMenu>
-    <div title="Move selected cell up" class="toggle-button" @click="handleMoveCellUp">&#8679;</div>
+    <div title="Move selected cell up" class="toggle-button" @click="handleMoveCellUp">
+      <span style="font-size: 1.1em">&#129033;</span>
+    </div>
     <div title="Move selected cell down" class="toggle-button" @click="handleMoveCellDown">
-      &#8681;
+      <span style="font-size: 1.1em">&#129035;</span>
     </div>
     <div
       class="toggle-button"
@@ -261,7 +264,7 @@
         :class="{ active: sidePanelStore.activePanel === 'settings' }"
         @click="handleTogglePanel('settings')"
       >
-        &#9881;
+            <span style="font-size: 1.1em">&#128295;</span> 
       </div>
       <div
         title="Get Help and Tutorials"
@@ -269,7 +272,7 @@
         :class="{ active: sidePanelStore.activePanel === 'help' }"
         @click="handleTogglePanel('help')"
       >
-        <strong>?</strong>
+        &#128735;
       </div>
     </div>
   </nav>

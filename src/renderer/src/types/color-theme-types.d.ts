@@ -45,6 +45,8 @@ export type ThemeColorTypes = {
   focusVisibleBorderColor: string
 
   sliderBackground: string
+  sliderThumbColor: string
+  sliderTrackColor: string
 
   dropdownDividerColor: string
 
