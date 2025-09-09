@@ -262,8 +262,12 @@
         :class="{ active: sidePanelStore.activePanel === 'flashcards' }"
         @click="handleTogglePanel('flashcards')"
       >
+<<<<<<< HEAD
         Cards
         <!-- Flashcards, but use Cards in UI - its shorter -->
+=======
+        Flashcards
+>>>>>>> 3da1c2f7b0cb50fec9f2cbeb46f118e5c8e595f3
       </div>
       <div
         class="side-panel-toggle-button"
@@ -699,6 +703,7 @@ const handleMoveNotebookToBin = (): void => {
   /* Optional: space between right buttons */
 }
 
+<<<<<<< HEAD
 /* Visually hide but keep accessible.
   'sr-only' is a standard utility class pattern that removes an element from the visual layout
   while keeping it in the accessibility tree so screen readers announce it.
@@ -706,6 +711,9 @@ const handleMoveNotebookToBin = (): void => {
   The element still participates in semantics (label/name computation) but is not visibly rendered.
   Avoid putting interactive controls inside an sr-only container; use it only for descriptive text. */
 
+=======
+/* Visually hide but keep accessible */
+>>>>>>> 3da1c2f7b0cb50fec9f2cbeb46f118e5c8e595f3
 .sr-only {
   position: absolute;
   width: 1px;
