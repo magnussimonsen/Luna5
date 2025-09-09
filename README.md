@@ -100,13 +100,14 @@ Notes
 * Pinia. MIT License
 * TypeScript. MIT License
 * Monaco Editor. MIT License
+* Tiptap (Rich Text Editor). MIT License
 * Pyodide. MPL-2.0 License
 
 ### Planned Core Libraries / Components
 
 * Rich-text editor with math input support (considering Tiptap, MathLive, and KaTeX)
 * Markdown editor with KaTeX rendering
-* Code editor (evaluating **CodeMirror** and **Monaco**)
+* Code editor (Monaco Editor in use)
 * Pyodide integration (via a background worker)
 * Numerical computation library (either in-house or a vetted JS/TS package)
 * Custom tokenizer and parser for Luna’s CAS syntax
@@ -133,12 +134,20 @@ Third-party components are licensed separately. Notably:
   See: https://github.com/pyodide/pyodide/blob/main/LICENSE
 - Monaco Editor is licensed under the MIT License.
   See: https://github.com/microsoft/monaco-editor/blob/main/LICENSE
+- Tiptap is licensed under the MIT License.
+  See: https://github.com/ueberdosis/tiptap/blob/main/LICENSE
 
 See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated list of third-party dependencies and their licenses.
 
 ---
 
 ## 🖼️ Current UI Progress Snapshots
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-08-1.png" alt="UI improvments" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-09-2.png" alt="UI improvments" width="900" />
+</p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-08-2.png" alt="UI improvments" width="900" />
 </p>

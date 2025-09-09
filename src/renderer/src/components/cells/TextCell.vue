@@ -4,7 +4,10 @@
       v-if="editor"
       class="tiptap-editor"
       :class="{ 'is-locked': isLocked }"
-      :style="{ fontSize: textCellFontSize }"
+      :style="{
+        fontSize: textCellFontSize,
+        fontFamily: 'var(--text-font, var(--content-font, inherit))'
+      }"
       data-primary-editor="true"
     >
       <EditorContent :editor="editor" />
@@ -95,7 +98,8 @@ onBeforeUnmount(() => {
   outline: none;
   min-height: 1.5em;
   line-height: 1.4;
-  font-family: var(--content-font, inherit);
+  /* Prefer --text-font, fall back to legacy --content-font, then inherit */
+  font-family: var(--text-font, var(--content-font, inherit));
   color: var(--text-color, #222);
   padding: 0.25rem 0.4rem;
 }

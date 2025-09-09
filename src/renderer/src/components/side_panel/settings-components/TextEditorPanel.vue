@@ -16,7 +16,7 @@
           {{ font.label }}
         </option>
       </select>
-      <ImplementedMark :implemented="false" />
+      <ImplementedMark :implemented="true" />
     </div>
     <div class="setting-row">
       <label for="text-editor-cells-font-size-select">Text Editor Font Size:</label>
@@ -35,7 +35,7 @@
           {{ size }} px
         </option>
       </select>
-      <ImplementedMark :implemented="false" />
+      <ImplementedMark :implemented="true" />
     </div>
   </div>
 </template>
