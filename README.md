@@ -115,6 +115,29 @@ Notes
 
 ---
 
+  ## 📁 File Format (.luna5)
+
+  Luna notebooks are saved with the extension `.luna5` and registered with the OS so double‑click will open the app.
+
+  Internal structure (write pipeline):
+  1. Serialize notebook JSON (cells, metadata, etc.).
+  2. Gzip compress.
+  3. Encrypt with AES‑256‑GCM using a temporary development key (to be replaced with a user/key management system before release).
+  4. Prepend a 5‑byte magic/version header: `LUNA1`.
+  5. Base64 encode for storage.
+
+  On load (read pipeline):
+  1. Base64 decode.
+  2. Validate header == `LUNA1` (reject if missing).
+  3. Decrypt (AES‑256‑GCM) → gzip buffer.
+  4. Gunzip → notebook JSON.
+
+  Why this design:
+  - Custom extension + header prevents OS from treating the file like a generic zip.
+  - Header allows future version migration (e.g. `LUNA2`).
+  - Encryption (even with a placeholder key now) avoids casual inspection and signature-based icon changes.
+  ---
+
 ## 🅰️ Fonts Used
 
 * **Comic Neue.** SIL Open Font License 1.1

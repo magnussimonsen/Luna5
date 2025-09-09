@@ -38,16 +38,16 @@ export const useFontStore = defineStore('fonts', {
     },
     setTextFont(font: string) {
       this.fonts.textFont = font
-  document.documentElement.style.setProperty('--text-font', font)
-  // Keep legacy/content alias so existing components using --content-font update
-  document.documentElement.style.setProperty('--content-font', font)
+      document.documentElement.style.setProperty('--text-font', font)
+      // Keep legacy/content alias so existing components using --content-font update
+      document.documentElement.style.setProperty('--content-font', font)
     },
     applyFonts() {
       document.documentElement.style.setProperty('--ui-font', this.fonts.uiFont)
       document.documentElement.style.setProperty('--default-cell-font', this.fonts.defaultCellFont)
       document.documentElement.style.setProperty('--coding-font', this.fonts.codingFont)
-  document.documentElement.style.setProperty('--text-font', this.fonts.textFont)
-  document.documentElement.style.setProperty('--content-font', this.fonts.textFont)
+      document.documentElement.style.setProperty('--text-font', this.fonts.textFont)
+      document.documentElement.style.setProperty('--content-font', this.fonts.textFont)
     }
   }
 })

@@ -13,6 +13,12 @@ extraResources:
   - THIRD_PARTY_NOTICES.md
 asarUnpack:
   - resources/**
+fileAssociations:
+  - ext: luna5
+    name: Luna Notebook
+    description: Luna 0.5 Notebook File
+    mimeType: application/x-luna-notebook
+    icon: build/icon.png
 win:
   executableName: luna
 nsis:

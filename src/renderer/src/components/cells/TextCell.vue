@@ -17,6 +17,13 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * TextCell.vue
+ * Renders a rich text (Tiptap) editor inside a notebook cell. The editor
+ * persists its HTML content to the workspace store and exposes its instance
+ * through a central registry so that a detached toolbar component can issue
+ * formatting commands.
+ */
 import { computed, onBeforeUnmount, watch } from 'vue'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
@@ -26,60 +33,75 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 
+// Props
 const { cell } = defineProps<{ cell: TextCell }>()
 
+// Stores
 const fontSizeStore = useFontSizeStore()
-const textCellFontSize = computed(() => fontSizeStore.fontSizes.textEditorCellFontSize)
 const workspaceStore = useWorkspaceStore()
-
-const isLocked = computed<boolean>(
-  () => !!cell.hidden || !!cell.softLocked || !!cell.hardLocked || !!cell.softDeleted
-)
-
-// Initialize Tiptap editor
 const textEditorsStore = useTextEditorsStore()
 
-const editor = new Editor({
+// Derived reactive values
+const textCellFontSize = computed(() => fontSizeStore.fontSizes.textEditorCellFontSize)
+const isLocked = computed<boolean>(function computeIsLocked() {
+  return !!cell.hidden || !!cell.softLocked || !!cell.hardLocked || !!cell.softDeleted
+})
+
+// -- Editor Initialization --------------------------------------------------
+/**
+ * Create the Tiptap editor. We only include core StarterKit now; math, links,
+ * media, etc. can be added later. Placeholder guides the user.
+ */
+const tiptapEditor = new Editor({
   editable: !isLocked.value,
   content: cell.cellInputContent || '',
   extensions: [
     StarterKit.configure({}),
-    Placeholder.configure({
-      placeholder: 'Rich text (Markdown-like) — start typing…'
-    })
+    Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' })
   ],
-  onUpdate: ({ editor }) => {
+  /**
+   * Persist HTML whenever the document changes (unless locked). We store HTML
+   * for now; a markdown / JSON representation could be added later.
+   */
+  onUpdate: function handleEditorUpdate({ editor }) {
     if (isLocked.value) return
-    const html = editor.getHTML()
-    workspaceStore.setCellInputContent(cell.id, html)
+    const htmlContent = editor.getHTML()
+    workspaceStore.setCellInputContent(cell.id, htmlContent)
   }
 })
 
-// Register for toolbar access
-textEditorsStore.register(cell.id, editor)
+// Register editor so toolbar can find it via selected cell id
+textEditorsStore.registerEditorForCell(cell.id, tiptapEditor)
 
-// React to lock state changes
-watch(isLocked, (locked) => {
-  editor.setEditable(!locked)
+// -- Watchers ---------------------------------------------------------------
+/** Keep editor editable state synced with lock flags. */
+watch(isLocked, function onLockStateChanged(locked) {
+  tiptapEditor.setEditable(!locked)
 })
 
-// React to external model updates for this cell
+/**
+ * If external cell content changes (e.g., file load), update the editor only
+ * when different to avoid resetting selection unnecessarily.
+ */
 watch(
   () => cell.cellInputContent,
-  (next) => {
-    const current = editor.getHTML()
-    const incoming = next || ''
-    if (incoming !== current) {
-      // Attempt minimal update (avoid resetting selection if unchanged)
-      editor.commands.setContent(incoming, false)
+  function onExternalContentChange(nextContent) {
+    const currentHtml = tiptapEditor.getHTML()
+    const incomingHtml = nextContent || ''
+    if (incomingHtml !== currentHtml) {
+      tiptapEditor.commands.setContent(incomingHtml, false)
     }
   }
 )
 
-onBeforeUnmount(() => {
-  textEditorsStore.unregister(cell.id)
-  editor.destroy()
+// -- Cleanup ----------------------------------------------------------------
+onBeforeUnmount(function onBeforeUnmountTextCell() {
+  textEditorsStore.unregisterEditorForCell(cell.id)
+  tiptapEditor.destroy()
 })
+
+// Expose to template
+const editor = tiptapEditor
 </script>
 
 <style scoped>

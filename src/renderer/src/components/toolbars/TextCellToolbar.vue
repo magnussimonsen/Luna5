@@ -1,97 +1,79 @@
 <template>
+  <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
+       currently selected cell's editor via the store. -->
   <div
-    v-if="editor"
+    v-if="activeTextEditor"
     class="text-cell-toolbar"
-    :class="{ 'is-dark': isDark }"
+    :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
-    aria-label="Text cell toolbar"
+    aria-label="Text cell formatting toolbar"
   >
+    <!-- Inline Formatting -->
     <button
       class="tb-btn"
-      :class="{ active: editor?.isActive('bold') }"
       type="button"
-      :disabled="!editor?.can().chain().focus().toggleBold().run()"
-      @click="editor?.chain().focus().toggleBold().run()"
+      :class="{ active: isActive('bold') }"
+      :disabled="!canRunCommand('toggleBold')"
+      @click="toggleBold"
     >
       Bold
     </button>
     <button
       class="tb-btn"
-      :class="{ active: editor?.isActive('italic') }"
       type="button"
+      :class="{ active: isActive('italic') }"
       title="Italic (Ctrl+I)"
-      :disabled="!editor?.can().chain().focus().toggleItalic().run()"
-      @click="editor?.chain().focus().toggleItalic().run()"
+      :disabled="!canRunCommand('toggleItalic')"
+      @click="toggleItalic"
     >
       <i>Italic</i>
     </button>
+
+    <!-- Lists -->
     <button
       class="tb-btn"
-      :class="{ active: editor?.isActive('bulletList') }"
       type="button"
+      :class="{ active: isActive('bulletList') }"
       title="Bullet list"
-      :disabled="!editor"
-      @click="editor?.chain().focus().toggleBulletList().run()"
+      :disabled="!activeTextEditor"
+      @click="toggleBulletList"
     >
       • List
     </button>
     <button
       class="tb-btn"
-      :class="{ active: editor?.isActive('orderedList') }"
       type="button"
+      :class="{ active: isActive('orderedList') }"
       title="Numbered list"
-      :disabled="!editor"
-      @click="editor?.chain().focus().toggleOrderedList().run()"
+      :disabled="!activeTextEditor"
+      @click="toggleOrderedList"
     >
       1. List
     </button>
-    <button
-      class="tb-btn"
-      :class="{ active: editor?.isActive('heading', { level: 1 }) }"
-      type="button"
-      title="Heading 1"
-      :disabled="!editor"
-      @click="editor?.chain().focus().toggleHeading({ level: 1 }).run()"
-    >
-      H1
-    </button>
-    <button
-      class="tb-btn"
-      :class="{ active: editor?.isActive('heading', { level: 2 }) }"
-      type="button"
-      title="Heading 2"
-      :disabled="!editor"
-      @click="editor?.chain().focus().toggleHeading({ level: 2 }).run()"
-    >
-      H2
-    </button>
+
+    <!-- Headings (compact render from config array) -->
+    <template v-for="heading in headingLevels" :key="'heading-' + heading">
       <button
-      class="tb-btn"
-      :class="{ active: editor?.isActive('heading', { level: 3 }) }"
-      type="button"
-      title="Heading 3"
-      :disabled="!editor"
-      @click="editor?.chain().focus().toggleHeading({ level: 3 }).run()"
-    >
-      H3
-    </button>
-      <button
-      class="tb-btn"
-      :class="{ active: editor?.isActive('heading', { level: 4 }) }"
-      type="button"
-      title="Heading 4"
-      :disabled="!editor"
-      @click="editor?.chain().focus().toggleHeading({ level: 4 }).run()"
-    >
-      H4
-    </button>
+        class="tb-btn"
+        type="button"
+        :class="{ active: isActiveHeading(heading) }"
+        :title="'Heading ' + heading"
+        :disabled="!activeTextEditor"
+        @click="toggleHeading(heading)"
+      >
+        H{{ heading }}
+      </button>
+    </template>
+
     <span class="sep" aria-hidden="true">|</span>
+
+    <!-- History -->
     <button
       class="tb-btn"
       type="button"
       title="Undo (Ctrl+Z)"
-      :disabled="!editor?.can().chain().focus().undo().run()"
-      @click="editor?.chain().focus().undo().run()"
+      :disabled="!canRunCommand('undo')"
+      @click="undo"
     >
       Undo
     </button>
@@ -99,8 +81,8 @@
       class="tb-btn"
       type="button"
       title="Redo (Ctrl+Y)"
-      :disabled="!editor?.can().chain().focus().redo().run()"
-      @click="editor?.chain().focus().redo().run()"
+      :disabled="!canRunCommand('redo')"
+      @click="redo"
     >
       Redo
     </button>
@@ -109,16 +91,92 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * TextCellToolbar.vue
+ * A detached toolbar controlling the active text (Tiptap) editor. It resolves
+ * the editor instance via the selection + textEditors stores so the toolbar
+ * can live anywhere in the component tree.
+ */
 import { computed } from 'vue'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
+import type { Editor } from '@tiptap/vue-3'
 
+// Stores
 const themeStore = useThemeStore()
-const isDark = computed(() => !!themeStore.isDarkMode)
-const selectionStore = useCellSelectionStore()
+const cellSelectionStore = useCellSelectionStore()
 const textEditorsStore = useTextEditorsStore()
-const editor = computed(() => textEditorsStore.getEditor(selectionStore.selectedCellId))
+
+// Reactive refs
+const isDarkMode = computed(() => !!themeStore.isDarkMode)
+const activeTextEditor = computed<Editor | null>(() =>
+  textEditorsStore.getEditorByCellId(cellSelectionStore.selectedCellId)
+)
+
+// Simple config for heading buttons
+type HeadingLevel = 1 | 2 | 3 | 4
+const headingLevels: HeadingLevel[] = [1, 2, 3, 4]
+
+// ---------------------------------------------------------------------------
+// Helper functions (use regular functions for clarity & easier debugging)
+function runCommand(chainFn: (editor: Editor) => unknown): void {
+  if (!activeTextEditor.value) return
+  chainFn(activeTextEditor.value)
+}
+
+function canRunCommand(commandName: string): boolean {
+  const editor = activeTextEditor.value
+  if (!editor) return false
+  try {
+    // Using optional chaining-like guard for commands relying on can()
+    switch (commandName) {
+      case 'toggleBold':
+        return editor.can().chain().focus().toggleBold().run()
+      case 'toggleItalic':
+        return editor.can().chain().focus().toggleItalic().run()
+      case 'undo':
+        return editor.can().chain().focus().undo().run()
+      case 'redo':
+        return editor.can().chain().focus().redo().run()
+      default:
+        return true
+    }
+  } catch {
+    return false
+  }
+}
+
+// Formatting action functions
+function toggleBold(): void {
+  runCommand((ed) => ed.chain().focus().toggleBold().run())
+}
+function toggleItalic(): void {
+  runCommand((ed) => ed.chain().focus().toggleItalic().run())
+}
+function toggleBulletList(): void {
+  runCommand((ed) => ed.chain().focus().toggleBulletList().run())
+}
+function toggleOrderedList(): void {
+  runCommand((ed) => ed.chain().focus().toggleOrderedList().run())
+}
+function toggleHeading(level: HeadingLevel): void {
+  runCommand((ed) => ed.chain().focus().toggleHeading({ level }).run())
+}
+function undo(): void {
+  runCommand((ed) => ed.chain().focus().undo().run())
+}
+function redo(): void {
+  runCommand((ed) => ed.chain().focus().redo().run())
+}
+
+// Active state helpers
+function isActive(markOrNode: string, attrs?: Record<string, unknown>): boolean {
+  return !!activeTextEditor.value?.isActive(markOrNode, attrs)
+}
+function isActiveHeading(level: number): boolean {
+  return !!activeTextEditor.value?.isActive('heading', { level })
+}
 </script>
 
 <style scoped>
