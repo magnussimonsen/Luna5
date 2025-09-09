@@ -232,7 +232,6 @@ function onMarginClick(): void {
 /* Flagged state: highlight index background only */
 .cell-container.is-flagged .cell-index {
   background: var(--flagged-cell-color, gold);
-  color: #000;
   padding: 0em 0.25rem;
   border-radius: 2px;
 }
