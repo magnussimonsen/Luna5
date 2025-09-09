@@ -64,15 +64,15 @@ export const useThemeStore = defineStore('theme', {
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'lightgreen',
       buttonHardOffColor: 'salmon',
-      deleteButtonHoverColor: 'lightcoral',
+      deleteButtonHoverColor: 'salmon',
       // Python worker Reset button colors
       buttonResetPythonWorkerColor: 'transparent',
-      buttonResetPythonWorkerHoverColor: 'lightcoral',
+      buttonResetPythonWorkerHoverColor: 'salmon',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'lightgreen',
-      resetZoomButtonColorOffCenter: 'lightcoral',
+      resetZoomButtonColorOffCenter: 'salmon',
       /* Flagged cells */
-      flaggedCellColor: 'salmon' // red for flagged cells
+      flaggedCellColor: 'salmon' // flagged cell index background
     } as ThemeColorTypes,
 
     darkTheme: {

@@ -7,7 +7,8 @@
       'is-in-bin': inBin,
       'is-locked': locked,
       'is-disabled': disabled,
-      'is-hidden': hidden
+      'is-hidden': hidden,
+      'is-flagged': flagged
     }"
     :data-kind="kind"
     role="group"
@@ -46,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, nextTick } from 'vue'
+import { computed, ref, nextTick, toRefs } from 'vue'
 const rootEl = ref<HTMLElement | null>(null)
 
 interface Props {
@@ -58,9 +59,12 @@ interface Props {
   locked?: boolean
   disabled?: boolean
   hidden?: boolean
+  flagged?: boolean
 }
 
 const props = defineProps<Props>()
+// Expose individual prop refs so template class bindings (selected, flagged, etc.) react correctly
+const { selected, inBin, locked, disabled, hidden, flagged } = toRefs(props)
 
 const emit = defineEmits<{
   (e: 'select', cellId: string): void
@@ -225,6 +229,14 @@ function onMarginClick(): void {
   user-select: none;
 }
 
+/* Flagged state: highlight index background only */
+.cell-container.is-flagged .cell-index {
+  background: var(--flagged-cell-color, gold);
+  color: #000;
+  padding: 0em 0.25rem;
+  border-radius: 2px;
+}
+
 .cell-margin-buttons {
   display: flex;
   flex-direction: column;
@@ -240,10 +252,6 @@ function onMarginClick(): void {
   font-size: 0.6rem;
   line-height: 1;
   border-radius: 0px;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
 }
 
 .cell-btn:hover:not(:disabled) {

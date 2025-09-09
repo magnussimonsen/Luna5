@@ -84,8 +84,8 @@ Design tokens (layout/spacing)
     /* TO DO: MOVE ICON CODE TO NEW FILE IN SAME FOLDER: icons-utf-8.css*/
     /*-------------------------------------------------------------------*/
     /* Unicode Icon Tokens (store actual characters, not HTML entities) */
-    --icon-arrow-move-up: '⬆'; /* previously &#129033; */
-    --icon-arrow-move-down: '⬇'; /* previously &#129035; */
+    --icon-arrow-move-up: '🠉'; /* previously &#129033; */
+    --icon-arrow-move-down: '🠋'; /* previously &#129035; */
     --icon-flag: '⚑'; 
     --icon-settings: '⚙';
     --icon-help: '?';
