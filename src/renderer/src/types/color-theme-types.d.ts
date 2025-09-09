@@ -67,4 +67,6 @@ export type ThemeColorTypes = {
 
   resetZoomButtonColorCenter: string
   resetZoomButtonColorOffCenter: string
+  // Flagged cells
+  flaggedCellColor: string
 }

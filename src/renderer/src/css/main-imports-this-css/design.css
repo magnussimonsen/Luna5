@@ -11,57 +11,127 @@ Design tokens (layout/spacing)
 
     /* Menu bar */
     --menu-bar-height: 1.2em;
-    --menu-bar-padding: 0.0em 0.3em 0em 0.0em; /* top, right, bottom, left */
-    --menu-bar-button-padding: 0.3em 0.3em 0.3em 0.3em;/* top, right, bottom, left */
-    --menu-bar-button-logo-padding: 0.0em 0.1m 0.0em 0.3em;/* top, right, bottom, left */
+    --menu-bar-padding: 0.0em 0.3em 0em 0.0em;
+    /* top, right, bottom, left */
+    --menu-bar-button-padding: 0.3em 0.3em 0.3em 0.3em;
+    /* top, right, bottom, left */
+    --menu-bar-button-logo-padding: 0.0em 0.1m 0.0em 0.3em;
+    /* top, right, bottom, left */
     --menu-bar-button-border-radius: 0px;
-    --menu-bar-button-border: 0px solid var(--button-border-color, var(--debug-color,#2563eb));
+    --menu-bar-button-border: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --menu-bar-button-border-hover: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --menu-bar-button-border-active: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --menu-bar-button-border-disabled: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --menu-bar-z-index: 3000; /* Ensure menu bar is above other UI elements */
+    --menu-bar-z-index: 3000;
+    /* Ensure menu bar is above other UI elements */
 
     /* Toolbar container */
-    --toolbar-container-padding: 0.2rem 0.1rem; /* top, right, bottom, left */
+    --toolbar-container-padding: 0.2rem 0.1rem;
+    /* top, right, bottom, left */
 
     /* Toolbar */
     --toolbar-height: 2.5em;
-    --toolbar-padding: 0.0em 0.0em 0em 0.0em; /* top, right, bottom, left */
-    --toolbar-button-padding: 0.1em 0.4em 0.1em 0.4em;/* top, right, bottom, left */
-    --toolbar-button-gap: 0.25em;   
-    --toolbar-button-radius: 0.25em; 
-    --toolbar-button-border: 1px solid var(--button-border-color, var(--debug-color,#2563eb));
+    --toolbar-padding: 0.0em 0.0em 0em 0.0em;
+    /* top, right, bottom, left */
+    --toolbar-button-padding: 0.1em 0.4em 0.1em 0.4em;
+    /* top, right, bottom, left */
+    --toolbar-button-gap: 0.25em;
+    --toolbar-button-radius: 0.25em;
+    --toolbar-button-border: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --toolbar-button-border-hover: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --toolbar-button-border-active: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --toolbar-button-border-disabled: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --toolbar-z-index: 2000; /* Ensure toolbar is above other UI elements but below menu bar */
-    
+    --toolbar-z-index: 2000;
+    /* Ensure toolbar is above other UI elements but below menu bar */
+
     /* Status bar */
     --status-bar-height: 2em;
-    --status-bar-padding: 0.2em 0.5em 0.2em 0.5em; /* top, right, bottom, left */
-    --status-bar-button-padding: 0.2em 0.3em 0.2em 0.3em; /* top, right, bottom, left */
+    --status-bar-padding: 0.2em 0.5em 0.2em 0.5em;
+    /* top, right, bottom, left */
+    --status-bar-button-padding: 0.2em 0.3em 0.2em 0.3em;
+    /* top, right, bottom, left */
     --status-bar-button-radius: 0.5em;
-    --status-bar-button-border: 0px solid var(--button-border-color, var(--debug-color,#2563eb));
+    --status-bar-button-border: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --status-bar-button-border-hover: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --status-bar-button-border-active: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --status-bar-button-border-disabled: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --status-bar-z-index: 3000; /* Ensure status bar is above other UI elements but below menu bar and toolbar */
+    --status-bar-z-index: 3000;
+    /* Ensure status bar is above other UI elements but below menu bar and toolbar */
 
     /* Dropdown menu */
-    --dropdown-trigger-padding: var(--menu-bar-button-padding); /* top, right, bottom, left */
-    --dropdown-items-padding: 0.3em 0.3em 0.3em 0.3em; /* top, right, bottom, left */
+    --dropdown-trigger-padding: var(--menu-bar-button-padding);
+    /* top, right, bottom, left */
+    --dropdown-items-padding: 0.3em 0.3em 0.3em 0.3em;
+    /* top, right, bottom, left */
     --dropdown-trigger-border-radius: var(--menu-bar-button-border-radius);
     --dropdown-transition-duration: 0.1s;
 
     /* Cell container styling */
-    --cell-container-padding: 0.5em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
+    --cell-container-padding: 0.5em 0.5em 0.5em 0.5em;
+    /* top, right, bottom, left */
     --cell-container-border: 0px solid var(--cell-border-color, 'red');
     --cell-container-border-radius: 0px;
     --cell-container-border-left-not-selected: 0.5rem solid transparent;
     --cell-container-border-left-selected: 0.5rem solid var(--active-border-color);
 
     /* Legacy button tokens (not used by current toolbars) */
-    --button-border-radius: 20px; /* legacy */
-    --button-padding: 3.1em 4.3em 4.1em 4.3em; /* legacy; top, right, bottom, left */
+    --button-border-radius: 20px;
+    /* legacy */
+    --button-padding: 3.1em 4.3em 4.1em 4.3em;
+    /* legacy; top, right, bottom, left */
 
+    /*-------------------------------------------------------------------*/
+    /* TO DO: MOVE ICON CODE TO NEW FILE IN SAME FOLDER: icons-utf-8.css*/
+    /*-------------------------------------------------------------------*/
+    /* Unicode Icon Tokens (store actual characters, not HTML entities) */
+    --icon-arrow-move-up: '⬆';
+    /* previously &#129033; */
+    --icon-arrow-move-down: '⬇';
+    /* previously &#129035; */
+    --icon-flag: '⚑';
+    --icon-settings: '⚙';
+    --icon-help: '?';
+    --icon-python: '🐍';
+
+
+    /* Icon utility classes (global) */
+    .icon,
+    .icon-flag,
+    .icon-move-up,
+    .icon-move-down,
+    .icon-settings,
+    .icon-help,
+    .icon-python {
+        display: inline-block;
+        line-height: 1;
+        font-size: 1em;
+        /* normalized to match text buttons for consistent button height */
+        vertical-align: middle;
+        /* Inherit color so theme changes propagate */
+        color: currentColor;
+    }
+
+    .icon-move-up::before {
+        content: var(--icon-arrow-move-up);
+    }
+
+    .icon-move-down::before {
+        content: var(--icon-arrow-move-down);
+    }
+
+    .icon-flag::before {
+        content: var(--icon-flag);
+    }
+
+    .icon-settings::before {
+        content: var(--icon-settings);
+    }
+
+    .icon-help::before {
+        content: var(--icon-help);
+    }
+
+    .icon-python::before {
+        content: var(--icon-python);
+    }
 }
