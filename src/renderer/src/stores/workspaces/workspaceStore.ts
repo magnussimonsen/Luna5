@@ -628,6 +628,19 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.markAsUnsaved()
       return true
     },
+    // --- Toogle flaged on selected cell ---
+    toggleFlaggedSelectedCell(): boolean {
+      const workspace = this.getWorkspace()
+      const cellSelectionStore = useCellSelectionStore()
+      const cellId = cellSelectionStore.selectedCellId
+      if (!cellId) return false
+      const cell = workspace.cells[cellId]
+      if (!cell) return false
+      cell.flagged = !cell.flagged
+      cell.updatedAt = new Date().toISOString()
+      this.markAsUnsaved()
+      return true
+    },
     // --- Set content for a given cell (e.g., from TextCell input) ---
     setCellInputContent(cellId: string, content: string): boolean {
       const workspace = this.getWorkspace()

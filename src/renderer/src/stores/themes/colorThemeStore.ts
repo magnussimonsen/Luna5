@@ -70,7 +70,9 @@ export const useThemeStore = defineStore('theme', {
       buttonResetPythonWorkerHoverColor: 'lightcoral',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'lightgreen',
-      resetZoomButtonColorOffCenter: 'lightcoral'
+      resetZoomButtonColorOffCenter: 'lightcoral',
+      /* Flagged cells */
+      flaggedCellColor: 'salmon' // red for flagged cells
     } as ThemeColorTypes,
 
     darkTheme: {
@@ -128,17 +130,16 @@ export const useThemeStore = defineStore('theme', {
       buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'darkgreen',
-      buttonHardOffColor: 'firebrick',
-      deleteButtonHoverColor: 'red',
+      buttonHardOffColor: 'darkred',
+      deleteButtonHoverColor: 'darkred',
       // Python worker Reset button colors
       buttonResetPythonWorkerColor: 'transparent',
-      buttonResetPythonWorkerHoverColor: 'firebrick',
+      buttonResetPythonWorkerHoverColor: 'darkred',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'darkgreen',
-      resetZoomButtonColorOffCenter: 'firebrick',
-
-
-    
+      resetZoomButtonColorOffCenter: 'darkred',
+      /* Flagged cells */
+      flaggedCellColor: 'darkred' // red for flagged cells
     } as ThemeColorTypes
   }),
 
@@ -213,6 +214,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--slider-background', colors.sliderBackground)
       root.style.setProperty('--slider-thumb-color', colors.sliderThumbColor)
       root.style.setProperty('--slider-track-color', colors.sliderTrackColor)
+      root.style.setProperty('--flagged-cell-color', colors.flaggedCellColor)
     },
     getLightTheme() {
       return this.lightTheme

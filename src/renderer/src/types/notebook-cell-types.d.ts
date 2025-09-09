@@ -13,6 +13,7 @@ export interface BaseCell {
   softLocked?: boolean
   hardLocked?: boolean
   hidden?: boolean
+  flagged?: boolean
   softDeleted?: boolean
   hardDeleted?: boolean // If true the cell is listed for permanent deletion
   baseCellInputContent?: string // Mostly for development

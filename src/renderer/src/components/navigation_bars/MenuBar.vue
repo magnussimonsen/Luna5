@@ -34,10 +34,9 @@
         Save File As <span class="shortcut-not-implemented">Ctrl + Shift + s</span>
         <ImplementedMark :implemented="true" />
       </div>
-      <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleSavePDFForSubmission">
-        <strong>Export PDF Submission (student → teacher)</strong>
-        <span class="shortcut-not-implemented"></span>
+        <strong>Save PDF For Submission</strong>
+        <span class="shortcut-not-implemented">Ctrl + Alt + s</span>
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-divider"></div>
@@ -45,24 +44,13 @@
         Settings <span class="shortcut-not-implemented">Alt + Shift + s</span>
         <ImplementedMark :implemented="true" />
       </div>
-      <div class="dropdown-menu-item" @click="handleHelp">
-        Get Help and Tutorials <span class="shortcut-not-implemented"></span>
-        <ImplementedMark :implemented="true" />
-      </div>
-
-      <div class="dropdown-menu-divider"></div>
-      <div class="dropdown-menu-item" @click="handleSavePDFForSubmission">
-        Save FILE as Student Handout (teacher → students)
-        <span class="shortcut-not-implemented"></span>
-        <ImplementedMark :implemented="false" />
-      </div>
-      <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleAboutLuna">
         About Luna <span class="shortcut-not-implemented"></span>
         <ImplementedMark :implemented="true" />
       </div>
+      <div class="dropdown-menu-divider"></div>
       <div class="dropdown-menu-item" @click="handleQuitLuna">
-        Quit Luna <span class="shortcut-not-implemented"></span>
+        Quit Luna <span class="shortcut-not-implemented">Ctrl + Shift + Q</span>
         <ImplementedMark :implemented="true" />
       </div>
     </DropdownMenu>
@@ -142,7 +130,7 @@
         <ImplementedMark :implemented="true" />
       </div>
     </DropdownMenu>
-    <DropdownMenu ref="insertMenu" label="Insert new cell">
+    <DropdownMenu ref="insertMenu" label="Insert">
       <div class="dropdown-menu-item" @click="handleInsertTextCell">
         Insert Text Cell <span class="shortcut-not-implemented">Ctrl + 1</span>
         <ImplementedMark :implemented="true" />
@@ -165,12 +153,11 @@
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item">
-        &#127922; Insert Probability Calculator Cell
-        <span class="shortcut-not-implemented">Ctrl + 6</span>
+        Insert Probability Calculator Cell <span class="shortcut-not-implemented">Ctrl + 6</span>
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-item" @click="handleInsertPythonCell">
-        &#128013; Insert Python Cell <span class="shortcut-not-implemented">Ctrl + 7</span>
+        Insert Python Cell <span class="shortcut-not-implemented">Ctrl + 7</span>
         <ImplementedMark :implemented="true" />
       </div>
       <div class="dropdown-menu-item">
@@ -178,11 +165,34 @@
         <ImplementedMark :implemented="false" />
       </div>
     </DropdownMenu>
-    <div title="Move selected cell up" class="toggle-button" @click="handleMoveCellUp">
-      <span style="font-size: 1.1em">&#129033;</span>
+    <div class="toggle-button" title="Move cell up" @click="handleMoveCellUp">
+      <span class="icon-move-up" aria-hidden="true"></span>
+      <span class="sr-only">Move cell up</span>
     </div>
-    <div title="Move selected cell down" class="toggle-button" @click="handleMoveCellDown">
-      <span style="font-size: 1.1em">&#129035;</span>
+    <div class="toggle-button" title="Move cell down" @click="handleMoveCellDown">
+      <span class="icon-move-down" aria-hidden="true"></span>
+      <span class="sr-only">Move cell down</span>
+    </div>
+    <div
+      class="toggle-button"
+      :class="{ active: isSelectedCellFlagged }"
+      :style="
+        isSelectedCellFlagged
+          ? {
+              background: 'var(--flagged-cell-color, var(--button-on-color, orange))',
+              color: 'var(--ui-text-color, #fff)'
+            }
+          : {}
+      "
+      :title="
+        isSelectedCellFlagged
+          ? 'Unflag selected cell (Feature is not implemented yet)'
+          : 'Flag selected cell (Feature is not implemented yet)'
+      "
+      @click="handleFlagCell"
+    >
+      <span class="icon-flag" aria-hidden="true"></span>
+      <span class="sr-only">Flag selected cell</span>
     </div>
     <div
       class="toggle-button"
@@ -227,7 +237,6 @@
     </div>
     <div class="right-buttons">
       <div
-        title="Show list of Notebooks in this file"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'notebooks' }"
         @click="handleTogglePanel('notebooks')"
@@ -235,7 +244,6 @@
         Notebooks
       </div>
       <div
-        title="Show Table of Contents from text cells in current notebook"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'toc' }"
         @click="handleTogglePanel('toc')"
@@ -243,7 +251,6 @@
         Table of Contents
       </div>
       <div
-        title="Variables and Functions in selected notebook"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'variables' }"
         @click="handleTogglePanel('variables')"
@@ -251,37 +258,34 @@
         Variables
       </div>
       <div
-        title="Flashcards"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'flashcards' }"
         @click="handleTogglePanel('flashcards')"
       >
-        Cards
+        Flashcards
       </div>
       <div
-        title="Settings"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'settings' }"
         @click="handleTogglePanel('settings')"
       >
-            <span style="font-size: 1.1em">&#128295;</span> 
+        <span class="icon-settings" aria-hidden="true"></span>
+        <span class="sr-only">Settings</span>
       </div>
       <div
-        title="Get Help and Tutorials"
         class="side-panel-toggle-button"
         :class="{ active: sidePanelStore.activePanel === 'help' }"
         @click="handleTogglePanel('help')"
       >
-        &#128735;
+        <span class="icon-help" aria-hidden="true"></span>
+        <span class="sr-only">Get help</span>
       </div>
     </div>
   </nav>
 </template>
 
 <script lang="ts" setup>
-//import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-169.png'
-// import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-01-square.png'
-import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-square.png'
+import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo.png'
 import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import DropdownMenu from '@renderer/components/UI/DropdownMenu.vue'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
@@ -321,6 +325,11 @@ const isSelectedCellHidden = computed(() => {
   const ws = workspaceStore.getWorkspace()
   const id = cellSelectionStore.selectedCellId
   return id ? !!ws.cells[id]?.hidden : false
+})
+const isSelectedCellFlagged = computed(() => {
+  const ws = workspaceStore.getWorkspace()
+  const id = cellSelectionStore.selectedCellId
+  return id ? !!ws.cells[id]?.flagged : false
 })
 const isSelectedCellLocked = computed(() => {
   const ws = workspaceStore.getWorkspace()
@@ -378,17 +387,11 @@ const handleSaveFileAs = async (): Promise<void> => {
 const handleSavePDFForSubmission = (): void => {}
 
 const handleSettings = (): void => {
-  // Open/toggle the Settings side panel instead of the Settings modal
-  sidePanelStore.togglePanel('settings')
+  modalStore.openSettingsModal()
 }
 
 const handleAboutLuna = (): void => {
   modalStore.openAboutLunaModal()
-}
-
-const handleHelp = (): void => {
-  // Open/toggle the Help side panel
-  sidePanelStore.togglePanel('help')
 }
 
 const handleQuitLuna = async (): Promise<void> => {
@@ -415,6 +418,11 @@ const handleMoveCellUp = (): void => {
 const handleMoveCellDown = (): void => {
   const ok = workspaceStore.moveSelectedCellDown()
   if (!ok) console.warn('Cannot move cell down: no selection or at bottom')
+}
+
+const handleFlagCell = (): void => {
+  const ok = workspaceStore.toggleFlaggedSelectedCell()
+  if (!ok) console.warn('No cell selected to flag/unflag')
 }
 
 const handleMoveFocusToCellAbove = (): void => {}
@@ -491,12 +499,10 @@ const handleMoveNotebookToBin = (): void => {
 
 <style scoped>
 .brand-icon {
-  /*height: var(--menu-bar-height, 1em);*/
-  padding: var(--menu-bar-button-logo-padding, 0em 0.3em 0em 0.3em); /* top, right, bottom, left */
-  height: 1em;
+  height: var(--menu-bar-height, 1.2em);
   width: auto;
   margin-right: 0em;
-  margin-left: 0.1em;
+  margin-left: 0.5em;
   display: inline-block;
   vertical-align: middle;
   cursor: pointer;
@@ -682,5 +688,18 @@ const handleMoveNotebookToBin = (): void => {
   display: flex;
   gap: 0.1em;
   /* Optional: space between right buttons */
+}
+
+/* Visually hide but keep accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 </style>

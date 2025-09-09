@@ -64,4 +64,31 @@ Design tokens (layout/spacing)
     --button-border-radius: 20px; /* legacy */
     --button-padding: 3.1em 4.3em 4.1em 4.3em; /* legacy; top, right, bottom, left */
 
+    /*-------------------------------------------------------------------*/
+    /* TO DO: MOVE ICON CODE TO NEW FILE IN SAME FOLDER: icons-utf-8.css*/
+    /*-------------------------------------------------------------------*/
+    /* Unicode Icon Tokens (store actual characters, not HTML entities) */
+    --icon-arrow-move-up: '⬆'; /* previously &#129033; */
+    --icon-arrow-move-down: '⬇'; /* previously &#129035; */
+    --icon-flag: '⚑'; 
+    --icon-settings: '⚙';
+    --icon-help: '?';
+    --icon-python: '🐍';
+
+
+/* Icon utility classes (global) */
+.icon, .icon-flag, .icon-move-up, .icon-move-down, .icon-settings, .icon-help, .icon-python {
+    display: inline-block;
+    line-height: 1;
+    font-size: 1em;
+    vertical-align: middle;
+    /* Inherit color so theme changes propagate */
+    color: currentColor;
+}
+.icon-move-up::before { content: var(--icon-arrow-move-up); }
+.icon-move-down::before { content: var(--icon-arrow-move-down); }
+.icon-flag::before { content: var(--icon-flag); }
+.icon-settings::before { content: var(--icon-settings); }
+.icon-help::before { content: var(--icon-help); }
+.icon-python::before { content: var(--icon-python); }
 }

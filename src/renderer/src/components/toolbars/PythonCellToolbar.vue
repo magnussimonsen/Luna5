@@ -34,7 +34,7 @@
     </button>
 
     <button
-      class="toolbar-btn reset-python-worker-margin-left-auto"
+      class="toolbar-btn reset-python-worker reset-python-worker-margin-left-auto"
       type="button"
       :disabled="!canReset"
       :title="
@@ -316,11 +316,13 @@ onUnmounted(() => {
   font-weight: bold;
 }
 
+.toolbar-btn.reset-python-worker,
 .toolbar-btn.reset-python-worker-margin-left-auto {
   background: var(--button-reset-python-worker-color, transparent);
   margin-left: auto; /* push to far right */
 }
-.toolbar-btn.reset-python-worker:hover {
+.toolbar-btn.reset-python-worker:hover,
+.toolbar-btn.reset-python-worker-margin-left-auto:hover {
   background: var(--button-reset-python-worker-hover-color, firebrick);
   border: var(--toolbar-button-border-hover);
 }
