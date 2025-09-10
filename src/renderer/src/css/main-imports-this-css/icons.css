@@ -35,7 +35,7 @@
     /* Math */
     --icon-math-live-block: 'Insert Math Live';
     --icon-math-live-inline: 'Insert Math Live Inline';
-    --icon-math-katex-block: 'Insert Katex';
+    --icon-math-katex-block: 'Insert KaTeX';
     --icon-math-katex-inline: 'Insert Katex Inline';
 
 /* Icon utility classes (global) */

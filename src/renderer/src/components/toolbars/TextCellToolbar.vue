@@ -305,7 +305,7 @@ function isActiveHeading(level: number): boolean {
 /* Rely on shared .toolbar-btn styles from toolbar-base.css; only override active state if needed */
 .toolbar-btn.active {
   background: var(--button-on-color, #2563eb);
-  color: #fff;
+  color: var(--text-color, #fff);
   border: var(--toolbar-button-border-hover, 1px solid #2563eb);
 }
 .sep {

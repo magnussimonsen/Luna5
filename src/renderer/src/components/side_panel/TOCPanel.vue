@@ -56,8 +56,8 @@ const headings = computed<TocHeading[]>(() => {
       const rawInner = m[3]
       // Strip HTML tags to plain text (basic)
       const text = rawInner
-        .replace(/<[^>]+>/g, '')
-        .replace(/&nbsp;/g, ' ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/g, '')
         .replace(/&amp;/g, '&')
         .replace(/&lt;/g, '<')
         .replace(/&gt;/g, '>')
@@ -143,7 +143,7 @@ watch(
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0rem;
 }
 .toc-item {
   display: block;
@@ -151,49 +151,43 @@ watch(
 .toc-link {
   background: none;
   border: none;
-  padding: 0.15rem 0.25rem;
+  padding: 0.15em 0.25em;
   width: 100%;
   text-align: left;
   cursor: pointer;
   font: inherit;
-  color: var(--text-color, #222);
+  color: var(--link-color, #3e55b8);
   border-radius: 3px;
   display: flex;
-  gap: 0.4rem;
+  gap: 1em;
   align-items: flex-start;
 }
 .toc-link:hover {
-  background: var(--cell-margin-background-color, #eef2f5);
+  background: var(--button-hover-color);
 }
 .toc-num {
   font-variant-numeric: tabular-nums;
-  color: var(--text-dim-color, #555);
-  min-width: 2.2rem;
+  color: var(--text-color, #555);
+  min-width: 0em;
   text-align: left;
   flex-shrink: 0;
 }
 .toc-num::after {
-  content: ' ';
+  content: '';
 }
 .toc-item.lvl-1 .toc-link {
+  padding-left: 0em;
   font-weight: 600;
 }
 .toc-item.lvl-2 .toc-link {
-  padding-left: 0.5rem;
+  padding-left: 0em;
 }
 .toc-item.lvl-3 .toc-link {
-  padding-left: 1rem;
-  font-size: 0.95em;
+  padding-left: 0em;
+  font-size: 0.93em;
 }
 .toc-item.lvl-4 .toc-link {
-  padding-left: 1.25rem;
+  padding-left: 0em;
   font-size: 0.9em;
-}
-
-/* Temporary highlight style when jumping */
-.toc-highlight {
-  outline: 2px solid var(--active-border-color, #2563eb);
-  outline-offset: 2px;
-  transition: outline-color 1s ease;
 }
 </style>

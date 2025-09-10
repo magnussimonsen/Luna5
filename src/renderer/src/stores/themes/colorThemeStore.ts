@@ -73,7 +73,12 @@ export const useThemeStore = defineStore('theme', {
       resetZoomButtonColorCenter: 'lightgreen',
       resetZoomButtonColorOffCenter: 'salmon',
       /* Flagged cells */
-      flaggedCellColor: 'salmon' // flagged cell index background
+      flaggedCellColor: 'salmon', // flagged cell index background
+      /* Links */
+      linkColor: 'green',
+      /* Scrollbar colors */
+      scrollbarThumbColor: 'gray',
+      scrollbarTrackColor: 'lightgray'
     } as ThemeColorTypes,
 
     darkTheme: {
@@ -141,7 +146,12 @@ export const useThemeStore = defineStore('theme', {
       resetZoomButtonColorCenter: 'darkgreen',
       resetZoomButtonColorOffCenter: 'darkred',
       /* Flagged cells */
-      flaggedCellColor: 'darkred' // red for flagged cells
+      flaggedCellColor: 'darkred', // red for flagged cells
+      /* Links */
+      linkColor: 'limegreen',
+      /* Scrollbar colors */
+      scrollbarThumbColor: '#555555',
+      scrollbarTrackColor: '#111111'
     } as ThemeColorTypes
   }),
 
@@ -218,6 +228,9 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--slider-thumb-color', colors.sliderThumbColor)
       root.style.setProperty('--slider-track-color', colors.sliderTrackColor)
       root.style.setProperty('--flagged-cell-color', colors.flaggedCellColor)
+      root.style.setProperty('--link-color', colors.linkColor)
+      root.style.setProperty('--scrollbar-thumb-color', colors.scrollbarThumbColor)
+      root.style.setProperty('--scrollbar-track-color', colors.scrollbarTrackColor)
     },
     getLightTheme() {
       return this.lightTheme

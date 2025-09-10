@@ -22,6 +22,25 @@ Main CSS entry for the renderer
   font-size: var(--main-app-font-size, 1.1em);
 }
 
+/* Custom scrollbar styling using theme variables */
+::-webkit-scrollbar {
+  width: 12px;
+  background: var(--scrollbar-track-color, #f0f0f0);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color, gray);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color, #f0f0f0);
+}
+
+/* For Firefox */
+body {
+  scrollbar-color: var(--scrollbar-thumb-color, gray) var(--scrollbar-track-color, #f0f0f0);
+  scrollbar-width: thin;
+}
+
 
 /* Small responsive tweaks */
 @media (max-width: 720px) {

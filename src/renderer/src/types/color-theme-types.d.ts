@@ -68,6 +68,14 @@ export type ThemeColorTypes = {
 
   resetZoomButtonColorCenter: string
   resetZoomButtonColorOffCenter: string
+
   // Flagged cells
   flaggedCellColor: string
+
+  // Links
+  linkColor: string
+
+  // Sctollbar colors
+  scrollbarThumbColor: string
+  scrollbarTrackColor: string
 }

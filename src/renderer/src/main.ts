@@ -38,3 +38,21 @@ watch(
   },
   { immediate: true }
 )
+
+// Reactive scrollbar color updates (only recompute these two vars when needed)
+watch(
+  () => [
+    themeStore.isDarkMode,
+    themeStore.lightTheme.scrollbarThumbColor,
+    themeStore.lightTheme.scrollbarTrackColor,
+    themeStore.darkTheme.scrollbarThumbColor,
+    themeStore.darkTheme.scrollbarTrackColor
+  ],
+  () => {
+    const c = themeStore.isDarkMode ? themeStore.darkTheme : themeStore.lightTheme
+    const root = document.documentElement
+    root.style.setProperty('--scrollbar-thumb-color', c.scrollbarThumbColor)
+    root.style.setProperty('--scrollbar-track-color', c.scrollbarTrackColor)
+  },
+  { immediate: true }
+)
