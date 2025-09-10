@@ -28,9 +28,8 @@ import { computed, onBeforeUnmount, watch } from 'vue'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import type { TextCell } from '@renderer/types/notebook-cell-types'
-import { Editor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Placeholder from '@tiptap/extension-placeholder'
+import { EditorContent, Editor as VueEditor } from '@tiptap/vue-3'
+import { createTiptapEditor } from '@renderer/code/tiptap/tiptap-initialization'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 
 // Props
@@ -48,24 +47,12 @@ const isLocked = computed<boolean>(function computeIsLocked() {
 })
 
 // -- Editor Initialization --------------------------------------------------
-/**
- * Create the Tiptap editor. We only include core StarterKit now; math, links,
- * media, etc. can be added later. Placeholder guides the user.
- */
-const tiptapEditor = new Editor({
+const tiptapEditor = createTiptapEditor({
   editable: !isLocked.value,
   content: cell.cellInputContent || '',
-  extensions: [
-    StarterKit.configure({}),
-    Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' })
-  ],
-  /**
-   * Persist HTML whenever the document changes (unless locked). We store HTML
-   * for now; a markdown / JSON representation could be added later.
-   */
-  onUpdate: function handleEditorUpdate({ editor }) {
+  onUpdate: ({ editor }) => {
     if (isLocked.value) return
-    const htmlContent = editor.getHTML()
+    const htmlContent = (editor as VueEditor).getHTML()
     workspaceStore.setCellInputContent(cell.id, htmlContent)
   }
 })
