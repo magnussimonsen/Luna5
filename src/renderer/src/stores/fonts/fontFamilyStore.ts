@@ -9,7 +9,6 @@ const availableFonts = [
   { label: 'Comic Neue', value: 'Comic Neue, Arial, sans-serif' },
   { label: 'Fira Mono', value: 'Fira Mono, monospace' },
   { label: 'Fira Code', value: 'Fira Code, monospace' },
-  { label: 'Georgia', value: 'Georgia, serif' },
   { label: 'Arimo', value: 'Arimo, Arial, sans-serif' }
 ]
 
@@ -18,7 +17,7 @@ const availableCodingFonts = [
   { label: 'OpenDyslexic', value: 'OpenDyslexic, Arial, sans-serif' },
   { label: 'Comic Neue', value: 'Comic Neue, Arial, sans-serif' },
   { label: 'Fira Mono', value: 'Fira Mono, monospace' },
-  { label: 'Fira Code', value: 'Fira Code, monospace' },
+  { label: 'Fira Code', value: 'Fira Code, monospace' }
 ]
 
 export const useFontStore = defineStore('fonts', {

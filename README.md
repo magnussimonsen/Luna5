@@ -44,9 +44,9 @@ Built-in flashcard functionality supporting text, images, audio, and IPA (Intern
 ## 🥷 For Teachers
 
 * Create both questions and solutions in the same file using **Hide Cell** and **Lock Cell**
-* Export test versions that hide answers; students can insert their responses in the same file
+* Export test versions with questions that are locked and answers hidden; students can write their responses directly in the same file
 * Reuse and adapt notebooks for lessons, homework, or live presentations
-* Demonstrate math, code, and concepts interactively in class or via screen sharing
+* Demonstrate math, code, and concepts interactively
 
 ---
 
@@ -64,14 +64,15 @@ Built-in flashcard functionality supporting text, images, audio, and IPA (Intern
 
 | Tool                         | Status        |
 | ---------------------------- | ------------- |
+| Notebook UI with automatic, reactive Table of Contents side panel | ✅ Implemented|
 | Rich Text / Markdown Editor | ✅ Core WYSIWYG (Tiptap) implemented (basic formatting). Math formula input not yet implemented (placeholder button present) |
-| Python Environment (Pyodide)	| ✅ Implemented. Core features available. Ongoing improvements and testing |
-| CAS (Symbolic Math, via SymPy)   | 🚧 Planned   |
+| Python Environment (Pyodide)	| ✅ Implemented. Core features available with one Pyodide thread per notebook. Ongoing improvements and testing |
+| CAS (Symbolic Math with custom Luna syntax that triggers SymPy for computation)   | 🚧 Planned   |
 | Graphical Calculator         | 🚧 Planned    |
 | Geometry Explorer            | 🚧 Planned    |
 | Spreadsheet Tool             | 🚧 Planned    |
 | Probability Calculator       | 🚧 Planned    |
-| Flashcards (Spaced Repetition) | 🚧 Planned  |
+| Flashcards (Spaced Repetition for concept learning) | 🚧 Planned  |
 
 ---
 
@@ -105,7 +106,7 @@ Notes
 
 ### Planned Core Libraries / Components
 
-* Rich-text editor with future math input support (KaTeX/other renderer under evaluation; current button is a placeholder)
+* Rich-text editor with future math input support (KaTeX or/and MathLive. Current buttons is a placeholder)
 * Markdown editor with KaTeX rendering
 * Code editor (Monaco Editor in use)
 * Pyodide integration (via a background worker)
@@ -141,9 +142,11 @@ Notes
 ## 🅰️ Fonts Used
 
 * **Comic Neue.** SIL Open Font License 1.1
+* **Inter.** SIL Open Font License 1.1
 * **Roboto.** Apache License 2.0
 * **OpenDyslexic.** SIL Open Font License 1.1
 * **Fira Code.** SIL Open Font License 1.1
+* **Fira Mono.** SIL Open Font License 1.1
 * **Arimo.** Apache License 2.0
 
 ---
