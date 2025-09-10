@@ -40,7 +40,34 @@ function createWindow(): void {
       preload: join(__dirname, '../preload/index.js'),
       // Sandbox false here because we rely on preload and Node APIs in this template.
       // If you enable sandbox, ensure your preload does not depend on Node integration.
-      sandbox: false
+      sandbox: false,
+
+      /**
+       * ============================================================================
+       *  SPELL CHECK: TEMPORARILY DISABLED FOR DEVELOPMENT (REMOVE / EDIT TO REVERT)
+       * ============================================================================
+       * We disable Chromium/Electron spell checking right now to avoid red underlines
+       * while working on editor UX. To re‑enable, set this to true or delete the line.
+       *
+       *   1) Re‑enable spellcheck:
+       *        - Change:  spellcheck: false  -->  spellcheck: true
+       *   2) Force English only (after re‑enabling):
+       *        app.whenReady().then(() => {
+       *          session.defaultSession.setSpellCheckerLanguages(['en-US'])
+       *        })
+       *   3) Multiple dialects example:
+       *        ['en-US','en-GB']
+       *   4) Make it environment‑toggled instead of hardcoded:
+       *        spellcheck: process.env.LUNA_SPELLCHECK === '1'
+       *
+       * NOTE: This only affects Chromium's built‑in spellchecker. The Tiptap editor
+       * also respects per-element attributes. We additionally recommend (and have
+       * implemented in the editor layer if needed) adding spellcheck="false" on the
+       * contentEditable root for explicitness. If you re‑enable here but still see
+       * no checking, verify the editor DOM does not have spellcheck="false".
+       * ============================================================================
+       */
+      spellcheck: false
     }
   })
 

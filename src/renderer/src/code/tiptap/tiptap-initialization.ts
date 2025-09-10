@@ -1,6 +1,11 @@
 import { Editor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
+import Table from '@tiptap/extension-table'
+import TableRow from '@tiptap/extension-table-row'
+import TableHeader from '@tiptap/extension-table-header'
+import TableCell from '@tiptap/extension-table-cell'
+// Math (custom) - dynamically imported or added when dependency installed
 import type { Transaction } from 'prosemirror-state'
 
 /**
@@ -22,7 +27,11 @@ export function createTiptapEditor(options: {
     content,
     extensions: [
       StarterKit.configure({}),
-      Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' })
+      Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' }),
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell
     ],
     onUpdate
   })

@@ -279,13 +279,7 @@ onUnmounted(() => {
 /*--------------------------------------------------------*/
 /* COMPONENT SPECIFIC STYLES (NOT BASE CSS)
 /*--------------------------------------------------------*/
-/* Layout: keep actions left, move reset button to far right */
-.python-cell-toolbar {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding-right: 0; /* ensure no right gutter so the last button touches the edge */
-}
+/* Layout specifics unique to Python toolbar */
 /* Run button constant width with reserved spinner space */
 .toolbar-btn.run {
   display: inline-flex;

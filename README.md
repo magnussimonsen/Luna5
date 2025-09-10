@@ -64,7 +64,7 @@ Built-in flashcard functionality supporting text, images, audio, and IPA (Intern
 
 | Tool                         | Status        |
 | ---------------------------- | ------------- |
-| Rich Text / Markdown Editor | ✅ Core WYSIWYG (Tiptap) implemented (basic formatting). Math formula support not yet available; evaluating MathLive / KaTeX integration |
+| Rich Text / Markdown Editor | ✅ Core WYSIWYG (Tiptap) implemented (basic formatting). Math formula input not yet implemented (placeholder button present) |
 | Python Environment (Pyodide)	| ✅ Implemented. Core features available. Ongoing improvements and testing |
 | CAS (Symbolic Math, via SymPy)   | 🚧 Planned   |
 | Graphical Calculator         | 🚧 Planned    |
@@ -105,7 +105,7 @@ Notes
 
 ### Planned Core Libraries / Components
 
-* Rich-text editor with math input support (considering Tiptap, MathLive, and KaTeX)
+* Rich-text editor with future math input support (KaTeX/other renderer under evaluation; current button is a placeholder)
 * Markdown editor with KaTeX rendering
 * Code editor (Monaco Editor in use)
 * Pyodide integration (via a background worker)
@@ -163,8 +163,13 @@ Third-party components are licensed separately. Notably:
 See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated list of third-party dependencies and their licenses.
 
 ---
-
 ## 🖼️ Current UI Progress Snapshots
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-10-1.png" alt="UI improvments" width="900" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-10-2.png" alt="UI improvments" width="900" />
+</p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-09-1.png" alt="UI improvments" width="900" />
 </p>

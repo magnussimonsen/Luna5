@@ -24,6 +24,7 @@ export type ThemeColorTypes = {
   pythonImageBackground: string
 
   toolbarBackground: string
+  toolbarBorderColor: string
 
   mainPanelBackground: string
   sidePanelBackground: string

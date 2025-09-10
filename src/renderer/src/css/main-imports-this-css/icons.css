@@ -1,0 +1,87 @@
+:root {
+
+    /* Unicode Icon Tokens (store actual characters, not HTML entities) */
+    --icon-arrow-move-up: '🠉'; /* previously &#129033; */
+    --icon-arrow-move-down: '🠋'; /* previously &#129035; */
+    --icon-flag: '⚑';
+    --icon-settings: '⚙';
+    --icon-help: '?';
+    --icon-python: '🐍';
+    /* Text / formatting */
+    --icon-bold: '𝐁';
+    --icon-italic: '𝙄';
+    --icon-underline: '𝐔';
+    --icon-heading-1: 'H1';
+    --icon-heading-2: 'H2';
+    --icon-heading-3: 'H3';
+    --icon-heading-4: 'H4';
+    --icon-heading-5: 'H5';
+    --icon-heading-6: 'H6';
+    --icon-bullet-list: '•';
+    --icon-numbered-list: '1.';
+    /* Table */
+    --icon-table: '▦';
+    --icon-insert-table-column-left: '⇤'; /* Not used */
+    --icon-insert-table-column-right: '+ |';
+    --icon-insert-table-row-above: '⇑'; /* Not used */
+    --icon-insert-table-row-below: '+ __';
+    /* Deletion icons refined for clarity (row = backspace, column = forward delete) */
+    --icon-delete-table-row: '┅';
+    --icon-delete-table-column: '┇';
+    --icon-delete-table: '✕';
+    /* History */
+    --icon-undo: '↺';
+    --icon-redo: '↻';
+    /* Math */
+    --icon-math-live-block: 'Insert Math Live';
+    --icon-math-live-inline: 'Insert Math Live Inline';
+    --icon-math-katex-block: 'Insert Katex';
+    --icon-math-katex-inline: 'Insert Katex Inline';
+
+/* Icon utility classes (global) */
+.icon, .icon-flag, .icon-move-up, .icon-move-down, .icon-settings, .icon-help, .icon-python {
+    display: inline-block;
+    line-height: 1;
+    font-size: 1em;
+    vertical-align: middle;
+    /* Inherit color so theme changes propagate */
+    color: currentColor;
+}
+
+.icon-move-up::before { content: var(--icon-arrow-move-up); }
+.icon-move-down::before { content: var(--icon-arrow-move-down); }
+.icon-flag::before { content: var(--icon-flag); }
+.icon-settings::before { content: var(--icon-settings); }
+.icon-help::before { content: var(--icon-help); }
+.icon-python::before { content: var(--icon-python); }
+
+/* Text editor icons (use CSS variables so we can override easily) */
+.icon-bold::before { content: var(--icon-bold); }
+.icon-italic::before { content: var(--icon-italic); }
+.icon-underline::before { content: var(--icon-underline); }
+.icon-heading-1::before { content: var(--icon-heading-1); }
+.icon-heading-2::before { content: var(--icon-heading-2); }
+.icon-heading-3::before { content: var(--icon-heading-3); }
+.icon-heading-4::before { content: var(--icon-heading-4); }
+.icon-heading-5::before { content: var(--icon-heading-5); }
+.icon-heading-6::before { content: var(--icon-heading-6); }
+.icon-bullet-list::before { content: var(--icon-bullet-list); }
+.icon-numbered-list::before { content: var(--icon-numbered-list); }
+.icon-table::before { content: var(--icon-table); }
+.icon-insert-table-column-left::before { content: var(--icon-insert-table-column-left); }
+.icon-insert-table-column-right::before { content: var(--icon-insert-table-column-right); }
+.icon-insert-table-row-above::before { content: var(--icon-insert-table-row-above); }
+.icon-insert-table-row-below::before { content: var(--icon-insert-table-row-below); }
+.icon-delete-table-row::before { content: var(--icon-delete-table-row); }
+.icon-delete-table-column::before { content: var(--icon-delete-table-column); }
+.icon-delete-table::before { content: var(--icon-delete-table); }
+.icon-undo::before { content: var(--icon-undo); }
+.icon-redo::before { content: var(--icon-redo); }
+/* Math icon variants (placeholders until feature implemented) */
+.icon-math-live-block::before { content: var(--icon-math-live-block); }
+.icon-math-live-inline::before { content: var(--icon-math-live-inline); }
+.icon-math-katex-block::before { content: var(--icon-math-katex-block); }
+.icon-math-katex-inline::before { content: var(--icon-math-katex-inline); }
+
+}
+

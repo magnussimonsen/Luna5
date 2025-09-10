@@ -20,6 +20,7 @@ export const useThemeStore = defineStore('theme', {
       menuBackground: 'whitesmoke',
       // Toolbar background
       toolbarBackground: 'whitesmoke',
+      toolbarBorderColor: 'whitesmoke',
       // Main panel
       mainPanelBackground: '#ffffff',
       // Side panel
@@ -88,6 +89,7 @@ export const useThemeStore = defineStore('theme', {
       menuBackground: '#111111',
       // Toolbar background
       toolbarBackground: '#111111',
+      toolbarBorderColor: '#111111',
       // Main panel
       mainPanelBackground: '#222222',
       //Side panel
@@ -168,6 +170,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--app-background', colors.appBackground)
       root.style.setProperty('--menu-background', colors.menuBackground)
       root.style.setProperty('--toolbar-background', colors.toolbarBackground)
+      root.style.setProperty('--toolbar-border-color', colors.toolbarBorderColor)
       root.style.setProperty('--main-panel-background', colors.mainPanelBackground)
       root.style.setProperty('--side-panel-background', colors.sidePanelBackground)
       root.style.setProperty('--cell-background', colors.cellBackground)

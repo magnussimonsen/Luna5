@@ -1,16 +1,33 @@
 /*
 Toolbar base
-- Shared layout for toolbars
-- Uses CSS variables; falls back to --debug-color in dev when tokens are missing
+  - Shared layout + sizing for all toolbars
+  - Component files should only add UNIQUE rules (spinners, special alignment, etc.)
+  - Uses CSS variables so theme + font stores can live update look
 */
+
 .python-cell-toolbar,
 .text-cell-toolbar,
 .flashcards-toolbar {
+  height: var(--toolbar-height, 3em);
   display: flex;
   align-items: center;
-  padding: var(--toolbar-padding, 0.0em 0.0em 0.0em 0.0em);
-  background: var(--toolbar-background, var(--debug-color, transparent)); /* dev debug fallback */
-  gap: var(--toolbar-button-gap, 0.5em); /* Space between buttons */
+  width: 100%;
+  gap: var(--toolbar-button-gap);
+  padding: var(--toolbar-padding);
+  font-size: var(--toolbar-font-size);
+  font-weight: var(--toolbar-font-weight, normal);
+  background: var(--toolbar-background, var(--app-background, #f3f5f7));
+  color: var(--ui-text-color, var(--text-color, #222));
+  border: var(--toolbar-border);
+  box-sizing: border-box;
+}
+
+/* Placeholder variant (when editor not yet ready) */
+.text-cell-toolbar.placeholder,
+.python-cell-toolbar.placeholder,
+.flashcards-toolbar.placeholder {
+  opacity: 0.6;
+  font-style: italic;
 }
 
 /* Shared toolbar button styles */
@@ -27,11 +44,24 @@ Toolbar base
   font-family: var(--ui-font, system-ui, sans-serif);
   /* Toolbar font size from font store */
   font-size: var(--toolbar-font-size, 14px);
+  /* Force consistent vertical sizing */
+  height: var(--toolbar-button-height, 1.9em);
+  line-height: 1; /* avoid tall glyph vertical metrics inflating height */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .toolbar-btn:hover {
   /* Hover colors with debug fallback */
   background: var(--button-hover-color, var(--debug-color, #e6f0ff));
+  border: var(--toolbar-button-border-hover);
+}
+
+.toolbar-btn.delete-button:hover {
+  /* Hover colors with debug fallback */
+  background: var(--delete-button-hover-color, var(--debug-color, #e6f0ff));
   border: var(--toolbar-button-border-hover);
 }
 

@@ -55,7 +55,7 @@ const currentThemeId = computed(() =>
             @change="fontStore.setCodingFont(fontStore.fonts.codingFont)"
           >
             <option
-              v-for="font in fontStore.availableFonts"
+              v-for="font in fontStore.availableCodingFonts"
               :key="'codingFont-' + font.value"
               :value="font.value"
             >

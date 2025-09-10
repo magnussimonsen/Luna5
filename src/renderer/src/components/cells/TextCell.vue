@@ -118,6 +118,34 @@ const editor = tiptapEditor
 .tiptap-editor :deep(.ProseMirror p:last-child) {
   margin-bottom: 0;
 }
+/* Ensure math block occupies full row width */
+.tiptap-editor :deep(.ProseMirror > div[data-math-block]),
+.tiptap-editor :deep(.ProseMirror > [data-node-view-wrapper][data-math-block]) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+/* Table styling */
+.tiptap-editor :deep(table) {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.4rem 0 0.8rem;
+}
+.tiptap-editor :deep(th),
+.tiptap-editor :deep(td) {
+  border: 1px solid var(--border-color, #d0d7de);
+  padding: 0.25rem 0.4rem;
+  vertical-align: top;
+  min-width: 2rem;
+}
+.tiptap-editor :deep(th) {
+  background: var(--cell-margin-background-color, #f3f5f7);
+  font-weight: 600;
+}
+.tiptap-editor :deep(.selectedCell) {
+  outline: 2px solid var(--active-border-color, lightgreen);
+  outline-offset: -2px;
+}
 .tiptap-loading {
   font-style: italic;
   opacity: 0.7;

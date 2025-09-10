@@ -10,68 +10,70 @@ For now only placeholders for the buttons and sliders are implemented.
 -->
 
 <template>
-  <footer
-    class="status-bar"
-    :style="{
-      fontFamily: fontStore.fonts.uiFont,
-      fontSize: fontSizeStore.fontSizes.statusBarFontSize
-    }"
-  >
-    <div class="status-section left">
-      <span class="cell-type">{{ cellTypeLabel }}</span>
-      <span class="divider">|</span>
-      <span class="cell-state">{{ cellStateLabel }}</span>
-      <span class="divider">|</span>
-      <span class="file-path">{{ filePathLabel }}</span>
-      <button
-        class="save-btn btn-status-bar"
-        :style="saveBtnStyle"
-        :title="saveBtnTitle"
-        @click="handleSaveClick()"
-      >
-        {{ saveBtnLabel }}
-      </button>
-      <button
-        class="autosave-btn btn-status-bar"
-        :style="autosaveBtnStyle"
-        :title="autosaveTooltip"
-        @click="cycleAutosave()"
-      >
-        {{ autosaveLabel }}
-      </button>
-    </div>
-    <div class="status-section right">
-      <input
-        id="font-size-slider"
-        v-model.number="changeFontSizeIndex"
-        class="zoom-slider"
-        type="range"
-        :min="0"
-        :max="fontSizeOptions.length - 1"
-        step="1"
-      />
-      <button
-        type="button"
-        class="reset-zoom-btn btn-status-bar"
-        :style="resetFontSizeBtnStyle"
-        @click="onResetBtnClick"
-      >
-  Font size <span class="fontsize-px-displayed-fixed">{{ displayedFontSize }}</span>
-      </button>
-      <input
-        id="zoom-slider"
-        v-model.number="zoomPercent"
-        class="zoom-slider"
-        type="range"
-        min="25"
-        max="200"
-        step="5"
-      />
-      <button class="reset-zoom-btn btn-status-bar" :style="resetZoomBtnStyle" @click="resetZoom">
-        <span class="zoom-percent-fixed">{{ zoomPercent }} %</span>
-      </button>
-    </div>
-  </footer>
+  <div class="status-bar-wrapper">
+    <footer
+      class="status-bar"
+      :style="{
+        fontFamily: fontStore.fonts.uiFont,
+        fontSize: fontSizeStore.fontSizes.statusBarFontSize
+      }"
+    >
+      <div class="status-section left">
+        <span class="cell-type">{{ cellTypeLabel }}</span>
+        <span class="divider">|</span>
+        <span class="cell-state">{{ cellStateLabel }}</span>
+        <span class="divider">|</span>
+        <span class="file-path">{{ filePathLabel }}</span>
+        <button
+          class="save-btn btn-status-bar"
+          :style="saveBtnStyle"
+          :title="saveBtnTitle"
+          @click="handleSaveClick()"
+        >
+          {{ saveBtnLabel }}
+        </button>
+        <button
+          class="autosave-btn btn-status-bar"
+          :style="autosaveBtnStyle"
+          :title="autosaveTooltip"
+          @click="cycleAutosave()"
+        >
+          {{ autosaveLabel }}
+        </button>
+      </div>
+      <div class="status-section right">
+        <input
+          id="font-size-slider"
+          v-model.number="changeFontSizeIndex"
+          class="zoom-slider"
+          type="range"
+          :min="0"
+          :max="fontSizeOptions.length - 1"
+          step="1"
+        />
+        <button
+          type="button"
+          class="reset-zoom-btn btn-status-bar"
+          :style="resetFontSizeBtnStyle"
+          @click="onResetBtnClick"
+        >
+          Font size <span class="fontsize-px-displayed-fixed">{{ displayedFontSize }}</span>
+        </button>
+        <input
+          id="zoom-slider"
+          v-model.number="zoomPercent"
+          class="zoom-slider"
+          type="range"
+          min="25"
+          max="200"
+          step="5"
+        />
+        <button class="reset-zoom-btn btn-status-bar" :style="resetZoomBtnStyle" @click="resetZoom">
+          <span class="zoom-percent-fixed">{{ zoomPercent }} %</span>
+        </button>
+      </div>
+    </footer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -312,6 +314,13 @@ const resetFontSizeBtnStyle = computed(() => ({
 </script>
 
 <style scoped>
+.status-bar-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+}
 .status-bar {
   position: relative;
   width: 100%;
@@ -428,7 +437,7 @@ const resetFontSizeBtnStyle = computed(() => ({
 /* Fixed-width zoom percentage (digits + % sign) always reserve 4 character cells */
 .zoom-percent-fixed {
   display: inline-block;
-  width: 5ch; 
+  width: 5ch;
   text-align: right; /* Align shorter values (e.g., 25%) to the right for consistency */
   font-variant-numeric: tabular-nums; /* Use tabular numbers if supported for consistent digit width */
   white-space: nowrap; /* Prevent wrapping */

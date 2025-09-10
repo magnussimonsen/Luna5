@@ -10,82 +10,149 @@
   >
     <!-- Inline Formatting -->
     <button
-      class="tb-btn"
+      class="toolbar-btn icon-bold"
       type="button"
       :class="{ active: isActive('bold') }"
+      title="Bold (Ctrl+B)"
+      aria-label="Bold"
       :disabled="!canRunCommand('toggleBold')"
       @click="toggleBold"
-    >
-      Bold
-    </button>
+    />
     <button
-      class="tb-btn"
+      class="toolbar-btn icon-italic"
       type="button"
       :class="{ active: isActive('italic') }"
       title="Italic (Ctrl+I)"
+      aria-label="Italic"
       :disabled="!canRunCommand('toggleItalic')"
       @click="toggleItalic"
-    >
-      <i>Italic</i>
-    </button>
+    />
 
     <!-- Lists -->
     <button
-      class="tb-btn"
+      class="toolbar-btn icon-bullet-list"
       type="button"
       :class="{ active: isActive('bulletList') }"
       title="Bullet list"
+      aria-label="Bullet list"
       :disabled="!activeTextEditor"
       @click="toggleBulletList"
-    >
-      • List
-    </button>
+    />
     <button
-      class="tb-btn"
+      class="toolbar-btn icon-numbered-list"
       type="button"
       :class="{ active: isActive('orderedList') }"
       title="Numbered list"
+      aria-label="Numbered list"
       :disabled="!activeTextEditor"
       @click="toggleOrderedList"
-    >
-      1. List
-    </button>
+    />
 
     <!-- Headings (compact render from config array) -->
     <template v-for="heading in headingLevels" :key="'heading-' + heading">
       <button
-        class="tb-btn"
+        class="toolbar-btn"
+        :class="['icon-heading-' + heading, { active: isActiveHeading(heading) }]"
         type="button"
-        :class="{ active: isActiveHeading(heading) }"
         :title="'Heading ' + heading"
+        :aria-label="'Heading ' + heading"
         :disabled="!activeTextEditor"
         @click="toggleHeading(heading)"
-      >
-        H{{ heading }}
-      </button>
+      />
     </template>
 
     <span class="sep" aria-hidden="true">|</span>
 
-    <!-- History -->
+    <!-- Tables -->
     <button
-      class="tb-btn"
+      class="toolbar-btn icon-table"
+      type="button"
+      title="Insert 3x3 table"
+      aria-label="Insert table"
+      :disabled="!activeTextEditor"
+      @click="insertTable"
+    />
+    <button
+      class="toolbar-btn icon-insert-table-row-below"
+      type="button"
+      title="Add row after"
+      aria-label="Add row"
+      :disabled="!isTableActive"
+      @click="addRow"
+    />
+    <button
+      class="toolbar-btn icon-insert-table-column-right"
+      type="button"
+      title="Add column after"
+      aria-label="Add column"
+      :disabled="!isTableActive"
+      @click="addColumn"
+    />
+    <button
+      class="toolbar-btn delete-button icon-delete-table-row"
+      type="button"
+      title="Delete row"
+      aria-label="Delete row"
+      :disabled="!isTableActive"
+      @click="deleteRow"
+    />
+    <button
+      class="toolbar-btn delete-button icon-delete-table-column"
+      type="button"
+      title="Delete column"
+      aria-label="Delete column"
+      :disabled="!isTableActive"
+      @click="deleteColumn"
+    />
+    <button
+      class="toolbar-btn delete-button icon-delete-table"
+      type="button"
+      title="Delete table"
+      aria-label="Delete table"
+      :disabled="!isTableActive"
+      @click="deleteTable"
+    />
+
+    <span class="sep" aria-hidden="true">|</span>
+
+    <!-- Math (placeholder button - feature removed, kept for future implementation) -->
+    <button
+      class="toolbar-btn icon-math-live-block"
+      type="button"
+      title="Math Live Input Field with virtual keyboard (coming soon)"
+      aria-label="Math Live (coming soon)"
+      :disabled="!activeTextEditor"
+      @click="placeholderMathLive"
+    />
+
+    <button
+      class="toolbar-btn icon-math-katex-block"
+      type="button"
+      title="KaTeX (coming soon)"
+      aria-label="LaTeX input field with KaTeX(coming soon)"
+      :disabled="!activeTextEditor"
+      @click="placeholderKaTeX"
+    />
+
+    <span class="sep" aria-hidden="true">|</span>
+
+    <!-- History: Use electron ctrl+z and ctrl+y for undo/redo
+    <button
+      class="toolbar-btn icon-undo"
       type="button"
       title="Undo (Ctrl+Z)"
+      aria-label="Undo"
       :disabled="!canRunCommand('undo')"
       @click="undo"
-    >
-      Undo
-    </button>
+    />
     <button
-      class="tb-btn"
+      class="toolbar-btn icon-redo"
       type="button"
       title="Redo (Ctrl+Y)"
+      aria-label="Redo"
       :disabled="!canRunCommand('redo')"
       @click="redo"
-    >
-      Redo
-    </button>
+    />-->
   </div>
   <div v-else class="text-cell-toolbar placeholder" aria-hidden="true">Editor not ready</div>
 </template>
@@ -135,10 +202,11 @@ function canRunCommand(commandName: string): boolean {
         return editor.can().chain().focus().toggleBold().run()
       case 'toggleItalic':
         return editor.can().chain().focus().toggleItalic().run()
-      case 'undo':
-        return editor.can().chain().focus().undo().run()
-      case 'redo':
-        return editor.can().chain().focus().redo().run()
+      // Use electron ctrl+z and ctrl+y for undo/redo
+      // case 'undo':
+      //   return editor.can().chain().focus().undo().run()
+      // case 'redo':
+      //   return editor.can().chain().focus().redo().run()
       default:
         return true
     }
@@ -163,11 +231,61 @@ function toggleOrderedList(): void {
 function toggleHeading(level: HeadingLevel): void {
   runCommand((ed) => ed.chain().focus().toggleHeading({ level }).run())
 }
+/* History: Use electron ctrl+z and ctrl+y for undo/redo
 function undo(): void {
   runCommand((ed) => ed.chain().focus().undo().run())
 }
 function redo(): void {
   runCommand((ed) => ed.chain().focus().redo().run())
+}
+*/
+
+// Table helpers
+const isTableActive = computed(() => isActive('table'))
+function insertTable(): void {
+  runCommand((ed) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(ed as any).chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
+  })
+}
+function addRow(): void {
+  runCommand((ed) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(ed as any).chain().focus().addRowAfter().run()
+  })
+}
+function addColumn(): void {
+  runCommand((ed) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(ed as any).chain().focus().addColumnAfter().run()
+  })
+}
+function deleteRow(): void {
+  runCommand((ed) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(ed as any).chain().focus().deleteRow().run()
+  })
+}
+function deleteColumn(): void {
+  runCommand((ed) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(ed as any).chain().focus().deleteColumn().run()
+  })
+}
+function deleteTable(): void {
+  runCommand((ed) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(ed as any).chain().focus().deleteTable().run()
+  })
+}
+
+function placeholderMathLive(): void {
+  // Intentionally left blank; future MathLive support will hook in here.
+  console.log('MathLive button in toolbar clicked.  Feature coming soon!')
+}
+function placeholderKaTeX(): void {
+  // Intentionally left blank; future KaTeX support will hook in here.
+  console.log('KaTeX button in toolbar clicked.  Feature coming soon!')
 }
 
 // Active state helpers
@@ -180,54 +298,15 @@ function isActiveHeading(level: number): boolean {
 </script>
 
 <style scoped>
+@import '../../css/main-imports-this-css/design.css'; /* ensure design tokens (height, padding vars) are available */
 @import '../../css/toolbar-base.css';
-.text-cell-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 0.2em;
-  font-size: 0.8em;
-  padding: 0.4em 0.4em;
-  /* Use theme variables coming from colorThemeStore */
-  background: var(--toolbar-background, var(--app-background, #f3f5f7));
-  border-bottom: 1px solid var(--border-color, #d0d7de);
-  color: var(--ui-text-color, var(--text-color, #222));
-  font-weight: 500;
-}
+/* Base styling moved to toolbar-base.css; only overrides below */
 
-.text-cell-toolbar.placeholder {
-  opacity: 0.6;
-  font-style: italic;
-}
-
-.tb-btn {
-  font: inherit;
-  padding: 0.15rem 0.45rem;
-  border: 1px solid var(--button-border-color, var(--border-color, #d0d7de));
-  background: var(--button-background-color, #ffffff);
-  border-radius: 3px;
-  cursor: pointer;
-  line-height: 1.1;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  color: inherit;
-  transition:
-    background-color 120ms ease,
-    border-color 120ms ease,
-    color 120ms ease;
-}
-.tb-btn:hover:not(:disabled) {
-  background: var(--button-hover-color, #eef2f5);
-  border-color: var(--button-border-hover-color, var(--button-border-color, #d0d7de));
-}
-.tb-btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-.tb-btn.active {
+/* Rely on shared .toolbar-btn styles from toolbar-base.css; only override active state if needed */
+.toolbar-btn.active {
   background: var(--button-on-color, #2563eb);
   color: #fff;
-  border-color: var(--button-border-hover-color, var(--button-on-color, #2563eb));
+  border: var(--toolbar-button-border-hover, 1px solid #2563eb);
 }
 .sep {
   opacity: 0.5;
@@ -235,14 +314,23 @@ function isActiveHeading(level: number): boolean {
 }
 
 /* Dark mode specific fine-tuning (variables already swapped by theme store) */
+/* Optional dark-mode fallback (variables should already swap) */
 .text-cell-toolbar.is-dark {
-  /* Provide subtle fallback just in case theme variables haven't applied yet */
   background: var(--toolbar-background, #1f2937);
-  border-bottom: 1px solid var(--border-color, #374151);
-  color: var(--ui-text-color, #e5e7eb);
 }
-.text-cell-toolbar.is-dark .tb-btn.active {
+.text-cell-toolbar.is-dark .toolbar-btn.active {
   /* Ensure contrast in dark mode if button-on-color is dark */
   color: var(--button-active-fg-dark, #fff);
+}
+
+/* Normalize icon-only button glyph metrics so all buttons visually share same height */
+.toolbar-btn[class*='icon-'] {
+  line-height: 1; /* remove font ascent differences */
+  font-size: var(--toolbar-font-size, 1em); /* keep consistent with text buttons */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--toolbar-button-height, 1.5em); /* use design token; fallback if not loaded */
+  padding: var(--toolbar-button-padding, 0.1em 0.4em 0.1em 0.4em);
 }
 </style>

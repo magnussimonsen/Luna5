@@ -13,6 +13,14 @@ const availableFonts = [
   { label: 'Arimo', value: 'Arimo, Arial, sans-serif' }
 ]
 
+const availableCodingFonts = [
+  { label: 'Roboto', value: 'Roboto, Arial, sans-serif' },
+  { label: 'OpenDyslexic', value: 'OpenDyslexic, Arial, sans-serif' },
+  { label: 'Comic Neue', value: 'Comic Neue, Arial, sans-serif' },
+  { label: 'Fira Mono', value: 'Fira Mono, monospace' },
+  { label: 'Fira Code', value: 'Fira Code, monospace' },
+]
+
 export const useFontStore = defineStore('fonts', {
   state: () => ({
     fonts: {
@@ -21,7 +29,8 @@ export const useFontStore = defineStore('fonts', {
       codingFont: 'Fira Code, monospace',
       textFont: 'Arimo, Arial, sans-serif'
     } as FontTypes,
-    availableFonts
+    availableFonts,
+    availableCodingFonts
   }),
   actions: {
     setUIFont(font: string) {

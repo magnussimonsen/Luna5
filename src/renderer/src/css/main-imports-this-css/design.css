@@ -30,18 +30,22 @@ Design tokens (layout/spacing)
     /* top, right, bottom, left */
 
     /* Toolbar */
-    --toolbar-height: 2.5em;
-    --toolbar-padding: 0.0em 0.0em 0em 0.0em;
-    /* top, right, bottom, left */
-    --toolbar-button-padding: 0.1em 0.4em 0.1em 0.4em;
-    /* top, right, bottom, left */
+    --toolbar-height: 2em;
+    --toolbar-padding: 0.0em 0.3em 0em 0.3em; /* top, right, bottom, left */
+    --toolbar-border: 1px solid var(--toolbar-border-color, #d0d7de);
+    --toolbar-font-size: 1em;
+    --toolbar-font-weight: normal;
+    --toolbar-z-index: 2000;
+
+    --toolbar-button-padding: 0.1em 0.4em 0.1em 0.4em; /* top, right, bottom, left */
+    --toolbar-button-height: 1.5em; /* uniform button height */
     --toolbar-button-gap: 0.25em;
     --toolbar-button-radius: 0.25em;
     --toolbar-button-border: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --toolbar-button-border-hover: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --toolbar-button-border-active: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --toolbar-button-border-disabled: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --toolbar-z-index: 2000;
+
     /* Ensure toolbar is above other UI elements but below menu bar */
 
     /* Status bar */
@@ -80,31 +84,4 @@ Design tokens (layout/spacing)
     --button-padding: 3.1em 4.3em 4.1em 4.3em;
     /* legacy; top, right, bottom, left */
 
-    /*-------------------------------------------------------------------*/
-    /* TO DO: MOVE ICON CODE TO NEW FILE IN SAME FOLDER: icons-utf-8.css*/
-    /*-------------------------------------------------------------------*/
-    /* Unicode Icon Tokens (store actual characters, not HTML entities) */
-    --icon-arrow-move-up: '🠉'; /* previously &#129033; */
-    --icon-arrow-move-down: '🠋'; /* previously &#129035; */
-    --icon-flag: '⚑'; 
-    --icon-settings: '⚙';
-    --icon-help: '?';
-    --icon-python: '🐍';
-
-
-/* Icon utility classes (global) */
-.icon, .icon-flag, .icon-move-up, .icon-move-down, .icon-settings, .icon-help, .icon-python {
-    display: inline-block;
-    line-height: 1;
-    font-size: 1em;
-    vertical-align: middle;
-    /* Inherit color so theme changes propagate */
-    color: currentColor;
-}
-.icon-move-up::before { content: var(--icon-arrow-move-up); }
-.icon-move-down::before { content: var(--icon-arrow-move-down); }
-.icon-flag::before { content: var(--icon-flag); }
-.icon-settings::before { content: var(--icon-settings); }
-.icon-help::before { content: var(--icon-help); }
-.icon-python::before { content: var(--icon-python); }
 }
