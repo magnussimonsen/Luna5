@@ -34,7 +34,7 @@ const selectionStore = useCellSelectionStore()
 const workspace = computed(() => workspaceStore.getWorkspace())
 
 if (!workspaceStore.currentNotebookId) {
-  // Auto-select / create default if missing so UId always shows something
+  // Auto-select / create default if missing so UI always shows something
   workspaceStore.ensureDefaultNotebook()
 }
 
