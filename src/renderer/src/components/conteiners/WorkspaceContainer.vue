@@ -7,14 +7,21 @@
   <div class="workspace-wrapper">
     <div
       :class="{
-        'workspace-container-fluid workspace-scroll': layoutMode === 'fluid',
-        'workspace-container-a4 a4-preview-scroll': layoutMode === 'a4Preview'
+        'workspace-scroll': layoutMode === 'web',
+        'a4-preview-scroll': layoutMode === 'a4Preview'
       }"
     >
-      <slot />
-      <SidePanel v-if="layoutMode === 'fluid'" />
+      <div
+        :class="{
+          'workspace-container-web': layoutMode === 'web',
+          'workspace-container-a4': layoutMode === 'a4Preview'
+        }"
+      >
+        <slot />
+        <SidePanel v-if="layoutMode === 'web'" />
+      </div>
+      <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" />
     </div>
-    <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" />
   </div>
 </template>
 
@@ -31,22 +38,27 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 /* Wrapper to contain the workspace and side panel */
 .workspace-wrapper {
   position: relative; /* for the side panel overlay */
-  flex: 1 1 auto; /* take available space in parent flex column */
+  flex: 1 0 auto; /* take available space in parent flex column */
+  overflow: hidden;
   background: var(--main-panel-background, #f0f0f0);
+  background: fuchsia; /* debug */
 }
 
-.workspace-container-fluid {
+.workspace-container-web {
   position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* prevent double scrollbars */
   display: flex;
   background: var(--main-panel-background, #f0f0f0);
-  background: red;
-  overflow: hidden;
+  background: rgb(87 134 134);
 }
 
-.workspace-container--a4 {
+.workspace-container-a4 {
   /* A4: fixed page width, centered, never pushes the StatusBar */
   /* Keep the container flexible vertically inside the flex column parent */
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   /* Exact page width but responsive fallback on small screens */
   width: min(210mm, 100%);
   max-width: 210mm;
@@ -57,10 +69,12 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   position: relative; /* keeps any local abs children positioned correctly */
   /* Optional polish */
   box-shadow: var(--paper-box-shadow, 0 8px 16px rgba(0, 0, 0, 1));
+  background: maroon;
 }
 
 .workspace-scroll {
-  flex: 1 1 auto;
+  display: relative;
+  flex: 0 1 auto;
   min-height: 0; /* critical for Chrome flex overflow */
   height: 100%;
   overflow-y: auto;
@@ -108,8 +122,8 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   border: 1px solid var(--paper-border-color, #ccc);
 }
 
-/* Border for fluid mode */
-.workspace-container--fluid .workspace-zoom {
+/* Border for web mode */
+.workspace-container--web .workspace-zoom {
   border: 1px solid var(--main-panel-border-color, #ccc);
 }
 

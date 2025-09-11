@@ -130,6 +130,7 @@ function onMarginClick(): void {
 /* Posible problem: Using em instead of rem - unclear how this will affect layout */
 .cell-container {
   display: flex;
+  flex: 0 1 auto;
   width: 100%;
   border: solid 1px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
   border-left: 0.5em solid var(--cell-border-color, blue);

@@ -4,7 +4,7 @@ import type { WorkspaceLayoutMode, MenubarState } from '@renderer/types/workspac
 export const useMenubarStore = defineStore('menubar', {
   state(): MenubarState {
     return {
-      workspaceLayoutMode: 'fluid'
+      workspaceLayoutMode: 'web'
     }
   },
   actions: {
@@ -12,7 +12,7 @@ export const useMenubarStore = defineStore('menubar', {
       this.workspaceLayoutMode = mode
     },
     toggleA4Preview(): void {
-      this.workspaceLayoutMode = this.workspaceLayoutMode === 'a4Preview' ? 'fluid' : 'a4Preview'
+      this.workspaceLayoutMode = this.workspaceLayoutMode === 'a4Preview' ? 'web' : 'a4Preview'
     }
   },
   getters: {
