@@ -7,12 +7,13 @@
     }"
   >
     <div class="workspace-scroll">
-      <!-- Cell list slot / future cell renderer 
-       (only way I got scrolling working was by adding this div)
-       dont know why -->
       <slot />
     </div>
-    <SidePanel />
+    <!-- Render the SidePanel only when layoutMode is 'fluid'.
+         In 'a4Preview' mode, the SidePanel should appear as an overlay
+         sliding in from the right, without affecting the workspace layout. -->
+    <SidePanel v-if="layoutMode === 'fluid'" />
+    <!-- <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" />-->
   </div>
 </template>
 
@@ -40,6 +41,7 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 .workspace-scroll {
   flex: 1 1 auto;
   min-height: 0; /* critical for Chrome flex overflow */
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0rem 0.25rem 0.25rem 0.25rem; /* top right bottom left */
@@ -54,14 +56,19 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   width: 100%;
 }
 
+/* A4: fixed page width, centered, never pushes the StatusBar */
 .workspace-container--a4 {
-  /* A4 width in mm converted directly; let the browser handle it */
-  width: 210mm;
+  /* Keep the container flexible vertically inside the flex column parent */
+  flex: 1 1 auto;
+  /* Exact page width but responsive fallback on small screens */
+  width: min(210mm, 100%);
   max-width: 210mm;
-  min-height: 297mm;
+  margin: 0 auto;
   background: var(--color-surface-paper, #fff);
   border: 1px solid var(--color-border-light, #e0e0e0);
-  position: relative;
+  position: relative; /* keeps any local abs children positioned correctly */
+  /* Optional polish */
+  box-shadow: 0 2px 16px rgba(0,0,0,.08);
 }
 
 /* Optional: nice background outside the page in preview mode (set on parent) */

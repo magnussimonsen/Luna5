@@ -40,7 +40,7 @@
         <ImplementedMark :implemented="false" />
       </div>
       <div class="dropdown-menu-divider"></div>
-      <div class="dropdown-menu-item" @click="handleSettings">
+      <div class="dropdown-menu-item" @click="handleTogglePanel('settings')">
         Settings <span class="shortcut-not-implemented">Alt + Shift + s</span>
         <ImplementedMark :implemented="true" />
       </div>
@@ -386,10 +386,6 @@ const handleSaveFileAs = async (): Promise<void> => {
 }
 
 const handleSavePDFForSubmission = (): void => {}
-
-const handleSettings = (): void => {
-  modalStore.openSettingsModal()
-}
 
 const handleAboutLuna = (): void => {
   modalStore.openAboutLunaModal()

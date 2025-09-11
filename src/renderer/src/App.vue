@@ -5,7 +5,6 @@ import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
 import CellList from '@renderer/components/conteiners/CellList.vue'
 import StatusBar from '@renderer/components/navigation_bars/StatusBar.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
-import GeneralSettingsModal from '@renderer/components/modals/settings_modals/SettingsModal.vue'
 import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
 /*import SidePanel from '@renderer/components/side_panel/SidePanel.vue'*/
 import { useModalStore } from '@renderer/stores/UI/modalStore'
@@ -22,6 +21,13 @@ const generalSettingsStore = useGeneralSettingsStore()
 const autosaveInterval = computed(() => generalSettingsStore.autosaveChangeIntervalGetter)
 const changeCount = computed(() => workspaceStore.inputChangesSinceLastSave)
 const isSaving = ref(false)
+
+// Layout mode for conditional rendering of SidePanel
+import { storeToRefs } from 'pinia'
+import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
+import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
+const menubarStore = useMenubarStore()
+const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 
 watch([autosaveInterval, changeCount], async ([interval, count]) => {
   if (!interval || interval <= 0) return
@@ -45,19 +51,19 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
 
 <template>
   <div id="app-layout">
-    <MenuBar />
-    <Toolbar />
+    <div class="top-bar-container">
+      <MenuBar />
+      <Toolbar />
+    </div>
     <WorkspaceContainer>
       <CellList />
     </WorkspaceContainer>
+    <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" />
     <StatusBar />
   </div>
   <!-- Modal layer outside the app layout for proper centering -->
   <div v-if="modalStore.isAboutLunaModalOpen" class="modal-container">
     <AboutLunaModal />
-  </div>
-  <div v-if="modalStore.isSettingsModalOpen" class="modal-container">
-    <GeneralSettingsModal />
   </div>
   <SaveAsModal v-if="modalStore.isSaveAsModalOpen" />
 </template>
@@ -75,6 +81,28 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   background: var(--main-panel-background, #f0f0f0);
 }
 
+.top-bar-container {
+  /* Ensure it stays on top */
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* A4 mode overlay: fixed, no layout impact */
+.side-panel-overlay {
+  position: fixed; /* out of flow => won't resize workspace */
+  right: 0;
+  top: 4em;/* start below top bars */
+  width: 25%;
+  max-width: 75%; /* safety on small screens */
+  height: auto;
+  z-index: 2000; /* above workspace, below modals (9999) */
+  display: flex; /* typical panel internals */
+  flex-direction: column;
+  pointer-events: auto;
+}
 .modal-container {
   position: fixed;
   top: 0;
