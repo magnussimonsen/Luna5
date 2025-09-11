@@ -1,3 +1,11 @@
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+
 <template>
   <div class="cell-list">
     <CellContainer
@@ -104,6 +112,7 @@ function onDeselect(): void {
 <style scoped>
 .cell-list {
   display: flex;
+  position: relative;
   flex-direction: column;
   padding: 0em 0.5em 0em 0em /* top right bottom left */;
   box-sizing: border-box;

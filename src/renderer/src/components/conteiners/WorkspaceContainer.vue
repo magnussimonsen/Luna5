@@ -1,3 +1,8 @@
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+
 <template>
   <div class="workspace-wrapper">
     <div
@@ -31,7 +36,6 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 }
 
 .workspace-container-fluid {
-  flex: 1 1 auto;
   position: relative;
   display: flex;
   background: var(--main-panel-background, #f0f0f0);
@@ -62,12 +66,11 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0rem 0.25rem 0.25rem 0.25rem; /* top right bottom left */
-  border: 14px solid darkorchid /* debug */
+  border: 14px solid darkorchid; /* debug */
 }
 
 .a4-preview-scroll {
-overflow-y: auto;
-
+  overflow-y: auto;
 }
 
 /* The overlay: docked right, full container height, slides L->R */

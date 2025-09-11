@@ -22,7 +22,7 @@ export const useThemeStore = defineStore('theme', {
       toolbarBackground: 'whitesmoke',
       toolbarBorderColor: 'whitesmoke',
       // Main panel
-      mainPanelBackground: 'blue', /* debug */
+      mainPanelBackground: 'blue' /* debug */,
       mainPanelBorderColor: 'gainsboro',
       // Toolbar background
       // Paper preview background

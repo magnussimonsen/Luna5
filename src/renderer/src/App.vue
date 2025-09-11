@@ -1,3 +1,10 @@
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+
 <script setup lang="ts">
 import MenuBar from '@renderer/components/navigation_bars/MenuBar.vue'
 import WorkspaceContainer from '@renderer/components/conteiners/WorkspaceContainer.vue'
