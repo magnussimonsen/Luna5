@@ -10,7 +10,7 @@
       :selected="selectionStore.selectedCellId === cellId"
       :locked="!!cells[cellId].softLocked"
       :hidden="!!cells[cellId].hidden"
-  :flagged="!!cells[cellId].flagged"
+      :flagged="!!cells[cellId].flagged"
       @select="onSelect"
       @deselect="onDeselect"
     >

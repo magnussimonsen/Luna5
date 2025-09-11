@@ -315,16 +315,17 @@ const resetFontSizeBtnStyle = computed(() => ({
 
 <style scoped>
 .status-bar-wrapper {
+  height: fit-content;
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 0em;
   z-index: 2000;
 }
 .status-bar {
   position: relative;
   width: 100%;
-  height: 2em;
+  height: var(--status-bar-height, 2.5em);
   background: var(--menu-background, var(--debug-color, #222));
   color: var(--text-color, var(--debug-color, #fff));
   display: flex;

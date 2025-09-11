@@ -25,7 +25,8 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 
 <style scoped>
 .workspace-container {
-  box-sizing: border-box;
+  /*box-sizing: border-box;*/
+  bottom: 0em; /*var(--status-bar-height, 2.5em);*/
   padding: 0;
   margin: 0 auto;
   height: 100%;

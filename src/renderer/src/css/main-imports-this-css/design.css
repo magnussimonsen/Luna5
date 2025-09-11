@@ -49,7 +49,7 @@ Design tokens (layout/spacing)
     /* Ensure toolbar is above other UI elements but below menu bar */
 
     /* Status bar */
-    --status-bar-height: 2em;
+    --status-bar-height: 2.5em; /* It seems lik this is not wierd to the statusbar*/
     --status-bar-padding: 0.2em 0.5em 0.2em 0.5em;
     /* top, right, bottom, left */
     --status-bar-button-padding: 0.2em 0.3em 0.2em 0.3em;
