@@ -17,6 +17,11 @@
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
+/**
+ * Type: TocHeading
+ * Describes a single heading entry shown in the table of contents.
+ * Use descriptive names; avoid abbreviations to help new contributors.
+ */
 interface TocHeading {
   id: string
   cellId: string
@@ -25,36 +30,52 @@ interface TocHeading {
   numbering: string
 }
 
+// Pinia store for accessing workspace and notebook state.
 const workspaceStore = useWorkspaceStore()
-const refreshTick = ref(0) // cheap trigger when needed
 
-// Extract headings from text-cell HTML (cellInputContent or source fallback)
+// Lightweight trigger used to force recomputation when the workspace changes.
+const refreshTick = ref(0)
+
+/**
+ * Compute the list of headings for the current notebook.
+ * Implementation notes:
+ * - We iterate the notebook's cell order and parse text-cell HTML for H1-H4 tags.
+ * - Outline numbering is computed incrementally using outlineCounters[].
+ * - This is intentionally simple and robust; consider replacing polling with events
+ *   if performance becomes a concern.
+ */
 const headings = computed<TocHeading[]>(() => {
-  // reference tick so polling triggers recompute
+  // Reference the tick so changes cause recompute (light polling in onMounted)
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   refreshTick.value
-  const ws = workspaceStore.getWorkspace?.()
-  if (!ws) return []
-  const nbId = workspaceStore.currentNotebookId
-  if (!nbId) return []
-  const nb = ws.notebooks[nbId]
-  if (!nb) return []
+
+  const workspace = workspaceStore.getWorkspace?.()
+  if (!workspace) return []
+
+  const currentNotebookId = workspaceStore.currentNotebookId
+  if (!currentNotebookId) return []
+
+  const notebook = workspace.notebooks[currentNotebookId]
+  if (!notebook) return []
+
   const result: TocHeading[] = []
-  const counters: number[] = [] // outline counters per level (index 0 -> h1)
-  const order = nb.cellOrder || []
-  for (const cellId of order) {
-    const cell = ws.cells[cellId]
+  const outlineCounters: number[] = [] // outline counters per level (index 0 -> h1)
+  const cellOrder = notebook.cellOrder || []
+
+  for (const cellId of cellOrder) {
+    const cell = workspace.cells[cellId]
     if (!cell || cell.kind !== 'text-cell' || cell.softDeleted || cell.hidden) continue
     const html = cell.cellInputContent || cell.source || ''
     if (!html) continue
-    // Parse headings (h1-h4) via a lightweight regex fallback + DOM parse for text
-    // Regex to find opening tags <h1 ...>...</h1>
-    const tagRe = /<h([1-4])([^>]*)>([\s\S]*?)<\/h\1>/gi
-    let m: RegExpExecArray | null
-    while ((m = tagRe.exec(html))) {
-      const level = parseInt(m[1], 10)
-      const rawInner = m[3]
-      // Strip HTML tags to plain text (basic)
+
+    // Regex to find heading tags <h1 ...>...</h1> up to h4
+    const headingTagRegex = /<h([1-4])([^>]*)>([\s\S]*?)<\/h\1>/gi
+    let match: RegExpExecArray | null
+    while ((match = headingTagRegex.exec(html))) {
+      const level = parseInt(match[1], 10)
+      const rawInner = match[3]
+
+      // Convert inner HTML to plain text (basic approach)
       const text = rawInner
         .replace(/<[^>]+>/g, ' ')
         .replace(/&nbsp;/g, '')
@@ -63,60 +84,65 @@ const headings = computed<TocHeading[]>(() => {
         .replace(/&gt;/g, '>')
         .trim()
       if (!text) continue
-      const id = `${cellId}-h-${m.index}`
+
+      const id = `${cellId}-h-${match.index}`
+
       // --- Outline numbering logic -------------------------------------------------
-      // Maintain counters[] where length == deepest level encountered.
+      // Maintain outlineCounters[] where length == deepest level encountered.
       // Encounter level L:
-      //  - Ensure counters has at least L entries (pad with 0s)
-      //  - Increment counters[L-1]
+      //  - Ensure outlineCounters has at least L entries (pad with 0s)
+      //  - Increment outlineCounters[L-1]
       //  - Truncate any deeper levels
       //  - For any leading zeros (if user started with h2/h3), backfill with 1 so we don't show 0.x
-      while (counters.length < level) counters.push(0)
-      counters[level - 1] += 1
-      counters.splice(level) // drop deeper levels
-      for (let i = 0; i < level - 1; i++) if (counters[i] === 0) counters[i] = 1
-      const numbering = counters.slice(0, level).join('.')
+      while (outlineCounters.length < level) outlineCounters.push(0)
+      outlineCounters[level - 1] += 1
+      outlineCounters.splice(level) // drop deeper levels
+      for (let i = 0; i < level - 1; i++) if (outlineCounters[i] === 0) outlineCounters[i] = 1
+      const numbering = outlineCounters.slice(0, level).join('.')
       // -----------------------------------------------------------------------------
+
       result.push({ id, cellId, level, text, numbering })
     }
   }
   return result
 })
 
-function scrollToHeading(h: TocHeading): void {
-  // Strategy: find the TextCell DOM element, then query for heading text match inside.
-  // Each text cell likely rendered with data attributes (not guaranteed) – fallback to text match search.
+/**
+ * Scroll to the selected heading inside the notebook. Uses multiple fallbacks
+ * to find the correct DOM element: data attribute, id, or heading text match.
+ */
+function scrollToHeading(heading: TocHeading): void {
   try {
-    const cellEl =
-      document.querySelector(`[data-cell-id="${h.cellId}"]`) ||
-      document.getElementById(h.cellId) ||
-      // Fallback: any element containing the heading text and an h tag.
+    const cellElement =
+      document.querySelector(`[data-cell-id="${heading.cellId}"]`) ||
+      document.getElementById(heading.cellId) ||
       (Array.from(document.querySelectorAll('h1,h2,h3,h4')).find(
-        (el) => el.textContent?.trim() === h.text
+        (el) => el.textContent?.trim() === heading.text
       ) as HTMLElement | undefined)
-    if (cellEl) {
-      cellEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      // Brief highlight effect
-      cellEl.classList.add('toc-highlight')
-      setTimeout(() => cellEl.classList.remove('toc-highlight'), 1200)
+
+    if (cellElement) {
+      cellElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      // Brief highlight to draw attention to the target cell
+      cellElement.classList.add('toc-highlight')
+      setTimeout(() => cellElement.classList.remove('toc-highlight'), 1200)
     }
   } catch {
-    /* ignore */
+    // Ignore DOM errors – this is a non-critical UI enhancement
   }
 }
 
-// Listen for workspace save/unsave or tick updates (simplistic: poll mutation events via interval)
-let interval: ReturnType<typeof setInterval> | null = null
+// Light polling to detect workspace changes. This is intentionally simple.
+let intervalHandle: ReturnType<typeof setInterval> | null = null
 onMounted(() => {
-  interval = setInterval(() => {
+  intervalHandle = setInterval(() => {
     refreshTick.value++
-  }, 2000) // light polling; could be optimized with event bus later
+  }, 2000) // light polling interval; replace with event-driven updates later if needed
 })
 onBeforeUnmount(() => {
-  if (interval) clearInterval(interval)
+  if (intervalHandle) clearInterval(intervalHandle)
 })
 
-// Recompute when current notebook changes
+// Also trigger recompute when the current notebook changes
 watch(
   () => workspaceStore.currentNotebookId,
   () => {
@@ -129,13 +155,13 @@ watch(
 @import '@renderer/css/side-panel-base.css';
 
 .toc-panel {
-  font-size: 0.9rem;
+  font-size: 0.9em;
   line-height: 1.25;
 }
 .toc-empty {
   opacity: 0.7;
   font-style: italic;
-  padding: 0.25rem 0;
+  padding: 0.25em 0;
 }
 .toc-list {
   list-style: none;

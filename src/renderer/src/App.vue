@@ -7,7 +7,7 @@ import StatusBar from '@renderer/components/navigation_bars/StatusBar.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 import GeneralSettingsModal from '@renderer/components/modals/settings_modals/SettingsModal.vue'
 import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
-import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
+/*import SidePanel from '@renderer/components/side_panel/SidePanel.vue'*/
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
