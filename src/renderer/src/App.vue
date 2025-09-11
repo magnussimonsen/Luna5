@@ -47,15 +47,9 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   <div id="app-layout">
     <MenuBar />
     <Toolbar />
-    <div class="workspace-container">
-      <div class="main-panel">
-        <!-- Add your main app content (cells) here -->
-      </div>
-      <WorkspaceContainer>
-        <CellList />
-      </WorkspaceContainer>
-      <SidePanel />
-    </div>
+    <WorkspaceContainer>
+      <CellList />
+    </WorkspaceContainer>
     <StatusBar />
   </div>
   <!-- Modal layer outside the app layout for proper centering -->
@@ -78,31 +72,6 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   min-width: 0;
   overflow: hidden;
   /* Prevent layout from expanding beyond viewport */
-  background: var(--main-panel-background, #f0f0f0);
-}
-
-.workspace-container {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  /* Allow inner areas to manage their own overflow; do not clip scrollbars */
-  overflow: visible;
-  background: var(--main-panel-background, #f0f0f0);
-}
-
-.main-panel {
-  flex: 1 1 0;
-  height: 100%;
-  min-height: 0;
-  min-width: 0;
-  position: relative;
-  z-index: 1000;
-  overflow-y: auto;
   background: var(--main-panel-background, #f0f0f0);
 }
 

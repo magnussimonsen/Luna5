@@ -316,11 +316,8 @@ const resetFontSizeBtnStyle = computed(() => ({
 <style scoped>
 .status-bar-wrapper {
   height: fit-content;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0em;
-  z-index: 2000;
+  width: 100%;
+  /* Removed position: fixed and z-index so StatusBar is part of flex layout */
 }
 .status-bar {
   position: relative;

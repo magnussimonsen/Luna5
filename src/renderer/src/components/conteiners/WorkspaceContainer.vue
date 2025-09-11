@@ -12,12 +12,14 @@
        dont know why -->
       <slot />
     </div>
+    <SidePanel />
   </div>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
+import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
 
 const menubarStore = useMenubarStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
@@ -25,15 +27,12 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 
 <style scoped>
 .workspace-container {
-  /*box-sizing: border-box;*/
-  bottom: 0em; /*var(--status-bar-height, 2.5em);*/
   padding: 0;
   margin: 0 auto;
-  height: 100%;
   min-height: 0;
   flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   /* No scrolling here; delegate to inner wrapper to avoid flex overflow bugs? */
   overflow: hidden;
 }
@@ -44,7 +43,6 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0rem 0.25rem 0.25rem 0.25rem; /* top right bottom left */
-  box-sizing: border-box;
   /* Apply zoom to the content area; default to 1 (100%) */
   transform: scale(var(--workspace-zoom, 1));
   transform-origin: top left;
