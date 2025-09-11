@@ -22,13 +22,6 @@ const autosaveInterval = computed(() => generalSettingsStore.autosaveChangeInter
 const changeCount = computed(() => workspaceStore.inputChangesSinceLastSave)
 const isSaving = ref(false)
 
-// Layout mode for conditional rendering of SidePanel
-import { storeToRefs } from 'pinia'
-import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
-import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
-const menubarStore = useMenubarStore()
-const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
-
 watch([autosaveInterval, changeCount], async ([interval, count]) => {
   if (!interval || interval <= 0) return
   if (count < interval) return
@@ -58,7 +51,7 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
     <WorkspaceContainer>
       <CellList />
     </WorkspaceContainer>
-    <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" />
+    <!-- <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" /> -->
     <StatusBar />
   </div>
   <!-- Modal layer outside the app layout for proper centering -->
@@ -90,19 +83,6 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   z-index: 1000;
 }
 
-/* A4 mode overlay: fixed, no layout impact */
-.side-panel-overlay {
-  position: fixed; /* out of flow => won't resize workspace */
-  right: 0;
-  top: 4em;/* start below top bars */
-  width: 25%;
-  max-width: 75%; /* safety on small screens */
-  height: auto;
-  z-index: 2000; /* above workspace, below modals (9999) */
-  display: flex; /* typical panel internals */
-  flex-direction: column;
-  pointer-events: auto;
-}
 .modal-container {
   position: fixed;
   top: 0;

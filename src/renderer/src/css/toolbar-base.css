@@ -8,7 +8,7 @@ Toolbar base
 .python-cell-toolbar,
 .text-cell-toolbar,
 .flashcards-toolbar {
-  height: var(--toolbar-height, 3em);
+  height: var(--toolbar-height, 2.5em);
   display: flex;
   align-items: center;
   width: 100%;

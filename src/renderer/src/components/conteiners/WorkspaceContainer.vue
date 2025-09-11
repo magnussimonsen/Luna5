@@ -1,19 +1,15 @@
 <template>
-  <div
-    class="workspace-container"
-    :class="{
-      'workspace-container--fluid': layoutMode === 'fluid',
-      'workspace-container--a4': layoutMode === 'a4Preview'
-    }"
-  >
-    <div class="workspace-scroll">
+  <div class="workspace-wrapper">
+    <div
+      :class="{
+        'workspace-container-fluid workspace-scroll': layoutMode === 'fluid',
+        'workspace-container-a4 a4-preview-scroll': layoutMode === 'a4Preview'
+      }"
+    >
       <slot />
+      <SidePanel v-if="layoutMode === 'fluid'" />
     </div>
-    <!-- Render the SidePanel only when layoutMode is 'fluid'.
-         In 'a4Preview' mode, the SidePanel should appear as an overlay
-         sliding in from the right, without affecting the workspace layout. -->
-    <SidePanel v-if="layoutMode === 'fluid'" />
-    <!-- <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" />-->
+    <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" />
   </div>
 </template>
 
@@ -27,15 +23,36 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 </script>
 
 <style scoped>
-.workspace-container {
-  padding: 0;
-  margin: 0 auto;
-  min-height: 0;
+/* Wrapper to contain the workspace and side panel */
+.workspace-wrapper {
+  position: relative; /* for the side panel overlay */
+  flex: 1 1 auto; /* take available space in parent flex column */
+  background: var(--main-panel-background, #f0f0f0);
+}
+
+.workspace-container-fluid {
   flex: 1 1 auto;
+  position: relative;
   display: flex;
-  flex-direction: row;
-  /* No scrolling here; delegate to inner wrapper to avoid flex overflow bugs? */
+  background: var(--main-panel-background, #f0f0f0);
+  background: red;
   overflow: hidden;
+}
+
+.workspace-container--a4 {
+  /* A4: fixed page width, centered, never pushes the StatusBar */
+  /* Keep the container flexible vertically inside the flex column parent */
+  flex: 1 1 auto;
+  /* Exact page width but responsive fallback on small screens */
+  width: min(210mm, 100%);
+  max-width: 210mm;
+  padding: var(--paper-margin-padding, 3em 2em 3em 3em);
+  margin: 2em auto;
+  background: var(--paper-color, #fff);
+  border: 0px solid var(--paper-border-color, #e0e0e0);
+  position: relative; /* keeps any local abs children positioned correctly */
+  /* Optional polish */
+  box-shadow: var(--paper-box-shadow, 0 8px 16px rgba(0, 0, 0, 1));
 }
 
 .workspace-scroll {
@@ -45,30 +62,52 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0rem 0.25rem 0.25rem 0.25rem; /* top right bottom left */
-  /* Apply zoom to the content area; default to 1 (100%) */
+  border: 14px solid darkorchid /* debug */
+}
+
+.a4-preview-scroll {
+overflow-y: auto;
+
+}
+
+/* The overlay: docked right, full container height, slides L->R */
+.side-panel-overlay {
+  position: absolute;
+  inset-block: 0; /* top:0; bottom:0; */
+  inset-inline-end: 0; /* right:0; (RTL-safe) */
+  width: var(--sidepanel-width, 360px);
+  max-width: 90vw;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  background: var(--side-panel-background, var(--debug-color, #fff));
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+  overflow: auto; /* panel scrolls independently */
+  overscroll-behavior: contain;
+  pointer-events: auto;
+}
+/* .side-panel-overlay.is-open { transform: translateX(0); } */
+
+/* remove transform from .workspace-container */
+.workspace-zoom {
+  transform: scale(var(--workspace-zoom, 1));
+  transform-origin: top left;
+  height: 100%;
+}
+
+.a4-preview-zoom {
   transform: scale(var(--workspace-zoom, 1));
   transform-origin: top left;
 }
 
-.workspace-container--fluid {
-  background: var(--main-panel-background, #f0f0f0);
-  max-width: 100%;
-  width: 100%;
+/* Border for A4 preview mode */
+.workspace-container--a4 .workspace-zoom {
+  border: 1px solid var(--paper-border-color, #ccc);
 }
 
-/* A4: fixed page width, centered, never pushes the StatusBar */
-.workspace-container--a4 {
-  /* Keep the container flexible vertically inside the flex column parent */
-  flex: 1 1 auto;
-  /* Exact page width but responsive fallback on small screens */
-  width: min(210mm, 100%);
-  max-width: 210mm;
-  margin: 0 auto;
-  background: var(--color-surface-paper, #fff);
-  border: 1px solid var(--color-border-light, #e0e0e0);
-  position: relative; /* keeps any local abs children positioned correctly */
-  /* Optional polish */
-  box-shadow: 0 2px 16px rgba(0,0,0,.08);
+/* Border for fluid mode */
+.workspace-container--fluid .workspace-zoom {
+  border: 1px solid var(--main-panel-border-color, #ccc);
 }
 
 /* Optional: nice background outside the page in preview mode (set on parent) */

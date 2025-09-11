@@ -22,7 +22,15 @@ export const useThemeStore = defineStore('theme', {
       toolbarBackground: 'whitesmoke',
       toolbarBorderColor: 'whitesmoke',
       // Main panel
-      mainPanelBackground: '#ffffff',
+      mainPanelBackground: 'blue', /* debug */
+      mainPanelBorderColor: 'gainsboro',
+      // Toolbar background
+      // Paper preview background
+      paperColor: '#ffffff',
+      paperBorderColor: 'transparent',
+      // Toolbar background
+      // paperMarginBackgroundColor: '#f0f0f0',
+      // paperCellBackground: '#ffffff',
       // Side panel
       sidePanelBackground: '#f0f0f0',
       // Cell
@@ -97,6 +105,12 @@ export const useThemeStore = defineStore('theme', {
       toolbarBorderColor: '#111111',
       // Main panel
       mainPanelBackground: '#222222',
+      mainPanelBorderColor: '#444444',
+      // Paper preview background
+      paperColor: '#333333',
+      paperBorderColor: 'transparent',
+      // paperMarginBackgroundColor: '#222222',
+      // paperCellBackground: '#333333',
       //Side panel
       sidePanelBackground: '#222222',
       // Cell
@@ -182,6 +196,11 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--toolbar-background', colors.toolbarBackground)
       root.style.setProperty('--toolbar-border-color', colors.toolbarBorderColor)
       root.style.setProperty('--main-panel-background', colors.mainPanelBackground)
+      root.style.setProperty('--main-panel-border-color', colors.mainPanelBorderColor)
+      root.style.setProperty('--paper-color', colors.paperColor)
+      root.style.setProperty('--paper-border-color', colors.paperBorderColor)
+      // root.style.setProperty('--paper-margin-background-color', colors.paperMarginBackgroundColor) --- IGNORE ---
+      // root.style.setProperty('--paper-cell-background', colors.paperCellBackground) --- IGNORE ---
       root.style.setProperty('--side-panel-background', colors.sidePanelBackground)
       root.style.setProperty('--cell-background', colors.cellBackground)
       root.style.setProperty('--cell-border-color', colors.cellBorderColor)

@@ -27,6 +27,13 @@ export type ThemeColorTypes = {
   toolbarBorderColor: string
 
   mainPanelBackground: string
+  mainPanelBorderColor: string
+
+  // Paper preview background
+  paperColor: string
+  paperBorderColor: string
+  // paperMarginBackgroundColor: string --- IGNORE ---
+  // paperCellBackground: string --- IGNORE ---
   sidePanelBackground: string
 
   textColor: string

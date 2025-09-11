@@ -127,11 +127,12 @@ function onMarginClick(): void {
 </script>
 
 <style scoped>
+/* Posible problem: Using em instead of rem - unclear how this will affect layout */
 .cell-container {
   display: flex;
   width: 100%;
   border: solid 1px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
-  border-left: 0.5rem solid var(--cell-border-color, blue);
+  border-left: 0.5em solid var(--cell-border-color, blue);
   border-radius: var(--cell-container-border-radius, 0px);
   background: var(--cell-background, blue);
   margin-block: 0rem;
@@ -141,12 +142,12 @@ function onMarginClick(): void {
 }
 
 .cell-container:focus-visible {
-  border-left: solid 0.5rem var(--focus-visible-border-color, blue);
+  border-left: solid 0.5em var(--focus-visible-border-color, blue);
 }
 
 .cell-container.is-selected {
   border: solid 1px var(--active-border-color);
-  border-left: solid 0.5rem var(--active-border-color);
+  border-left: solid 0.5em var(--active-border-color);
   background: var(transparent, yellow);
 }
 
@@ -154,7 +155,7 @@ function onMarginClick(): void {
 .cell-container.is-locked.is-selected {
   border-color: var(--soft-locked-border-color, orange);
   border: solid 1px var(--soft-locked-border-color, orange);
-  border-left: 0.5rem solid var(--soft-locked-border-color, blue); /* Keep left bar as-is */
+  border-left: 0.5em solid var(--soft-locked-border-color, blue); /* Keep left bar as-is */
 }
 
 /* When a cell is locked but NOT selected, tint top/right/bottom borders with locked color */
@@ -223,7 +224,8 @@ function onMarginClick(): void {
 }
 
 .cell-index {
-  font-size: 0.75rem;
+  padding: 0em 0.25em;
+  font-size: 0.75em;
   font-weight: 600;
   color: var(--text-color, #555);
   user-select: none;
@@ -232,8 +234,8 @@ function onMarginClick(): void {
 /* Flagged state: highlight index background only */
 .cell-container.is-flagged .cell-index {
   background: var(--flagged-cell-color, gold);
-  padding: 0em 0.25rem;
-  border-radius: 2px;
+  padding: 0em 0.25em;
+  border-radius: 0px;
 }
 
 .cell-margin-buttons {

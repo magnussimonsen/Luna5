@@ -30,7 +30,10 @@ const currentToolbarComponent = computed(() => {
 .toolbar-container {
   left: 0;
   width: 100vw;
-  min-height: 2em;
+  height: calc(
+    var(--menu-bar-height, 1.2em) + var(--toolbar-height, 2.5em) - 0 *
+      var(--toolbar-border-width, 1px)
+  ); /* start below top bars */
   display: flex;
   align-items: center;
   background: var(--toolbar-background, #f4f4f4);
@@ -45,12 +48,12 @@ const currentToolbarComponent = computed(() => {
   /* Lower than MenuBar dropdown (3000) */
   position: relative;
   /* Ensure z-index works correctly */
-  margin-bottom: 2px; /* Space below toolbar */
+  margin-bottom: 5px; /* Space below toolbar */
 }
 
 .toolbar-placeholder {
   opacity: 0.6;
-  font-size: 0.75rem;
-  padding: 0.3rem 0;
+  font-size: 1em;
+  padding: 0.3em 0;
 }
 </style>

@@ -26,12 +26,13 @@ Design tokens (layout/spacing)
     /* Ensure menu bar is above other UI elements */
 
     /* Toolbar container */
-    --toolbar-container-padding: 0.2rem 0.1rem;
+    --toolbar-container-padding: 0.2em 0.1em;
     /* top, right, bottom, left */
 
     /* Toolbar */
-    --toolbar-height: 2em;
+    --toolbar-height: 1em;
     --toolbar-padding: 0.0em 0.3em 0em 0.3em; /* top, right, bottom, left */
+    --toolbar-border-width: 1px;
     --toolbar-border: 1px solid var(--toolbar-border-color, #d0d7de);
     --toolbar-font-size: 1em;
     --toolbar-font-weight: normal;
@@ -46,8 +47,10 @@ Design tokens (layout/spacing)
     --toolbar-button-border-active: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --toolbar-button-border-disabled: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
 
-    /* Ensure toolbar is above other UI elements but below menu bar */
-
+    --workspace-container-padding: 1em 1em 1em 1em;
+    /* Paper preview */
+    --paper-margin-padding: 3em 2em 3em 3em;
+    --paper-box-shadow: 0 4px 16px black; /* Example shadow, adjust as needed */
     /* Status bar */
     --status-bar-height: 2.5em; /* It seems lik this is not wierd to the statusbar*/
     --status-bar-padding: 0.2em 0.5em 0.2em 0.5em;
