@@ -57,6 +57,10 @@
 
 To keep the codebase consistent and readable, follow these naming conventions:
 
+### Bar-names
+Use menu-bar, tool-bar, status-bar and so on.
+Use menuBar, toolBar, statusBar and so on
+
 ### Vue Components
 - **PascalCase** for component file names and component names.
   - Example: `UserProfile.vue`, `ThemeSwitcher.vue`

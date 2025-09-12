@@ -7,9 +7,9 @@ Design tokens (layout/spacing)
 :root {
 
     /*z-index for various components*/
-    --menubar-z-index: 3000;
-    --toolbar-z-index: 2000;
-    --statusbar-z-index: 3000;
+    --menu-bar-z-index: 3000;
+    --tool-bar-z-index: 2000;
+    --status-bar-z-index: 3000;
 
     /* General buttondesign variables */
     --border-radius: 0.25em;
@@ -19,47 +19,47 @@ Design tokens (layout/spacing)
     --button-border-radius: 0.25em;
 
     /* Menu bar */
-    --menubar-height: 1.2em;
-    --menubar-padding: 0.0em 0.3em 0em 0.0em;
+    --menu-bar-height: 1.2em;
+    --menu-bar-padding: 0.0em 0.3em 0em 0.0em;
     /* top, right, bottom, left */
-    --menubar-button-padding: 0.3em 0.3em 0.3em 0.3em;
+    --menu-bar-button-padding: 0.3em 0.3em 0.3em 0.3em;
     /* top, right, bottom, left */
-    --menubar-button-logo-padding: 0.0em 0.1m 0.0em 0.3em;
+    --menu-bar-button-logo-padding: 0.0em 0.1m 0.0em 0.3em;
     /* top, right, bottom, left */
-    --menubar-button-border-radius: 0px;
-    --menubar-button-border: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --menubar-button-border-hover: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --menubar-button-border-active: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --menubar-button-border-disabled: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --menu-bar-button-border-radius: 0px;
+    --menu-bar-button-border: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --menu-bar-button-border-hover: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --menu-bar-button-border-active: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --menu-bar-button-border-disabled: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     /* Ensure menu bar is above other UI elements */
 
     /* Toolbar container */
-    --toolbar-container-padding: 0.2em 0.1em;
+    --tool-bar-container-padding: 0.2em 0.1em;
     /* top, right, bottom, left */
 
     /* Toolbar */
-    --toolbar-height: 1em;
-    --toolbar-padding: 0.0em 0.3em 0em 0.3em; /* top, right, bottom, left */
-    --toolbar-border-width: 1px;
-    --toolbar-border: 1px solid var(--toolbar-border-color, #d0d7de);
-    --toolbar-font-size: 1em;
-    --toolbar-font-weight: normal;
+    --tool-bar-height: 1em;
+    --tool-bar-padding: 0.0em 0.3em 0em 0.3em; /* top, right, bottom, left */
+    --tool-bar-border-width: 1px;
+    --tool-bar-border: 1px solid var(--tool-bar-border-color, #d0d7de);
+    --tool-bar-font-size: 1em;
+    --tool-bar-font-weight: normal;
 
-    --toolbar-button-padding: 0.1em 0.4em 0.1em 0.4em; /* top, right, bottom, left */
-    --toolbar-button-height: 1.5em; /* uniform button height */
-    --toolbar-button-gap: 0.25em;
-    --toolbar-button-radius: 0.25em;
-    --toolbar-button-border: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --toolbar-button-border-hover: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --toolbar-button-border-active: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
-    --toolbar-button-border-disabled: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --tool-bar-button-padding: 0.1em 0.4em 0.1em 0.4em; /* top, right, bottom, left */
+    --tool-bar-button-height: 1.5em; /* uniform button height */
+    --tool-bar-button-gap: 0.25em;
+    --tool-bar-button-radius: 0.25em;
+    --tool-bar-button-border: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --tool-bar-button-border-hover: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --tool-bar-button-border-active: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
+    --tool-bar-button-border-disabled: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
 
     --workspace-container-padding: 1em 1em 1em 1em;
     /* Paper preview */
     --paper-margin-padding: 3em 2em 3em 3em;
     --paper-box-shadow: 0 4px 16px black; /* Example shadow, adjust as needed */
     /* Status bar */
-    --status-bar-height: 2.5em; /* It seems lik this is not wierd to the statusbar*/
+    --status-bar-height: 2.5em; /* It seems lik this is not wierd to the status-bar*/
     --status-bar-padding: 0.2em 0.5em 0.2em 0.5em;
     /* top, right, bottom, left */
     --status-bar-button-padding: 0.2em 0.3em 0.2em 0.3em;
@@ -69,7 +69,7 @@ Design tokens (layout/spacing)
     --status-bar-button-border-hover: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --status-bar-button-border-active: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
     --status-bar-button-border-disabled: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
-    /* Ensure status bar is above other UI elements but below menu bar and toolbar */
+    /* Ensure status bar is above other UI elements but below menu bar and tool-bar */
 
     /* Dropdown menu */
     --dropdown-trigger-padding: var(--menu-bar-button-padding);

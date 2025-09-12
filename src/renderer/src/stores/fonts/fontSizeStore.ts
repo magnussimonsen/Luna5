@@ -28,24 +28,24 @@ export const useFontSizeStore = defineStore('fontSize', {
   }),
   actions: {
     setMenubarFontSize(size: string) {
-      this.fontSizes.menubarFontSize = size
+      this.fontSizes.menuBarFontSize = size
       document.documentElement.style.setProperty('--menubar-font-size', size)
     },
     setStatusBarFontSize(size: string) {
-      this.fontSizes.statusbarFontSize = size
+      this.fontSizes.statusBarFontSize = size
       document.documentElement.style.setProperty('--status-bar-font-size', size)
     },
-    setSidePanelmenubarFontSize(size: string) {
-      this.fontSizes.sidePanelMenubarFontSize = size
+    setSidePanelMenuBarFontSize(size: string) {
+      this.fontSizes.sidePanelMenuBarFontSize = size
       document.documentElement.style.setProperty('--side-panel-menubar-font-size', size)
     },
     setSidePanelFontSize(size: string) {
       this.fontSizes.sidePanelFontSize = size
       document.documentElement.style.setProperty('--side-panel-font-size', size)
     },
-    setToolbarFontSize(size: string) {
-      this.fontSizes.toolbarFontSize = size
-      document.documentElement.style.setProperty('--toolbar-font-size', size)
+    setToolBarFontSize(size: string) {
+      this.fontSizes.toolBarFontSize = size
+      document.documentElement.style.setProperty('--tool-bar-font-size', size)
     },
     // This sets the default font size for cells when user clicks "reset font size" in statusbar
     setDefaultCellFontSize(size: string) {
@@ -88,7 +88,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       }
       document.documentElement.style.setProperty(
         '--menu-bar-font-size',
-        this.fontSizes.menubarFontSize
+        this.fontSizes.menuBarFontSize
       )
       document.documentElement.style.setProperty(
         '--status-bar-font-size',
@@ -96,15 +96,15 @@ export const useFontSizeStore = defineStore('fontSize', {
       )
       document.documentElement.style.setProperty(
         '--side-panel-menu-bar-font-size',
-        this.fontSizes.sidePanelmenubarFontSize
+        this.fontSizes.sidePanelMenuBarFontSize
       )
       document.documentElement.style.setProperty(
         '--side-panel-font-size',
         this.fontSizes.sidePanelFontSize
       )
       document.documentElement.style.setProperty(
-        '--toolbar-font-size',
-        this.fontSizes.toolbarFontSize
+        '--tool-bar-font-size',
+        this.fontSizes.toolBarFontSize
       )
       document.documentElement.style.setProperty(
         '--default-cells-font-size',
