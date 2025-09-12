@@ -113,7 +113,7 @@ function onDeselect(): void {
 .cell-list {
   position: relative;
   display: flex;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   flex-direction: column;
   border: 1px solid red; /* debug */
 }

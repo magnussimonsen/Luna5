@@ -131,7 +131,6 @@ function onMarginClick(): void {
 .cell-container {
   position: relative;
   display: flex;
-  width: 100%;
   border: solid 10px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
   border-left: 0.5em solid var(--cell-border-color, blue);
   border-radius: var(--cell-container-border-radius, 0px);
