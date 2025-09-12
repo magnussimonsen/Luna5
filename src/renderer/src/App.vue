@@ -8,11 +8,11 @@
 <script setup lang="ts">
 // Example of how to use the IPC mechanism if needed
 // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-import MenuBar from '@renderer/components/navigation_bars/MenuBar.vue'
+import Menubar from '@renderer/components/navigation_bars/Menubar.vue'
 import WorkspaceContainer from '@renderer/components/conteiners/WorkspaceContainer.vue'
-import ToolBar from '@renderer/components/conteiners/ToolBarContainer.vue'
+import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
 import CellList from '@renderer/components/conteiners/CellList.vue'
-import StatusBar from '@renderer/components/navigation_bars/StatusBar.vue'
+import Statusbar from '@renderer/components/navigation_bars/Statusbar.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
 import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
@@ -42,12 +42,11 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
 })
 //------------------------------------------------------------------------------//
 </script>
-
 <template>
   <div id="app-layout">
-    <div class="menuBar-and-toolbar-container">
-      <MenuBar />
-      <ToolBar />
+    <div class="menubar-and-toolbar-container">
+      <Menubar />
+      <Toolbar />|
     </div>
     <div v-if="layoutMode === 'web'" class="web--workspace-layout">
       <CellList />

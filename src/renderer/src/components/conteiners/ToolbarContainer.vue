@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import TextCellToolbar from '@renderer/components/toolbars/TextCellToolbar.vue'
 import PythonCellToolbar from '@renderer/components/toolbars/PythonCellToolbar.vue'
 

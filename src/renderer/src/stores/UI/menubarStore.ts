@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import type { WorkspaceLayoutMode, MenubarState } from '@renderer/types/workspace-layout-mode-type'
+import type { WorkspaceLayoutMode, MenuBarState } from '@renderer/types/workspace-layout-mode-type'
 
-export const useMenubarStore = defineStore('menubar', {
-  state(): MenubarState {
+export const useMenuBarStore = defineStore('menubar', {
+  state(): MenuBarState {
     return {
       workspaceLayoutMode: 'web'
     }

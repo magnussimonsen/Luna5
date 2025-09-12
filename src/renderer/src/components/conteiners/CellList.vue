@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
-import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import CellContainer from './CellContainer.vue'
 import TextCell from '@renderer/components/cells/TextCell.vue'
 import PythonCell from '@renderer/components/cells/PythonCell.vue'

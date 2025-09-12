@@ -166,7 +166,7 @@
  */
 import { computed } from 'vue'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
-import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import type { Editor } from '@tiptap/vue-3'
 

@@ -27,8 +27,8 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useMenubarStore } from '@renderer/stores/UI/menuBarStore'
-import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
+import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
+import SidePanel from '@renderer/components/side-panel/SidePanel.vue'
 
 const menubarStore = useMenubarStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)

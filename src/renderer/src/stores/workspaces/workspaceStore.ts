@@ -5,7 +5,7 @@ import { defineStore } from 'pinia'
 import { createEmptyWorkspace } from '@renderer/code/notebook-core/model/workspace-initial'
 import type { Workspace, Notebook } from '@renderer/code/notebook-core/model/schema'
 import type { Cell, TextCell } from '@renderer/types/notebook-cell-types'
-import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import {
   createNotebook as operationsCreateNotebook,
   createTextCell as operationsCreateTextCell,

@@ -57,9 +57,24 @@
 
 To keep the codebase consistent and readable, follow these naming conventions:
 
-### Bar-names
-Use menu-bar, tool-bar, status-bar and so on.
-Use menuBar, toolBar, statusBar and so on
+### Bar-names and other common names
+Rule: Be descriptive and consistent in naming things
+
+Avoid abbreviations unless they are well-known (e.g., `API`, `URL`)
+General example: Use element, not e
+
+Use English for all names.
+
+Use menubar, not menuBar or menu-bar
+Use toolbar, not toolBar or tool-bar
+Use statusbar, not statusBar or status-bar
+Uee workspace, not workSpace or work-space
+USe sidepanel, not sidePanel or side-panel
+Use button, not btn
+Use error, not err
+
+
+
 
 ### Vue Components
 - **PascalCase** for component file names and component names.
@@ -124,10 +139,6 @@ Use menuBar, toolBar, statusBar and so on
 - **Single uppercase letter** (commonly `T`, `U`, `V`).
   - Example: `function identity<T>(value: T): T`
 
-### Other Rules
-- Avoid abbreviations unless they are well-known (e.g., `API`, `URL`).
-- Be descriptive and consistent.
-- Use English for all names.
 
 ---
 

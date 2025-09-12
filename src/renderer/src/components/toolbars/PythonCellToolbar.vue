@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import {

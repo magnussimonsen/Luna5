@@ -25,7 +25,7 @@ import {
 
 import type { Shortcut } from '@renderer/types/shortcut-types'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
-import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 // No direct execution imports needed when delegating to the toolbar button
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
