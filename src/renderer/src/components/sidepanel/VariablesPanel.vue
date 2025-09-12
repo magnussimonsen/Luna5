@@ -1,5 +1,5 @@
 <template>
-  <div class="variables-panel side-panel-ui-base side-panel-padding-margin-base">
+  <div class="variables-panel sidepanel-ui-base sidepanel-padding-margin-base">
     <h2>🚧 Work in progres</h2>
     <h3>Variables Panel</h3>
     <p>
@@ -14,7 +14,7 @@
 </script>
 
 <style scoped>
-@import '@renderer/css/side-panel-base.css';
+@import '@renderer/css/sidepanel-base.css';
 .variables-panel {
   background-color: transparent;
 }

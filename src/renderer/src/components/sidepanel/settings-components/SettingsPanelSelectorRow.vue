@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-selector-row side-panel menu-bar" :style="{ fontSize }">
+  <div class="settings-selector-row sidepanel menubar" :style="{ fontSize }">
     <div>
       <button :class="{ active: currentPage === 'general' }" @click="emitUpdate('general')">
         General

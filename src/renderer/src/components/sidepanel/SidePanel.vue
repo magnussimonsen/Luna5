@@ -1,7 +1,7 @@
 <template>
   <aside
-    v-if="sidePanelStore.activePanel"
-    class="side-panel side-panel-ui-base"
+    v-if="sidepanelStore.activePanel"
+    class="sidepanel sidepanel-ui-base"
     :style="{ width: panelWidth + 'px', flex: '0 0 ' + panelWidth + 'px' }"
   >
     <div
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { ref, onBeforeUnmount, onMounted, nextTick, computed } from 'vue'
-import { useSidePanelStore } from '@renderer/stores/UI/sidePanelStore'
+import { useSidepanelStore } from '@renderer/stores/UI/sidepanelStore'
 import HelpPanel from './HelpPanel.vue'
 import FlashcardsPanel from './FlashcardsPanel.vue'
 import NotebooksPanel from './NotebooksPanel.vue'
@@ -26,8 +26,8 @@ import TOCPanel from './TOCPanel.vue'
 import VariablesPanel from './VariablesPanel.vue'
 import SettingsPanel from './SettingsPanel.vue'
 
-const sidePanelStore = useSidePanelStore()
-const panelWidth = ref(sidePanelStore.lastPanelWidth)
+const sidepanelStore = useSidepanelStore()
+const panelWidth = ref(sidepanelStore.lastPanelWidth)
 const panelContentRef = ref<HTMLElement | null>(null)
 //let minWidthScalingFactor: number = 0.01 // use 0 here and 1em in CSS
 let maxWidthScalingFactor: number = 0.75
@@ -47,8 +47,8 @@ const panelComponents = {
 
 // Dynamically select the current panel component based on active panel in store
 const currentPanelComponent = computed(() => {
-  if (!sidePanelStore.activePanel) return null
-  return panelComponents[sidePanelStore.activePanel] || null
+  if (!sidepanelStore.activePanel) return null
+  return panelComponents[sidepanelStore.activePanel] || null
 })
 
 // Handle resizing of the side panel
@@ -58,7 +58,7 @@ function startResize(e: MouseEvent): void {
   startWidth = panelWidth.value
   document.addEventListener('mousemove', onResize)
   document.addEventListener('mouseup', stopResize)
-  document.body.classList.add('side-panel-resizing')
+  document.body.classList.add('sidepanel-resizing')
   e.preventDefault() // Prevent text selection during resize
 }
 
@@ -71,7 +71,7 @@ function onResize(e: MouseEvent): void {
   const maxWidth: number = window.innerWidth * maxWidthScalingFactor
   const next = Math.max(minWidth, Math.min(maxWidth, startWidth + delta))
   panelWidth.value = next
-  sidePanelStore.setLastPanelWidth(next)
+  sidepanelStore.setLastPanelWidth(next)
 }
 
 function stopResize(): void {
@@ -79,14 +79,14 @@ function stopResize(): void {
   resizing = false
   document.removeEventListener('mousemove', onResize)
   document.removeEventListener('mouseup', stopResize)
-  document.body.classList.remove('side-panel-resizing')
-  sidePanelStore.setLastPanelWidth(panelWidth.value)
+  document.body.classList.remove('sidepanel-resizing')
+  sidepanelStore.setLastPanelWidth(panelWidth.value)
 }
 
 // Handle scrolling and store scroll position
 function onScrollPanelContent(): void {
   if (panelContentRef.value) {
-    sidePanelStore.setLastPanelScrollY(panelContentRef.value.scrollTop)
+    sidepanelStore.setLastPanelScrollY(panelContentRef.value.scrollTop)
   }
 }
 
@@ -96,7 +96,7 @@ onMounted(() => {
       // Use timeout to ensure DOM is fully rendered before scrolling
       setTimeout(() => {
         if (panelContentRef.value) {
-          panelContentRef.value.scrollTop = sidePanelStore.lastPanelScrollY
+          panelContentRef.value.scrollTop = sidepanelStore.lastPanelScrollY
         }
       }, 0)
     }
@@ -110,11 +110,11 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.side-panel {
+.sidepanel {
   position: relative; /* participate in flex layout of parent */
   min-width: 1em;
   max-width: calc(100vw * maxWidthScalingFactor);
-  background: var(--side-panel-background, #f0f0f0);
+  background: var(--sidepanel-background, #f0f0f0);
   color: var(--text-color, #222);
   display: flex;
   flex-direction: row;
@@ -127,7 +127,7 @@ onBeforeUnmount(() => {
 }
 
 /* While resizing: prevent text selection & show consistent cursor */
-body.side-panel-resizing {
+body.sidepanel-resizing {
   cursor: ew-resize !important;
   user-select: none;
 }

@@ -4,11 +4,11 @@
 
 export type FontSizeTypes = {
   rootFontSize?: string // Root <html> font size in px, used to set rem baseline (not user-changeable currently)
-  menuBarFontSize: string
-  statusBarFontSize: string
-  sidePanelMenuBarFontSize: string
-  sidePanelFontSize: string
-  toolBarFontSize: string
+  menubarFontSize: string
+  statusbarFontSize: string
+  sidepanelMenubarFontSize: string
+  sidepanelFontSize: string
+  toolbarFontSize: string
   defaultCellFontSize: string
   codeEditorCellFontSize: string
   textEditorCellFontSize: string

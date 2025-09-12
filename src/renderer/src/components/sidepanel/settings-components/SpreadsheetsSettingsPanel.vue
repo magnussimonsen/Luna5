@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-column side-panel-ui-base">
+  <div class="settings-column sidepanel-ui-base">
     <h3>Spreadsheets Settings</h3>
     <div class="setting-row" style="opacity: 0.8">
       <span>Placeholder: spreadsheet options will appear here.</span>
@@ -12,7 +12,7 @@
 </script>
 
 <style scoped>
-@import '@renderer/css/side-panel-base.css';
+@import '@renderer/css/sidepanel-base.css';
 .settings-column {
   width: 100%;
 }

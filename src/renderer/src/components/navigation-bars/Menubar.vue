@@ -3,7 +3,7 @@
     class="menu-bar"
     :style="{
       fontFamily: fontStore.fonts.uiFont || 'Arial, sans-serif',
-      fontSize: fontSizeStore.fontSizes.menuBarFontSize || '1em'
+      fontSize: fontSizeStore.fontSizes.menubarFontSize || '1em'
     }"
   >
     <!-- App brand icon -->
@@ -237,45 +237,45 @@
     </div>
     <div class="right-buttons">
       <div
-        class="side-panel-toggle-button"
-        :class="{ active: sidePanelStore.activePanel === 'notebooks' }"
+        class="sidepanel-toggle-button"
+        :class="{ active: sidepanelStore.activePanel === 'notebooks' }"
         @click="handleTogglePanel('notebooks')"
       >
         Notebooks
       </div>
       <div
-        class="side-panel-toggle-button"
-        :class="{ active: sidePanelStore.activePanel === 'toc' }"
+        class="sidepanel-toggle-button"
+        :class="{ active: sidepanelStore.activePanel === 'toc' }"
         @click="handleTogglePanel('toc')"
       >
         Table of Contents
       </div>
       <div
-        class="side-panel-toggle-button"
-        :class="{ active: sidePanelStore.activePanel === 'variables' }"
+        class="sidepanel-toggle-button"
+        :class="{ active: sidepanelStore.activePanel === 'variables' }"
         @click="handleTogglePanel('variables')"
       >
         Variables
       </div>
       <div
-        class="side-panel-toggle-button"
-        :class="{ active: sidePanelStore.activePanel === 'flashcards' }"
+        class="sidepanel-toggle-button"
+        :class="{ active: sidepanelStore.activePanel === 'flashcards' }"
         @click="handleTogglePanel('flashcards')"
       >
         Cards
         <!-- Flashcards, but use 'Cards' in UI for brevity -->
       </div>
       <div
-        class="side-panel-toggle-button"
-        :class="{ active: sidePanelStore.activePanel === 'settings' }"
+        class="sidepanel-toggle-button"
+        :class="{ active: sidepanelStore.activePanel === 'settings' }"
         @click="handleTogglePanel('settings')"
       >
         <span class="icon-settings" aria-hidden="true"></span>
         <span class="sr-only">Settings</span>
       </div>
       <div
-        class="side-panel-toggle-button"
-        :class="{ active: sidePanelStore.activePanel === 'help' }"
+        class="sidepanel-toggle-button"
+        :class="{ active: sidepanelStore.activePanel === 'help' }"
         @click="handleTogglePanel('help')"
       >
         <span class="icon-help" aria-hidden="true"></span>
@@ -291,11 +291,11 @@ import type { Workspace } from '@renderer/code/notebook-core/model/schema'
 import DropdownMenu from '@renderer/components/UI/DropdownMenu.vue'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
-import { useSidePanelStore } from '@renderer/stores/UI/sidePanelStore'
+import { useSidepanelStore } from '@renderer/stores/UI/sidepanelStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
-import { useMenuBarStore } from '@renderer/stores/UI/menuBarStore'
+import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import { computed, ref } from 'vue'
@@ -305,17 +305,17 @@ import { openWorkspaceFromDisk } from '@renderer/code/files/open-file'
 import { createNewWorkspaceWithPrompt } from '@renderer/code/files/new-file'
 
 const modalStore = useModalStore()
-const sidePanelStore = useSidePanelStore()
+const sidepanelStore = useSidepanelStore()
 const themeStore = useThemeStore()
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
-const menuBarStore = useMenuBarStore()
+const menubarStore = useMenubarStore()
 const workspaceStore = useWorkspaceStore()
 const cellSelectionStore = useCellSelectionStore()
 // ref to Insert dropdown menu to programmatically close after action
 const insertMenu = ref<{ closeDropdown: () => void } | null>(null)
 // Computed properties
-const isA4Preview = computed(() => menuBarStore.isA4Preview)
+const isA4Preview = computed(() => menubarStore.isA4Preview)
 const isDarkMode = computed(() => themeStore.isDarkMode)
 const isSelectedCellSoftLocked = computed(() => {
   const ws = workspaceStore.getWorkspace()
@@ -341,8 +341,8 @@ const isSelectedCellLocked = computed(() => {
 })
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
-  menuBarStore.toggleA4Preview()
-  console.log('Toggle button pressed, new layout mode:', menuBarStore.workspaceLayoutMode)
+  menubarStore.toggleA4Preview()
+  console.log('Toggle button pressed, new layout mode:', menubarStore.workspaceLayoutMode)
 }
 
 function isWorkspaceEffectivelyEmpty(): boolean {
@@ -455,7 +455,7 @@ const handleInsertPythonCell = (): void => {
 }
 
 const handleTogglePanel = (panel: string): void => {
-  sidePanelStore.togglePanel(panel)
+  sidepanelStore.togglePanel(panel)
 }
 
 const handleToggleDark = (): void => {
@@ -663,7 +663,7 @@ const handleMoveNotebookToBin = (): void => {
   color: var(--text-color, #fff);
 }
 
-.side-panel-toggle-button {
+.sidepanel-toggle-button {
   background: var(--button-transparent-off-color, transparent);
   color: var(--text-color, #fff);
   border: none;
@@ -680,11 +680,11 @@ const handleMoveNotebookToBin = (): void => {
   line-height: 1; /* normalize inline height */
 }
 
-.side-panel-toggle-button.active {
+.sidepanel-toggle-button.active {
   background: var(--button-on-color, lightgreen);
   color: var(--text-color, #fff);
 }
-.side-panel-toggle-button:hover {
+.sidepanel-toggle-button:hover {
   background: var(--button-hover-color, #333);
   color: var(--text-color, #fff);
 }

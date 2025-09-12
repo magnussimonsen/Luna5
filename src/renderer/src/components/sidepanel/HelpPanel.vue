@@ -3,13 +3,13 @@
     <!-- Menu bar selection row (component) -->
     <HelpPanelSelectionRow
       :current-page="currentPage"
-      :font-size="fontSizeStore.fontSizes.sidePanelMenuBarFontSize"
+      :font-size="fontSizeStore.fontSizes.sidepanelMenubarFontSize"
       @update:current-page="onUpdatePage"
     />
 
     <!-- Content area -->
     <div
-      class="help-panel-content side-panel-padding-margin-base side-panel-y-scrolling"
+      class="help-panel-content sidepanel-padding-margin-base sidepanel-y-scrolling"
       :style="contentStyle"
     >
       <GeneralHelpPanel v-if="currentPage === 'general'" />
@@ -51,7 +51,7 @@ const currentPage: Ref<HelpPage> = ref('general')
 const fontSizeStore = useFontSizeStore()
 
 const contentStyle = computed(() => ({
-  fontSize: fontSizeStore.fontSizes.sidePanelFontSize
+  fontSize: fontSizeStore.fontSizes.sidepanelFontSize
 }))
 
 function onUpdatePage(page: HelpPage): void {

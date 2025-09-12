@@ -1,5 +1,5 @@
 <template>
-  <div class="side-panel-ui-base side-panel-padding-margin-base toc-panel">
+  <div class="sidepanel-ui-base sidepanel-padding-margin-base toc-panel">
     <h2>Table of Contents</h2>
     <div v-if="!headings.length" class="toc-empty">No headings yet. Add H1–H4 in text cells.</div>
     <ol v-else class="toc-list" role="list">
@@ -152,7 +152,7 @@ watch(
 </script>
 
 <style scoped>
-@import '@renderer/css/side-panel-base.css';
+@import '@renderer/css/sidepanel-base.css';
 
 .toc-panel {
   font-size: 0.9em;

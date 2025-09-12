@@ -1,5 +1,5 @@
 <template>
-  <div class="general-settings-panel side-panel-ui-base">
+  <div class="general-settings-panel sidepanel-ui-base">
     <div class="settings-columns">
       <div class="settings-column">
         <h3>General Settings</h3>
@@ -90,16 +90,16 @@
           <ImplementedMark :implemented="true" />
         </div>
         <div class="setting-row">
-          <label for="menu-bar-font-size-select">Menu Bar Font Size:</label>
+          <label for="menubar-font-size-select">Menu Bar Font Size:</label>
           <select
-            id="menu-bar-font-size-select"
-            v-model="fontSizeStore.fontSizes.menuBarFontSize"
+            id="menubar-font-size-select"
+            v-model="fontSizeStore.fontSizes.menubarFontSize"
             :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontSizeStore.setMenuBarFontSize(fontSizeStore.fontSizes.menuBarFontSize)"
+            @change="fontSizeStore.setMenubarFontSize(fontSizeStore.fontSizes.menubarFontSize)"
           >
             <option
               v-for="size in fontSizeOptions"
-              :key="'menuBarFontSize-' + size"
+              :key="'menubarFontSize-' + size"
               :value="size + 'px'"
             >
               {{ size }} px
@@ -127,20 +127,20 @@
         </div>
         <!-- Set the font size for side panel menu bar -->
         <div class="setting-row">
-          <label for="side-panel-menu-bar-font-size-select">Side Panel Menu Bar Font Size:</label>
+          <label for="sidepanel-menubar-font-size-select">Side Panel Menu Bar Font Size:</label>
           <select
-            id="side-panel-menu-bar-font-size-select"
-            v-model="fontSizeStore.fontSizes.sidePanelMenuBarFontSize"
+            id="sidepanel-menubar-font-size-select"
+            v-model="fontSizeStore.fontSizes.sidepanelMenubarFontSize"
             :class="{ 'dark-mode': themeStore.isDarkMode }"
             @change="
-              fontSizeStore.setSidePanelMenuBarFontSize(
-                fontSizeStore.fontSizes.sidePanelMenuBarFontSize
+              fontSizeStore.setSidepanelMenubarFontSize(
+                fontSizeStore.fontSizes.sidepanelMenubarFontSize
               )
             "
           >
             <option
               v-for="size in fontSizeOptions"
-              :key="'sidePanelMenuBarFontSize-' + size"
+              :key="'SidepanelMenuBarFontSize-' + size"
               :value="size + 'px'"
             >
               {{ size }} px
@@ -149,16 +149,16 @@
           <ImplementedMark :implemented="true" />
         </div>
         <div class="setting-row">
-          <label for="side-panel-font-size-select">Side Panel Font Size:</label>
+          <label for="sidepanel-font-size-select">Side Panel Font Size:</label>
           <select
-            id="side-panel-font-size-select"
-            v-model="fontSizeStore.fontSizes.sidePanelFontSize"
+            id="sidepanel-font-size-select"
+            v-model="fontSizeStore.fontSizes.sidepanelFontSize"
             :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontSizeStore.setSidePanelFontSize(fontSizeStore.fontSizes.sidePanelFontSize)"
+            @change="fontSizeStore.setSidepanelFontSize(fontSizeStore.fontSizes.sidepanelFontSize)"
           >
             <option
               v-for="size in fontSizeOptions"
-              :key="'sidePanelFontSize-' + size"
+              :key="'SidepanelFontSize-' + size"
               :value="size + 'px'"
             >
               {{ size }} px
@@ -170,9 +170,9 @@
           <label for="status-bar-font-size-select">Status Bar Font Size:</label>
           <select
             id="status-bar-font-size-select"
-            v-model="fontSizeStore.fontSizes.statusBarFontSize"
+            v-model="fontSizeStore.fontSizes.statusbarFontSize"
             :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontSizeStore.setStatusBarFontSize(fontSizeStore.fontSizes.statusBarFontSize)"
+            @change="fontSizeStore.setStatusBarFontSize(fontSizeStore.fontSizes.statusbarFontSize)"
           >
             <option
               v-for="size in fontSizeOptions"
@@ -278,5 +278,5 @@ const autosaveOptions: { label: string; value: AutosaveOption }[] = [
 </script>
 
 <style scoped>
-@import '@renderer/css/side-panel-base.css';
+@import '@renderer/css/sidepanel-base.css';
 </style>

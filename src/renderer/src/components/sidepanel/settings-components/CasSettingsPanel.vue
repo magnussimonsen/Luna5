@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-page side-panel-ui-base">
+  <div class="settings-page sidepanel-ui-base">
     <h3>CAS Settings</h3>
     <p>CAS settings content goes here.</p>
   </div>
@@ -10,5 +10,5 @@
 </script>
 
 <style scoped>
-@import '@renderer/css/side-panel-base.css';
+@import '@renderer/css/sidepanel-base.css';
 </style>

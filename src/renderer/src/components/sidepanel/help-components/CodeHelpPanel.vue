@@ -1,5 +1,5 @@
 <template>
-  <div class="side-panel-ui-base side-panel-padding-margin-base">
+  <div class="sidepanel-ui-base sidepanel-padding-margin-base">
     <h2>🚧 Work in progress</h2>
     <h2>Python help and examples</h2>
     <h3>Shortcuts</h3>
@@ -55,5 +55,5 @@
 </script>
 
 <style scoped>
-@import '@renderer/css/side-panel-base.css';
+@import '@renderer/css/sidepanel-base.css';
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flashcards-panel side-panel-ui-base side-panel-padding-margin-base">
+  <div class="flashcards-panel sidepanel-ui-base sidepanel-padding-margin-base">
     <h2>🚧 Work in progres</h2>
   <h3>Flashcards</h3>
     <p class="hint">This is a placeholder panel. Design and features to come.</p>
@@ -11,11 +11,11 @@
 </template>
 
 <script setup lang="ts">
-// Placeholder only; wired via sidePanelStore as 'flashcards'
+// Placeholder only; wired via sidepanelStore as 'flashcards'
 </script>
 
 <style scoped>
-@import '@renderer/css/side-panel-base.css';
+@import '@renderer/css/sidepanel-base.css';
 .flashcards-panel {
   display: flex;
   flex-direction: column;

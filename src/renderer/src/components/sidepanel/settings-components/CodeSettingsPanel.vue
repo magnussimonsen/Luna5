@@ -1,5 +1,5 @@
 <template>
-  <div class="code-settings-content side-panel-ui-base">
+  <div class="code-settings-content sidepanel-ui-base">
     <div class="settings-column">
       <h3>Coding Font Options</h3>
       <div class="setting-row">
@@ -110,7 +110,7 @@ const darkThemeOptions = [...darkBuiltins, ...getCuratedDarkMonacoThemeIds()]
 </script>
 
 <style scoped>
-@import '@renderer/css/side-panel-base.css';
+@import '@renderer/css/sidepanel-base.css';
 .code-settings-content {
   width: 100%;
 }

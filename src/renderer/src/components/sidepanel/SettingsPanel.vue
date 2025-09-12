@@ -3,12 +3,12 @@
     <!-- Menu bar selection row (component) -->
     <SettingsPanelSelectorRow
       :current-page="currentPage"
-      :font-size="fontSizeStore.fontSizes.sidePanelMenuBarFontSize"
+      :font-size="fontSizeStore.fontSizes.sidepanelMenubarFontSize"
       @update:current-page="onUpdatePage"
     />
     <!-- Content area -->
     <div
-      class="settings-panel-content side-panel-padding-margin-base side-panel-y-scrolling"
+      class="settings-panel-content sidepanel-padding-margin-base sidepanel-y-scrolling"
       :style="contentStyle"
     >
       <GeneralSettingsPanel v-if="currentPage === 'general'" />
@@ -50,7 +50,7 @@ const currentPage: Ref<SettingsPage> = ref('general')
 const fontSizeStore = useFontSizeStore()
 
 const contentStyle = computed(() => ({
-  fontSize: fontSizeStore.fontSizes.sidePanelFontSize
+  fontSize: fontSizeStore.fontSizes.sidepanelFontSize
 }))
 
 function onUpdatePage(page: SettingsPage): void {

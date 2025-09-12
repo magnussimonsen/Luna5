@@ -1,5 +1,5 @@
 <template>
-  <div class="notebooks-panel side-panel-padding-margin-base">
+  <div class="notebooks-panel sidepanel-padding-margin-base">
     <div class="header">
       <!-- Row 1: view toggles + move up/down -->
       <div class="button-row-flex-wrap-base" role="tablist" aria-label="Notebook views">
@@ -337,7 +337,7 @@ function formatDate(iso?: string): string {
   padding: 0.6rem 0.6rem 1rem;
   /* Centralized font control for entire component */
   font-family: var(--ui-font, 'Arial', sans-serif);
-  font-size: var(--side-panel-menu-bar-font-size, 1em);
+  font-size: var(--sidepanel-menu-bar-font-size, 1em);
 }
 .header {
   display: flex;
@@ -445,13 +445,13 @@ function formatDate(iso?: string): string {
   gap: 0.25rem;
 }
 .notebook-item {
-  background: var(--side-panel-background, red);
+  background: var(--sidepanel-background, red);
 }
 .nb-btn {
   width: 100%;
   text-align: left;
   color: var(--text-color, #222);
-  background: var(--side-panel-background, red);
+  background: var(--sidepanel-background, red);
   border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
   padding: 0.35rem 0.45rem;
   border-radius: 4px;

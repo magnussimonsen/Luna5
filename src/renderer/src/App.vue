@@ -8,25 +8,25 @@
 <script setup lang="ts">
 // Example of how to use the IPC mechanism if needed
 // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-import Menubar from '@renderer/components/navigation_bars/Menubar.vue'
+import Menubar from '@renderer/components/navigation-bars/Menubar.vue'
 import WorkspaceContainer from '@renderer/components/conteiners/WorkspaceContainer.vue'
 import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
 import CellList from '@renderer/components/conteiners/CellList.vue'
-import Statusbar from '@renderer/components/navigation_bars/Statusbar.vue'
+import Statusbar from '@renderer/components/navigation-bars/Statusbar.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
-import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
+import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
-import { useMenuBarStore } from '@renderer/stores/UI/menuBarStore'
+import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import { computed, ref, watch } from 'vue'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { storeToRefs } from 'pinia'
 import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-watch-function'
 
-const menuBarStore = useMenuBarStore()
-const { workspaceLayoutMode: layoutMode } = storeToRefs(menuBarStore)
+const menubarStore = useMenubarStore()
+const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
 
@@ -50,7 +50,7 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
     </div>
     <div v-if="layoutMode === 'web'" class="web--workspace-layout">
       <CellList />
-      <SidePanel />
+      <Sidepanel />
       <div v-if="layoutMode === 'a4Preview'" class="a4--workspace-layout">A4</div>
     </div>
 
@@ -67,11 +67,11 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   height: 100vh;
 }
 /* ----------------------------------------------------------------------- */
-/* Section: Top level menuBar-toolbar, workspace and statusbar containers  */
-.menuBar-and-toolbar-container {
+/* Section: Top level menubar-toolbar, workspace and statusbar containers  */
+.menubar-and-toolbar-container {
   display: flex;
   flex-direction: column;
-  /* Stack menuBar and toolbar vertically */
+  /* Stack menubar and toolbar vertically */
   flex: 0 0 auto;
   /* Prevent it from growing */
 }

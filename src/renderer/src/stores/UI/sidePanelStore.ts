@@ -1,10 +1,10 @@
-/* Filepath: src/renderer/src/stores/UI/sidePanelStore.ts */
+/* Filepath: src/renderer/src/stores/UI/sidepanelStore.ts */
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { PanelName } from '@renderer/types/side-panel-types'
 
-export const useSidePanelStore = defineStore('sidePanel', () => {
+export const useSidepanelStore = defineStore('sidepanel', () => {
   const allowedPanels = ['flashcards', 'notebooks', 'toc', 'variables', 'help', 'settings'] // Must match the types in side-panel-types.ts (not elegant...)
   const activePanel = ref<PanelName | null>(null)
   // Store the last width of the side panel (in px)
