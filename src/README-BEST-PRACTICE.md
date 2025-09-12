@@ -151,20 +151,3 @@ function identity<T>(value: T): T {
   return value;
 }
 ```
-
-## Example Project Structure
-
-src/
-components/
-UserProfile.vue
-ThemeSwitcher.vue
-assets/
-css/
-base.css
-theme-dark.css
-stores/
-themeStore.ts
-utils/
-colorUtils.ts
-types/
-theme-types.ts
