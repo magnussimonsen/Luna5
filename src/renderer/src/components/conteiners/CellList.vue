@@ -111,12 +111,10 @@ function onDeselect(): void {
 
 <style scoped>
 .cell-list {
+  position: relative;
   display: flex;
-  overflow: hidden;
-  flex: 1 0 auto;
-  height: 100%;
+  flex: 0 0 auto;
   flex-direction: column;
-  padding: 0em 0.5em 0em 0em /* top right bottom left */;
-  border: 30px solid yellow; /* debug */
+  border: 1px solid red; /* debug */
 }
 </style>

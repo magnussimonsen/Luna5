@@ -129,15 +129,14 @@ function onMarginClick(): void {
 <style scoped>
 /* Posible problem: Using em instead of rem - unclear how this will affect layout */
 .cell-container {
+  position: relative;
   display: flex;
-  flex: 0 1 auto;
   width: 100%;
-  border: solid 1px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
+  border: solid 10px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
   border-left: 0.5em solid var(--cell-border-color, blue);
   border-radius: var(--cell-container-border-radius, 0px);
   background: var(--cell-background, blue);
   margin-block: 0rem;
-  position: relative;
   outline: none;
   margin-bottom: 2px; /* What font size is used here if I choose to make margin 1em? */
 }

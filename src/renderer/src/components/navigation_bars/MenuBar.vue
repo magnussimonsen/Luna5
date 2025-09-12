@@ -342,6 +342,7 @@ const isSelectedCellLocked = computed(() => {
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
   menubarStore.toggleA4Preview()
+  console.log('Toggle button pressed, new layout mode:', menubarStore.workspaceLayoutMode)
 }
 
 function isWorkspaceEffectivelyEmpty(): boolean {

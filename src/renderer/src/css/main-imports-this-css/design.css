@@ -5,6 +5,12 @@ Design tokens (layout/spacing)
 - Later definitions override earlier ones (e.g., border radius below)
 */
 :root {
+
+    /*z-index for various components*/
+    --menu-bar-z-index: 3000;
+    --toolbar-z-index: 2000;
+    --status-bar-z-index: 3000;
+
     /* General design variables */
     --border-radius: 0.25em;
     --transition-duration: 0.11s;

@@ -1,0 +1,59 @@
+
+
+
+<template>
+ <div id="app-layout">
+    <div class="top-bar-container">
+      <MenuBar />
+      <Toolbar />
+    </div>
+    <WorkspaceContainer>
+      <CellList />
+    </WorkspaceContainer>
+    <!-- <SidePanel v-if="layoutMode === 'a4Preview'" class="side-panel-overlay" /> -->
+    <StatusBar />
+  </div>
+  <!-- Modal layer outside the app layout for proper centering -->
+  <div v-if="modalStore.isAboutLunaModalOpen" class="modal-container">
+    <AboutLunaModal />
+  </div>
+  <SaveAsModal v-if="modalStore.isSaveAsModalOpen" />
+</template>
+
+<style scoped>
+#app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  /* Fixed height instead of min-height */
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  /* Prevent layout from expanding beyond viewport */
+  background: var(--main-panel-background, #f0f0f0);
+}
+
+.top-bar-container {
+  /* Ensure it stays on top */
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 1000;
+}
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* Higher than any other element */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent overlay */
+}
+</style>
