@@ -1,0 +1,138 @@
+
+/* Section: Toggle Buttons */
+.toggle-btn {
+  cursor: pointer;
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
+  background: var(--button-transparent-off-color, transparent);
+  color: var(--text-color, #222);
+  padding: var(--side-panel-button-padding, 0em 0em 0em 0em);
+  border-radius: var(--side-panel-button-border-radius, 4px);
+  /* Inherit font settings from root */
+  font: inherit;
+}
+
+.toggle-btn:hover {
+  background: var(--button-hover-color, #2563eb);
+  border-color: var(--button-border-hover-color, #2563eb);
+
+}
+.toggle-btn.is-active {
+  background: var(--button-on-color, #2563eb);
+  color: var(--text-color);
+  border-color: var(--active-border-color, #2563eb);
+}
+
+.toggle-btn.is-active:hover {
+  background: var(--button-hover-color, #1d4ed8);
+  color: var(--text-color);
+  border-color: var(--button-border-hover-color, #1d4ed8);
+}
+
+
+
+
+.add-btn,
+.restore-btn {
+  cursor: pointer;
+  color: var(--text-color, blue);
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
+  background: var(--button-background-color, #fff);
+  padding: 0 0.4rem;
+  border-radius: 4px;
+  line-height: 1.2;
+  min-height: 1.6rem;
+  /*Bold text*/
+  font-weight: bold;
+  font: inherit;
+}
+.restore-btn:disabled {
+  opacity: 0.45;
+  filter: grayscale(0.6) blur(0.5px);
+  cursor: not-allowed;
+}
+.add-btn:hover,
+.restore-btn:hover {
+  background: var(--button-hover-color, #2563eb);
+  color: var(--text-color, #fff);
+  border-color: var(--button-border-hover-color, #2563eb);
+}
+.delete-btn,
+.empty-bin-btn {
+  cursor: pointer;
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
+  background: var(--button-transparent-off-color, transparent);
+  color: var(--text-color, #222);
+  padding: 0 0.4rem;
+  border-radius: 4px;
+  line-height: 1.2;
+  min-height: 1.6rem;
+  /*Bold text*/
+  font-weight: bold;
+  font: inherit;
+}
+.delete-btn:hover,
+.empty-bin-btn:hover {
+  background: var(--delete-button-hover-color, #2563eb);
+  color: var(--text-color, #fff);
+  border-color: var(--button-border-hover-color, #2563eb);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.notebook-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.notebook-item {
+  background: var(--side-panel-background, red);
+}
+.nb-btn {
+  width: 100%;
+  text-align: left;
+  color: var(--text-color, #222);
+  background: var(--side-panel-background, red);
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
+  padding: 0.35rem 0.45rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.rename-input {
+  width: 100%;
+  font: inherit;
+  padding: 0.2rem 0.3rem;
+  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
+  border-radius: 4px;
+}
+.nb-btn:hover,
+.notebook-item.is-active .nb-btn:hover {
+  /* background: var(--button-hover-color, #2563eb); */
+  border-color: var(--button-border-hover-color, #2563eb);
+}
+.notebook-item.is-active .nb-btn {
+  background: var(--active-background-color, rgba(37, 99, 235, 0.08));
+  border-color: var(--active-border-color, #2563eb);
+}
+.nb-btn.is-active {
+  background: var(--active-background-color, rgba(37, 99, 235, 0.08));
+  border-color: var(--active-border-color, #2563eb);
+}
+.notebook-item.is-deleted .nb-btn,
+.nb-btn.deleted {
+  opacity: 0.7;
+  cursor: pointer;
+  border: var(--border-thickness, 2px) dashed var(--button-border-color, #ccc);
+}

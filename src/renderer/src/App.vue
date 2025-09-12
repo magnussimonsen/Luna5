@@ -8,25 +8,25 @@
 <script setup lang="ts">
 // Example of how to use the IPC mechanism if needed
 // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-import Menubar from '@renderer/components/navigation_bars/MenuBar.vue'
+import MenuBar from '@renderer/components/navigation_bars/MenuBar.vue'
 import WorkspaceContainer from '@renderer/components/conteiners/WorkspaceContainer.vue'
-import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
+import ToolBar from '@renderer/components/conteiners/ToolBarContainer.vue'
 import CellList from '@renderer/components/conteiners/CellList.vue'
-import Statusbar from '@renderer/components/navigation_bars/StatusBar.vue'
+import Statusbar from '@renderer/components/navigation_bars/Statusbar.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
 import SidePanel from '@renderer/components/side_panel/SidePanel.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
-import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
+import { useMenuBarStore } from '@renderer/stores/UI/menuBarStore'
 import { computed, ref, watch } from 'vue'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { storeToRefs } from 'pinia'
 import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-watch-function'
 
-const menubarStore = useMenubarStore()
-const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
+const menuBarStore = useMenuBarStore()
+const { workspaceLayoutMode: layoutMode } = storeToRefs(menuBarStore)
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
 
@@ -45,13 +45,13 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
 
 <template>
   <div id="app-layout">
-    <div class="menubar-and-toolbar-container">
-      <Menubar />
-      <Toolbar />
+    <div class="menuBar-and-toolbar-container">
+      <MenuBar />
+      <ToolBar />
     </div>
-      <div v-if="layoutMode === 'web'" class="web--workspace-layout">
-        <CellList />
-        <SidePanel />
+    <div v-if="layoutMode === 'web'" class="web--workspace-layout">
+      <CellList />
+      <SidePanel />
       <div v-if="layoutMode === 'a4Preview'" class="a4--workspace-layout">A4</div>
     </div>
 
@@ -68,11 +68,11 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   height: 100vh;
 }
 /* ----------------------------------------------------------------------- */
-/* Section: Top level menubar-toolbar, workspace and statusbar containers  */
-.menubar-and-toolbar-container {
+/* Section: Top level menuBar-toolbar, workspace and statusbar containers  */
+.menuBar-and-toolbar-container {
   display: flex;
   flex-direction: column;
-  /* Stack menubar and toolbar vertically */
+  /* Stack menuBar and toolbar vertically */
   flex: 0 0 auto;
   /* Prevent it from growing */
 }
@@ -95,7 +95,7 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   flex: 1 1 auto;
   border: 9px solid green;
   color: black;
-  /* Take remaining space between menubar-toolbar and statusbar */
+  /* Take remaining space between menuBar-toolbar and statusbar */
 }
 
 /* ----------------------------------------------------------------------- */

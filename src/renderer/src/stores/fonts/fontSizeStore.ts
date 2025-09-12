@@ -13,9 +13,9 @@ export const useFontSizeStore = defineStore('fontSize', {
   state: () => ({
     fontSizes: {
       rootFontSize: '16px', // Used to set the rem unit at app initialization, not user changeable
-      menuBarFontSize: '13px',
+      menubarFontSize: '13px',
       statusBarFontSize: '10px',
-      sidePanelMenuBarFontSize: '14px',
+      sidePanelMenubarFontSize: '14px',
       sidePanelFontSize: '14px',
       toolbarFontSize: '14px',
       /* This (defaultCellFontSize)is the fontsize that will be set for the
@@ -27,17 +27,17 @@ export const useFontSizeStore = defineStore('fontSize', {
     } as FontSizeTypes
   }),
   actions: {
-    setMenuBarFontSize(size: string) {
-      this.fontSizes.menuBarFontSize = size
-      document.documentElement.style.setProperty('--menu-bar-font-size', size)
+    setMenubarFontSize(size: string) {
+      this.fontSizes.menubarFontSize = size
+      document.documentElement.style.setProperty('--menubar-font-size', size)
     },
     setStatusBarFontSize(size: string) {
-      this.fontSizes.statusBarFontSize = size
+      this.fontSizes.statusbarFontSize = size
       document.documentElement.style.setProperty('--status-bar-font-size', size)
     },
-    setSidePanelMenuBarFontSize(size: string) {
-      this.fontSizes.sidePanelMenuBarFontSize = size
-      document.documentElement.style.setProperty('--side-panel-menu-bar-font-size', size)
+    setSidePanelmenubarFontSize(size: string) {
+      this.fontSizes.sidePanelMenubarFontSize = size
+      document.documentElement.style.setProperty('--side-panel-menubar-font-size', size)
     },
     setSidePanelFontSize(size: string) {
       this.fontSizes.sidePanelFontSize = size
@@ -88,7 +88,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       }
       document.documentElement.style.setProperty(
         '--menu-bar-font-size',
-        this.fontSizes.menuBarFontSize
+        this.fontSizes.menubarFontSize
       )
       document.documentElement.style.setProperty(
         '--status-bar-font-size',
@@ -96,7 +96,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       )
       document.documentElement.style.setProperty(
         '--side-panel-menu-bar-font-size',
-        this.fontSizes.sidePanelMenuBarFontSize
+        this.fontSizes.sidePanelmenubarFontSize
       )
       document.documentElement.style.setProperty(
         '--side-panel-font-size',

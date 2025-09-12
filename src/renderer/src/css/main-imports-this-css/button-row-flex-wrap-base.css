@@ -1,0 +1,12 @@
+
+/* button-row-flex-wrap-base.css */
+
+/*
+Base styles for button rows that need to wrap flexibly.
+*/
+.button-row-flex-wrap.base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25em;
+}

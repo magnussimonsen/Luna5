@@ -9,7 +9,8 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/design.css';
 @import './main-imports-this-css/icons.css';
 @import './main-imports-this-css/fonts.css';
-@import './hidden-cell-linear-gradient-style.css';
+@import './main-imports-this-css/hidden-cell-linear-gradient-style.css';
+@import './main-imports-this-css/button-row-flex-wrap-base.css';
 
 #app {
   /* App root layout */

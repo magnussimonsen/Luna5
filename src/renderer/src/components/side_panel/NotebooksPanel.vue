@@ -2,7 +2,7 @@
   <div class="notebooks-panel side-panel-padding-margin-base">
     <div class="header">
       <!-- Row 1: view toggles + move up/down -->
-      <div class="row" role="tablist" aria-label="Notebook views">
+      <div class="button-row-flex-wrap-base" role="tablist" aria-label="Notebook views">
         <button
           type="button"
           class="toggle-btn"
@@ -342,7 +342,7 @@ function formatDate(iso?: string): string {
 .header {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.4em;
 }
 
 .title {
@@ -350,11 +350,13 @@ function formatDate(iso?: string): string {
   font-size: 0.85rem;
   font-weight: 600;
 }
+/* Replaced with .button-row-flex-wrap-base.css from css-folder
 .row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.25rem;
-}
+  gap: 0.25em;
+}*/
 .toggle-btn {
   cursor: pointer;
   border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);

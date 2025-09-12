@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="menu-bar"
+    class="menuBar"
     :style="{
       fontFamily: fontStore.fonts.uiFont || 'Arial, sans-serif',
       fontSize: fontSizeStore.fontSizes.menuBarFontSize || '1em'
@@ -113,8 +113,8 @@
         class="dropdown-menu-item"
         :class="{
           disabled: isSelectedCellLocked || isSelectedCellHidden,
-          'cell-is-locked-menubar-option': isSelectedCellLocked,
-          'cell-is-hidden-menubar-option': isSelectedCellHidden,
+          'cell-is-locked-menuBar-option': isSelectedCellLocked,
+          'cell-is-hidden-menuBar-option': isSelectedCellHidden,
           'hidden-stripes-bg': isSelectedCellHidden
         }"
         :aria-disabled="isSelectedCellLocked || isSelectedCellHidden ? 'true' : undefined"
@@ -295,7 +295,7 @@ import { useSidePanelStore } from '@renderer/stores/UI/sidePanelStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
-import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
+import { useMenubarStore } from '@renderer/stores/UI/menuBarStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar_cell_communication/cellSelectionStore'
 import { computed, ref } from 'vue'
@@ -309,13 +309,13 @@ const sidePanelStore = useSidePanelStore()
 const themeStore = useThemeStore()
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
-const menubarStore = useMenubarStore()
+const menuBarStore = useMenubarStore()
 const workspaceStore = useWorkspaceStore()
 const cellSelectionStore = useCellSelectionStore()
 // ref to Insert dropdown menu to programmatically close after action
 const insertMenu = ref<{ closeDropdown: () => void } | null>(null)
 // Computed properties
-const isA4Preview = computed(() => menubarStore.isA4Preview)
+const isA4Preview = computed(() => menuBarStore.isA4Preview)
 const isDarkMode = computed(() => themeStore.isDarkMode)
 const isSelectedCellSoftLocked = computed(() => {
   const ws = workspaceStore.getWorkspace()
@@ -341,8 +341,8 @@ const isSelectedCellLocked = computed(() => {
 })
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
-  menubarStore.toggleA4Preview()
-  console.log('Toggle button pressed, new layout mode:', menubarStore.workspaceLayoutMode)
+  menuBarStore.toggleA4Preview()
+  console.log('Toggle button pressed, new layout mode:', menuBarStore.workspaceLayoutMode)
 }
 
 function isWorkspaceEffectivelyEmpty(): boolean {
@@ -497,7 +497,7 @@ const handleMoveNotebookToBin = (): void => {
 
 <style scoped>
 .brand-icon {
-  height: var(--menu-bar-height, 1.2em);
+  height: var(--menuBar-height, 1.2em);
   width: auto;
   margin-right: 0em;
   margin-left: 0.3em;
@@ -521,19 +521,19 @@ const handleMoveNotebookToBin = (): void => {
   color: var(--ui-text-color, #fff);
   display: flex;
   align-items: center;
-  padding: var(--menu-bar-padding, 0.5em);
+  padding: var(--menuBar-padding, 0.5em);
   /* top, right, bottom, left */
   box-sizing: border-box;
-  z-index: var(--menu-bar-z-index, 3000);
+  z-index: var(--menuBar-z-index, 3000);
   /* Higher than toolbar, consistent with dropdown z-index */
   position: relative;
   /* Ensure z-index works correctly */
   /* Store controled Font */
   font-family: var(--ui-font, 'Arial', sans-serif);
-  font-size: var(--menu-bar-font-size, 1em);
+  font-size: var(--menuBar-font-size, 1em);
   /* Not controlled by store yet*/
-  line-height: var(--menu-bar-line-height, 1em);
-  font-weight: var(--menu-bar-font-weight, normal);
+  line-height: var(--menuBar-line-height, 1em);
+  font-weight: var(--menuBar-font-weight, normal);
 }
 
 .dropdown-menu-item {
@@ -585,33 +585,33 @@ const handleMoveNotebookToBin = (): void => {
 
 /* Disabled state: cursor only; visual styles are controlled by specific state classes */
 .dropdown-menu-item.disabled,
-.dropdown-menu-item.cell-is-locked-menubar-option,
-.dropdown-menu-item.cell-is-hidden-menubar-option {
+.dropdown-menu-item.cell-is-locked-menuBar-option,
+.dropdown-menu-item.cell-is-hidden-menuBar-option {
   cursor: not-allowed !important;
 }
 .dropdown-menu-item.disabled *,
-.dropdown-menu-item.cell-is-locked-menubar-option *,
-.dropdown-menu-item.cell-is-hidden-menubar-option * {
+.dropdown-menu-item.cell-is-locked-menuBar-option *,
+.dropdown-menu-item.cell-is-hidden-menuBar-option * {
   cursor: not-allowed !important;
 }
 
 /* Locked: use soft-locked theme color, keep disabled cursor */
-.dropdown-menu-item.cell-is-locked-menubar-option {
+.dropdown-menu-item.cell-is-locked-menuBar-option {
   opacity: 0.85;
   background-color: var(--soft-locked-border-color, orange);
   border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
 }
-.dropdown-menu-item.cell-is-locked-menubar-option:hover {
+.dropdown-menu-item.cell-is-locked-menuBar-option:hover {
   background-color: var(--soft-locked-border-color, orange);
   border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
 }
 
 /* Hidden: reuse hidden-cell stripe pattern and color tokens */
-.dropdown-menu-item.cell-is-hidden-menubar-option {
+.dropdown-menu-item.cell-is-hidden-menuBar-option {
   opacity: 0.9;
   border: var(--border-thickness, 2px) solid var(--hide-cell-color, red);
 }
-.dropdown-menu-item.cell-is-hidden-menubar-option:hover {
+.dropdown-menu-item.cell-is-hidden-menuBar-option:hover {
   border: var(--border-thickness, 2px) solid var(--hide-cell-color, red);
 }
 
@@ -619,11 +619,11 @@ const handleMoveNotebookToBin = (): void => {
    - Keep hidden stripes background
    - Use locked color for border
    - Add a left accent bar with the locked color */
-.dropdown-menu-item.cell-is-hidden-menubar-option.cell-is-locked-menubar-option {
+.dropdown-menu-item.cell-is-hidden-menuBar-option.cell-is-locked-menuBar-option {
   border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
   box-shadow: inset 6px 0 0 0 var(--soft-locked-border-color, orange);
 }
-.dropdown-menu-item.cell-is-hidden-menubar-option.cell-is-locked-menubar-option:hover {
+.dropdown-menu-item.cell-is-hidden-menuBar-option.cell-is-locked-menuBar-option:hover {
   border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
   box-shadow: inset 6px 0 0 0 var(--soft-locked-border-color, orange);
 }
@@ -638,10 +638,10 @@ const handleMoveNotebookToBin = (): void => {
   background: var(--menu-background, #222);
   color: var(--text-color, #fff);
   border: none;
-  padding: var(--menu-bar-button-padding);
+  padding: var(--menuBar-button-padding);
   cursor: pointer;
   font: inherit;
-  border-radius: var(--menu-bar-button-border-radius, 0px);
+  border-radius: var(--menuBar-button-border-radius, 0px);
   display: flex; /* ensure content (icons/text) is vertically centered */
   align-items: center; /* vertical centering */
   line-height: 1; /* remove extra inline box space */
@@ -667,11 +667,11 @@ const handleMoveNotebookToBin = (): void => {
   background: var(--button-transparent-off-color, transparent);
   color: var(--text-color, #fff);
   border: none;
-  padding: var(--menu-bar-button-padding);
+  padding: var(--menuBar-button-padding);
   cursor: pointer;
   font: inherit;
   border-radius: var(
-    --menu-bar-button-border-radius,
+    --menuBar-button-border-radius,
     0px
   ); /* match toggle-button for uniform height perception */
   transition: background 0.15s;

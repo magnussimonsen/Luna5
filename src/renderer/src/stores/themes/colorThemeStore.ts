@@ -24,13 +24,9 @@ export const useThemeStore = defineStore('theme', {
       // Main panel
       mainPanelBackground: 'blue' /* debug */,
       mainPanelBorderColor: 'gainsboro',
-      // Toolbar background
       // Paper preview background
       paperColor: '#ffffff',
       paperBorderColor: 'transparent',
-      // Toolbar background
-      // paperMarginBackgroundColor: '#f0f0f0',
-      // paperCellBackground: '#ffffff',
       // Side panel
       sidePanelBackground: '#f0f0f0',
       // Cell
@@ -109,8 +105,6 @@ export const useThemeStore = defineStore('theme', {
       // Paper preview background
       paperColor: '#333333',
       paperBorderColor: 'transparent',
-      // paperMarginBackgroundColor: '#222222',
-      // paperCellBackground: '#333333',
       //Side panel
       sidePanelBackground: '#222222',
       // Cell
