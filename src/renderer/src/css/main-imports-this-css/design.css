@@ -24,7 +24,7 @@ Design tokens (layout/spacing)
     --menubar-padding: 0.0em 0.3em 0em 0.3em; /* top, right, bottom, left */
     --menubar-button-padding: 0.2em 0.4em 0.2em 0.4em;
     /* top, right, bottom, left */
-    --menubar-button-logo-padding: 0.0em 0.1m 0.0em 0.3em;
+    --menubar-button-logo-padding: 0.0em 0.1em 0.0em 0.3em;
     /* top, right, bottom, left */
     --menubar-button-border-radius: 0px;
     --menubar-button-border: 0px solid var(--button-border-color, var(--debug-color, #2563eb));
@@ -41,7 +41,7 @@ Design tokens (layout/spacing)
     --toolbar-height: 1em;
     --toolbar-padding: 0.0em 0.3em 0em 0.3em; /* top, right, bottom, left */
     --toolbar-border-width: 1px;
-    --toolbar-border: 1px solid var(--tool-bar-border-color, #d0d7de);
+    --toolbar-border: 1px solid var(--toolbar-border-color, #d0d7de);
     --toolbar-font-size: 1em;
     --toolbar-font-weight: normal;
 
@@ -79,7 +79,7 @@ Design tokens (layout/spacing)
 
     /* Cell container styling */
     --cell-container-padding: 0.5em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
-    --cell-container-border: 0px solid var(--cell-border-color, 'red');
+    --cell-container-border: 0px solid var(--cell-border-color, red);
     --cell-container-border-radius: 0px;
     --cell-container-border-left-not-selected: 0.5rem solid transparent;
     --cell-container-border-left-selected: 0.5rem solid var(--active-border-color);

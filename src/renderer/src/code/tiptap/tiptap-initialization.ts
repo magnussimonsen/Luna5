@@ -5,6 +5,8 @@ import Table from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableHeader from '@tiptap/extension-table-header'
 import TableCell from '@tiptap/extension-table-cell'
+import Subscript from '@tiptap/extension-subscript'
+import Superscript from '@tiptap/extension-superscript'
 // Math (custom) - dynamically imported or added when dependency installed
 import type { Transaction } from 'prosemirror-state'
 
@@ -31,7 +33,10 @@ export function createTiptapEditor(options: {
       Table.configure({ resizable: true }),
       TableRow,
       TableHeader,
-      TableCell
+      TableCell,
+      Subscript,
+      Superscript
+      // Math extensions can be added here if the dependency is installed
     ],
     onUpdate
   })
