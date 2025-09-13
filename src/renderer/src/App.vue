@@ -46,7 +46,7 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   <div id="app-layout">
     <div class="menubar-and-toolbar-container">
       <Menubar />
-      <Toolbar />|
+      <Toolbar />
     </div>
     <div v-if="layoutMode === 'web'" class="web--workspace-layout">
       <CellList />
@@ -72,8 +72,8 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   display: flex;
   flex-direction: column;
   /* Stack menubar and toolbar vertically */
-  flex: 0 0 auto;
   /* Prevent it from growing */
+  width: 100vw;
 }
 .workspace-and-sidepanel-container {
   display: flex;

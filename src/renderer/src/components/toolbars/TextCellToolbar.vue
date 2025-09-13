@@ -3,138 +3,174 @@
        currently selected cell's editor via the store. -->
   <div
     v-if="activeTextEditor"
-    class="text-cell-toolbar"
+    class="button-row-flex-wrap-base"
     :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
     aria-label="Text cell formatting toolbar"
   >
-    <!-- Inline Formatting -->
+    <!--  BOLD -->
     <button
-      class="toolbar-btn icon-bold"
+      class="top-toolbar-button icon icon-bold"
       type="button"
       :class="{ active: isActive('bold') }"
       title="Bold (Ctrl+B)"
       aria-label="Bold"
       :disabled="!canRunCommand('toggleBold')"
       @click="toggleBold"
-    />
+    ></button>
+    <!--  ITALIC -->
     <button
-      class="toolbar-btn icon-italic"
+      class="top-toolbar-button icon icon-italic"
       type="button"
       :class="{ active: isActive('italic') }"
       title="Italic (Ctrl+I)"
       aria-label="Italic"
       :disabled="!canRunCommand('toggleItalic')"
       @click="toggleItalic"
-    />
+    ></button>
 
-    <!-- Lists -->
+    <!-- BULLET LIST -->
     <button
-      class="toolbar-btn icon-bullet-list"
+      class="top-toolbar-button icon icon-bullet-list"
       type="button"
       :class="{ active: isActive('bulletList') }"
       title="Bullet list"
       aria-label="Bullet list"
       :disabled="!activeTextEditor"
       @click="toggleBulletList"
-    />
+    ></button>
+    <!-- ORDERED LIST -->
     <button
-      class="toolbar-btn icon-numbered-list"
+      class="top-toolbar-button icon icon-numbered-list"
       type="button"
       :class="{ active: isActive('orderedList') }"
       title="Numbered list"
       aria-label="Numbered list"
       :disabled="!activeTextEditor"
       @click="toggleOrderedList"
-    />
+    ></button>
+    <!-- HEADING 1 -->
+    <button
+      class="top-toolbar-button icon icon-heading-1"
+      type="button"
+      :class="{ active: isActiveHeading(1) }"
+      title="Heading 1"
+      aria-label="Heading 1"
+      :disabled="!activeTextEditor"
+      @click="toggleHeading(1)"
+    ></button>
+    <!-- HEADING 2 -->
+    <button
+      class="top-toolbar-button icon icon-heading-2"
+      type="button"
+      :class="{ active: isActiveHeading(2) }"
+      title="Heading 2"
+      aria-label="Heading 2"
+      :disabled="!activeTextEditor"
+      @click="toggleHeading(2)"
+    ></button>
+    <!-- HEADING 3 -->
+    <button
+      class="top-toolbar-button icon icon-heading-3"
+      type="button"
+      :class="{ active: isActiveHeading(3) }"
+      title="Heading 3"
+      aria-label="Heading 3"
+      :disabled="!activeTextEditor"
+      @click="toggleHeading(3)"
+    ></button>
+    <!-- HEADING 4 -->
+    <button
+      class="top-toolbar-button icon  icon-heading-4"
+      type="button"
+      :class="{ active: isActiveHeading(4) }"
+      title="Heading 4"
+      aria-label="Heading 4"
+      :disabled="!activeTextEditor"
+      @click="toggleHeading(4)"
+    ></button>
+    <!-- HEADING 5 -->
+    <button
+      class="top-toolbar-button icon icon-heading-5"
+      type="button"
+      :class="{ active: isActiveHeading(5) }"
+      title="Heading 5"
+      aria-label="Heading 5"
+      :disabled="!activeTextEditor"
+      @click="toggleHeading(5)"
+    ></button>
 
-    <!-- Headings (compact render from config array) -->
-    <template v-for="heading in headingLevels" :key="'heading-' + heading">
-      <button
-        class="toolbar-btn"
-        :class="['icon-heading-' + heading, { active: isActiveHeading(heading) }]"
-        type="button"
-        :title="'Heading ' + heading"
-        :aria-label="'Heading ' + heading"
-        :disabled="!activeTextEditor"
-        @click="toggleHeading(heading)"
-      />
-    </template>
-
-    <span class="sep" aria-hidden="true">|</span>
 
     <!-- Tables -->
     <button
-      class="toolbar-btn icon-table"
+      class="top-toolbar-button icon icon-table"
       type="button"
       title="Insert 3x3 table"
       aria-label="Insert table"
       :disabled="!activeTextEditor"
       @click="insertTable"
-    />
+    ></button>
     <button
-      class="toolbar-btn icon-insert-table-row-below"
+      class="top-toolbar-button icon icon-insert-table-row-below"
       type="button"
       title="Add row after"
       aria-label="Add row"
       :disabled="!isTableActive"
       @click="addRow"
-    />
+    ></button>
     <button
-      class="toolbar-btn icon-insert-table-column-right"
+      class="top-toolbar-button icon icon-insert-table-column-right"
       type="button"
       title="Add column after"
       aria-label="Add column"
       :disabled="!isTableActive"
       @click="addColumn"
-    />
+    ></button>
     <button
-      class="toolbar-btn delete-button icon-delete-table-row"
+      class="top-toolbar-button icon delete-button icon-delete-table-row"
       type="button"
       title="Delete row"
       aria-label="Delete row"
       :disabled="!isTableActive"
       @click="deleteRow"
-    />
+    ></button>
     <button
-      class="toolbar-btn delete-button icon-delete-table-column"
+      class="top-toolbar-button icon delete-button icon-delete-table-column"
       type="button"
       title="Delete column"
       aria-label="Delete column"
       :disabled="!isTableActive"
       @click="deleteColumn"
-    />
+    ></button>
     <button
-      class="toolbar-btn delete-button icon-delete-table"
+      class="top-toolbar-button icon delete-button icon-delete-table"
       type="button"
       title="Delete table"
       aria-label="Delete table"
       :disabled="!isTableActive"
       @click="deleteTable"
-    />
+    ></button>
 
-    <span class="sep" aria-hidden="true">|</span>
 
     <!-- Math (placeholder button - feature removed, kept for future implementation) -->
     <button
-      class="toolbar-btn icon-math-live-block"
+      class="top-toolbar-button icon icon-math-live-block"
       type="button"
       title="Math Live Input Field with virtual keyboard (coming soon)"
       aria-label="Math Live (coming soon)"
       :disabled="!activeTextEditor"
       @click="placeholderMathLive"
-    />
+    ></button>
 
     <button
-      class="toolbar-btn icon-math-katex-block"
+      class="top-toolbar-button icon icon-math-katex-block"
       type="button"
       title="KaTeX (coming soon)"
       aria-label="LaTeX input field with KaTeX(coming soon)"
       :disabled="!activeTextEditor"
       @click="placeholderKaTeX"
-    />
+    ></button>
 
-    <span class="sep" aria-hidden="true">|</span>
 
     <!-- History: Use electron ctrl+z and ctrl+y for undo/redo
     <button
@@ -169,7 +205,7 @@ import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import type { Editor } from '@tiptap/vue-3'
-
+import type { HeadingLevel } from '@renderer/types/heading-level-type'
 // Stores
 const themeStore = useThemeStore()
 const cellSelectionStore = useCellSelectionStore()
@@ -180,10 +216,6 @@ const isDarkMode = computed(() => !!themeStore.isDarkMode)
 const activeTextEditor = computed<Editor | null>(() =>
   textEditorsStore.getEditorByCellId(cellSelectionStore.selectedCellId)
 )
-
-// Simple config for heading buttons
-type HeadingLevel = 1 | 2 | 3 | 4
-const headingLevels: HeadingLevel[] = [1, 2, 3, 4]
 
 // ---------------------------------------------------------------------------
 // Helper functions (use regular functions for clarity & easier debugging)
@@ -217,20 +249,23 @@ function canRunCommand(commandName: string): boolean {
 
 // Formatting action functions
 function toggleBold(): void {
-  runCommand((ed) => ed.chain().focus().toggleBold().run())
+  runCommand((editor) => editor.chain().focus().toggleBold().run())
 }
 function toggleItalic(): void {
-  runCommand((ed) => ed.chain().focus().toggleItalic().run())
+  runCommand((editor) => editor.chain().focus().toggleItalic().run())
 }
 function toggleBulletList(): void {
-  runCommand((ed) => ed.chain().focus().toggleBulletList().run())
+  runCommand((editor) => editor.chain().focus().toggleBulletList().run())
 }
 function toggleOrderedList(): void {
-  runCommand((ed) => ed.chain().focus().toggleOrderedList().run())
+  runCommand((editor) => editor.chain().focus().toggleOrderedList().run())
 }
+
+
 function toggleHeading(level: HeadingLevel): void {
   runCommand((ed) => ed.chain().focus().toggleHeading({ level }).run())
 }
+
 /* History: Use electron ctrl+z and ctrl+y for undo/redo
 function undo(): void {
   runCommand((ed) => ed.chain().focus().undo().run())
@@ -243,39 +278,39 @@ function redo(): void {
 // Table helpers
 const isTableActive = computed(() => isActive('table'))
 function insertTable(): void {
-  runCommand((ed) => {
+  runCommand((editor) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(ed as any).chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
+    ;(editor as any).chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
   })
 }
 function addRow(): void {
-  runCommand((ed) => {
+  runCommand((editor) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(ed as any).chain().focus().addRowAfter().run()
+    ;(editor as any).chain().focus().addRowAfter().run()
   })
 }
 function addColumn(): void {
-  runCommand((ed) => {
+  runCommand((editor) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(ed as any).chain().focus().addColumnAfter().run()
+    ;(editor as any).chain().focus().addColumnAfter().run()
   })
 }
 function deleteRow(): void {
-  runCommand((ed) => {
+  runCommand((editor) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(ed as any).chain().focus().deleteRow().run()
+    ;(editor as any).chain().focus().deleteRow().run()
   })
 }
 function deleteColumn(): void {
-  runCommand((ed) => {
+  runCommand((editor) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(ed as any).chain().focus().deleteColumn().run()
+    ;(editor   as any).chain().focus().deleteColumn().run()
   })
 }
 function deleteTable(): void {
-  runCommand((ed) => {
+  runCommand((editor) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(ed as any).chain().focus().deleteTable().run()
+    ;(editor as any).chain().focus().deleteTable().run()
   })
 }
 
@@ -293,44 +328,8 @@ function isActive(markOrNode: string, attrs?: Record<string, unknown>): boolean 
   return !!activeTextEditor.value?.isActive(markOrNode, attrs)
 }
 function isActiveHeading(level: number): boolean {
-  return !!activeTextEditor.value?.isActive('heading', { level })
+  const result = !!activeTextEditor.value?.isActive('heading', { level })
+  console.log('isActiveHeading', level, result)
+  return result
 }
 </script>
-
-<style scoped>
-@import '../../css/main-imports-this-css/design.css'; /* ensure design tokens (height, padding vars) are available */
-@import '../../css/toolbar-base.css';
-/* Base styling moved to toolbar-base.css; only overrides below */
-
-/* Rely on shared .toolbar-btn styles from toolbar-base.css; only override active state if needed */
-.toolbar-btn.active {
-  background: var(--button-on-color, #2563eb);
-  color: var(--text-color, #fff);
-  border: var(--toolbar-button-border-hover, 1px solid #2563eb);
-}
-.sep {
-  opacity: 0.5;
-  user-select: none;
-}
-
-/* Dark mode specific fine-tuning (variables already swapped by theme store) */
-/* Optional dark-mode fallback (variables should already swap) */
-.text-cell-toolbar.is-dark {
-  background: var(--toolbar-background, #1f2937);
-}
-.text-cell-toolbar.is-dark .toolbar-btn.active {
-  /* Ensure contrast in dark mode if button-on-color is dark */
-  color: var(--button-active-fg-dark, #fff);
-}
-
-/* Normalize icon-only button glyph metrics so all buttons visually share same height */
-.toolbar-btn[class*='icon-'] {
-  line-height: 1; /* remove font ascent differences */
-  font-size: var(--toolbar-font-size, 1em); /* keep consistent with text buttons */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--toolbar-button-height, 1.5em); /* use design token; fallback if not loaded */
-  padding: var(--toolbar-button-padding, 0.1em 0.4em 0.1em 0.4em);
-}
-</style>

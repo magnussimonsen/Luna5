@@ -1,0 +1,66 @@
+/* All menubar button styles */
+
+.menubar-button {
+    background: transparent;
+    color: var(--text-color, #fff);
+    padding: var(--menubar-button-padding, 0.3em 0.6em 0.3em 0.6em); /* top, right, bottom, left */
+    cursor: pointer;
+    display: flex;
+    font-size: var(--menubar-font-size); 
+    font-family: var(--ui-font);
+    color: var(--ui-text-color, var(--debug-color));
+}
+
+.menubar-button:hover {
+  background: var(--button-hover-color, #333);
+  color: var(--text-color, #fff);
+}
+
+.menubar-button.active {
+  background: var(--button-on-color, lightgreen);
+  color: var(--text-color, #fff);
+}
+
+.menubar-button.flagged-cell-active {
+  background: var(--flagged-cell-color, salmon );
+  color: var(--ui-text-color, #fff);
+}
+
+.menubar-button.lock-cell-active {
+  background: var(--soft-locked-border-color, orange);
+  color: var(--ui-text-color, #fff);
+}
+
+.menubar-button.hide-cell-active {
+  background: var(--button-on-color, lightgreen);
+  color: var(--ui-text-color, #fff);
+}
+
+.menubar-button.a4-preview-active {
+  background: var(--button-on-color, lightgreen);
+  color: var(--ui-text-color, #fff);
+}
+
+.menubar-button.dark-mode-active {
+  background: var(--button-on-color, lightgreen);
+  color: var(--ui-text-color, #fff);
+}
+
+.menubar-button.disabled {
+  background: var(--button-disabled-color, #555); 
+  color: var(--button-disabled-text-color, #aaa);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.menubar-about-icon {
+  height: var(--menubar-height, 1.2em);
+  width: auto;
+  margin-right: 0.2em;
+  margin-left: 0.4em;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+

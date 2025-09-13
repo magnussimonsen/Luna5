@@ -1,0 +1,87 @@
+
+.menubar-dropdown-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--menu-background, #f9f9f9);
+  padding: var(--menubar-dropdown-items-padding, 10em); /* top, right, bottom, left */
+  border: 0px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+
+  font-size: var(--menubar-font-size);  
+  font-family: var(--ui-font);
+  color: var(--ui-text-color, var(--debug-color));
+
+}
+
+.menubar-shortcut {
+  margin-left: auto;
+  opacity: 0.7;
+  font-size: 0.95em;
+  padding-left: 4em;
+}
+
+.menubar-shortcut-not-implemented {
+  text-decoration: line-through;
+  margin-left: auto;
+  opacity: 0.7;
+  font-size: 0.95em;
+  padding-left: 4em;
+}
+
+.menubar-dropdown-item:hover {
+  background-color: var(--button-hover-color, red);
+  border: 0px solid var(--button-border-hover-color, red);
+}
+
+/* Disabled state: cursor only; visual styles are controlled by specific state classes */
+.menubar-dropdown-menu-item.disabled,
+.menubar-dropdown-menu-item.cell-is-locked-menu-bar-option,
+.menubar-dropdown-menu-item.cell-is-hidden-menu-bar-option {
+  cursor: not-allowed !important;
+}
+.menubar-dropdown-menu-item.disabled *,
+.menubar-dropdown-menu-item.cell-is-locked-menu-bar-option *,
+.menubar-dropdown-menu-item.cell-is-hidden-menu-bar-option * {
+  cursor: not-allowed !important;
+}
+
+/* Locked: use soft-locked theme color, keep disabled cursor */
+.menubar-menubar-dropdown-menu-item.cell-is-locked-menu-bar-option {
+  opacity: 0.85;
+  background-color: var(--soft-locked-border-color, orange);
+  border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
+}
+.menubar-dropdown-menu-item.cell-is-locked-menu-bar-option:hover {
+  background-color: var(--soft-locked-border-color, orange);
+  border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
+}
+
+/* Hidden: reuse hidden-cell stripe pattern and color tokens */
+.menubar-dropdown-menu-item.cell-is-hidden-menu-bar-option {
+  opacity: 0.9;
+  border: var(--border-thickness, 2px) solid var(--hide-cell-color, red);
+}
+.menubar-dropdown-menu-item.cell-is-hidden-menu-bar-option:hover {
+  border: var(--border-thickness, 2px) solid var(--hide-cell-color, red);
+}
+
+/* Combined state: hidden + locked.
+   - Keep hidden stripes background
+   - Use locked color for border
+   - Add a left accent bar with the locked color */
+.menubar-dropdown-menu-item.cell-is-hidden-menu-bar-option.cell-is-locked-menu-bar-option {
+  border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
+  box-shadow: inset 6px 0 0 0 var(--soft-locked-border-color, orange);
+}
+.menubar-dropdown-menu-item.cell-is-hidden-menu-bar-option.cell-is-locked-menu-bar-option:hover {
+  border: var(--border-thickness, 2px) solid var(--soft-locked-border-color, orange);
+  box-shadow: inset 6px 0 0 0 var(--soft-locked-border-color, orange);
+}
+
+.dropdown-menu-divider {
+  height: 1px;
+  background-color: var(--dropdown-divider-color, red);
+  margin: 0.25em 0;
+}
+

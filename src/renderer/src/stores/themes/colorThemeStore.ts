@@ -70,6 +70,11 @@ export const useThemeStore = defineStore('theme', {
       buttonOnColor: 'lightgreen',
       buttonHardOffColor: 'salmon',
       deleteButtonHoverColor: 'salmon',
+      // Disabled button colors
+      buttonDisabledColor: 'gray',
+      buttonDisabledBorderColor: 'darkgray',
+      buttonDisabledTextColor: '#aaa',
+      buttonDisabledHoverColor: 'gray',
       // Python worker Reset button colors
       buttonResetPythonWorkerColor: 'transparent',
       buttonResetPythonWorkerHoverColor: 'salmon',
@@ -141,12 +146,17 @@ export const useThemeStore = defineStore('theme', {
       // Button colors
       buttonBorderColor: '#555555',
       buttonHoverColor: 'dimgray',
-      buttonBorderHoverColor: '#FFFFFF',
+      buttonBorderHoverColor: 'whitesmoke',
       buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'darkgreen',
       buttonHardOffColor: 'darkred',
       deleteButtonHoverColor: 'darkred',
+      // Disabled button colors
+      buttonDisabledColor: 'gray',
+      buttonDisabledBorderColor: 'darkgray',
+      buttonDisabledTextColor: '#555555',
+      buttonDisabledHoverColor: 'gray',
       // Python worker Reset button colors
       buttonResetPythonWorkerColor: 'transparent',
       buttonResetPythonWorkerHoverColor: 'darkred',
@@ -223,6 +233,10 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--button-on-color', colors.buttonOnColor)
       root.style.setProperty('--button-transparent-off-color', colors.buttonTransparentOffColor)
       root.style.setProperty('--button-hard-off-color', colors.buttonHardOffColor)
+      root.style.setProperty('--button-disabled-color', colors.buttonDisabledColor)
+      root.style.setProperty('--button-disabled-border-color', colors.buttonDisabledBorderColor)
+      root.style.setProperty('--button-disabled-text-color', colors.buttonDisabledTextColor)
+      root.style.setProperty('--button-disabled-hover-color', colors.buttonDisabledHoverColor)
       root.style.setProperty(
         '--button-reset-python-worker-color',
         colors.buttonResetPythonWorkerColor

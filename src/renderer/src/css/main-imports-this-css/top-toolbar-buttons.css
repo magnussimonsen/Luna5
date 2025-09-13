@@ -1,0 +1,50 @@
+
+.top-toolbar-button {
+    display: flex;
+    align-items: center;
+    
+    background: transparent;
+    color: var(--text-color, #fff);
+
+    border: var( --toolbar-button-border);
+    border-radius: 0;
+
+    cursor: pointer;
+
+    margin: 0 var(--toolbar-button-gap, 0.1em);
+
+    padding: var(--toolbar-button-padding, 0.3em 0.6em 0.3em 0.6em); /* top, right, bottom, left */
+    line-height: var(--toolbar-button-height, 1.3em);
+    
+    font-size: var(--toolbar-font-size);
+    font-family: var(--ui-font);
+    color: var(--ui-text-color, var(--debug-color));
+    
+}
+.top-toolbar-button.icon {
+    cursor: pointer;  /* Just because style can not be empty */
+}
+
+ 
+
+.top-toolbar-button:hover {
+  background: var(--button-hover-color, #333);
+  color: var(--text-color, #fff);
+
+}
+
+.top-toolbar-button-icon:hover {
+  background: var(--button-hover-color, #333);
+  color: var(--text-color, #fff);
+
+}
+
+.top-toolbar-button.active {
+  background: var(--button-on-color, lightgreen);
+  color: var(--text-color, #fff);
+}
+
+.top-toolbar-button-icon.active {
+  background: var(--button-on-color, lightgreen);
+  color: var(--text-color, #fff);
+}

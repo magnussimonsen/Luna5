@@ -36,43 +36,59 @@ export type ThemeColorTypes = {
   // paperCellBackground: string --- IGNORE ---
   sidePanelBackground: string
 
+  // Text colors
   textColor: string
   UITextColor: string
 
+  // Main border colors
   borderColor: string
   dropdownBorderColor: string
 
+  // Active elements
   activeBackgroundColor: string
   activeBorderColor: string
   activeBorderColorHover: string
 
+  // Locked/hidden elements
   softLockedColor: string
   cellLockedOverlay: string
   hideCellColor: string
 
   focusVisibleBorderColor: string
 
+  // Slider colors
   sliderBackground: string
   sliderThumbColor: string
   sliderTrackColor: string
 
+  // Dropdown colors
   dropdownDividerColor: string
 
+  // Button colors
   buttonBackgroundColor: string
   buttonBorderColor: string
   buttonHoverColor: string
   buttonBorderHoverColor: string
 
+ // Toggle button colors
   buttonOnColor: string
   buttonTransparentOffColor: string
   buttonHardOffColor: string
 
+  // Delete button colors
   deleteButtonHoverColor: string
+
+  // Disabled button colors
+  buttonDisabledColor: string
+  buttonDisabledBorderColor: string
+  buttonDisabledTextColor: string
+  buttonDisabledHoverColor: string
 
   // Python worker Reset button colors
   buttonResetPythonWorkerColor: string
   buttonResetPythonWorkerHoverColor: string
-
+  
+  // Zoom buttons
   resetZoomButtonColorCenter: string
   resetZoomButtonColorOffCenter: string
 

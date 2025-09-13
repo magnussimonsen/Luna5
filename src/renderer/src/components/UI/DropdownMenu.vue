@@ -1,14 +1,35 @@
 <!-- 
- DropdownMenu.vue
- Allows toggling visibility and supports closing on outside clicks.
- -->
+DropdownMenu.vue
+
+A reusable dropdown menu component for the menubar and other UI areas.
+- Allows toggling visibility and supports closing on outside clicks.
+- Uses slots for flexible content and trigger customization.
+- Styles: src/renderer/src/css/main-imports-this-css/menubar-dropdown.css
+-->
 
 <template>
-  <div ref="dropdownRef" class="dropdown">
-    <button class="dropdown-trigger" :class="{ 'is-active': isOpen }" @click="toggleDropdown">
+  <!--
+    Root container for the dropdown menu.
+    Uses a ref for outside click detection.
+  -->
+  <div ref="dropdownRef" class="menubar-dropdown-container">
+    <!--
+      Trigger button for opening/closing the dropdown.
+      Slot 'trigger' allows custom button content; falls back to label prop.
+    -->
+    <button
+      class="menubar-dropdown-trigger-button"
+      :class="{ active: isOpen }"
+      @click="toggleDropdown"
+    >
       <slot name="trigger">{{ label }}</slot>
     </button>
-    <div v-show="isOpen" class="dropdown-content" @click="closeDropdown">
+    <!--
+      Dropdown content area.
+      Uses default slot for menu items/content.
+      Closes dropdown on click (can be customized).
+    -->
+    <div v-show="isOpen" class="menubar-dropdown-content" @click="closeDropdown">
       <slot></slot>
     </div>
   </div>
@@ -17,6 +38,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
+// Props:
+// - label: Text label for the dropdown trigger button
+// - closeOnOutsideClick: Whether to close dropdown when clicking outside
 const props = defineProps({
   label: {
     type: String,
@@ -63,51 +87,3 @@ defineExpose({
   toggleDropdown
 })
 </script>
-
-<style scoped>
-/* Dropdown container */
-.dropdown {
-  position: relative;
-  display: inline-block;
-  z-index: 10020;
-  /* Higher than toolbar's z-index */
-}
-
-/* Trigger button */
-.dropdown-trigger {
-  background: transparent;
-  color: var(--text-color);
-  border: none;
-  padding: var(--dropdown-trigger-padding, 0.5em 1em);
-  /* top, right, bottom, left */
-  cursor: pointer;
-  font: inherit;
-  border-radius: var(--dropdown-trigger-border-radius, 0px);
-  transition: background var(--transition-duration, 0.1s);
-}
-
-.dropdown-trigger.is-active,
-.dropdown-trigger:hover {
-  background: var(--button-hover-color, red);
-  color: var(--text-color, red);
-}
-
-/* Dropdown content */
-.dropdown-content {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 0em;
-  min-width: fit-content;
-  background: var(--menu-background);
-  color: var(--text-color);
-  border: solid 1px var(--dropdown-border-color, red);
-  padding: 0.5em 0.5em 0.5em 0.5em;
-  /* top, right, bottom, left */
-  border-radius: var(--border-radius);
-  z-index: 10030;
-  /* Higher than the .dropdown z-index */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  /* Add shadow for better visibility */
-}
-</style>

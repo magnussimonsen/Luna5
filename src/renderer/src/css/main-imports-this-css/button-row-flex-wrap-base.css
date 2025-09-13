@@ -3,10 +3,26 @@
 
 /*
 Base styles for button rows that need to wrap flexibly.
+No padding, gap, or margin defined here; these should be set in design.css
 */
-.button-row-flex-wrap.base {
+
+.button-row-flex-wrap-base {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25em;
+  align-items: center; /* Vertically center items */
+  width: 100%; /* Full width to allow wrapping */
+  height: fit-content; /* Height adjusts based on content */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  /*background-color: var(--button-row-background-color, transparent);  Default to transparent if not set */
+  /* No padding, gap, or margin here; set in design.css */
+}
+
+/* This class extends button-row-flex-wrap-base  with flex start alignment */
+.button-row-flex-wrap-base.flex-start {
+  justify-content: flex-start;
+}
+
+/* This class extends button-row-flex-wrap-base  with flex end alignment */
+.button-row-flex-wrap-base.flex-end {
+  justify-content: flex-end;
 }

@@ -1,0 +1,47 @@
+
+
+/* Dropdown container */
+.menubar-dropdown-container {
+  position: relative;
+  display: flex;
+  z-index: var(--menubar-z-index + 10), 3010;
+}
+
+.menubar-dropdown-trigger-button {
+  background: transparent; /* Use menubar background */
+  color: var(--text-color);
+  border: none;
+  padding: var( --menubar-dropdown-trigger-padding, 0.3em 0.6em 0.3em 0.6em); /* top, right, bottom, left */
+  cursor: pointer;
+  border-radius: var(--menubar-dropdown-trigger-border-radius, 0px);
+
+  font-size: var(--menubar-font-size);  
+  font-family: var(--ui-font);
+  color: var(--ui-text-color, var(--debug-color));
+}
+
+.menubar-dropdown-trigger-button:active,
+.menubar-dropdown-trigger-button:hover {
+  background: var(--button-hover-color, red);
+  color: var(--text-color, red);
+}
+
+.menubar-dropdown-content {
+  position: absolute;
+  background: var(--menu-background, var(--debug-color, 'lightblue'));
+  top: 100%;
+  left: 0;
+  margin-top: 0em;
+  min-width: fit-content;
+  color: var(--text-color);
+  border: solid 1px var(--dropdown-border-color, var(--debug-color, 'salmon'));
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  /* top, right, bottom, left */
+  border-radius: var(--border-radius);
+  z-index: 10030;
+  /* Higher than the .dropdown z-index */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  /* Add shadow for better visibility */
+}
+
+ 

@@ -1,7 +1,21 @@
+<!--
+ToolbarContainer.vue
+
+This component displays the appropriate toolbar for the currently selected cell in the workspace.
+- It dynamically chooses which toolbar to show (e.g., text cell, python cell) based on the cell type.
+- If no cell is selected, it shows a placeholder message.
+- Toolbar styles are in: src/renderer/src/css/main-imports-this-css/top-toolbar-container.css
+-->
+
 <template>
-  <div class="toolbar-container">
+  <!--
+    Main container for the top toolbar area.
+    Renders the correct toolbar component for the selected cell type.
+    If no cell is selected, shows a placeholder.
+  -->
+  <div class="top-toolbar-container">
     <component :is="currentToolbarComponent" v-if="currentToolbarComponent" />
-    <div v-else class="toolbar-placeholder" aria-hidden="true">No cell selected</div>
+    <div v-else class="top-toolbar-placeholder" aria-hidden="true">No cell selected</div>
   </div>
 </template>
 
@@ -11,49 +25,20 @@ import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communicati
 import TextCellToolbar from '@renderer/components/toolbars/TextCellToolbar.vue'
 import PythonCellToolbar from '@renderer/components/toolbars/PythonCellToolbar.vue'
 
+// Store for cell selection state (selected cell type, etc.)
 const selectionStore = useCellSelectionStore()
 
+// Mapping of cell types to their corresponding toolbar components
 const toolbarComponents = {
   'text-cell': TextCellToolbar,
   'python-cell': PythonCellToolbar
   // future: markdown: MarkdownCellToolbar, etc.
 } as const
 
+// Computes which toolbar component to show based on the selected cell type
 const currentToolbarComponent = computed(() => {
   const kind = selectionStore.selectedCellKind
-  if (!kind) return null
+  if (!kind) return null // No cell selected
   return toolbarComponents[kind as keyof typeof toolbarComponents] || null
 })
 </script>
-
-<style scoped>
-.toolbar-container {
-  left: 0;
-  width: 100vw;
-  height: calc(
-    var(--menu-bar-height, 1.2em) + var(--toolbar-height, 2.5em) - 0 *
-      var(--toolbar-border-width, 1px)
-  ); /* start below top bars */
-  display: flex;
-  align-items: center;
-  background: var(--toolbar-background, #f4f4f4);
-  color: var(--ui-text-color, #333);
-  /* UI font family from font store */
-  font-family: var(--ui-font);
-  /* Toolbar font size from font store */
-  font-size: var(--toolbar-font-size);
-  box-sizing: border-box;
-  padding: var(--toolbar-container-padding, 0.2rem 0.5rem);
-  z-index: var(--toolbar-z-index, 2000);
-  /* Lower than MenuBar dropdown (3000) */
-  position: relative;
-  /* Ensure z-index works correctly */
-  margin-bottom: 5px; /* Space below toolbar */
-}
-
-.toolbar-placeholder {
-  opacity: 0.6;
-  font-size: 1em;
-  padding: 0.3em 0;
-}
-</style>
