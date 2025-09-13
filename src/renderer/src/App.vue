@@ -71,18 +71,19 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
 .menubar-and-toolbar-container {
   display: flex;
   flex-direction: column;
-  /* Stack menubar and toolbar vertically */
-  /* Prevent it from growing */
   width: 100vw;
+  background: transparent;
+  
 }
 .workspace-and-sidepanel-container {
   display: flex;
-  width: 100%;
+  width: 100vw;
   background: transparent;
   border: 1px solid blue;
 }
 .statusbar-container {
   flex: 0 0 auto;
+  width: 100vw;
   /* Prevent it from growing */
 }
 

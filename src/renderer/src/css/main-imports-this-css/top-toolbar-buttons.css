@@ -7,7 +7,7 @@
     color: var(--text-color, #fff);
 
     border: var( --toolbar-button-border);
-    border-radius: 0;
+    border-radius: var(--toolbar-button-radius, 0);
 
     cursor: pointer;
 
