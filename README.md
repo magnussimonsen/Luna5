@@ -163,8 +163,9 @@ Third-party components are licensed separately. Notably:
 - Tiptap is licensed under the MIT License.
   See: https://github.com/ueberdosis/tiptap/blob/main/LICENSE
 
+
 See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated list of third-party dependencies and their licenses.
-Luna52025-09-14
+
 ---
 ## 🖼️ Current UI Progress Snapshots and dev updates
 **Currently** refactoring the UI’s underlying CSS architecture and integrating experimental text‑editor highlighting (work in progress).
