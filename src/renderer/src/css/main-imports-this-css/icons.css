@@ -13,6 +13,9 @@
     --icon-underline: '_'; 
     --icon-subscript: 'X₂';
     --icon-superscript: 'X²';
+    /* Insert link and image */
+    --icon-link: '🔗';
+    --icon-image: '🖼';
     /* Highlight pen */
     --icon-highlight-pen: '🖍';
     /* Headings */
@@ -29,7 +32,7 @@
     --icon-insert-table-column-left: '⇤'; /* Not used */
     --icon-insert-table-column-right: '+ |';
     --icon-insert-table-row-above: '⇑'; /* Not used */
-    --icon-insert-table-row-below: '+ __';
+    --icon-insert-table-row-below: '+ _';
     /* Deletion icons refined for clarity (row = backspace, column = forward delete) */
     --icon-delete-table-row: '┅';
     --icon-delete-table-column: '┇';
@@ -38,6 +41,8 @@
     --icon-undo: '↺';
     --icon-redo: '↻';
     /* Math */
+    --icon-math: 'Math'; /* Generic math icon */
+    --icon-LaTeX: 'TeX'; /* LaTeX icon */
     --icon-math-live-block: 'Insert Math Live';
     --icon-math-live-inline: 'Insert Math Live Inline';
     --icon-math-katex-block: 'Insert KaTeX';
@@ -66,6 +71,9 @@
 .icon-subscript::before { content: var(--icon-subscript); }
 .icon-superscript::before { content: var(--icon-superscript); }
 .icon-underline::before { content: var(--icon-underline); }
+/* Insert link and image */
+.icon-link::before { content: var(--icon-link); }
+.icon-image::before { content: var(--icon-image); }
 /* Highlight */
 .icon-highlight-pen::before { content: var(--icon-highlight-pen); }
 /* Headings */
@@ -90,6 +98,8 @@
 .icon-undo::before { content: var(--icon-undo); }
 .icon-redo::before { content: var(--icon-redo); }
 /* Math icon variants (placeholders until feature implemented) */
+.icon-math::before { content: var(--icon-math); }
+.icon-LaTeX::before { content: var(--icon-LaTeX); }
 .icon-math-live-block::before { content: var(--icon-math-live-block); }
 .icon-math-live-inline::before { content: var(--icon-math-live-inline); }
 .icon-math-katex-block::before { content: var(--icon-math-katex-block); }

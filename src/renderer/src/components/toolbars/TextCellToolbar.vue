@@ -122,6 +122,7 @@
       :disabled="!activeTextEditor"
       @click="toggleHeading(4)"
     ></button>
+    <!-- REMOVE HEADING 5 
     <button
       class="top-toolbar-button icon icon-heading-5"
       type="button"
@@ -131,8 +132,28 @@
       :disabled="!activeTextEditor"
       @click="toggleHeading(5)"
     ></button>
+    -->
+    <!-- button placeholder for insert link-->
+    <button
+      class="top-toolbar-button icon icon-link"
+      type="button"
+      title="Insert link (coming soon)"
+      aria-label="Insert link (coming soon)"
+      :disabled="!activeTextEditor"
+      @click="() => {}"
+    ></button>
+    <!-- button placeholder for insert image-->
+    <button
+      class="top-toolbar-button icon icon-image"
+      type="button"
+      title="Insert image (coming soon)"
+      aria-label="Insert image (coming soon)"
+      :disabled="!activeTextEditor"
+      @click="() => {}"
+    ></button>
 
     <!-- Highlight buttons: fixed four tokens; background set by resolver -->
+    <!-- ORANGE REMOVED 
     <button
       class="top-toolbar-button icon icon-highlight-pen"
       type="button"
@@ -141,6 +162,16 @@
       title="Highlight Orange"
       aria-label="Highlight Orange"
       @click="toggleHighlight('orange-highlighting')"
+    ></button>
+    -->
+      <button
+      class="top-toolbar-button icon icon-highlight-pen"
+      type="button"
+      :style="{ backgroundColor: resolveHighlightColor('red-highlighting', isDarkMode) }"
+      :class="{ 'is-active': isHighlightActive('red-highlighting') }"
+      title="Highlight Red"
+      aria-label="Highlight Red"
+      @click="toggleHighlight('red-highlighting')"
     ></button>
 
     <button
@@ -163,17 +194,10 @@
       @click="toggleHighlight('green-highlighting')"
     ></button>
 
-    <button
-      class="top-toolbar-button icon icon-highlight-pen"
-      type="button"
-      :style="{ backgroundColor: resolveHighlightColor('red-highlighting', isDarkMode) }"
-      :class="{ 'is-active': isHighlightActive('red-highlighting') }"
-      title="Highlight Red"
-      aria-label="Highlight Red"
-      @click="toggleHighlight('red-highlighting')"
-    ></button>
+  
 
-    <!-- Table controls -->
+    <!-- Table controls with disabled states -->
+
     <button
       class="top-toolbar-button icon icon-table"
       type="button"
@@ -183,7 +207,12 @@
       @click="insertTable"
     ></button>
     <button
-      class="top-toolbar-button icon icon-insert-table-row-below"
+      :class="[
+        'top-toolbar-button',
+        'icon',
+        { disabled: !isTableActive },
+        'icon-insert-table-row-below'
+      ]"
       type="button"
       title="Add row after"
       aria-label="Add row"
@@ -191,7 +220,12 @@
       @click="addRow"
     ></button>
     <button
-      class="top-toolbar-button icon icon-insert-table-column-right"
+      :class="[
+        'top-toolbar-button',
+        'icon',
+        { disabled: !isTableActive },
+        'icon-insert-table-column-right'
+      ]"
       type="button"
       title="Add column after"
       aria-label="Add column"
@@ -199,7 +233,13 @@
       @click="addColumn"
     ></button>
     <button
-      class="top-toolbar-button icon delete-button icon-delete-table-row"
+      :class="[
+        'top-toolbar-button',
+        'icon',
+        'delete-button',
+        { disabled: !isTableActive },
+        'icon-delete-table-row'
+      ]"
       type="button"
       title="Delete row"
       aria-label="Delete row"
@@ -207,7 +247,13 @@
       @click="deleteRow"
     ></button>
     <button
-      class="top-toolbar-button icon delete-button icon-delete-table-column"
+      :class="[
+        'top-toolbar-button',
+        'icon',
+        'delete-button',
+        { disabled: !isTableActive },
+        'icon-delete-table-column'
+      ]"
       type="button"
       title="Delete column"
       aria-label="Delete column"
@@ -215,7 +261,13 @@
       @click="deleteColumn"
     ></button>
     <button
-      class="top-toolbar-button icon delete-button icon-delete-table"
+      :class="[
+        'top-toolbar-button',
+        'icon',
+        'delete-button',
+        { disabled: !isTableActive },
+        'icon-delete-table'
+      ]"
       type="button"
       title="Delete table"
       aria-label="Delete table"
@@ -223,21 +275,23 @@
       @click="deleteTable"
     ></button>
 
+    <!-- visual separator -->
+
     <!-- Math (placeholder) -->
     <button
-      class="top-toolbar-button icon icon-math-live-block"
+      class="top-toolbar-button icon icon-math"
       type="button"
-      title="Math Live Input Field with virtual keyboard (coming soon)"
-      aria-label="Math Live (coming soon)"
+      title="Insert Math Live Input Field with virtual keyboard (coming soon)"
+      aria-label="Insert Math Live Input Field with virtual keyboard (coming soon)"
       :disabled="!activeTextEditor"
       @click="placeholderMathLive"
     ></button>
 
     <button
-      class="top-toolbar-button icon icon-math-katex-block"
+      class="top-toolbar-button icon icon-LaTeX"
       type="button"
-      title="KaTeX (coming soon)"
-      aria-label="LaTeX input field with KaTeX(coming soon)"
+      title="Insert LaTeX input field with KaTeX (coming soon)"
+      aria-label="Insert LaTeX input field with KaTeX (coming soon)"
       :disabled="!activeTextEditor"
       @click="placeholderKaTeX"
     ></button>
