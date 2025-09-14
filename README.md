@@ -167,7 +167,7 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 Luna52025-09-14
 ---
 ## 🖼️ Current UI Progress Snapshots and dev updates
-- Currently refactoring the UI’s underlying CSS architecture and integrating experimental text‑editor highlighting (work in progress).
+**Currently** refactoring the UI’s underlying CSS architecture and integrating experimental text‑editor highlighting (work in progress).
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-14.png" alt="UI improvments" width="900" />
 </p>
