@@ -153,7 +153,7 @@ Notes
 
 ## 📜 License
 
-This project is licensed under the **MIT License**
+This project is licensed under the **MIT License**.
 
 Third-party components are licensed separately. Notably:
 - Pyodide is licensed under the Mozilla Public License 2.0 (MPL-2.0).
@@ -170,7 +170,7 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 ## 🖼️ Current UI Progress Snapshots and dev updates
 **Currently** refactoring the UI’s underlying CSS architecture and integrating experimental text‑editor highlighting (work in progress).
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-09-14.png" alt="UI improvments" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-09-1.png" alt="UI improvments" width="900" />
 </p>
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-10-1.png" alt="UI improvments" width="900" />
