@@ -16,10 +16,16 @@
   color: var(--text-color, #fff);
 }
 
+.menubar-button.icon:hover {
+  background: var(--button-hover-color, #333);
+  color: var(--text-color, #fff);
+}
+
 .menubar-button.active {
   background: var(--button-on-color, lightgreen);
   color: var(--text-color, #fff);
 }
+
 
 .menubar-button.flagged-cell-active {
   background: var(--flagged-cell-color, salmon );
@@ -58,7 +64,6 @@
   width: auto;
   margin-right: 0.2em;
   margin-left: 0.4em;
-  display: inline-block;
   vertical-align: middle;
   cursor: pointer;
 }

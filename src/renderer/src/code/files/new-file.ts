@@ -8,6 +8,8 @@ import { saveAsCurrentWorkspace } from './save-as'
  * - success:true: new workspace initialized (user may or may not have saved it yet)
  * - success:false: includes optional error message and canceled flag when user aborts
  */
+
+// TODO: Move type to type folder
 export type NewFileResult =
   | { success: true }
   | { success: false; error?: string; canceled?: boolean }

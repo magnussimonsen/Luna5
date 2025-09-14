@@ -45,7 +45,7 @@ Design tokens (layout/spacing)
     --toolbar-font-size: 1em;
     --toolbar-font-weight: normal;
 
-    --toolbar-button-padding: min(2px, 0em) min(2px, 0.2em) min(2px, 0em) min(2px, 0.2em); /* top, right, bottom, left */
+    --toolbar-button-padding: min(4px, 0.2em) min(4px, 0.2em) min(4px, 0.2em) min(4px, 0.2em); /* top, right, bottom, left */
     --toolbar-button-height: 1em; /* uniform button height */
     --toolbar-button-gap: min(0.1em, 4px); /* gap between buttons */
     --toolbar-button-radius: min(0.2em, 4px);

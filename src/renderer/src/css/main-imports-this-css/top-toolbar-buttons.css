@@ -26,6 +26,21 @@
     font-family: var(--ui-font);
 
 }
+
+/* Margin utilities to push buttons to the right without 
+using the "button-row-flex-wrap-base flex-end"-style wrappers
+which can cause layout issues in some cases.
+*/
+
+.top-toolbar-button.margin-left-auto {
+    margin-left: auto;
+}
+
+.top-toolbar-button.icon.margin-left-auto {
+    margin-left: auto;
+}
+
+
 .top-toolbar-button.icon-highlight { /* No icons, just buttons with highlights color background */
   padding: 0;
   font-size: var(--toolbar-font-size);
@@ -55,6 +70,35 @@
   color: var(--text-color, #fff);
 }
 
+
+.top-toolbar-button.reset {
+  background: var(--button-reset-color, #b91c1c);
+  color: var(--text-color, #fff);
+}
+
+.top-toolbar-button.icon.reset {
+  background: var(--button-reset-color, #b91c1c);
+  color: var(--text-color, #fff);
+}
+
+.top-toolbar-button.reset:hover {
+  background: var(--button-reset-color-hover, #b91c1c);
+  color: var(--text-color, #fff);
+}
+
+.top-toolbar-button.icon.reset {
+  background: var(--button-reset-color, #b91c1c);
+  color: var(--text-color, #fff);
+}
+
+.top-toolbar-button.label {
+  opacity: 1; /* Style can not be empty */
+}
+
+.top-toolbar-button.icon.label {
+  opacity: 1; /* Style can not be empty */
+}
+
 .top-toolbar-button.disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -64,5 +108,7 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Component spesific styles */
 
 

@@ -168,6 +168,18 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 
 ---
 ## 🖼️ Current UI Progress Snapshots and dev updates
+
+**Currently** refactoring core level CSS (all the way from #app to top level) for all top row menubar and toolbar components.
+
+Implement flexible `flex-wrap` behavior and `margin-left auto` subclass for menubar and toolbar containers (the `auto` sizing lets a group size to its content). Streamline global CSS imports by moving styles out of Vue components into a separate CSS folder for reusable row- and button-style rules, improving consistency between the menu and toolbars. Consolidate shared helper classes across components. Visual/layout-only changes; no TypeScript behavior changes.
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-14-1.png" alt="UI improvments" width="450" />
+</p>
+
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-14-2.png" alt="UI improvments" width="300" />
+</p>
+
 **Currently** refactoring the UI’s underlying CSS architecture and integrating experimental text‑editor highlighting (work in progress).
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-14.png" alt="UI improvments" width="900" />

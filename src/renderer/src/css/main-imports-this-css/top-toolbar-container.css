@@ -4,7 +4,8 @@ The top toolbar container that holds the toolbars for the selected cell.
 
 .top-toolbar-container {
     display: flex;
-    justify-content: space-between; /*  Allows left button row and right button row to be spaced apart */
+    justify-content: flex-start; /*  Allows left button row and right button row to be spaced apart */
+    
     background: var(--toolbar-background, #f4f4f4);
     
     font-size: var(--menubar-font-size);

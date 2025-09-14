@@ -3,6 +3,9 @@ Toolbar base
   - Shared layout + sizing for all toolbars
   - Component files should only add UNIQUE rules (spinners, special alignment, etc.)
   - Uses CSS variables so theme + font stores can live update look
+
+
+  THIS IS DEPRICATED!  
 */
 
 .python-cell-toolbar,

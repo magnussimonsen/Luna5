@@ -70,7 +70,7 @@ export type ThemeColorTypes = {
   buttonHoverColor: string
   buttonBorderHoverColor: string
 
- // Toggle button colors
+  // Toggle button colors
   buttonOnColor: string
   buttonTransparentOffColor: string
   buttonHardOffColor: string
@@ -85,9 +85,9 @@ export type ThemeColorTypes = {
   buttonDisabledHoverColor: string
 
   // Python worker Reset button colors
-  buttonResetPythonWorkerColor: string
-  buttonResetPythonWorkerHoverColor: string
-  
+  buttonResetColor: string
+  buttonResetHoverColor: string
+
   // Zoom buttons
   resetZoomButtonColorCenter: string
   resetZoomButtonColorOffCenter: string

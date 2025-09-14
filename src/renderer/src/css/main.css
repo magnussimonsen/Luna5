@@ -5,19 +5,29 @@ Main CSS entry for the renderer
 */
 
 @import './main-imports-this-css/body.css';
+
 @import './main-imports-this-css/color-theme.css';
+
 @import './main-imports-this-css/design.css';
+
 @import './main-imports-this-css/icons.css';
+
 @import './main-imports-this-css/fonts.css';
+
 @import './main-imports-this-css/hidden-cell-linear-gradient-style.css';
+
 @import './main-imports-this-css/button-row-flex-wrap-base.css';
+
 @import './main-imports-this-css/menubar-container.css';
 @import './main-imports-this-css/menubar-buttons.css';
 @import './main-imports-this-css/menubar-dropdown.css';
 @import './main-imports-this-css/menubar-dropdown-item.css';
+
 @import './main-imports-this-css/implemented-not-implemented.css';
+
 @import './main-imports-this-css/top-toolbar-container.css';
 @import './main-imports-this-css/top-toolbar-buttons.css';
+@import './main-imports-this-css/ascii-spinner.css';
 
 #app {
   /* App root layout */

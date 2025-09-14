@@ -1,252 +1,248 @@
 <template>
-  <nav
-    class="menubar"
-    :style="{
-      fontFamily: fontStore.fonts.uiFont || 'Arial, sans-serif',
-      fontSize: fontSizeStore.fontSizes.menubarFontSize || '1em'
-    }"
+  <div
+    class="button-row-flex-wrap-base flex-start"
+    role="menubar"
+    aria-label="Application main menu"
   >
-    <div class="button-row-flex-wrap-base flex-start">
-      <img
-        :src="LunaSmallIcon"
-        alt="Luna"
-        class="menubar-about-icon"
-        title="About Luna"
-        tabindex="0"
-        @click.stop="handleAboutLuna"
-        @keydown.enter.stop.prevent="handleAboutLuna"
-        @keydown.space.stop.prevent="handleAboutLuna"
-      />
-      <DropdownMenu label="File">
-        <div class="menubar-dropdown-item" @click="handleNewFile">
-          New File <span class="menubar-shortcut-not-implemented">Ctrl + n</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleOpenFile">
-          Open File <span class="menubar-shortcut-not-implemented">Ctrl + o</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleSaveFile">
-          Save File <span class="menubar-shortcut-not-implemented">Ctrl + s</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleSaveFileAs">
-          Save File As <span class="menubar-shortcut-not-implemented">Ctrl + Shift + s</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleSavePDFForSubmission">
-          <strong>Save PDF For Submission</strong>
-          <span class="menubar-shortcut-not-implemented">Ctrl + Alt + s</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="dropdown-menu-divider"></div>
-        <div class="menubar-dropdown-item" @click="handleTogglePanel('settings')">
-          Settings <span class="menubar-shortcut-not-implemented">Alt + Shift + s</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleAboutLuna">
-          About Luna <span class="menubar-shortcut-not-implemented"></span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="dropdown-menu-divider"></div>
-        <div class="menubar-dropdown-item" @click="handleQuitLuna">
-          Quit Luna <span class="menubar-shortcut-not-implemented">Ctrl + Shift + Q</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-      </DropdownMenu>
-      <DropdownMenu label="Edit">
-        <div class="menubar-dropdown-item" @click="handleMoveCellUp">
-          Move cell up <span class="menubar-shortcut-not-implemented">Ctrl + Shift + Up</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleMoveCellDown">
-          Move cell down <span class="menubar-shortcut-not-implemented">Ctrl + Shift + Down</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleMoveFocusToCellAbove">
-          Move focus to cell above <span class="menubar-shortcut-not-implemented">Ctrl + Up</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleMoveFocusToCellBelow">
-          Move focus to cell below <span class="menubar-shortcut-not-implemented">Ctrl + Down</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="dropdown-menu-divider"></div>
-        <div class="menubar-dropdown-item" @click="handleUndo">
-          Undo
-          <span class="menubar-shortcut-not-implemented">Ctrl + z</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleRedo">
-          Redo
-          <span class="menubar-shortcut-not-implemented">Ctrl + y</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleCut">
-          Cut
-          <span class="menubar-shortcut-not-implemented">Ctrl + x</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleCopy">
-          Copy
-          <span class="menubar-shortcut-not-implemented">Ctrl + c</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handlePaste">
-          Paste
-          <span class="menubar-shortcut-not-implemented">Ctrl + v</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="dropdown-menu-divider"></div>
-        <div class="menubar-dropdown-item" @click="handleFind">
-          Find
-          <span class="menubar-shortcut-not-implemented">Ctrl + f</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleReplace">
-          Replace
-          <span class="menubar-shortcut-not-implemented">Ctrl + h</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="dropdown-menu-divider"></div>
-        <div
-          class="menubar-dropdown-item"
-          :class="{
-            disabled: isSelectedCellLocked || isSelectedCellHidden,
-            'cell-is-locked-menu-bar-option': isSelectedCellLocked,
-            'cell-is-hidden-menu-bar-option': isSelectedCellHidden,
-            'hidden-stripes-bg': isSelectedCellHidden
-          }"
-          :aria-disabled="isSelectedCellLocked || isSelectedCellHidden ? 'true' : undefined"
-          @click="handleMoveCellToBin"
-        >
-          Move cell to Bin
-          <span class="menubar-shortcut-not-implemented">Ctrl + 0</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleMoveNotebookToBin">
-          Move notebook to Bin
-          <span class="menubar-shortcut-not-implemented">Ctrl + Shift + 0</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-      </DropdownMenu>
-      <DropdownMenu ref="insertMenu" label="Insert">
-        <div class="menubar-dropdown-item" @click="handleInsertTextCell">
-          Insert Text Cell <span class="menubar-shortcut-not-implemented">Ctrl + 1</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item">
-          Insert Graphical Calculator Cell
-          <span class="menubar-shortcut-not-implemented">Ctrl + 2</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item">
-          Insert CAS (Computer Algebra System) Cell
-          <span class="menubar-shortcut-not-implemented">Ctrl + 3</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item">
-          Insert Geometry Cell <span class="menubar-shortcut-not-implemented">Ctrl + 4</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item">
-          Insert Spreadsheet Cell <span class="menubar-shortcut-not-implemented">Ctrl + 5</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item">
-          Insert Probability Calculator Cell
-          <span class="menubar-shortcut-not-implemented">Ctrl + 6</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="menubar-dropdown-item" @click="handleInsertPythonCell">
-          Insert Python Cell <span class="menubar-shortcut-not-implemented">Ctrl + 7</span>
-          <ImplementedMark :implemented="true" />
-        </div>
-        <div class="menubar-dropdown-item">
-          Insert Markdown Cell <span class="shortcut-not-implemented">Ctrl + 8</span>
-          <ImplementedMark :implemented="false" />
-        </div>
-      </DropdownMenu>
-      <!--------------------------------------------------------------------->
-      <!-- Cell Movement Controls Toggle buttons (no dropdown menues here) -->
-      <!--------------------------------------------------------------------->
-      <div class="menubar-button" title="Move cell up" @click="handleMoveCellUp">
-        <span class="icon-move-up" aria-hidden="true"></span>
-        <span class="sr-only">Move cell up</span>
+    <img
+      :src="LunaSmallIcon"
+      alt="Luna"
+      class="menubar-about-icon"
+      title="About Luna"
+      tabindex="0"
+      @click.stop="handleAboutLuna"
+      @keydown.enter.stop.prevent="handleAboutLuna"
+      @keydown.space.stop.prevent="handleAboutLuna"
+    />
+    <DropdownMenu label="File">
+      <div class="menubar-dropdown-item" @click="handleNewFile">
+        New File <span class="menubar-shortcut-not-implemented">Ctrl + n</span>
+        <ImplementedMark :implemented="true" />
       </div>
-      <div class="menubar-button" title="Move cell down" @click="handleMoveCellDown">
-        <span class="icon-move-down" aria-hidden="true"></span>
-        <span class="sr-only">Move cell down</span>
+      <div class="menubar-dropdown-item" @click="handleOpenFile">
+        Open File <span class="menubar-shortcut-not-implemented">Ctrl + o</span>
+        <ImplementedMark :implemented="true" />
       </div>
-      <!---------------------------->
-      <!-- Cell Flagging Controls -->
-      <!---------------------------->
+      <div class="menubar-dropdown-item" @click="handleSaveFile">
+        Save File <span class="menubar-shortcut-not-implemented">Ctrl + s</span>
+        <ImplementedMark :implemented="true" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleSaveFileAs">
+        Save File As <span class="menubar-shortcut-not-implemented">Ctrl + Shift + s</span>
+        <ImplementedMark :implemented="true" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleSavePDFForSubmission">
+        <strong>Save PDF For Submission</strong>
+        <span class="menubar-shortcut-not-implemented">Ctrl + Alt + s</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="dropdown-menu-divider"></div>
+      <div class="menubar-dropdown-item" @click="handleTogglePanel('settings')">
+        Settings <span class="menubar-shortcut-not-implemented">Alt + Shift + s</span>
+        <ImplementedMark :implemented="true" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleAboutLuna">
+        About Luna <span class="menubar-shortcut-not-implemented"></span>
+        <ImplementedMark :implemented="true" />
+      </div>
+      <div class="dropdown-menu-divider"></div>
+      <div class="menubar-dropdown-item" @click="handleQuitLuna">
+        Quit Luna <span class="menubar-shortcut-not-implemented">Ctrl + Shift + Q</span>
+        <ImplementedMark :implemented="true" />
+      </div>
+    </DropdownMenu>
+    <DropdownMenu label="Edit">
+      <div class="menubar-dropdown-item" @click="handleMoveCellUp">
+        Move cell up <span class="menubar-shortcut-not-implemented">Ctrl + Shift + Up</span>
+        <ImplementedMark :implemented="true" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleMoveCellDown">
+        Move cell down <span class="menubar-shortcut-not-implemented">Ctrl + Shift + Down</span>
+        <ImplementedMark :implemented="true" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleMoveFocusToCellAbove">
+        Move focus to cell above <span class="menubar-shortcut-not-implemented">Ctrl + Up</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleMoveFocusToCellBelow">
+        Move focus to cell below <span class="menubar-shortcut-not-implemented">Ctrl + Down</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="dropdown-menu-divider"></div>
+      <div class="menubar-dropdown-item" @click="handleUndo">
+        Undo
+        <span class="menubar-shortcut-not-implemented">Ctrl + z</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleRedo">
+        Redo
+        <span class="menubar-shortcut-not-implemented">Ctrl + y</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleCut">
+        Cut
+        <span class="menubar-shortcut-not-implemented">Ctrl + x</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleCopy">
+        Copy
+        <span class="menubar-shortcut-not-implemented">Ctrl + c</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handlePaste">
+        Paste
+        <span class="menubar-shortcut-not-implemented">Ctrl + v</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="dropdown-menu-divider"></div>
+      <div class="menubar-dropdown-item" @click="handleFind">
+        Find
+        <span class="menubar-shortcut-not-implemented">Ctrl + f</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleReplace">
+        Replace
+        <span class="menubar-shortcut-not-implemented">Ctrl + h</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="dropdown-menu-divider"></div>
       <div
-        class="menubar-button"
-        :class="{ 'flagged-cell-active': isSelectedCellFlagged }"
-        :title="
-          isSelectedCellFlagged
-            ? 'Unflag selected cell (Feature is not implemented yet)'
-            : 'Flag selected cell (Feature is not implemented yet)'
-        "
-        @click="handleFlagCell"
+        class="menubar-dropdown-item"
+        :class="{
+          disabled: isSelectedCellLocked || isSelectedCellHidden,
+          'cell-is-locked-menu-bar-option': isSelectedCellLocked,
+          'cell-is-hidden-menu-bar-option': isSelectedCellHidden,
+          'hidden-stripes-bg': isSelectedCellHidden
+        }"
+        :aria-disabled="isSelectedCellLocked || isSelectedCellHidden ? 'true' : undefined"
+        @click="handleMoveCellToBin"
       >
-        <span class="icon-flag" aria-hidden="true"></span>
-        <span class="sr-only">Flag selected cell</span>
+        Move cell to Bin
+        <span class="menubar-shortcut-not-implemented">Ctrl + 0</span>
+        <ImplementedMark :implemented="true" />
       </div>
-      <!------------------------------->
-      <!-- Cell Hide / Show Controls -->
-      <!------------------------------->
-      <div
-        class="menubar-button"
-        :class="{ 'hide-cell-active': isSelectedCellHidden }"
-        :title="isSelectedCellHidden ? 'Show selected cell' : 'Hide selected cell'"
-        @click="handleToggleHidden"
-      >
-        {{ isSelectedCellHidden ? 'Hide' : 'Hide' }}
+      <div class="menubar-dropdown-item" @click="handleMoveNotebookToBin">
+        Move notebook to Bin
+        <span class="menubar-shortcut-not-implemented">Ctrl + Shift + 0</span>
+        <ImplementedMark :implemented="true" />
       </div>
-      <!--------------------------------->
-      <!-- Cell Lock / Unlock Controls -->
-      <!--------------------------------->
-      <div
-        class="menubar-button"
-        :class="{ 'lock-cell-active': isSelectedCellSoftLocked }"
-        :title="isSelectedCellSoftLocked ? 'Unlock selected cell' : 'Lock selected cell'"
-        @click="handleToggleSoftLock"
-      >
-        {{ isSelectedCellSoftLocked ? 'Lock' : 'Lock' }}
+    </DropdownMenu>
+    <DropdownMenu ref="insertMenu" label="Insert">
+      <div class="menubar-dropdown-item" @click="handleInsertTextCell">
+        Insert Text Cell <span class="menubar-shortcut-not-implemented">Ctrl + 1</span>
+        <ImplementedMark :implemented="true" />
       </div>
+      <div class="menubar-dropdown-item">
+        Insert Graphical Calculator Cell
+        <span class="menubar-shortcut-not-implemented">Ctrl + 2</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item">
+        Insert CAS (Computer Algebra System) Cell
+        <span class="menubar-shortcut-not-implemented">Ctrl + 3</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item">
+        Insert Geometry Cell <span class="menubar-shortcut-not-implemented">Ctrl + 4</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item">
+        Insert Spreadsheet Cell <span class="menubar-shortcut-not-implemented">Ctrl + 5</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item">
+        Insert Probability Calculator Cell
+        <span class="menubar-shortcut-not-implemented">Ctrl + 6</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+      <div class="menubar-dropdown-item" @click="handleInsertPythonCell">
+        Insert Python Cell <span class="menubar-shortcut-not-implemented">Ctrl + 7</span>
+        <ImplementedMark :implemented="true" />
+      </div>
+      <div class="menubar-dropdown-item">
+        Insert Markdown Cell <span class="shortcut-not-implemented">Ctrl + 8</span>
+        <ImplementedMark :implemented="false" />
+      </div>
+    </DropdownMenu>
+    <!--------------------------------------------------------------------->
+    <!-- Cell Movement Controls Toggle buttons (no dropdown menues here) -->
+    <!--------------------------------------------------------------------->
+    <div class="menubar-button" title="Move cell up" @click="handleMoveCellUp">
+      <span class="icon-move-up" aria-hidden="true"></span>
+      <!-- <span class="sr-only">Move cell up</span> -->
+    </div>
+    <div class="menubar-button" title="Move cell down" @click="handleMoveCellDown">
+      <span class="icon-move-down" aria-hidden="true"></span>
+      <!--<span class="sr-only">Move cell down</span>-->
+    </div>
+    <!---------------------------->
+    <!-- Cell Flagging Controls -->
+    <!---------------------------->
+    <div
+      class="menubar-button"
+      :class="{ 'flagged-cell-active': isSelectedCellFlagged }"
+      :title="
+        isSelectedCellFlagged
+          ? 'Unflag selected cell (Feature is not implemented yet)'
+          : 'Flag selected cell (Feature is not implemented yet)'
+      "
+      @click="handleFlagCell"
+    >
+      <span class="icon-flag" aria-hidden="true"></span>
+      <!-- <span class="sr-only">Flag selected cell</span> -->
+    </div>
+    <!------------------------------->
+    <!-- Cell Hide / Show Controls -->
+    <!------------------------------->
+    <div
+      class="menubar-button"
+      :class="{ 'hide-cell-active': isSelectedCellHidden }"
+      :title="isSelectedCellHidden ? 'Show selected cell' : 'Hide selected cell'"
+      @click="handleToggleHidden"
+    >
+      {{ isSelectedCellHidden ? 'Hide' : 'Hide' }}
+    </div>
+    <!--------------------------------->
+    <!-- Cell Lock / Unlock Controls -->
+    <!--------------------------------->
+    <div
+      class="menubar-button"
+      :class="{ 'lock-cell-active': isSelectedCellSoftLocked }"
+      :title="isSelectedCellSoftLocked ? 'Unlock selected cell' : 'Lock selected cell'"
+      @click="handleToggleSoftLock"
+    >
+      {{ isSelectedCellSoftLocked ? 'Lock' : 'Lock' }}
+    </div>
 
-      <!------------------------->
-      <!-- A4 Preview Controls -->
-      <!------------------------->
-      <div
-        class="menubar-button"
-        :class="{ 'a4-preview-active': isA4Preview }"
-        :title="isA4Preview ? 'Switch to fluid layout' : 'Switch to A4 preview layout'"
-        @click="handleToggleWorkspaceLayout"
-      >
-        {{ isA4Preview ? 'A4 Preview' : 'A4 Preview' }}
-      </div>
+    <!------------------------->
+    <!-- A4 Preview Controls -->
+    <!------------------------->
+    <div
+      class="menubar-button"
+      :class="{ 'a4-preview-active': isA4Preview }"
+      :title="isA4Preview ? 'Switch to fluid layout' : 'Switch to A4 preview layout'"
+      @click="handleToggleWorkspaceLayout"
+    >
+      {{ isA4Preview ? 'A4 Preview' : 'A4 Preview' }}
+    </div>
 
-      <!------------------------->
-      <!-- Dark Mode Controls -->
-      <!------------------------->
-      <div
-        class="menubar-button"
-        :class="{ 'dark-mode-active': isDarkMode }"
-        :title="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
-        @click="handleToggleDark"
-      >
-        {{ isDarkMode ? 'Dark' : 'Dark' }}
-        <!-- No point change in text -->
-      </div>
+    <!------------------------->
+    <!-- Dark Mode Controls -->
+    <!------------------------->
+    <div
+      class="menubar-button"
+      :class="{ 'dark-mode-active': isDarkMode }"
+      :title="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+      @click="handleToggleDark"
+    >
+      {{ isDarkMode ? 'Dark' : 'Dark' }}
+      <!-- No point change in text -->
     </div>
 
     <!-------------------------------------------------------------------------------------------->
     <!-- Right side: Side panel toggles: Notebooks, TOC, Variables, Flashcards, Settings, Help -->
     <!-------------------------------------------------------------------------------------------->
-    <div class="button-row-flex-wrap-base flex-end">
+    <div class="button-row-flex-wrap-base margin-left-auto">
       <div
         class="menubar-button"
         :class="{ active: sidepanelStore.activePanel === 'notebooks' }"
@@ -282,7 +278,7 @@
         @click="handleTogglePanel('settings')"
       >
         <span class="icon-settings" aria-hidden="true"></span>
-        <span class="sr-only">Settings</span>
+        <!-- <span class="sr-only">Settings</span> -->
       </div>
       <div
         class="menubar-button"
@@ -290,10 +286,10 @@
         @click="handleTogglePanel('help')"
       >
         <span class="icon-help" aria-hidden="true"></span>
-        <span class="sr-only">Get help</span>
+        <!-- <span class="sr-only">Get help</span> -->
       </div>
     </div>
-  </nav>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -304,8 +300,8 @@ import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useSidepanelStore } from '@renderer/stores/UI/sidepanelStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
-import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
-import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
+// import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
+// import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
@@ -318,8 +314,8 @@ import { createNewWorkspaceWithPrompt } from '@renderer/code/files/new-file'
 const modalStore = useModalStore()
 const sidepanelStore = useSidepanelStore()
 const themeStore = useThemeStore()
-const fontStore = useFontStore()
-const fontSizeStore = useFontSizeStore()
+// const fontStore = useFontStore()
+// const fontSizeStore = useFontSizeStore()
 const menubarStore = useMenubarStore()
 const workspaceStore = useWorkspaceStore()
 const cellSelectionStore = useCellSelectionStore()
@@ -514,7 +510,7 @@ const handleMoveNotebookToBin = (): void => {
   See: https://www.w3.org/WAI/GL/wiki/Using_the_.27sr-only.27_class
   The element still participates in semantics (label/name computation) but is not visibly rendered.
   Avoid putting interactive controls inside an sr-only container; use it only for descriptive text. 
-*/
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -525,5 +521,5 @@ const handleMoveNotebookToBin = (): void => {
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
-}
+}*/
 </style>

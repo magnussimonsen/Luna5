@@ -69,15 +69,15 @@ export const useThemeStore = defineStore('theme', {
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'lightgreen',
       buttonHardOffColor: 'salmon',
-      deleteButtonHoverColor: 'salmon',
+      deleteButtonHoverColor: 'firebrick',
       // Disabled button colors
       buttonDisabledColor: 'gray',
       buttonDisabledBorderColor: 'darkgray',
       buttonDisabledTextColor: '#aaa',
       buttonDisabledHoverColor: 'gray',
-      // Python worker Reset button colors
-      buttonResetPythonWorkerColor: 'transparent',
-      buttonResetPythonWorkerHoverColor: 'salmon',
+      // General reset button colors
+      buttonResetColor: 'salmon',
+      buttonResetHoverColor: 'firebrick',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'lightgreen',
       resetZoomButtonColorOffCenter: 'salmon',
@@ -157,9 +157,9 @@ export const useThemeStore = defineStore('theme', {
       buttonDisabledBorderColor: 'darkgray',
       buttonDisabledTextColor: '#555555',
       buttonDisabledHoverColor: 'gray',
-      // Python worker Reset button colors
-      buttonResetPythonWorkerColor: 'transparent',
-      buttonResetPythonWorkerHoverColor: 'darkred',
+      // General reset button colors
+      buttonResetColor: 'darkred',
+      buttonResetHoverColor: 'firebrick',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'darkgreen',
       resetZoomButtonColorOffCenter: 'darkred',
@@ -237,14 +237,8 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--button-disabled-border-color', colors.buttonDisabledBorderColor)
       root.style.setProperty('--button-disabled-text-color', colors.buttonDisabledTextColor)
       root.style.setProperty('--button-disabled-hover-color', colors.buttonDisabledHoverColor)
-      root.style.setProperty(
-        '--button-reset-python-worker-color',
-        colors.buttonResetPythonWorkerColor
-      )
-      root.style.setProperty(
-        '--button-reset-python-worker-hover-color',
-        colors.buttonResetPythonWorkerHoverColor
-      )
+      root.style.setProperty('--button-reset-color', colors.buttonResetColor)
+      root.style.setProperty('--button-reset-hover-color', colors.buttonResetHoverColor)
       root.style.setProperty('--delete-button-hover-color', colors.deleteButtonHoverColor)
       root.style.setProperty('--reset-zoom-button-color-Center', colors.resetZoomButtonColorCenter)
       root.style.setProperty(

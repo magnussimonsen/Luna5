@@ -1,8 +1,14 @@
 <template>
-  <div class="python-cell-toolbar" role="toolbar" aria-label="Python cell toolbar">
+  <div
+    class="button-row-flex-wrap-base flex-start"
+    :class="{ 'is-dark': isDarkMode }"
+    role="toolbar"
+    aria-label="Python cell toolbar"
+  >
+    <!-- Run button with spinner when running -->
     <button
-      class="toolbar-btn run"
-      :class="{ 'is-running': isRunning }"
+      class="top-toolbar-button"
+      :class="{ active: isRunning }"
       type="button"
       :disabled="!canRun || isRunning"
       :title="isRunning ? 'Run (working)…' : 'Run selected Python cell (Ctrl + Enter)'"
@@ -14,8 +20,9 @@
       <span class="label">Run python code</span>
       <span class="spin-wrap" aria-hidden="true"> </span>
     </button>
+    <!-- Clear python outputs  -->
     <button
-      class="toolbar-btn run"
+      class="top-toolbar-button"
       type="button"
       :disabled="!canRun"
       :title="'Delete output (Ctrl + Shift + Enter)'"
@@ -23,9 +30,13 @@
     >
       <span class="label">Delete output from selected cell</span>
     </button>
-    <!-- Add Button that when pressed opens a electron built in "modal" with theese options: (1)Export code from selected cell (2) Export code from selected notebook -->
+    <!-- Core idea: (not implemented yet)
+    Add Button that when pressed opens a electron built in "modal" with theese options: 
+    (1) Export code from selected cell 
+    (2) Export code from selected notebook 
+     -->
     <button
-      class="toolbar-btn export"
+      class="top-toolbar-button disabled"
       type="button"
       title="Export code from selected cell (not implemented)"
       @click="onCodeExport"
@@ -33,8 +44,16 @@
       <span class="label">Export code</span>
     </button>
 
+    <!-- Section: Using margin-left-auto instead of flex-end -->
+    <!-- <div
+      class="button-row-flex-wrap-base flex-end"
+      :class="{ 'is-dark': isDarkMode }"
+      role="toolbar"
+      aria-label="Python cell toolbar"
+    >
+    -->
     <button
-      class="toolbar-btn reset-python-worker reset-python-worker-margin-left-auto"
+      class="top-toolbar-button margin-left-auto reset"
       type="button"
       :disabled="!canReset"
       :title="
@@ -47,10 +66,11 @@
       Reset python
     </button>
   </div>
+  <!-- </div> -->
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
@@ -67,6 +87,8 @@ const themeStore = useThemeStore()
 const selectedCellId = computed(() => selectionStore.selectedCellId)
 const selectedKind = computed(() => selectionStore.selectedCellKind)
 
+const isDarkMode = computed(() => !!themeStore.isDarkMode)
+
 const canRun = computed(() => selectedCellId.value && selectedKind.value === 'python-cell')
 const canReset = canRun
 
@@ -79,25 +101,7 @@ const isRunning = computed(() => {
   return cell.exec?.status === 'running'
 })
 
-// Luna4-style ASCII spinner (| / - \) shown while running
-const spinnerChars = ['|', '/', '-', '\\']
-const spinnerChar = ref(spinnerChars[0])
-let spinnerInterval: ReturnType<typeof setInterval> | null = null
-
-function startSpinner(): void {
-  if (spinnerInterval) return
-  let index = 0
-  spinnerInterval = setInterval(() => {
-    index = (index + 1) % spinnerChars.length
-    spinnerChar.value = spinnerChars[index]
-  }, 150)
-}
-function stopSpinner(): void {
-  if (spinnerInterval) {
-    clearInterval(spinnerInterval)
-    spinnerInterval = null
-  }
-}
+import { spinnerChar, startSpinner, stopSpinner } from '@renderer/code/animations/ascii-spinner'
 
 watch(isRunning, (running) => {
   if (running) startSpinner()
@@ -270,64 +274,10 @@ onUnmounted(() => {
     ;(window as any).__lunaHandleResetEvent = undefined
   }
 })
+
+/*
+---------------------------------------------------------------
+Styles used in this component are global styles from css-folder
+---------------------------------------------------------------
+*/
 </script>
-
-<style scoped>
-@import '../../css/main-imports-this-css/design.css';
-@import '../../css/toolbar-base.css';
-
-/*--------------------------------------------------------*/
-/* COMPONENT SPECIFIC STYLES (NOT BASE CSS)
-/*--------------------------------------------------------*/
-/* Layout specifics unique to Python toolbar */
-/* Run button constant width with reserved spinner space */
-.toolbar-btn.run {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2em;
-}
-.toolbar-btn.run .label {
-  display: inline-block;
-}
-.toolbar-btn.run .spin-wrap {
-  display: inline-flex;
-  width: 0em; /* reserve space so width stays constant */
-  height: 0em;
-  align-items: center;
-  justify-content: center;
-}
-.toolbar-btn.run.is-running {
-  background: var(--button-on-color, lightgreen); /* uses theme var; light green fallback */
-}
-
-/* ASCII spinner styles */
-.ascii-spinner {
-  display: inline-block;
-  width: 1ch; /* reserve exactly one character width */
-  text-align: center;
-  font-family: var(--ui-font, monospace);
-  font-size: var(--toolbar-font-size, 12px);
-  font-weight: bold;
-}
-
-.toolbar-btn.reset-python-worker,
-.toolbar-btn.reset-python-worker-margin-left-auto {
-  background: var(--button-reset-python-worker-color, transparent);
-  margin-left: auto; /* push to far right */
-}
-.toolbar-btn.reset-python-worker:hover,
-.toolbar-btn.reset-python-worker-margin-left-auto:hover {
-  background: var(--button-reset-python-worker-hover-color, firebrick);
-  border: var(--toolbar-button-border-hover);
-}
-
-/* Class for export button not implemented cursor not allowed */
-.toolbar-btn.export {
-  background: var(--button-transparent-off-color, #3b82f6); /* blue */
-  cursor: not-allowed;
-}
-.toolbar-btn.export:hover {
-  background: var(--toolbar-button-border-hover, #2563eb); /* darker blue */
-  border: var(--toolbar-button-border-hover);
-}
-</style>

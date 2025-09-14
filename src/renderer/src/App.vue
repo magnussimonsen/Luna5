@@ -8,17 +8,17 @@
 <script setup lang="ts">
 // Example of how to use the IPC mechanism if needed
 // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+
 import Menubar from '@renderer/components/navigation-bars/Menubar.vue'
-// WorkspaceContainer is not currently used here; leave import commented for future
-// import WorkspaceContainer from '@renderer/components/conteiners/WorkspaceContainer.vue'
 import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
 import CellList from '@renderer/components/conteiners/CellList.vue'
 import Statusbar from '@renderer/components/navigation-bars/Statusbar.vue'
+import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
+
 // Modals and sidepanel are currently not referenced directly in this file.
 // They are imported where needed by child components.
 // import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 // import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
-import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
 // import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
@@ -47,10 +47,9 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
 </script>
 <template>
   <div id="app-layout">
-    <div class="menubar-and-toolbar-container">
-      <Menubar />
-      <Toolbar />
-    </div>
+    <Menubar />
+    <Toolbar />
+
     <div v-if="layoutMode === 'web'" class="web--workspace-layout">
       <CellList />
       <Sidepanel />
@@ -68,24 +67,14 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
 }
 /* ----------------------------------------------------------------------- */
-/* Section: Top level menubar-toolbar, workspace and statusbar containers  */
-.menubar-and-toolbar-container {
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  background: transparent;
-}
-.workspace-and-sidepanel-container {
-  display: flex;
-  width: 100vw;
-  background: transparent;
-  border: 1px solid blue;
-}
+/* Section:  Container for statusbar at bottom of app                      */
+
 .statusbar-container {
   flex: 0 0 auto;
-  width: 100vw;
+  width: 100%;
   /* Prevent it from growing */
 }
 

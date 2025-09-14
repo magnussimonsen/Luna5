@@ -1,0 +1,11 @@
+
+/* ASCII spinner styles */
+/* Script: src/renderer/src/code/animations/ascii-spinner.ts */
+
+.ascii-spinner {
+  width: 1ch; /* reserve exactly one character width */
+  text-align: center;
+  font-family: var(--ui-font, monospace);
+  font-size: var(--toolbar-font-size, 12px);
+  font-weight: bold;
+}
