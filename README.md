@@ -153,7 +153,7 @@ Notes
 
 ## 📜 License
 
-This project is licensed under the **MIT License**
+This project is licensed under the **MIT License**.
 
 Third-party components are licensed separately. Notably:
 - Pyodide is licensed under the Mozilla Public License 2.0 (MPL-2.0).
