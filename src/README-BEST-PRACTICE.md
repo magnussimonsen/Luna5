@@ -1,9 +1,10 @@
 # Coding Practices for the Luna Project
 
-> **Readability above all** – code is read more often than it is written.  
-> Consistency and clarity make the project easier to maintain and extend.
+> 📌
+>**Readability above all.** Code is read more often than it is written.  
+>Consistency and clarity make the project easier to maintain and extend.
 
----
+
 
 ## Function Style Guidelines
 
@@ -75,7 +76,7 @@ To ensure consistency and readability, follow these rules:
   - ❌ `e`  
 - Avoid abbreviations unless they are universal (e.g., API, URL).
 
-### Specific Luna Conventions
+### Specific Luna Conventions for main building blocks
 - **menubar** (not `menuBar` or `menu-bar`)
 - **toolbar** (not `toolBar` or `tool-bar`)
 - **statusbar** (not `statusBar` or `status-bar`)
@@ -83,6 +84,7 @@ To ensure consistency and readability, follow these rules:
 - **sidepanel** (not `sidePanel` or `side-panel`)
 - **button** (not `btn`)
 - **error** (not `err`)
+- and so on. The goal is consistent naming across all files and avoid abbreviations.
 
 ### Folders
 - Use **kebab-case** for folder names.  
