@@ -41,8 +41,8 @@
     --icon-undo: '↺';
     --icon-redo: '↻';
     /* Math */
-    --icon-math: 'Math'; /* Generic math icon */
-    --icon-LaTeX: 'TeX'; /* LaTeX icon */
+    --icon-math: 'Insert Math Live'; /* Generic math icon */
+    --icon-LaTeX: 'Insert KaTeX'; /* LaTeX icon */
     --icon-math-live-block: 'Insert Math Live';
     --icon-math-live-inline: 'Insert Math Live Inline';
     --icon-math-katex-block: 'Insert KaTeX';
