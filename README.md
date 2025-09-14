@@ -4,7 +4,7 @@
 <img src="src/renderer/src/assets/icons/Luna05-logo-169.png" alt="Luna 0.5 icon" width="auto" height="300px"/>
 </div>
 
-# Luna 0.5. ...
+# Luna 0.5. 
 
 📋 **For contributors:** Please read [src/README-BEST-PRACTICE.md](src/README-BEST-PRACTICE.md) for coding guidelines and project structure.
 
