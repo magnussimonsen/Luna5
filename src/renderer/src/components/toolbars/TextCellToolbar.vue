@@ -164,7 +164,7 @@
       @click="toggleHighlight('orange-highlighting')"
     ></button>
     -->
-      <button
+    <button
       class="top-toolbar-button icon icon-highlight-pen"
       type="button"
       :style="{ backgroundColor: resolveHighlightColor('red-highlighting', isDarkMode) }"
@@ -193,8 +193,6 @@
       aria-label="Highlight Green"
       @click="toggleHighlight('green-highlighting')"
     ></button>
-
-  
 
     <!-- Table controls with disabled states -->
 
