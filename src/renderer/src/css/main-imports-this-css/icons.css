@@ -10,7 +10,12 @@
     /* Text / formatting */
     --icon-bold: '𝐁';
     --icon-italic: '𝙄';
-    --icon-underline: '𝐔';
+    --icon-underline: '_'; 
+    --icon-subscript: 'X₂';
+    --icon-superscript: 'X²';
+    /* Highlight pen */
+    --icon-highlight-pen: '🖍';
+    /* Headings */
     --icon-heading-1: 'H1';
     --icon-heading-2: 'H2';
     --icon-heading-3: 'H3';
@@ -58,7 +63,12 @@
 /* Text editor icons (use CSS variables so we can override easily) */
 .icon-bold::before { content: var(--icon-bold); }
 .icon-italic::before { content: var(--icon-italic); }
+.icon-subscript::before { content: var(--icon-subscript); }
+.icon-superscript::before { content: var(--icon-superscript); }
 .icon-underline::before { content: var(--icon-underline); }
+/* Highlight */
+.icon-highlight-pen::before { content: var(--icon-highlight-pen); }
+/* Headings */
 .icon-heading-1::before { content: var(--icon-heading-1); }
 .icon-heading-2::before { content: var(--icon-heading-2); }
 .icon-heading-3::before { content: var(--icon-heading-3); }
@@ -67,6 +77,8 @@
 .icon-heading-6::before { content: var(--icon-heading-6); }
 .icon-bullet-list::before { content: var(--icon-bullet-list); }
 .icon-numbered-list::before { content: var(--icon-numbered-list); }
+.icon-subscript::before { content: var(--icon-subscript); }
+.icon-superscript::before { content: var(--icon-superscript); }
 .icon-table::before { content: var(--icon-table); }
 .icon-insert-table-column-left::before { content: var(--icon-insert-table-column-left); }
 .icon-insert-table-column-right::before { content: var(--icon-insert-table-column-right); }

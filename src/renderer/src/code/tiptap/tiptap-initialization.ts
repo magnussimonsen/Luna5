@@ -1,12 +1,14 @@
 import { Editor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
-import Table from '@tiptap/extension-table'
+import { Table } from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableHeader from '@tiptap/extension-table-header'
 import TableCell from '@tiptap/extension-table-cell'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
+import Highlight from '@tiptap/extension-highlight'
+// Subscript/superscript are optional
 // Math (custom) - dynamically imported or added when dependency installed
 import type { Transaction } from 'prosemirror-state'
 
@@ -30,6 +32,8 @@ export function createTiptapEditor(options: {
     extensions: [
       StarterKit.configure({}),
       Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' }),
+      // Enable the built-in highlight extension with multicolor support
+      Highlight.configure({ multicolor: true }),
       Table.configure({ resizable: true }),
       TableRow,
       TableHeader,

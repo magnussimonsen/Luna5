@@ -9,14 +9,17 @@
 // Example of how to use the IPC mechanism if needed
 // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 import Menubar from '@renderer/components/navigation-bars/Menubar.vue'
-import WorkspaceContainer from '@renderer/components/conteiners/WorkspaceContainer.vue'
+// WorkspaceContainer is not currently used here; leave import commented for future
+// import WorkspaceContainer from '@renderer/components/conteiners/WorkspaceContainer.vue'
 import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
 import CellList from '@renderer/components/conteiners/CellList.vue'
 import Statusbar from '@renderer/components/navigation-bars/Statusbar.vue'
-import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
-import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
+// Modals and sidepanel are currently not referenced directly in this file.
+// They are imported where needed by child components.
+// import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
+// import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
 import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
-import { useModalStore } from '@renderer/stores/UI/modalStore'
+// import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
@@ -51,8 +54,8 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
     <div v-if="layoutMode === 'web'" class="web--workspace-layout">
       <CellList />
       <Sidepanel />
-      <div v-if="layoutMode === 'a4Preview'" class="a4--workspace-layout">A4</div>
     </div>
+    <div v-else-if="layoutMode === 'a4Preview'" class="a4--workspace-layout">A4</div>
 
     <div class="statusbar-container">
       <Statusbar />
@@ -73,7 +76,6 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   flex-direction: column;
   width: 100vw;
   background: transparent;
-  
 }
 .workspace-and-sidepanel-container {
   display: flex;

@@ -76,7 +76,7 @@ watch(
     const currentHtml = tiptapEditor.getHTML()
     const incomingHtml = nextContent || ''
     if (incomingHtml !== currentHtml) {
-      tiptapEditor.commands.setContent(incomingHtml, false)
+      tiptapEditor.commands.setContent(incomingHtml)
     }
   }
 )

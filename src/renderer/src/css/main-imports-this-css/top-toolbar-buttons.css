@@ -24,6 +24,12 @@
 .top-toolbar-button.icon {
     cursor: pointer;  /* Just because style can not be empty */
 }
+.top-toolbar-button.icon-highlight {
+  padding: 0;
+  font-size: var(--toolbar-font-size);
+    font-family: var(--ui-font);
+ 
+}
 
  
 

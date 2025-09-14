@@ -15,7 +15,7 @@ For now only placeholders for the buttons and sliders are implemented.
       class="status-bar"
       :style="{
         fontFamily: fontStore.fonts.uiFont,
-        fontSize: fontSizeStore.fontSizes.statusBarFontSize
+        fontSize: fontSizeStore.fontSizes.statusbarFontSize
       }"
     >
       <div class="status-section left">
