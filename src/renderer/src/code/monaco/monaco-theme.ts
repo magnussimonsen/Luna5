@@ -64,11 +64,7 @@ export function applyMonacoTheme(id: string): void {
   try {
     monaco.editor.setTheme(safeThemeId)
   } catch {
-    // ignore errors
-  }
-  try {
+    // ignore errors and fall back to 'vs' only if the requested theme fails
     monaco.editor.setTheme('vs')
-  } catch {
-    // ignore errors
   }
 }

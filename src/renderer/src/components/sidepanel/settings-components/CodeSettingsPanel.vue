@@ -84,11 +84,36 @@
         </select>
         <ImplementedMark :implemented="true" />
       </div>
+      <div class="setting-row">
+        <label
+          for="max-monaco-instances"
+          title="Limits the maximum number of Monaco code editors active at once. Lower values improve performance in large notebooks, higher values allow more cells to show syntax highlighting simultaneously."
+        >
+          Max Monaco Editors:
+        </label>
+        <select
+          id="max-monaco-instances"
+          v-model.number="codeSettingsStore.maxNumberOfMonacoInstances"
+          title="Limits the maximum number of Monaco code editors active at once. Lower values improve performance in large notebooks, higher values allow more cells to show syntax highlighting simultaneously."
+          @change="
+            codeSettingsStore.setMaxNumberOfMonacoInstances(
+              codeSettingsStore.maxNumberOfMonacoInstances
+            )
+          "
+        >
+          <option v-for="n in maxMonacoOptions" :key="'max-monaco-' + n" :value="n">
+            {{ n }}
+          </option>
+        </select>
+        <ImplementedMark :implemented="true" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+// Reasonable options for max Monaco instances
+const maxMonacoOptions = [2, 4, 8, 12, 16, 24, 32]
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore, fontSizeOptions } from '@renderer/stores/fonts/fontSizeStore'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'

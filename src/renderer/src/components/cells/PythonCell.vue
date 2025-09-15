@@ -3,7 +3,46 @@ Performance tip: If Monaco editor causes the side panel to open slowly, defer Mo
 For example, use setTimeout, requestAnimationFrame, or Vue's nextTick to delay editor setup.
 You can also lazy-load Monaco only when the Python cell is visible or focused, or show a loading spinner while Monaco loads.
 Changing the container structure will NOT fix the lag; the solution is to delay Monaco's setup until after the panel is open.
+
+PYTHON CELL & MONACO EDITOR REFACTOR PLAN
+
+Goal:
+Refactor the PythonCell component and Monaco editor lifecycle to optimize performance, memory usage, and user experience in large notebooks.
+
+Key Strategies:
+1. Selected Cell: Interactive Monaco Editor
+  - Only the selected cell has a fully interactive Monaco editor (read/write, all features).
+
+2. Visible, Deselected Cells: Read-Only Monaco
+  - Visible but deselected cells use Monaco in read-only mode for syntax highlighting.
+  - Minimize decorations, disable minimap, and restrict interactions for performance.
+
+3. Not Visible Cells: Hybernation/Rest State
+  - Cells scrolled out of view either:
+    a) Dispose their Monaco instance to free memory, or
+    b) Detach the editor DOM node but keep the instance in memory for fast reactivation.
+  - Use IntersectionObserver to track cell visibility.
+
+4. Selection Switching
+  - When a cell is selected: attach or initialize a full Monaco editor.
+  - When a cell is deselected: switch to read-only/minimal mode.
+
+5. Editor Pooling (Advanced)
+  - Maintain a pool of Monaco editor instances, reusing them for visible cells.
+  - Limit the total number of active editors (configurable in settings).
+
+Functions to Implement:
+function initializeFullMonacoEditor(cellId, container, initialValue, options) { }
+function setMonacoEditorReadOnly(cellId) { }
+function hybernateMonacoEditor(cellId) { }
+function wakeUpMonacoEditor(cellId, container) { }
+function destroyMonacoEditor(cellId) { }
+
+// Pool management (optional)
+function getMonacoEditorFromPool(container, initialValue, options) { }
+function releaseMonacoEditorToPool(cellId) { }
 -->
+
 <template>
   <div class="python-cell" :data-locked="isCellLocked ? 'true' : null">
     <div
@@ -141,7 +180,6 @@ async function lazyInitializeMonacoEditor(): Promise<void> {
 }
 
 function initializeMonacoEditor(): void {
-  
   if (!editorElementRef.value) return
   const initialValue = props.cell.cellInputContent ?? props.cell.source ?? ''
   // Make sure any custom themes are registered before creating editor
@@ -151,7 +189,7 @@ function initializeMonacoEditor(): void {
     value: initialValue,
     language: 'python',
     // Start with a safe built-in theme; we'll apply the selected theme right after init
-     // theme: 'vs', Not needed, we apply the correct theme below
+    // theme: 'vs', Not needed, we apply the correct theme below
     readOnly: isCellLocked.value,
     lineNumbers: 'on',
     renderLineHighlightOnlyWhenFocus: true,

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { normalizeStringToSafeKebab } from '@renderer/utils/miscellaneous/normalize-string-to-safe-kebab'
 
 /**
  * Code settings store
@@ -6,19 +7,6 @@ import { defineStore } from 'pinia'
  * - On startup, normalizes any previously saved theme IDs and falls back to a curated default.
  * - Public API (state keys + action names) is stable to avoid breaking existing consumers.
  */
-// Normalize incoming theme IDs to a safe, kebab-case form to match monaco-theme IDs
-function normalizeThemeIdToSafeKebab(id: string): string {
-  try {
-    return id
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, '')
-  } catch {
-    // Default to a known-good built-in theme
-    return 'vs'
-  }
-}
 
 // Initial themes: use Monaco built-ins (no persistence)
 // const initialLightMonacoThemeId = 'vs'
@@ -35,15 +23,17 @@ export const useCodeSettingsStore = defineStore('codeSettings', {
     enableLineNumbersState: true,
     enableCodeLintingState: false,
     enableCodeFormattingState: false,
-    enableCodeSuggestionsState: false
+    enableCodeSuggestionsState: false,
+    // Maximum number of Monaco editor instances allowed (user-configurable)
+    maxNumberOfMonacoInstances: 4
   }),
   actions: {
     setLightCodeEditorTheme(themeId: string) {
-      const normalizedThemeId = normalizeThemeIdToSafeKebab(themeId)
+      const normalizedThemeId = normalizeStringToSafeKebab(themeId, 'vs')
       this.lightCodeEditorTheme = normalizedThemeId
     },
     setDarkCodeEditorTheme(themeId: string) {
-      const normalizedThemeId = normalizeThemeIdToSafeKebab(themeId)
+      const normalizedThemeId = normalizeStringToSafeKebab(themeId, 'vs-dark')
       this.darkCodeEditorTheme = normalizedThemeId
     },
     // Setters for code quality toggles
@@ -58,6 +48,10 @@ export const useCodeSettingsStore = defineStore('codeSettings', {
     },
     setEnableCodeSuggestions(value: boolean) {
       this.enableCodeSuggestionsState = value
+    },
+    // Setter for max number of Monaco instances
+    setMaxNumberOfMonacoInstances(value: number) {
+      this.maxNumberOfMonacoInstances = value
     }
   }
 })
