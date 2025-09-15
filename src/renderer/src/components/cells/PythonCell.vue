@@ -71,17 +71,7 @@ let resizeObserver: ResizeObserver | null = null
 // Guard flag to avoid echoing local edits back into the model watcher
 let isApplyingLocalEdit = false
 
-// Convert CSS pixel string values (e.g., "14px") to a numeric value for Monaco options
-// Move to utils folder
-function parsePixelsToNumber(px: string | undefined, fallback = 14): number {
-  try {
-    if (!px) return fallback
-    const m = /([0-9]+(?:\.[0-9]+)?)/.exec(px)
-    return m ? Number(m[1]) : fallback
-  } catch {
-    return fallback
-  }
-}
+import { parsePixelsToNumber } from '@renderer/utils/miscellaneous/parse-pixels-to-number'
 
 // Cells can be locked/hidden via several flags; reflect that in editor readOnly state
 const isCellLocked = computed(
@@ -151,12 +141,7 @@ async function lazyInitializeMonacoEditor(): Promise<void> {
 }
 
 function initializeMonacoEditor(): void {
-  // Add logic to only initialize if this cell is selected.
-  // We also need to unmount/dispose the editor when the cell is no longer selected.
-  // This will save resources when many cells are present.
-  // However, it may cause loss of scroll position and cursor position.
-  // Does the monaco editor have a "cursor position" API we can use to restore?
-  // Alternatively, we can lazy-load the editor only when the cell is focused/selected.
+  
   if (!editorElementRef.value) return
   const initialValue = props.cell.cellInputContent ?? props.cell.source ?? ''
   // Make sure any custom themes are registered before creating editor
@@ -166,7 +151,7 @@ function initializeMonacoEditor(): void {
     value: initialValue,
     language: 'python',
     // Start with a safe built-in theme; we'll apply the selected theme right after init
-    theme: 'vs',
+     // theme: 'vs', Not needed, we apply the correct theme below
     readOnly: isCellLocked.value,
     lineNumbers: 'on',
     renderLineHighlightOnlyWhenFocus: true,

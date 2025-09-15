@@ -1,40 +1,32 @@
+// Monaco Theme Management
+//
+// This module registers a fixed set of curated Monaco Editor themes for Luna.
+// To add or change themes, import the JSON files here and update the 'themes' array below.
+// Usage:
+//   - Call applyMonacoTheme('theme-id') to switch themes (e.g. 'dracula', 'solarized-light').
+//   - Theme IDs are normalized to lowercase and hyphens.
+//   - Only themes listed in 'themes' are available; built-in Monaco themes are also supported.
+//
+// If you add a new theme JSON file, import it at the top and add it to the 'themes' array.
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import SlushAndPoppies from '@renderer/code/monaco/monaco-curated-light-themes/Slush and Poppies.json'
+import SolarizedLight from '@renderer/code/monaco/monaco-curated-light-themes/Solarized-light.json'
+import Dracula from '@renderer/code/monaco/monaco-curated-dark-themes/Dracula.json'
 
-/**
- * Monaco theme management (curated, simple, well-documented).
- *
- * How it works:
- * - Place JSON theme files under the split folders:
- *   - src/renderer/src/code/monaco/monaco-curated-light-themes
- *   - src/renderer/src/code/monaco/monaco-curated-dark-themes
- * - We eagerly import those JSON files at build time (fast and synchronous)
- * - We define each theme in Monaco using a sanitized, safe theme id
- * - Consumers can call applyMonacoTheme('friendly id') without worrying about exact filenames
- *
- * Why curated local files instead of importing straight from node_modules?
- * - Stability: node_modules internal file layouts can change; our app shouldn’t rely on them
- * - Size control: we can pick a subset instead of bundling every theme
- * - Clarity: the folder clearly shows what ships with the app
- */
+// Monaco's built-in themes (always available)
+export const builtinMonacoThemes: string[] = ['vs', 'vs-dark', 'hc-black']
 
-// Discover curated JSON themes (split into light and dark collections).
-// NOTE: Vite alias @renderer points to src/renderer/src
-// We eagerly import theme JSON files so we can synchronously enumerate and define them.
-const curatedLightThemeModuleMap = import.meta.glob<{
-  default: monaco.editor.IStandaloneThemeData
-}>('@renderer/code/monaco/monaco-curated-light-themes/*.json', { eager: true })
+// Curated Luna themes. Add new themes here as needed.
+const themes = [
+  { id: 'slush-and-poppies', data: SlushAndPoppies },
+  { id: 'solarized-light', data: SolarizedLight },
+  { id: 'dracula', data: Dracula }
+]
 
-const curatedDarkThemeModuleMap = import.meta.glob<{
-  default: monaco.editor.IStandaloneThemeData
-}>('@renderer/code/monaco/monaco-curated-dark-themes/*.json', { eager: true })
-
-// No legacy fallback: curated themes must live in the split folders above
-
-// Guard to define curated themes only once
 let themesRegistered = false
 
+// Normalize theme IDs to lowercase and hyphens for consistency
 function toSafeThemeId(themeId: string): string {
-  // Lowercase, replace any non-alphanumeric with hyphens, collapse repeats, trim edges
   return themeId
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -42,105 +34,41 @@ function toSafeThemeId(themeId: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
-// Monaco's built-in theme IDs (always available)
-export const builtinMonacoThemes: string[] = ['vs', 'vs-dark', 'hc-black']
-
-/**
- * Return the list of curated theme IDs derived from JSON filenames in the curated folder.
- * IDs are normalized via toSafeId (e.g., "GitHub Dark" -> "github-dark").
- */
+// Returns IDs of available light themes
 export function getCuratedLightMonacoThemeIds(): string[] {
-  const themeIds = new Set<string>()
-  // New split folder
-  for (const filePath of Object.keys(curatedLightThemeModuleMap)) {
-    const rawThemeId =
-      filePath
-        .split('/')
-        .pop()
-        ?.replace(/\.json$/, '') || 'custom-theme'
-    themeIds.add(toSafeThemeId(rawThemeId))
-  }
-  return Array.from(themeIds).sort()
+  return ['slush-and-poppies', 'solarized-light']
 }
 
+// Returns IDs of available dark themes
 export function getCuratedDarkMonacoThemeIds(): string[] {
-  const themeIds = new Set<string>()
-  // New split folder
-  for (const filePath of Object.keys(curatedDarkThemeModuleMap)) {
-    const rawThemeId =
-      filePath
-        .split('/')
-        .pop()
-        ?.replace(/\.json$/, '') || 'custom-theme'
-    themeIds.add(toSafeThemeId(rawThemeId))
-  }
-  return Array.from(themeIds).sort()
+  return ['dracula']
 }
 
-/**
- * Define all curated themes once per app lifetime.
- * Safe to call multiple times.
- */
+// Registers all curated themes with Monaco (safe to call multiple times)
 export function ensureAllMonacoThemesDefined(): void {
-  // Define curated themes one time per app lifetime. Safe to call repeatedly.
   if (themesRegistered) return
-
-  // 1) Curated local JSON themes (light)
-  for (const [filePath, module] of Object.entries(curatedLightThemeModuleMap)) {
-    const rawThemeId =
-      filePath
-        .split('/')
-        .pop()
-        ?.replace(/\.json$/, '') || 'custom-theme'
-    const imported = module.default
-    if (!imported) continue
-    const themeData = imported as unknown as monaco.editor.IStandaloneThemeData
-    const safeThemeId = toSafeThemeId(rawThemeId)
+  for (const theme of themes) {
     try {
-      monaco.editor.defineTheme(safeThemeId, themeData)
+      monaco.editor.defineTheme(theme.id, theme.data as monaco.editor.IStandaloneThemeData)
     } catch {
       // ignore define errors for individual themes
     }
   }
-
-  // 2) Curated local JSON themes (dark)
-  for (const [filePath, module] of Object.entries(curatedDarkThemeModuleMap)) {
-    const rawThemeId =
-      filePath
-        .split('/')
-        .pop()
-        ?.replace(/\.json$/, '') || 'custom-theme'
-    const imported = module.default
-    if (!imported) continue
-    const themeData = imported as unknown as monaco.editor.IStandaloneThemeData
-    const safeThemeId = toSafeThemeId(rawThemeId)
-    try {
-      monaco.editor.defineTheme(safeThemeId, themeData)
-    } catch {
-      // ignore define errors for individual themes
-    }
-  }
-
-  // 3) No legacy folder is supported anymore; themes must be present in the split folders
-
   themesRegistered = true
 }
 
-/**
- * Apply a theme by id. Falls back to Monaco's built-in 'vs' first.
- * Accepts either the filename (without .json) or any string – it will be normalized.
- */
+// Applies a theme by ID (falls back to 'vs' if not found)
 export function applyMonacoTheme(id: string): void {
   ensureAllMonacoThemesDefined()
   const safeThemeId = toSafeThemeId(id)
   try {
-    monaco.editor.setTheme('vs')
-  } catch {
-    /* ignore */
-  }
-  try {
     monaco.editor.setTheme(safeThemeId)
   } catch {
-    /* ignore */
+    // ignore errors
+  }
+  try {
+    monaco.editor.setTheme('vs')
+  } catch {
+    // ignore errors
   }
 }
