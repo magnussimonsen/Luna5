@@ -54,7 +54,9 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
       <CellList />
       <Sidepanel />
     </div>
-    <div v-else-if="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">A4</div>
+    <div v-else-if="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">
+      A4
+    </div>
 
     <div class="statusbar-container">
       <Statusbar />
