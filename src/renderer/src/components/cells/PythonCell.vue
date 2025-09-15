@@ -1,3 +1,9 @@
+<!--
+Performance tip: If Monaco editor causes the side panel to open slowly, defer Monaco initialization until after the panel animation completes.
+For example, use setTimeout, requestAnimationFrame, or Vue's nextTick to delay editor setup.
+You can also lazy-load Monaco only when the Python cell is visible or focused, or show a loading spinner while Monaco loads.
+Changing the container structure will NOT fix the lag; the solution is to delay Monaco's setup until after the panel is open.
+-->
 <template>
   <div class="python-cell" :data-locked="isCellLocked ? 'true' : null">
     <div
