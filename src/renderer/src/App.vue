@@ -50,11 +50,11 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
     <Menubar />
     <Toolbar />
 
-    <div v-if="layoutMode === 'web'" class="web--workspace-layout">
+    <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
       <CellList />
       <Sidepanel />
     </div>
-    <div v-else-if="layoutMode === 'a4Preview'" class="a4--workspace-layout">A4</div>
+    <div v-else-if="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">A4</div>
 
     <div class="statusbar-container">
       <Statusbar />

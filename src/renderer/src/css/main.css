@@ -27,6 +27,10 @@ Main CSS entry for the renderer
 
 @import './main-imports-this-css/top-toolbar-container.css';
 @import './main-imports-this-css/top-toolbar-buttons.css';
+
+@import './main-imports-this-css/workspace-web-layout-container.css';
+@import './main-imports-this-css/workspace-a4-preview-layout-container.css';
+
 @import './main-imports-this-css/ascii-spinner.css';
 
 #app {

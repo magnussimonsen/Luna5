@@ -1,6 +1,10 @@
 <!--
 MenubarContainer.vue
 
+--------------------------------------
+THIS IS NOT USED. SEE App.vue INSTEAD.
+--------------------------------------
+
 This component is the top menubar container for the application. It renders the
 application-level `Menubar` component and provides a stable slot in the top
 toolbar area for navigation and global actions. Menubar-specific styles live in

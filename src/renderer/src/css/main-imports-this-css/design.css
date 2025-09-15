@@ -10,6 +10,8 @@ Design tokens (layout/spacing)
     --menubar-z-index: 3000;
     --toolbar-z-index: 2000;
     --statusbar-z-index: 3000;
+    --workspace-web-layout-container-z-index: 1000;
+    --workspace-a4-preview-layout-container-z-index: 1000;
 
     /* General buttondesign variables */
     --border-radius: 0px;

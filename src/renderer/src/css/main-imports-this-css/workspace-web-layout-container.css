@@ -1,0 +1,19 @@
+/*
+The workspace web layout container that holds both the cell list and the side panel.
+*/
+
+.workspace-web-layout-container {
+    display: flex;
+    justify-content: flex-start; /*  Allows left button row and right button row to be spaced apart */
+
+    background: var(--red, var(--debug-color));
+
+    z-index: var(--workspace-web-layout-container-z-index, 1000);
+
+    width: 100%; /* Full width of parent */
+
+    /* Grow to fill available space */
+    flex-grow: 1;
+
+
+}
