@@ -27,6 +27,7 @@ Changing the container structure will NOT fix the lag; the solution is to delay 
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import type { PythonCell } from '@renderer/types/notebook-cell-types'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
@@ -35,12 +36,9 @@ import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { ensureAllMonacoThemesDefined, applyMonacoTheme } from '@renderer/code/monaco/monaco-theme'
 
-// Monaco ESM API + CSS + worker (Vite-friendly)
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import 'monaco-editor/min/vs/editor/editor.main.css'
-import 'monaco-editor/esm/vs/basic-languages/python/python.contribution'
-// Editor worker: required for Monaco to function under Vite
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+// Monaco will be lazy-loaded. See `lazyInitializeMonacoEditor` below.
+// We load the ESM API, CSS, python contribution and the worker dynamically at runtime
+// to avoid increasing the initial bundle size.
 import PythonOutputText from './python-output/PythonOutputText.vue'
 import PythonOutputImages from './python-output/PythonOutputImages.vue'
 
@@ -55,6 +53,7 @@ import PythonOutputImages from './python-output/PythonOutputImages.vue'
 const props = defineProps<{ cell: PythonCell }>()
 
 const workspaceStore = useWorkspaceStore()
+const cellSelection = useCellSelectionStore()
 const themeStore = useThemeStore()
 const codeSettingsStore = useCodeSettingsStore()
 const fontStore = useFontStore()
@@ -62,8 +61,9 @@ const fontSizeStore = useFontSizeStore()
 
 // DOM reference to the Monaco editor container
 const editorElementRef = ref<HTMLDivElement | null>(null)
-// Monaco editor instance
-let editor: monaco.editor.IStandaloneCodeEditor | null = null
+// Monaco editor instance (will be assigned after Monaco is loaded)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let editor: any = null
 // Collect Monaco disposables so we can clean up on unmount
 let disposables: Array<{ dispose: () => void }> = []
 // Resize observer to re-layout the editor when the container size changes
@@ -72,6 +72,7 @@ let resizeObserver: ResizeObserver | null = null
 let isApplyingLocalEdit = false
 
 // Convert CSS pixel string values (e.g., "14px") to a numeric value for Monaco options
+// Move to utils folder
 function parsePixelsToNumber(px: string | undefined, fallback = 14): number {
   try {
     if (!px) return fallback
@@ -104,7 +105,58 @@ function registerCuratedMonacoThemesIfNeeded(): void {
   ensureAllMonacoThemesDefined()
 }
 
+// Module-scoped references to the dynamically loaded Monaco and worker
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let monaco: any = null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let editorWorker: any = null
+let monacoLoaded = false
+
+// Lazy-load Monaco (API + CSS + python language) and the worker, then run
+// the existing `initializeMonacoEditor` logic which expects Monaco to be present.
+async function lazyInitializeMonacoEditor(): Promise<void> {
+  if (monacoLoaded) {
+    // Monaco already available => just initialize
+    initializeMonacoEditor()
+    return
+  }
+  try {
+    const [monacoEditor, workerMod] = await Promise.all([
+      import('monaco-editor/esm/vs/editor/editor.api'),
+      // load CSS (side-effect)
+      import('monaco-editor/min/vs/editor/editor.main.css'),
+      // python language contribution (side-effect)
+      import('monaco-editor/esm/vs/basic-languages/python/python.contribution'),
+      import('monaco-editor/esm/vs/editor/editor.worker?worker')
+    ])
+    monaco = monacoEditor
+    // worker module default export is the worker constructor
+    editorWorker = workerMod && (workerMod.default ?? workerMod)
+
+    // Configure worker factory
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(self as any).MonacoEnvironment = {
+      getWorker() {
+        return new editorWorker()
+      }
+    }
+
+    monacoLoaded = true
+    // Now reuse the existing initialization logic which references `monaco` at runtime
+    initializeMonacoEditor()
+  } catch (err) {
+    // Keep failure non-fatal in UI; log for debugging
+    console.error('Failed to lazy-load Monaco editor', err)
+  }
+}
+
 function initializeMonacoEditor(): void {
+  // Add logic to only initialize if this cell is selected.
+  // We also need to unmount/dispose the editor when the cell is no longer selected.
+  // This will save resources when many cells are present.
+  // However, it may cause loss of scroll position and cursor position.
+  // Does the monaco editor have a "cursor position" API we can use to restore?
+  // Alternatively, we can lazy-load the editor only when the cell is focused/selected.
   if (!editorElementRef.value) return
   const initialValue = props.cell.cellInputContent ?? props.cell.source ?? ''
   // Make sure any custom themes are registered before creating editor
@@ -205,8 +257,36 @@ function initializeMonacoEditor(): void {
 }
 
 onMounted(() => {
-  initializeMonacoEditor()
+  // Use lazy loader so Monaco and its workers are only fetched when needed
+  // Initialize only if this cell is selected at mount time
+  if (cellSelection.selectedCellId === props.cell.id) {
+    void lazyInitializeMonacoEditor()
+  }
 })
+
+// Dispose helper used when cell becomes unselected or on unmount
+function disposeEditorInstance(): void {
+  disposables.forEach((d) => d.dispose())
+  disposables = []
+  if (resizeObserver) {
+    try {
+      resizeObserver.disconnect()
+    } catch {
+      /* ignore */
+    }
+    resizeObserver = null
+  }
+  if (editor) {
+    try {
+      const model = editor.getModel()
+      editor.dispose()
+      if (model) model.dispose()
+    } catch {
+      /* ignore */
+    }
+    editor = null
+  }
+}
 
 // Theme reactivity: when dark mode or selected theme changes,
 // ensure themes are registered and then switch via setTheme().
@@ -282,23 +362,23 @@ watch(isCellLocked, (locked) => {
 })
 
 onBeforeUnmount(() => {
-  disposables.forEach((d) => d.dispose())
-  disposables = []
-  if (resizeObserver) {
-    try {
-      resizeObserver.disconnect()
-    } catch {
-      /* ignore */
-    }
-    resizeObserver = null
-  }
-  if (editor) {
-    const model = editor.getModel()
-    editor.dispose()
-    if (model) model.dispose()
-    editor = null
-  }
+  disposeEditorInstance()
 })
+
+// React to selection changes: initialize when this cell becomes selected,
+// dispose when it is no longer selected.
+watch(
+  () => cellSelection.selectedCellId,
+  (newId, oldId) => {
+    if (newId === props.cell.id) {
+      // selected now
+      void lazyInitializeMonacoEditor()
+    } else if (oldId === props.cell.id) {
+      // just unselected
+      disposeEditorInstance()
+    }
+  }
+)
 </script>
 
 <style scoped>
