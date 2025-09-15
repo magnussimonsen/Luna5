@@ -2,7 +2,7 @@
   <aside
     v-if="sidepanelStore.activePanel"
     class="sidepanel sidepanel-ui-base"
-    :style="{ width: panelWidth + 'px', flex: '0 0 ' + panelWidth + 'px' }"
+    :style="{ width: panelWidth + 'px' }"
   >
     <div
       class="resize-handle left"
@@ -111,9 +111,11 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .sidepanel {
-  position: relative; /* participate in flex layout of parent */
+  position: absolute; /* overlay positioned inside workspace container */
+  right: 0;
+  top: 0;
+  height: 100%;
   min-width: 1em;
-  max-width: calc(100vw * maxWidthScalingFactor);
   background: var(--sidepanel-background, #f0f0f0);
   color: var(--text-color, #222);
   display: flex;
@@ -124,6 +126,7 @@ onBeforeUnmount(() => {
   border-bottom: 0.1em solid var(--button-on-color, lightgreen);
   border-radius: 0;
   box-sizing: border-box;
+  z-index: var(--workspace-web-layout-container-z-index, 1000);
 }
 
 /* While resizing: prevent text selection & show consistent cursor */

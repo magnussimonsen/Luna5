@@ -49,6 +49,7 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   <div id="app-layout">
     <Menubar />
     <Toolbar />
+    
 
     <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
       <CellList />
@@ -57,7 +58,6 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
     <div v-else-if="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">
       A4
     </div>
-
     <div class="statusbar-container">
       <Statusbar />
     </div>
