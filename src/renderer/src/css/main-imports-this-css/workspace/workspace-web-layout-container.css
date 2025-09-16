@@ -16,5 +16,7 @@ The workspace web layout container that holds both the cell list and the side pa
     /* Grow to fill available space */
     flex-grow: 1;
 
+    overflow-y: scroll;
+
 
 }

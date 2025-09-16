@@ -1,22 +1,24 @@
-/* Filepath: src/renderer/src/stores/UI/sidepanelStore.ts */
-
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { PanelName } from '@renderer/types/side-panel-types'
 
 export const useSidepanelStore = defineStore('sidepanel', () => {
-  const allowedPanels = ['flashcards', 'notebooks', 'toc', 'variables', 'help', 'settings'] // Must match the types in side-panel-types.ts (not elegant...)
+  // Heights used to position the sidepanel between top and bottom chrome
+  const menubarHeight = ref<number>(0)
+  const toolbarHeight = ref<number>(0)
+  const statusbarHeight = ref<number>(0)
+
+  // Existing sidepanel state
+  const allowedPanels = ['flashcards', 'notebooks', 'toc', 'variables', 'help', 'settings']
   const activePanel = ref<PanelName | null>(null)
-  // Store the last width of the side panel (in px)
 
   function getAppWidthInPx(): number {
     const appWidth =
       window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-    return typeof appWidth === 'number' && !isNaN(appWidth) ? appWidth * 0.33 : 400
+    return typeof appWidth === 'number' && !isNaN(appWidth) ? appWidth * 0.45 : 400
   }
 
-  const lastPanelWidth = ref<number>(getAppWidthInPx()) 
-  // Store the last scroll Y position of the side panel
+  const lastPanelWidth = ref<number>(getAppWidthInPx())
   const lastPanelScrollY = ref<number>(0)
 
   function showPanel(name: string): void {
@@ -43,15 +45,39 @@ export const useSidepanelStore = defineStore('sidepanel', () => {
     lastPanelScrollY.value = y
   }
 
+  // Height setters for top/bottom chrome
+  function setMenubarHeight(h: number): void {
+    menubarHeight.value = h
+  }
+  function setToolbarHeight(h: number): void {
+    toolbarHeight.value = h
+  }
+  function setStatusbarHeight(h: number): void {
+    statusbarHeight.value = h
+  }
+
+  const topChromeHeight = computed(() => menubarHeight.value + toolbarHeight.value)
+  const bottomChromeHeight = computed(() => statusbarHeight.value)
+
   return {
+    // panel state
     activePanel,
+    allowedPanels,
     showPanel,
     hidePanel,
     togglePanel,
-    allowedPanels,
     lastPanelWidth,
     setLastPanelWidth,
     lastPanelScrollY,
-    setLastPanelScrollY
+    setLastPanelScrollY,
+    // chrome heights
+    menubarHeight,
+    toolbarHeight,
+    statusbarHeight,
+    setMenubarHeight,
+    setToolbarHeight,
+    setStatusbarHeight,
+    topChromeHeight,
+    bottomChromeHeight
   }
 })

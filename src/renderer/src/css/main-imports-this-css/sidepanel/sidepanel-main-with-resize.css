@@ -1,12 +1,14 @@
 /* The main side panel container with resize handle */
 
-.sidepanel-main  {
-  position: absolute; /* overlay positioned inside workspace container */
+.sidepanel-main {
+  position: fixed;
+  /* overlay positioned inside workspace container */
   right: 0;
-  top: 0;
-   top: 50%;
-  transform: translateY(-50%);
-  height: 97%;
+  /* Offset from top so the panel sits below menubar+toolbar. App.vue sets --top-chrome-height dynamically */
+  top: var(--top-chrome-height, 0px);
+  transform: none;
+  /* Height: stretch from below top chrome to above bottom statusbar. App.vue sets --bottom-chrome-height if needed */
+  height: calc(100vh - var(--top-chrome-height, 0px) - var(--bottom-chrome-height, 0px));
   box-shadow: var(--box-shadow, 0 0 8px rgba(0, 0, 0, 0.1));
   display: flex;
   flex-direction: row;
@@ -30,7 +32,8 @@ body.sidepanel-resizing {
   position: absolute;
   top: 0;
   left: 0;
-  width: min(5px, 0.5em); /* Thin handle for resizing */
+  width: min(5px, 0.5em);
+  /* Thin handle for resizing */
   cursor: ew-resize;
   background: var(--button-on-color, lightgreen);
   height: 100%;
@@ -42,6 +45,3 @@ body.sidepanel-resizing {
 .resize-handle.left:active {
   background: var(--active-border-color-hover, green);
 }
-
-
-  

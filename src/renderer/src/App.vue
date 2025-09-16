@@ -23,12 +23,16 @@ import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { useToolbarStore } from '@renderer/stores/UI/toolbarStore'
+import { useSidepanelStore } from '@renderer/stores/UI/sidepanelStore'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { storeToRefs } from 'pinia'
 import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-watch-function'
 
 const menubarStore = useMenubarStore()
+const toolbarStore = useToolbarStore()
+const sidepanelStore = useSidepanelStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
@@ -44,19 +48,71 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   await autosaveWatchFunction(interval, count, isSaving, saveOrSaveAs)
 })
 //------------------------------------------------------------------------------//
+
+// --- Top chrome measurement (menubar + toolbar) ----------------------------
+const menubarRef = ref<HTMLElement | null>(null)
+const toolbarRef = ref<HTMLElement | null>(null)
+const statusbarRef = ref<HTMLElement | null>(null)
+let menubarObserver: ResizeObserver | null = null
+let toolbarObserver: ResizeObserver | null = null
+
+onMounted(async () => {
+  await nextTick()
+  if (menubarRef.value) {
+    menubarObserver = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect?.height ?? 0
+      toolbarStore.setMenubarHeight(h)
+      sidepanelStore.setMenubarHeight(h)
+      // Update CSS var for top chrome height (menubar + toolbar)
+      const top = h + (sidepanelStore.toolbarHeight ?? 0)
+      document.documentElement.style.setProperty('--top-chrome-height', `${top}px`)
+    })
+    menubarObserver.observe(menubarRef.value)
+  }
+  if (toolbarRef.value) {
+    toolbarObserver = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect?.height ?? 0
+      toolbarStore.setToolbarHeight(h)
+      sidepanelStore.setToolbarHeight(h)
+      const top = h + (sidepanelStore.menubarHeight ?? 0)
+      document.documentElement.style.setProperty('--top-chrome-height', `${top}px`)
+    })
+    toolbarObserver.observe(toolbarRef.value)
+  }
+  if (statusbarRef.value) {
+    const statusObserver = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect?.height ?? 0
+      sidepanelStore.setStatusbarHeight(h)
+      document.documentElement.style.setProperty('--bottom-chrome-height', `${h}px`)
+    })
+    statusObserver.observe(statusbarRef.value)
+  }
+})
+
+onBeforeUnmount(() => {
+  menubarObserver?.disconnect()
+  toolbarObserver?.disconnect()
+})
 </script>
 <template>
   <div id="app-layout">
-    <Menubar />
-    <Toolbar />
+    <div ref="menubarRef">
+      <Menubar />
+    </div>
+    <div ref="toolbarRef">
+      <Toolbar />
+    </div>
     <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
       <CellList />
-      <Sidepanel />
     </div>
+
     <div v-else-if="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">
       A4
     </div>
-    <div class="statusbar-container">
+
+    <Sidepanel />
+
+    <div ref="statusbarRef" class="statusbar-container">
       <Statusbar />
     </div>
   </div>
