@@ -1,0 +1,11 @@
+
+/* Style for the container where the cells are displayed */
+.cell-containers-list {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto; /* Allow to grow and shrink, initial size auto */
+    flex-direction: column;
+    border: 12px solid blueviolet; /* debug */
+   
+}
+

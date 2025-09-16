@@ -26,6 +26,12 @@ export type ThemeColorTypes = {
   toolbarBackground: string
   toolbarBorderColor: string
 
+  // Workspace
+  workspaceBackground: string
+  workspaceBorderColor: string
+  
+  // Main panel
+
   mainPanelBackground: string
   mainPanelBorderColor: string
 

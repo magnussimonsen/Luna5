@@ -7,7 +7,7 @@
 <!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
 
 <template>
-  <div class="cell-list">
+  <div class="cell-containers-list">
     <CellContainer
       v-for="(cellId, idx) in orderedCellIds"
       :key="cellId"
@@ -108,13 +108,3 @@ function onDeselect(): void {
   selectionStore.clearSelection()
 }
 </script>
-
-<style scoped>
-.cell-list {
-  position: relative;
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  border: 1px solid red; /* debug */
-}
-</style>

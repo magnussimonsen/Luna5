@@ -314,6 +314,7 @@ const resetFontSizeBtnStyle = computed(() => ({
 </script>
 
 <style scoped>
+/* Implement classes from button-row-flex-wrap-base.css */
 .status-bar-wrapper {
   height: fit-content;
   width: 100%;

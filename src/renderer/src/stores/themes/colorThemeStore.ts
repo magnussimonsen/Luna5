@@ -21,6 +21,9 @@ export const useThemeStore = defineStore('theme', {
       // Toolbar background
       toolbarBackground: 'whitesmoke',
       toolbarBorderColor: 'whitesmoke',
+      // Workspace
+      workspaceBackground: '#e0e0e0', // light gray
+      workspaceBorderColor: 'gainsboro', // slightly darker gray
       // Main panel
       mainPanelBackground: 'blue' /* debug */,
       mainPanelBorderColor: 'gainsboro',
@@ -104,9 +107,12 @@ export const useThemeStore = defineStore('theme', {
       // Toolbar background
       toolbarBackground: '#111111',
       toolbarBorderColor: '#111111',
+      // Workspace 
+      workspaceBackground: '#222222', 
+      workspaceBorderColor: '#444444', 
       // Main panel
-      mainPanelBackground: '#222222',
-      mainPanelBorderColor: '#444444',
+      mainPanelBackground: '#222222', // Replace this with workspace background color
+      mainPanelBorderColor: '#444444',// Replace this with workspace border color
       // Paper preview background
       paperColor: '#333333',
       paperBorderColor: 'transparent',
@@ -199,6 +205,8 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--menu-background', colors.menuBackground)
       root.style.setProperty('--toolbar-background', colors.toolbarBackground)
       root.style.setProperty('--toolbar-border-color', colors.toolbarBorderColor)
+      root.style.setProperty('--workspace-background', colors.workspaceBackground)
+      root.style.setProperty('--workspace-border-color', colors.workspaceBorderColor)
       root.style.setProperty('--main-panel-background', colors.mainPanelBackground)
       root.style.setProperty('--main-panel-border-color', colors.mainPanelBorderColor)
       root.style.setProperty('--paper-color', colors.paperColor)

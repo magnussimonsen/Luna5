@@ -18,7 +18,6 @@ Main CSS entry for the renderer
 
 @import './main-imports-this-css/button-row-flex-wrap-base.css';
 
-@import './main-imports-this-css/menubar-container.css';
 @import './main-imports-this-css/menubar-buttons.css';
 @import './main-imports-this-css/menubar-dropdown.css';
 @import './main-imports-this-css/menubar-dropdown-item.css';
@@ -27,6 +26,8 @@ Main CSS entry for the renderer
 
 @import './main-imports-this-css/top-toolbar-container.css';
 @import './main-imports-this-css/top-toolbar-buttons.css';
+
+@import './main-imports-this-css/cell-containers-list.css';
 
 @import './main-imports-this-css/workspace-web-layout-container.css';
 @import './main-imports-this-css/workspace-a4-preview-layout-container.css';
