@@ -331,7 +331,8 @@ const resetFontSizeBtnStyle = computed(() => ({
   justify-content: space-between;
   z-index: 2000;
   border: solid 1px var(--border-color, var(--debug-color, #444));
-  padding: var(--status-bar-padding, 0em);
+  margin-top: var(--statusbar-top-margin, 0.3em);
+  padding: var(--statusbar-padding, 0em);
   /* top, right, bottom, left */
   box-sizing: border-box;
 }

@@ -16,7 +16,7 @@ The top toolbar container that holds the toolbars for the selected cell.
 
     padding: var(--toolbar-container-padding, 0.2em 0.5em);
 
-    margin-bottom: 5px; /* Space below toolbar */
+    margin-bottom: var(--toolbar-margin-bottom, min(5px,0.5em));
 }
 
 .top-toolbar-placeholder {

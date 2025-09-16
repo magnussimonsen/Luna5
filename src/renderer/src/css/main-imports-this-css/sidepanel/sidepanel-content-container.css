@@ -1,6 +1,13 @@
 /* Base style for the panel content container that holds 
 all the specific side panel types*/
 
-.panel-content-container {
-  border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+.sidepanel-content-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sidepanel-content-padding); /* left padding for handle space */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: normal;
+  border: 40px solid yellow; /* Debug border to visualize the container */
 }

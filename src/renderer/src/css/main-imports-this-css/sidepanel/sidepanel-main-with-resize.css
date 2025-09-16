@@ -1,6 +1,47 @@
 /* The main side panel container with resize handle */
 
-.sidepanel-main-with-resize {
-    border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+.sidepanel-main  {
+  position: absolute; /* overlay positioned inside workspace container */
+  right: 0;
+  top: 0;
+   top: 50%;
+  transform: translateY(-50%);
+  height: 97%;
+  box-shadow: var(--box-shadow, 0 0 8px rgba(0, 0, 0, 0.1));
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  border-left: 0.1em solid var(--button-on-color, lightgreen);
+  border-top: 0.1em solid var(--button-on-color, lightgreen);
+  border-bottom: 0.1em solid var(--button-on-color, lightgreen);
+  border-radius: 0;
+  box-sizing: border-box;
+  z-index: var(--sidepanel-main-z-index, 4000);
 }
+
+/* While resizing: prevent text selection & show consistent cursor */
+body.sidepanel-resizing {
+  cursor: ew-resize !important;
+  user-select: none;
+}
+
+/* Left-edge resize handle (panel anchored to the right) */
+.resize-handle.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: min(5px, 0.5em); /* Thin handle for resizing */
+  cursor: ew-resize;
+  background: var(--button-on-color, lightgreen);
+  height: 100%;
+  flex-shrink: 0;
+  display: block;
+}
+
+.resize-handle.left:hover,
+.resize-handle.left:active {
+  background: var(--active-border-color-hover, green);
+}
+
+
   

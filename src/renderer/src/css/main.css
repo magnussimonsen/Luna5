@@ -14,26 +14,29 @@ Main CSS entry for the renderer
 
 @import './main-imports-this-css/fonts.css';
 
-@import './main-imports-this-css/hidden-cell-linear-gradient-style.css';
-
+/* Miscellaneous */
 @import './main-imports-this-css/button-row-flex-wrap-base.css';
-
-@import './main-imports-this-css/menubar-buttons.css';
-@import './main-imports-this-css/menubar-dropdown.css';
-@import './main-imports-this-css/menubar-dropdown-item.css';
-
 @import './main-imports-this-css/implemented-not-implemented.css';
-
-@import './main-imports-this-css/top-toolbar-container.css';
-@import './main-imports-this-css/top-toolbar-buttons.css';
-
-@import './main-imports-this-css/cell-containers-list.css';
-
-@import './main-imports-this-css/workspace-web-layout-container.css';
-@import './main-imports-this-css/workspace-a4-preview-layout-container.css';
-
 @import './main-imports-this-css/ascii-spinner.css';
 
+/* Menubar */
+@import './main-imports-this-css/menubar/menubar-buttons.css';
+@import './main-imports-this-css/menubar/menubar-dropdown.css';
+@import './main-imports-this-css/menubar/menubar-dropdown-item.css';
+
+/* Top toolbar */
+@import './main-imports-this-css/top-toolbar/top-toolbar-container.css';
+@import './main-imports-this-css/top-toolbar/top-toolbar-buttons.css';
+
+/* Cells */
+@import './main-imports-this-css/hidden-cell-linear-gradient-style.css';
+@import './main-imports-this-css/cells/cell-containers-list.css';
+
+/* Workspace */
+@import './main-imports-this-css/workspace/workspace-web-layout-container.css';
+@import './main-imports-this-css/workspace/workspace-a4-preview-layout-container.css';
+
+/* Sidepanel*/
 @import './main-imports-this-css/sidepanel/sidepanel-main-with-resize.css';
 @import './main-imports-this-css/sidepanel/sidepanel-content-container.css';
 @import './main-imports-this-css/sidepanel/sidepanel-ui.css';

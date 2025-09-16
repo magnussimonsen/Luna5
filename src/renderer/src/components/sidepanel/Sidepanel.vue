@@ -1,7 +1,7 @@
 <template>
   <aside
     v-if="sidepanelStore.activePanel"
-    class="sidepanel sidepanel-ui-base"
+    class="sidepanel-main"
     :style="{ width: panelWidth + 'px' }"
   >
     <div
@@ -10,7 +10,7 @@
       aria-label="Resize side panel"
       @mousedown="startResize"
     ></div>
-    <div ref="panelContentRef" class="panel-content-container" @scroll="onScrollPanelContent">
+    <div ref="panelContentRef" class="sidepanel-content-container" @scroll="onScrollPanelContent">
       <component :is="currentPanelComponent" v-if="currentPanelComponent" />
     </div>
   </aside>
@@ -110,56 +110,5 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.sidepanel {
-  position: absolute; /* overlay positioned inside workspace container */
-  right: 0;
-  top: 0;
-  height: 100%;
-  min-width: 1em;
-  background: var(--sidepanel-background, #f0f0f0);
-  color: var(--text-color, #222);
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  border-left: 0.1em solid var(--button-on-color, lightgreen);
-  border-top: 0.1em solid var(--button-on-color, lightgreen);
-  border-bottom: 0.1em solid var(--button-on-color, lightgreen);
-  border-radius: 0;
-  box-sizing: border-box;
-  z-index: var(--workspace-web-layout-container-z-index, 1000);
-}
-
-/* While resizing: prevent text selection & show consistent cursor */
-body.sidepanel-resizing {
-  cursor: ew-resize !important;
-  user-select: none;
-}
-
-/* Left-edge resize handle (panel anchored to the right) */
-.resize-handle.left {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  cursor: ew-resize;
-  background: var(--button-on-color, lightgreen);
-  height: 100%;
-  flex-shrink: 0;
-  display: block;
-}
-
-.resize-handle.left:hover,
-.resize-handle.left:active {
-  background: var(--active-border-color-hover, green);
-}
-
-.panel-content-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 0.5em 0 0.75em; /* left padding for handle space */
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  scrollbar-width: normal;
-}
+/* Styles are in the css folder */
 </style>
