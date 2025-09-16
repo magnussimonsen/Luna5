@@ -1,0 +1,25 @@
+/** Side panel UI styles */
+
+.sidepanel-menubar{
+    border: 0px solid var(--side-panel-border-color, #ccc); /* use/copy button-row-flex-wrap-base */
+}
+
+
+/* Different padding than menubar*/
+.sidepanel-selector-row {
+    border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+}
+
+.sidepanel-on-off-button {
+    border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+}
+
+.sidepanel-action-button {
+    border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+}
+
+
+.sidepanel-action-button {
+    border: 0px solid var(--side-panel-border-color, #ccc);
+    /* Placeholder */
+}

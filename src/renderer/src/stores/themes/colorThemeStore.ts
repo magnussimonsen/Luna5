@@ -107,12 +107,12 @@ export const useThemeStore = defineStore('theme', {
       // Toolbar background
       toolbarBackground: '#111111',
       toolbarBorderColor: '#111111',
-      // Workspace 
-      workspaceBackground: '#222222', 
-      workspaceBorderColor: '#444444', 
+      // Workspace
+      workspaceBackground: '#222222',
+      workspaceBorderColor: '#444444',
       // Main panel
       mainPanelBackground: '#222222', // Replace this with workspace background color
-      mainPanelBorderColor: '#444444',// Replace this with workspace border color
+      mainPanelBorderColor: '#444444', // Replace this with workspace border color
       // Paper preview background
       paperColor: '#333333',
       paperBorderColor: 'transparent',

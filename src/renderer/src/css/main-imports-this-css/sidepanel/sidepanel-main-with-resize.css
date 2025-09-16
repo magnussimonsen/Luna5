@@ -1,0 +1,6 @@
+/* The main side panel container with resize handle */
+
+.sidepanel-main-with-resize {
+    border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+}
+  

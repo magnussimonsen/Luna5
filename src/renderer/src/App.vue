@@ -85,8 +85,9 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   position: relative;
   display: flex;
   flex: 1 1 auto;
-  border: 9px solid green;
-  color: black;
+  /* border: 9px solid green; */
+  color: var(--text-color, var(--debug-color, red));
+  background: var(--workspace-background, var(--debug-color, red));
   /* Take remaining space between menuBar-toolbar and statusbar */
 }
 

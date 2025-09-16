@@ -34,6 +34,10 @@ Main CSS entry for the renderer
 
 @import './main-imports-this-css/ascii-spinner.css';
 
+@import './main-imports-this-css/sidepanel/sidepanel-main-with-resize.css';
+@import './main-imports-this-css/sidepanel/sidepanel-content-container.css';
+@import './main-imports-this-css/sidepanel/sidepanel-ui.css';
+
 #app {
   /* App root layout */
   min-height: 100vh;

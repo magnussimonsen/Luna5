@@ -10,7 +10,7 @@
       aria-label="Resize side panel"
       @mousedown="startResize"
     ></div>
-    <div ref="panelContentRef" class="panel-content" @scroll="onScrollPanelContent">
+    <div ref="panelContentRef" class="panel-content-container" @scroll="onScrollPanelContent">
       <component :is="currentPanelComponent" v-if="currentPanelComponent" />
     </div>
   </aside>
@@ -153,7 +153,7 @@ body.sidepanel-resizing {
   background: var(--active-border-color-hover, green);
 }
 
-.panel-content {
+.panel-content-container {
   flex: 1;
   overflow-y: auto;
   padding: 0 0.5em 0 0.75em; /* left padding for handle space */

@@ -29,7 +29,7 @@ export type ThemeColorTypes = {
   // Workspace
   workspaceBackground: string
   workspaceBorderColor: string
-  
+
   // Main panel
 
   mainPanelBackground: string

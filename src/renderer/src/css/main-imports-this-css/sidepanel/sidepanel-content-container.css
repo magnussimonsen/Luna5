@@ -1,0 +1,6 @@
+/* Base style for the panel content container that holds 
+all the specific side panel types*/
+
+.panel-content-container {
+  border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+}
