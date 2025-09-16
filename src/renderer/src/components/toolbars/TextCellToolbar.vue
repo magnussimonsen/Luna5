@@ -294,7 +294,7 @@
       @click="placeholderKaTeX"
     ></button>
   </div>
-  <div v-else class="text-cell-toolbar placeholder" aria-hidden="true">Editor not ready</div>
+  <div v-else>Editor not ready</div>
 </template>
 
 <script setup lang="ts">

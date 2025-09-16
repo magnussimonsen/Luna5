@@ -49,7 +49,6 @@ watch([autosaveInterval, changeCount], async ([interval, count]) => {
   <div id="app-layout">
     <Menubar />
     <Toolbar />
-
     <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
       <CellList />
       <Sidepanel />

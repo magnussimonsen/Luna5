@@ -5,7 +5,7 @@
     display: flex;
     flex: 1 1 auto; /* Allow to grow and shrink, initial size auto */
     flex-direction: column;
-    /*border: 12px solid blueviolet;*/
+    border: 12px solid blueviolet;
     background: var(transparent, var(--debug-color));
 }
 

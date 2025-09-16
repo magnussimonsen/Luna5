@@ -15,13 +15,14 @@ This component displays the appropriate toolbar for the currently selected cell 
   -->
   <div class="top-toolbar-container">
     <component :is="currentToolbarComponent" v-if="currentToolbarComponent" />
-    <div v-else class="top-toolbar-placeholder" aria-hidden="true">No cell selected</div>
+    <div v-else class="top-toolbar-container" aria-hidden="true"><NoCellSelectedToolbar /></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
+import NoCellSelectedToolbar from '@renderer/components/toolbars/NoCellSelectedToolbar.vue'
 import TextCellToolbar from '@renderer/components/toolbars/TextCellToolbar.vue'
 import PythonCellToolbar from '@renderer/components/toolbars/PythonCellToolbar.vue'
 

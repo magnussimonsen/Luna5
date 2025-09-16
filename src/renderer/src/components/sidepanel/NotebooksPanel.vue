@@ -1,43 +1,44 @@
 <template>
-  <div class="notebooks-panel sidepanel-padding-margin-base">
-    <div class="header">
-      <!-- Row 1: view toggles + move up/down -->
-      <div class="button-row-flex-wrap-base" role="tablist" aria-label="Notebook views">
-        <button
-          type="button"
-          class="toggle-btn"
-          :class="mode === 'notebooks' && 'is-active'"
-          role="tab"
-          :aria-selected="mode === 'notebooks'"
-          @click="onClickNotebooksTab"
-        >
-          Notebooks
-        </button>
-        <button
-          type="button"
-          class="toggle-btn"
-          :class="mode === 'bin' && 'is-active'"
-          role="tab"
-          :aria-selected="mode === 'bin'"
-          @click="onClickBinTab"
-        >
-          Bin
-        </button>
-        <button type="button" class="toggle-btn" :disabled="!currentId" @click="moveNotebookUp">
-          <span class="icon" aria-label="Move notebook up">↑</span>
-        </button>
-        <button type="button" class="toggle-btn" :disabled="!currentId" @click="moveNotebookDown">
-          <span class="icon" aria-label="Move notebook down">↓</span>
-        </button>
-      </div>
+  <div
+    class="button-row-flex-wrap-base button-row-flex-wrap-base--sidepanel-menubar"
+    role="tablist"
+    aria-label="Notebook views"
+  >
+    <button
+      type="button"
+      class="sidepanel-button"
+      :class="mode === 'notebooks' && 'sidepanel-button--on'"
+      role="tab"
+      :aria-selected="mode === 'notebooks'"
+      @click="onClickNotebooksTab"
+    >
+      Notebooks
+    </button>
+    <button
+      type="button"
+      class="toggle-btn"
+      :class="mode === 'bin' && 'is-active'"
+      role="tab"
+      :aria-selected="mode === 'bin'"
+      @click="onClickBinTab"
+    >
+      Bin
+    </button>
+    <button type="button" class="toggle-btn" :disabled="!currentId" @click="moveNotebookUp">
+      <span class="icon" aria-label="Move notebook up">↑</span>
+    </button>
+    <button type="button" class="toggle-btn" :disabled="!currentId" @click="moveNotebookDown">
+      <span class="icon" aria-label="Move notebook down">↓</span>
+    </button>
+  </div>
 
-      <!-- Row 2: action buttons (depends on mode) -->
-      <div class="row">
-        <template v-if="mode === 'notebooks'">
-          <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
-            Create new notebook
-          </button>
-          <!--
+  <!-- Row 2: action buttons (depends on mode) -->
+  <div class="row">
+    <template v-if="mode === 'notebooks'">
+      <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
+        Create new notebook
+      </button>
+      <!--
           Temporarily disabled: these actions are moved to the Edit menu.
           <button type="button" class="delete-btn" aria-label="Move selected cell to bin" :disabled="!currentId" @click="onSelectedCellDelete">
             Cell 
@@ -48,93 +49,92 @@
             Bin
           </button>
           -->
-        </template>
-        <template v-else>
-          <button
-            type="button"
-            class="restore-btn"
-            aria-label="Restore selected notebook"
-            :disabled="!currentId || !isBinActiveNotebook"
-            @click="onRestoreSelectedCell"
-          >
-            Restore cell
-          </button>
-          <button
-            type="button"
-            class="restore-btn"
-            aria-label="Restore selected notebook"
-            :disabled="!currentId || isBinActiveNotebook"
-            @click="onRestoreSelectedNotebook"
-          >
-            Restore notebook
-          </button>
-          <button type="button" class="empty-bin-btn" aria-label="Empty bin" @click="onEmptyBin">
-            Empty Bin
-          </button>
-        </template>
-      </div>
-    </div>
-    <!-- Active notebooks list -->
-    <ul v-if="mode === 'notebooks' && activeNotebooks.length" class="notebook-list" role="list">
-      <li
-        v-for="notebook in activeNotebooks"
-        :key="notebook.id"
-        :class="['notebook-item', notebook.id === currentId && 'is-active']"
-        role="listitem"
+    </template>
+    <template v-else>
+      <button
+        type="button"
+        class="restore-btn"
+        aria-label="Restore selected notebook"
+        :disabled="!currentId || !isBinActiveNotebook"
+        @click="onRestoreSelectedCell"
       >
-        <button
-          v-if="editingId !== notebook.id"
-          type="button"
-          class="nb-btn"
-          :title="notebook.title"
-          :aria-current="notebook.id === currentId ? 'true' : undefined"
-          @click="select(notebook.id)"
-          @dblclick="startEditing(notebook.id, notebook.title)"
-        >
-          <span class="nb-title">{{ notebook.title }}</span>
-        </button>
-        <div v-else class="nb-btn">
-          <input
-            :ref="setRenameInputRef"
-            v-model="editingTitle"
-            class="rename-input"
-            type="text"
-            @keydown.stop
-            @click.stop
-            @keyup.enter="commitRename(notebook.id)"
-            @blur="commitRename(notebook.id)"
-          />
-        </div>
-      </li>
-    </ul>
-    <div v-else-if="mode === 'notebooks'" class="empty">No notebooks yet.</div>
-
-    <ul
-      v-if="mode === 'bin' && deletedNotebooks.length"
-      class="notebook-list"
-      role="list"
-      aria-label="Deleted notebooks"
-    >
-      <li
-        v-for="notebook in deletedNotebooks"
-        :key="notebook.id"
-        class="notebook-item is-deleted"
-        role="listitem"
+        Restore cell
+      </button>
+      <button
+        type="button"
+        class="restore-btn"
+        aria-label="Restore selected notebook"
+        :disabled="!currentId || isBinActiveNotebook"
+        @click="onRestoreSelectedNotebook"
       >
-        <button
-          type="button"
-          class="nb-btn deleted"
-          :class="[notebook.id === currentId && 'is-active']"
-          :title="notebook.title"
-          @click="workspaceStore.selectNotebookInBin(notebook.id)"
-        >
-          <span class="nb-title">{{ notebook.title }}</span>
-          <span class="nb-meta">{{ formatDate(notebook.deletedAt) }}</span>
-        </button>
-      </li>
-    </ul>
-    <div v-else-if="mode === 'bin'" class="empty">Bin is empty.</div>
+        Restore notebook
+      </button>
+      <button type="button" class="empty-bin-btn" aria-label="Empty bin" @click="onEmptyBin">
+        Empty Bin
+      </button>
+    </template>
   </div>
+
+  <!-- Active notebooks list -->
+  <ul v-if="mode === 'notebooks' && activeNotebooks.length" class="notebook-list" role="list">
+    <li
+      v-for="notebook in activeNotebooks"
+      :key="notebook.id"
+      :class="['notebook-item', notebook.id === currentId && 'is-active']"
+      role="listitem"
+    >
+      <button
+        v-if="editingId !== notebook.id"
+        type="button"
+        class="nb-btn"
+        :title="notebook.title"
+        :aria-current="notebook.id === currentId ? 'true' : undefined"
+        @click="select(notebook.id)"
+        @dblclick="startEditing(notebook.id, notebook.title)"
+      >
+        <span class="nb-title">{{ notebook.title }}</span>
+      </button>
+      <div v-else class="nb-btn">
+        <input
+          :ref="setRenameInputRef"
+          v-model="editingTitle"
+          class="rename-input"
+          type="text"
+          @keydown.stop
+          @click.stop
+          @keyup.enter="commitRename(notebook.id)"
+          @blur="commitRename(notebook.id)"
+        />
+      </div>
+    </li>
+  </ul>
+  <div v-else-if="mode === 'notebooks'" class="empty">No notebooks yet.</div>
+
+  <ul
+    v-if="mode === 'bin' && deletedNotebooks.length"
+    class="notebook-list"
+    role="list"
+    aria-label="Deleted notebooks"
+  >
+    <li
+      v-for="notebook in deletedNotebooks"
+      :key="notebook.id"
+      class="notebook-item is-deleted"
+      role="listitem"
+    >
+      <button
+        type="button"
+        class="nb-btn deleted"
+        :class="[notebook.id === currentId && 'is-active']"
+        :title="notebook.title"
+        @click="workspaceStore.selectNotebookInBin(notebook.id)"
+      >
+        <span class="nb-title">{{ notebook.title }}</span>
+        <span class="nb-meta">{{ formatDate(notebook.deletedAt) }}</span>
+      </button>
+    </li>
+  </ul>
+  <div v-else-if="mode === 'bin'" class="empty">Bin is empty.</div>
 </template>
 
 <script setup lang="ts">

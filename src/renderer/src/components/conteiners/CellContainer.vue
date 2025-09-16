@@ -131,13 +131,13 @@ function onMarginClick(): void {
 .cell-container {
   position: relative;
   display: flex;
-  border: solid 10px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
+  border: solid 1px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
   border-left: 0.5em solid var(--cell-border-color, blue);
   border-radius: var(--cell-container-border-radius, 0px);
   background: var(--cell-background, blue);
-  margin-block: 0rem;
+  margin-block: 0em;
   outline: none;
-  margin-bottom: 2px; /* What font size is used here if I choose to make margin 1em? */
+  margin-bottom: 0px; /* What font size is used here if I choose to make margin 1em? */
 }
 
 .cell-container:focus-visible {
@@ -280,15 +280,6 @@ function onMarginClick(): void {
   width: 100%;
   opacity: 1;
   border-radius: 0px;
-}
-
-.cell-tools {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  font-size: 0.75rem;
-  color: var(--cell-tools-color, #555);
 }
 
 .cell-content {

@@ -1,18 +1,38 @@
 /** Side panel UI styles */
 
-.sidepanel-menubar{
-    border: 0px solid var(--side-panel-border-color, #ccc); /* use/copy button-row-flex-wrap-base */
+.button-row-flex-wrap-base--sidepanel-menubar{
+    border: 10px solid blue; /* debug */
 }
 
 
 /* Different padding than menubar*/
 .sidepanel-selector-row {
-    border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+    border: 0px solid var(--side-panel-border-color, var(--debug-color, red)); /* Placeholder */
 }
 
-.sidepanel-on-off-button {
-    border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
+.sidepanel-button {
+  cursor: pointer;
+  border: var(--border-thickness, 2px) solid var(--button-border-color, var(--debug-color, red));
+  background: var(--button-transparent-off-color, var(--debug-color, red));
+  color: var(--text-color, var(--debug-color, red));
+  padding: var(--sidepanel-button-padding);
+  border-radius: var(--border-radius, 2px);
+  /* Inherit font settings from root */
+  font: inherit;
 }
+
+.sidepanel-button:hover {
+  background: var(--button-hover-color, var(--debug-color, red));
+  border-color: var(--button-border-hover-color, var(--debug-color, red));
+}
+
+.sidepanel-button--on {
+    background: var(--button-on-color, var(--debug-color, #2563eb));
+    color: var(--text-color);
+    border-color: var(--active-border-color, var(--debug-color, #2563eb));
+
+}
+
 
 .sidepanel-action-button {
     border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */

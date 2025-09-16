@@ -1,5 +1,6 @@
 :root {
-
+     /* Empty toolbar placeholder icon of a duck */
+     --icon-empty-toolbar: '🦆';
     /* Unicode Icon Tokens (store actual characters, not HTML entities) */
     --icon-arrow-move-up: '🠉'; /* previously &#129033; */
     --icon-arrow-move-down: '🠋'; /* previously &#129035; */
@@ -58,6 +59,10 @@
     color: currentColor;
 }
 
+/* Placeholder icon */
+.icon-empty-toolbar::before { content: var(--icon-empty-toolbar); }
+
+/* General purpose icons */
 .icon-move-up::before { content: var(--icon-arrow-move-up); }
 .icon-move-down::before { content: var(--icon-arrow-move-down); }
 .icon-flag::before { content: var(--icon-flag); }
