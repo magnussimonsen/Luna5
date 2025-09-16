@@ -12,10 +12,10 @@ Design tokens (layout/spacing)
     --statusbar-z-index: 3000;
     --workspace-web-layout-container-z-index: 2000;
     --workspace-a4-preview-layout-container-z-index: 2000;
-    --sidebar-z-index: 4000;
+    --sidepanel-main-z-index: 4000;
 
     /* Consistent box shadows */
-    --box-shadow: 0 3px 10px rgba(0, 0, 0, 0.9); 
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); 
 
     /* General buttondesign variables */
     --border-radius: 0px;
