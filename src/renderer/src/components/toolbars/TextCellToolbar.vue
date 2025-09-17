@@ -10,9 +10,9 @@
   >
     <!-- BOLD -->
     <button
-      class="top-toolbar-button icon icon-bold"
+      class="top-toolbar__button top-toolbar__button--icon icon-bold"
       type="button"
-      :class="{ active: isActive('bold') }"
+      :class="{ 'top-toolbar__button--active': isActive('bold') }"
       title="Bold (Ctrl+B)"
       aria-label="Bold"
       :disabled="!canRunCommand('toggleBold')"
