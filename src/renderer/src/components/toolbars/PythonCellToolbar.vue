@@ -7,8 +7,8 @@
   >
     <!-- Run button with spinner when running -->
     <button
-      class="top-toolbar-button"
-      :class="{ active: isRunning }"
+      class="top-toolbar__button"
+      :class="{ 'top-toolbar__button--active': isRunning }"
       type="button"
       :disabled="!canRun || isRunning"
       :title="isRunning ? 'Run (working)…' : 'Run selected Python cell (Ctrl + Enter)'"
@@ -22,7 +22,8 @@
     </button>
     <!-- Clear python outputs  -->
     <button
-      class="top-toolbar-button"
+      class="top-toolbar__button"
+      :class="{ 'top-toolbar__button--active': !canRun }"
       type="button"
       :disabled="!canRun"
       :title="'Delete output (Ctrl + Shift + Enter)'"
@@ -36,7 +37,7 @@
     (2) Export code from selected notebook 
      -->
     <button
-      class="top-toolbar-button disabled"
+      class="top-toolbar__button--disabled"
       type="button"
       title="Export code from selected cell (not implemented)"
       @click="onCodeExport"
@@ -53,7 +54,7 @@
     >
     -->
     <button
-      class="top-toolbar-button margin-left-auto reset"
+      class="top-toolbar__button top-toolbar__button--reset"
       type="button"
       :disabled="!canReset"
       :title="

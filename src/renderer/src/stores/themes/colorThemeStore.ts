@@ -71,6 +71,7 @@ export const useThemeStore = defineStore('theme', {
       buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'lightgreen',
+      buttonBorderOnColor: 'green',
       buttonHardOffColor: 'salmon',
       deleteButtonHoverColor: 'firebrick',
       // Disabled button colors
@@ -156,6 +157,7 @@ export const useThemeStore = defineStore('theme', {
       buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'darkgreen',
+      buttonBorderOnColor: 'darkgreen',
       buttonHardOffColor: 'darkred',
       deleteButtonHoverColor: 'darkred',
       // Disabled button colors
@@ -239,6 +241,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--button-hover-color', colors.buttonHoverColor)
       root.style.setProperty('--button-border-hover-color', colors.buttonBorderHoverColor)
       root.style.setProperty('--button-on-color', colors.buttonOnColor)
+      root.style.setProperty('--button-border-on-color', colors.buttonBorderOnColor)
       root.style.setProperty('--button-transparent-off-color', colors.buttonTransparentOffColor)
       root.style.setProperty('--button-hard-off-color', colors.buttonHardOffColor)
       root.style.setProperty('--button-disabled-color', colors.buttonDisabledColor)

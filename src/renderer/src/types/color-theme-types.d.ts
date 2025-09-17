@@ -78,6 +78,7 @@ export type ThemeColorTypes = {
 
   // Toggle button colors
   buttonOnColor: string
+  buttonBorderOnColor: string
   buttonTransparentOffColor: string
   buttonHardOffColor: string
 
