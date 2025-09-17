@@ -1,6 +1,6 @@
 <template>
   <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
-       currently selected cell's editor via the store. -->
+       currently selected cell's editor via the store. ...-->
   <div
     v-if="activeTextEditor"
     class="button-row-flex-wrap-base"
