@@ -1,10 +1,11 @@
 
-.top-toolbar-button {
+/* These button styles apply to all buttons in the top toolbar */
+
+.top-toolbar__button {
     display: flex;
     align-items: center;
     
     background: transparent;
-    color: var(--text-color, #fff);
 
     border: var( --toolbar-button-border);
     border-radius: var(--toolbar-button-radius, 0);
@@ -13,103 +14,74 @@
 
     margin: 0em var(--toolbar-button-gap, 0.4em);
 
-    padding: var(--toolbar-button-padding, 0.3em 0.6em 0.3em 0.6em); /* top, right, bottom, left */
+    padding: var(--toolbar-button-padding, 0.3em 0.6em 0.3em 0.6em); 
     line-height: var(--toolbar-button-height, 1.3em);
 
     font-size: var(--toolbar-font-size);
     font-family: var(--ui-font);
     color: var(--ui-text-color, var(--debug-color));
-    
-}
-/* To do: change to .top-toolbar-button--icon*/
-.top-toolbar-button.icon {
-    font-size: var(--toolbar-font-size);
-    font-family: var(--ui-font);
-
 }
 
-/* Margin utilities to push buttons to the right without 
+/* Hover: applies to every toolbar button */
+.top-toolbar__button:hover {
+  background: var(--button-hover-color, var(--debug-color));
+  color: var(--ui-text-color, var(--debug-color));
+}
+
+.top-toolbar__button:active {
+  background: var(--button-on-color, var(--debug-color));
+  color: var(--ui-text-color, var(--debug-color));
+}
+
+/* ------------  Modifiers ----------------- */
+
+/* For future icon button styles (same hover as regular buttons) */
+.top-toolbar__button--icon {
+  font-size: var(--toolbar-font-size);
+  font-family: var(--ui-font);
+  color: var(--ui-text-color, var(--debug-color));
+}
+
+/* On off buttons */
+.top-toolbar__button--active {
+  background: var(--button-on-color, lightgreen);
+  color: var(--ui-text-color, var(--debug-color)); /* Placeholder for future  var(--active-text-color)*/
+}
+
+.top-toolbar__button--active:hover {
+  background: var(--button-on-color, lightgreen);
+  color: var(--ui-text-color, var(--debug-color)); /* Placeholder for future  var(--active-text-hover-color)*/
+}
+
+/* “Reset/danger” variant */
+.top-toolbar__button--reset {
+  background: var(--button-reset-color, var(--debug-color, red));
+  color: var(--ui-text-color, var(--debug-color, red));
+}
+
+.top-toolbar__button--reset:hover {
+  background: var(--button-reset-color-hover, var(--debug-color, red));
+  color: var(--ui-text-color, var(--debug-color, red));
+}
+
+
+/* Disabled state (modifier + native attr for robustness) */
+.top-toolbar__button--disabled,
+.top-toolbar__button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Margin utilities class to push buttons to the right without 
 using the "button-row-flex-wrap-base flex-end"-style wrappers
 which can cause layout issues in some cases.
 */
 
-.top-toolbar-button.margin-left-auto {
-    margin-left: auto;
+.util-margin-left-auto {
+  margin-left: auto;
 }
 
-.top-toolbar-button.icon.margin-left-auto {
-    margin-left: auto;
-}
-
-
-.top-toolbar-button.icon-highlight { /* No icons, just buttons with highlights color background */
+/* Used for highlighted buttons*/
+.util-padding-zero {
   padding: 0;
-  font-size: var(--toolbar-font-size);
-  font-family: var(--ui-font);
- 
 }
-
-.top-toolbar-button:hover {
-  background: var(--button-hover-color, #333);
-  color: var(--text-color, #fff);
-
-}
-
-.top-toolbar-button.icon:hover {
-  background: var(--button-hover-color, #333);
-  color: var(--text-color, #fff);
-
-}
-
-.top-toolbar-button.active {
-  background: var(--button-on-color, lightgreen);
-  color: var(--text-color, #fff);
-}
-
-.top-toolbar-button.icon.active {
-  background: var(--button-on-color, lightgreen);
-  color: var(--text-color, #fff);
-}
-
-
-.top-toolbar-button.reset {
-  background: var(--button-reset-color, #b91c1c);
-  color: var(--text-color, #fff);
-}
-
-.top-toolbar-button.icon.reset {
-  background: var(--button-reset-color, #b91c1c);
-  color: var(--text-color, #fff);
-}
-
-.top-toolbar-button.reset:hover {
-  background: var(--button-reset-color-hover, #b91c1c);
-  color: var(--text-color, #fff);
-}
-
-.top-toolbar-button.icon.reset {
-  background: var(--button-reset-color, #b91c1c);
-  color: var(--text-color, #fff);
-}
-
-.top-toolbar-button.label {
-  opacity: 1; /* Style can not be empty */
-}
-
-.top-toolbar-button.icon.label {
-  opacity: 1; /* Style can not be empty */
-}
-
-.top-toolbar-button.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.top-toolbar-button.icon.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Component spesific styles */
-
-

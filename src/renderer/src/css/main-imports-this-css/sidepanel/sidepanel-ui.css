@@ -10,36 +10,28 @@
     border: 0px solid var(--side-panel-border-color, var(--debug-color, red)); /* Placeholder */
 }
 
-.sidepanel-button {
+.sidepanel__button {
   cursor: pointer;
   border: var(--border-thickness, 2px) solid var(--button-border-color, var(--debug-color, red));
   background: var(--button-transparent-off-color, var(--debug-color, red));
   color: var(--text-color, var(--debug-color, red));
   padding: var(--sidepanel-button-padding);
   border-radius: var(--border-radius, 2px);
+  border: 0px solid var(--side-panel-border-color, #ccc);
+    /* Placeholder */
   /* Inherit font settings from root */
   font: inherit;
 }
 
-.sidepanel-button:hover {
+.sidepanel__button:hover {
   background: var(--button-hover-color, var(--debug-color, red));
   border-color: var(--button-border-hover-color, var(--debug-color, red));
 }
 
-.sidepanel-button--on {
+.sidepanel__button--active {
     background: var(--button-on-color, var(--debug-color, #2563eb));
     color: var(--text-color);
     border-color: var(--active-border-color, var(--debug-color, #2563eb));
 
 }
 
-
-.sidepanel-action-button {
-    border: 0px solid var(--side-panel-border-color, #ccc); /* Placeholder */
-}
-
-
-.sidepanel-action-button {
-    border: 0px solid var(--side-panel-border-color, #ccc);
-    /* Placeholder */
-}
