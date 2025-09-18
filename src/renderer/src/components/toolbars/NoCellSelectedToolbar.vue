@@ -6,22 +6,24 @@
     :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
     aria-label="Placeholder toolbar - no cell selected"
-     :style="{
-        fontSize: 'var(--toolbar-font-size)',
-        fontFamily: 'var(--ui-font)'
-      }"
+    :style="{
+      fontSize: 'var(--top-toolbar-font-size)',
+      fontFamily: 'var(--ui-font)'
+    }"
   >
     <button
-      class="top-toolbar-button icon"
+      class="top-toolbar__button"
       type="button"
       title="No cell selected"
       aria-label="No cell selected"
       :style="{
-        fontSize: 'var(--toolbar-font-size)',
+        fontSize: 'var(--top-toolbar-font-size)',
         fontFamily: 'var(--ui-font)'
       }"
       @click="handlePlaceholdeButtonPressed"
-    >No cell selected</button>
+    >
+      No cell selected
+    </button>
     <!-- <button class="top-toolbar-button" type="button" @click="handleInsertTextCell">Insert text cell</button> -->
     <!-- <button class="top-toolbar-button" type="button" @click="handleInsertPythonCell">Insert Python cell</button> -->
   </div>
