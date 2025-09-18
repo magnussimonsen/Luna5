@@ -17,7 +17,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       statusbarFontSize: '10px',
       sidepanelMenubarFontSize: '14px',
       sidepanelFontSize: '14px',
-      toolbarFontSize: '16px',
+      topToolbarFontSize: '16px',
       /* This (defaultCellFontSize)is the fontsize that will be set for the
       selected cell when user click the "reset font size"-button in the statusbar. */
       defaultCellFontSize: '14px',
@@ -44,7 +44,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       document.documentElement.style.setProperty('--sidepanel-font-size', size)
     },
     setToolbarFontSize(size: string) {
-      this.fontSizes.toolbarFontSize = size
+      this.fontSizes.topToolbarFontSize = size
       document.documentElement.style.setProperty('--toolbar-font-size', size)
     },
     // This sets the default font size for cells when user clicks "reset font size" in statusbar
@@ -104,7 +104,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       )
       document.documentElement.style.setProperty(
         '--toolbar-font-size',
-        this.fontSizes.toolbarFontSize
+        this.fontSizes.topToolbarFontSize
       )
       document.documentElement.style.setProperty(
         '--default-cells-font-size',

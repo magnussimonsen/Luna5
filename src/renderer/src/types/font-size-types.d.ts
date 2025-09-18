@@ -8,7 +8,7 @@ export type FontSizeTypes = {
   statusbarFontSize: string
   sidepanelMenubarFontSize: string
   sidepanelFontSize: string
-  toolbarFontSize: string
+  topToolbarFontSize: string
   defaultCellFontSize: string
   codeEditorCellFontSize: string
   textEditorCellFontSize: string
