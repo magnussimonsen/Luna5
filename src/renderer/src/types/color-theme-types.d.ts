@@ -23,8 +23,8 @@ export type ThemeColorTypes = {
   pythonStdOutBackground: string
   pythonImageBackground: string
 
-  toolbarBackground: string
-  toolbarBorderColor: string
+  topToolbarBackground: string
+  topToolbarBorderColor: string
 
   // Workspace
   workspaceBackground: string
