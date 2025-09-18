@@ -4,24 +4,24 @@ The top toolbar container that holds the toolbars for the selected cell.
 
 .top-toolbar-container {
     display: flex;
-    font-size: var(--toolbar-font-size);
+    font-size: var(--top-toolbar-font-size);
     font-family: var(--ui-font);
 
     align-items: center;
     justify-content: flex-start; /*  Allows left button row and right button row to be spaced apart */
     
-    background: var(--toolbar-background, #f4f4f4);
+    background: var(--top-toolbar-background, #f4f4f4);
 
     height: fit-content;
 
     
     color: var(--ui-text-color, var(--debug-color));
 
-    z-index: var(--toolbar-z-index, 2000);
+    z-index: var(--top-toolbar-z-index, 2000);
 
-    padding: var(--toolbar-container-padding, 0.2em 0.5em);
+    padding: var(--top-toolbar-container-padding, 0.2em 0.5em);
 
-    margin-bottom: var(--toolbar-margin-bottom, min(5px,0.5em));
+    margin-bottom: var(--top-toolbar-margin-bottom, min(5px,0.5em));
 }
 
 .top-toolbar-placeholder {
