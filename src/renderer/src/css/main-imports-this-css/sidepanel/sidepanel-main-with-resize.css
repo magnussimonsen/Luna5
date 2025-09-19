@@ -45,3 +45,7 @@ body.sidepanel-resizing {
 .resize-handle.left:active {
   background: var(--active-border-color-hover, green);
 }
+
+.util-sidepanel-z-index {
+  z-index: var(--sidepanel-main-z-index, 4000);
+}

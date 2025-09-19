@@ -1,6 +1,9 @@
 <template>
-  
-  <div class="button-row-flex-wrap-base" role="tablist" aria-label="Notebook views">
+  <div
+    class="button-row-flex-wrap-base"
+    role="tablist"
+    aria-label="Notebook views"
+  >
     <button
       type="button"
       class="sidepanel-button"
