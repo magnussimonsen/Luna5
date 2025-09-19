@@ -15,14 +15,14 @@
       class="top-toolbar__button"
       type="button"
       title="No cell selected"
-      aria-label="No cell selected"
+      aria-label="No cell selected button placeholder"
       :style="{
         fontSize: 'var(--top-toolbar-font-size)',
         fontFamily: 'var(--ui-font)'
       }"
       @click="handlePlaceholdeButtonPressed"
     >
-      No cell selected
+      No cell selected button placeholder
     </button>
     <!-- <button class="top-toolbar-button" type="button" @click="handleInsertTextCell">Insert text cell</button> -->
     <!-- <button class="top-toolbar-button" type="button" @click="handleInsertPythonCell">Insert Python cell</button> -->

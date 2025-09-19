@@ -15,7 +15,7 @@ This component displays the appropriate toolbar for the currently selected cell 
   -->
   <div class="top-toolbar-container">
     <component :is="currentToolbarComponent" v-if="currentToolbarComponent" />
-    <div v-else class="top-toolbar-container" aria-hidden="true"><NoCellSelectedToolbar /></div>
+    <div v-else class="top-toolbar-container" aria-hidden="true">No Cell Selected here</div>
   </div>
 </template>
 
@@ -39,7 +39,7 @@ const toolbarComponents = {
 // Computes which toolbar component to show based on the selected cell type
 const currentToolbarComponent = computed(() => {
   const kind = selectionStore.selectedCellKind
-  if (!kind) return null // No cell selected
+  if (!kind) return NoCellSelectedToolbar
   return toolbarComponents[kind as keyof typeof toolbarComponents] || null
 })
 </script>
