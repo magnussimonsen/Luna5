@@ -72,7 +72,7 @@
 }
 
 .top-toolbar__button--reset:hover {
-  background: var(--top-button-reset-color-hover, var(--debug-color, red));
+  background: var(--button-reset-hover-color, var(--debug-color, red));
   color: var(--ui-text-color, var(--debug-color, red));
   font-size: var(--top-toolbar-font-size);
   font-family: var(--ui-font);

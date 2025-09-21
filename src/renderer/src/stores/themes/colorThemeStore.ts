@@ -4,6 +4,8 @@ import type { ThemeColorTypes } from '@renderer/types/color-theme-types'
 
 // Remember to update the color-theme.css file with the new color-theme values
 
+// TO DO: REMOVE BUTTON ON AND REPLACE WITH BUTTON ACTIVE. INCONSISTENT NAMING IN CURRENT IMPLEMENTATION */
+
 export const useThemeStore = defineStore('theme', {
   state: () => ({
     isDarkMode: false,
@@ -49,7 +51,7 @@ export const useThemeStore = defineStore('theme', {
       dropdownBorderColor: '#cccccc',
       // Active
       activeBackgroundColor: 'lightgreen',
-      activeBorderColor: 'black',
+      activeBorderColor: 'lightgreen',
       activeBorderColorHover: 'lightgreen',
       // Soft locked
       softLockedColor: 'orange',
@@ -81,8 +83,8 @@ export const useThemeStore = defineStore('theme', {
       buttonDisabledTextColor: '#aaa',
       buttonDisabledHoverColor: 'gray',
       // General reset or delete button colors
-      buttonResetColor: 'salmon',
-      buttonResetHoverColor: 'firebrick',
+      buttonResetColor: 'darksalmon',
+      buttonResetHoverColor: 'red',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'lightgreen',
       resetZoomButtonColorOffCenter: 'salmon',
@@ -138,7 +140,7 @@ export const useThemeStore = defineStore('theme', {
       dropdownBorderColor: '#555555',
       // Active
       activeBackgroundColor: 'darkgreen',
-      activeBorderColor: 'lightgray',
+      activeBorderColor: 'darkgreen',
       activeBorderColorHover: 'darkgreen',
       // Soft locked
       softLockedColor: 'saddlebrown',
@@ -173,7 +175,7 @@ export const useThemeStore = defineStore('theme', {
       buttonResetColor: 'firebrick',
       buttonResetHoverColor: 'red',
       /* Reset zoom button color */
-      resetZoomButtonColorCenter: 'limegreen',
+      resetZoomButtonColorCenter: 'darkgreen',
       resetZoomButtonColorOffCenter: 'darkred',
       /* Flagged cells */
       flaggedCellColor: 'darkred', // red for flagged cells

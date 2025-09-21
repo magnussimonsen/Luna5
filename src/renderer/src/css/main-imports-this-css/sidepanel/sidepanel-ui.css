@@ -97,7 +97,6 @@
 
 .sidepanel__button--delete:hover {
   background: var(--button-reset-hover-color, #2563eb);
-  color: var(--text-color, #fff);
 }
 
 /*------------------------*/

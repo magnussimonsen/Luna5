@@ -27,7 +27,7 @@
     <button
       type="button"
       class="sidepanel__button sidepanel__button-icon"
-      :disabled="!currentId"
+      :disabled="!currentId || mode === 'bin'"
       @click="moveNotebookUp"
     >
       <span aria-label="Move notebook up" class="icon-move-up"></span>
@@ -35,7 +35,7 @@
     <button
       type="button"
       class="sidepanel__button sidepanel__button-icon"
-      :disabled="!currentId || (mode === 'bin' && isBinEmpty)"
+      :disabled="!currentId || mode === 'bin'"
       @click="moveNotebookDown"
     >
       <span aria-label="Move notebook down" class="icon-move-down"></span>
@@ -44,8 +44,12 @@
       type="button"
       title="Flag selected notebook (Not implemented yet)"
       class="sidepanel__button sidepanel__button-icon"
-      :disabled="!currentId || (mode === 'bin' && isBinEmpty)"
-      @click="moveNotebookDown"
+      :disabled="!currentId || mode === 'bin'"
+      @click="
+        () => {
+          console.log('Flag notebook - not implemented yet')
+        }
+      "
     >
       <span aria-label="Flag selected notebook (Not implemented yet)" class="icon-flag"></span>
     </button>
@@ -96,7 +100,7 @@
         type="button"
         class="sidepanel__button"
         aria-label="Restore selected notebook"
-        :disabled="!currentId || isBinActiveNotebook"
+        :disabled="!currentId || isBinActiveNotebook || isBinEmpty"
         @click="onRestoreSelectedNotebook"
       >
         Restore notebook
@@ -105,6 +109,7 @@
         type="button"
         class="sidepanel__button sidepanel__button--delete"
         aria-label="Empty bin"
+        :disabled="isBinEmpty"
         @click="onEmptyBin"
       >
         Empty Bin
@@ -200,7 +205,9 @@ const isBinActiveNotebook = computed(() => {
   if (!id) return false
   return !!workspace.value.notebooks[id]
 })
+
 const isBinEmpty = computed(() => workspace.value.recycleBin.notebookOrder.length === 0)
+
 // Inline rename state
 const editingId = ref<string | null>(null)
 const editingTitle = ref('')
