@@ -8,10 +8,10 @@ export const useThemeStore = defineStore('theme', {
   state: () => ({
     isDarkMode: false,
     lightTheme: {
-      lunaPalatte1: '', // Example color for Luna Palette (For later use)
-      lunaPalatte2: '',
-      lunaPalatte3: '',
-      lunaPalatte4: '',
+      lunaPalatte1: 'red', // Example color for Luna Palette (For later use)
+      lunaPalatte2: 'blue',
+      lunaPalatte3: 'green',
+      lunaPalatte4: 'yellow',
       // Development debug color
       debugColor: 'red',
       // Background colors
@@ -49,7 +49,7 @@ export const useThemeStore = defineStore('theme', {
       dropdownBorderColor: '#cccccc',
       // Active
       activeBackgroundColor: 'lightgreen',
-      activeBorderColor: 'lightgreen',
+      activeBorderColor: 'black',
       activeBorderColorHover: 'lightgreen',
       // Soft locked
       softLockedColor: 'orange',
@@ -76,11 +76,11 @@ export const useThemeStore = defineStore('theme', {
       buttonHardOffColor: 'salmon',
       deleteButtonHoverColor: 'firebrick',
       // Disabled button colors
-      buttonDisabledColor: 'gray',
+      buttonDisabledColor: 'transparent',
       buttonDisabledBorderColor: 'darkgray',
       buttonDisabledTextColor: '#aaa',
       buttonDisabledHoverColor: 'gray',
-      // General reset button colors
+      // General reset or delete button colors
       buttonResetColor: 'salmon',
       buttonResetHoverColor: 'firebrick',
       /* Reset zoom button color */
@@ -92,14 +92,16 @@ export const useThemeStore = defineStore('theme', {
       linkColor: 'green',
       /* Scrollbar colors */
       scrollbarThumbColor: 'gray',
-      scrollbarTrackColor: 'lightgray'
+      scrollbarTrackColor: 'lightgray',
+    /* Input field colors */
+    inputFieldBackgroundColor: 'white'
     } as ThemeColorTypes,
 
     darkTheme: {
-      lunaPalatte1: '', // Example color for Luna Palette (For later use)
-      lunaPalatte2: '',
-      lunaPalatte3: '',
-      lunaPalatte4: '',
+      lunaPalatte1: 'red', // Example color for Luna Palette (For later use)
+      lunaPalatte2: 'blue',
+      lunaPalatte3: 'green',
+      lunaPalatte4: 'yellow',
       // Development debug color
       debugColor: 'red',
       // Background colors
@@ -136,7 +138,7 @@ export const useThemeStore = defineStore('theme', {
       dropdownBorderColor: '#555555',
       // Active
       activeBackgroundColor: 'darkgreen',
-      activeBorderColor: 'darkgreen',
+      activeBorderColor: 'lightgray',
       activeBorderColorHover: 'darkgreen',
       // Soft locked
       softLockedColor: 'saddlebrown',
@@ -163,15 +165,15 @@ export const useThemeStore = defineStore('theme', {
       buttonHardOffColor: 'darkred',
       deleteButtonHoverColor: 'darkred',
       // Disabled button colors
-      buttonDisabledColor: 'gray',
+      buttonDisabledColor: 'transparent',
       buttonDisabledBorderColor: 'darkgray',
       buttonDisabledTextColor: '#555555',
       buttonDisabledHoverColor: 'gray',
       // General reset button colors
-      buttonResetColor: 'darkred',
-      buttonResetHoverColor: 'firebrick',
+      buttonResetColor: 'firebrick',
+      buttonResetHoverColor: 'red',
       /* Reset zoom button color */
-      resetZoomButtonColorCenter: 'darkgreen',
+      resetZoomButtonColorCenter: 'limegreen',
       resetZoomButtonColorOffCenter: 'darkred',
       /* Flagged cells */
       flaggedCellColor: 'darkred', // red for flagged cells
@@ -179,7 +181,9 @@ export const useThemeStore = defineStore('theme', {
       linkColor: 'limegreen',
       /* Scrollbar colors */
       scrollbarThumbColor: '#555555',
-      scrollbarTrackColor: '#111111'
+      scrollbarTrackColor: '#111111',
+    /* Input field colors */
+    inputFieldBackgroundColor: '#333333'
     } as ThemeColorTypes
   }),
 
@@ -266,6 +270,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--link-color', colors.linkColor)
       root.style.setProperty('--scrollbar-thumb-color', colors.scrollbarThumbColor)
       root.style.setProperty('--scrollbar-track-color', colors.scrollbarTrackColor)
+      root.style.setProperty('--input-field-background-color', colors.inputFieldBackgroundColor)
     },
     getLightTheme() {
       return this.lightTheme

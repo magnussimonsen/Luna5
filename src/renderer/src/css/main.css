@@ -43,7 +43,6 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/sidepanel/sidepanel-content-container.css';
 @import './main-imports-this-css/sidepanel/sidepanel-ui.css';
 
-@import './main-imports-this-css/sidepanel/sidepanel-notebook/sidepanel-notebook.css';
 #app {
   /* App root layout */
   min-height: 100vh;

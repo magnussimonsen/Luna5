@@ -16,7 +16,6 @@
 .settings-panel {
 	display: flex;
 	flex-direction: column;
-	gap: 0.5em;
 }
 
 /* Content area under the selector row */

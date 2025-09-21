@@ -111,4 +111,7 @@ export type ThemeColorTypes = {
   // Sctollbar colors
   scrollbarThumbColor: string
   scrollbarTrackColor: string
+
+  // Input field colors
+  inputFieldBackgroundColor: string
 }

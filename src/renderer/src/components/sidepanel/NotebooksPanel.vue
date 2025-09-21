@@ -1,13 +1,13 @@
 <template>
   <div
-    class="button-row-flex-wrap-base button-row-flex-wrap-base__sidepanel-menubar"
+    class="sidepanel-row-flex-wrap sidepanel-row-flex-wrap__sidepanel-menubar"
     role="tablist"
     aria-label="Notebook views"
   >
     <button
       type="button"
-      class="sidepanel-menubar__button"
-      :class="mode === 'notebooks' && 'sidepanel-menubar__button--active'"
+      class="sidepanel__button"
+      :class="mode === 'notebooks' && 'sidepanel__button--active'"
       role="tab"
       :aria-selected="mode === 'notebooks'"
       @click="onClickNotebooksTab"
@@ -16,67 +16,76 @@
     </button>
     <button
       type="button"
-      class="sidepanel-menubar__button"
-      :class="mode === 'bin' && 'sidepanel-menubar__button--active'"
+      class="sidepanel__button"
+      :class="mode === 'bin' && 'sidepanel__button--active'"
       role="tab"
       :aria-selected="mode === 'bin'"
       @click="onClickBinTab"
     >
-      Bin
+      Recycle Bin
     </button>
     <button
       type="button"
-      class="sidepanel-menubar__button"
+      class="sidepanel__button sidepanel__button-icon"
       :disabled="!currentId"
       @click="moveNotebookUp"
     >
-      <span
-        class="sidepanel-menubar__button sidepanel-menubar__button-icon"
-        aria-label="Move notebook up"
-        >↑</span
-      >
+      <span aria-label="Move notebook up" class="icon-move-up"></span>
     </button>
     <button
       type="button"
-      class="sidepanel-menubar__button"
-      :disabled="!currentId"
+      class="sidepanel__button sidepanel__button-icon"
+      :disabled="!currentId || (mode === 'bin' && isBinEmpty)"
       @click="moveNotebookDown"
     >
-      <span
-        class="sidepanel-menubar__button sidepanel-menubar__button-icon"
-        aria-label="Move notebook down"
-        >↓</span
-      >
+      <span aria-label="Move notebook down" class="icon-move-down"></span>
+    </button>
+    <button
+      type="button"
+      title="Flag selected notebook (Not implemented yet)"
+      class="sidepanel__button sidepanel__button-icon"
+      :disabled="!currentId || (mode === 'bin' && isBinEmpty)"
+      @click="moveNotebookDown"
+    >
+      <span aria-label="Flag selected notebook (Not implemented yet)" class="icon-flag"></span>
     </button>
   </div>
 
   <!-- Row 2: action buttons (depends on mode) -->
-  <div class="button-row-flex-wrap-base button-row-flex-wrap-base--sidepanel-menubar">
+  <div class="sidepanel-row-flex-wrap sidepanel-row-flex-wrap__sidepanel-menubar">
     <template v-if="mode === 'notebooks'">
       <button
         type="button"
-        class="sidepanel-menubar__button"
+        class="sidepanel__button"
         aria-label="Create new notebook"
         @click="onAdd"
       >
         Create new notebook
       </button>
-      <!--
-          Temporarily disabled: these actions are moved to the Edit menu.
-          <button type="button" class="delete-btn" aria-label="Move selected cell to bin" :disabled="!currentId" @click="onSelectedCellDelete">
-            Cell 
-            Bin
-          </button>
-          <button type="button" class="delete-btn" aria-label="Delete selected notebook" :disabled="!currentId" @click="onSelectedNotebookDelete">
-            Notebook 
-            Bin
-          </button>
-          -->
+      <!-- Temporarily disabled: these actions are moved to the Edit menu.       <button
+        type="button"
+        class="delete-btn"
+        aria-label="Move selected cell to bin"
+        :disabled="!currentId"
+        @click="onSelectedCellDelete"
+      >
+        Delete cell
+      </button>
+      <button
+        type="button"
+        class="delete-btn"
+        aria-label="Delete selected notebook"
+        :disabled="!currentId"
+        @click="onSelectedNotebookDelete"
+      >
+        Delete notebook
+      </button>
+      -->
     </template>
     <template v-else>
       <button
         type="button"
-        class="restore-btn"
+        class="sidepanel__button"
         aria-label="Restore selected notebook"
         :disabled="!currentId || !isBinActiveNotebook"
         @click="onRestoreSelectedCell"
@@ -85,43 +94,50 @@
       </button>
       <button
         type="button"
-        class="restore-btn"
+        class="sidepanel__button"
         aria-label="Restore selected notebook"
         :disabled="!currentId || isBinActiveNotebook"
         @click="onRestoreSelectedNotebook"
       >
         Restore notebook
       </button>
-      <button type="button" class="empty-bin-btn" aria-label="Empty bin" @click="onEmptyBin">
+      <button
+        type="button"
+        class="sidepanel__button sidepanel__button--delete"
+        aria-label="Empty bin"
+        @click="onEmptyBin"
+      >
         Empty Bin
       </button>
     </template>
   </div>
 
   <!-- Active notebooks list -->
-  <ul v-if="mode === 'notebooks' && activeNotebooks.length" class="notebook-list" role="list">
+  <ul
+    v-if="mode === 'notebooks' && activeNotebooks.length"
+    class="sidepanel-content-container-under-menubar sidepanel__notebook-list"
+    role="list"
+  >
     <li
       v-for="notebook in activeNotebooks"
       :key="notebook.id"
-      :class="['notebook-item', notebook.id === currentId && 'is-active']"
+      :class="[
+        'sidepanel__notebook-item',
+        notebook.id === currentId && 'sidepanel__notebook-item sidepanel__notebook-item--active'
+      ]"
       role="listitem"
+      :title="notebook.title"
+      :aria-current="notebook.id === currentId ? 'true' : undefined"
+      @click="select(notebook.id)"
+      @dblclick="startEditing(notebook.id, notebook.title)"
     >
-      <button
-        v-if="editingId !== notebook.id"
-        type="button"
-        class="nb-btn"
-        :title="notebook.title"
-        :aria-current="notebook.id === currentId ? 'true' : undefined"
-        @click="select(notebook.id)"
-        @dblclick="startEditing(notebook.id, notebook.title)"
-      >
-        <span class="nb-title">{{ notebook.title }}</span>
-      </button>
-      <div v-else class="nb-btn">
+      <span v-if="editingId !== notebook.id">{{ notebook.title }}</span>
+      <div v-else>
         <input
           :ref="setRenameInputRef"
           v-model="editingTitle"
-          class="rename-input"
+          class="sidepanel__notebook-rename-input"
+          size="100"
           type="text"
           @keydown.stop
           @click.stop
@@ -131,33 +147,33 @@
       </div>
     </li>
   </ul>
-  <div v-else-if="mode === 'notebooks'" class="empty">No notebooks yet.</div>
+  <div v-else-if="mode === 'notebooks'" class="sidepanel__test-message--empty">
+    No notebooks yet.
+  </div>
 
   <ul
     v-if="mode === 'bin' && deletedNotebooks.length"
-    class="notebook-list"
+    class="sidepanel-content-container-under-menubar sidepanel__notebook-list"
     role="list"
     aria-label="Deleted notebooks"
   >
     <li
       v-for="notebook in deletedNotebooks"
       :key="notebook.id"
-      class="notebook-item is-deleted"
+      class="sidepanel__notebook-item sidepanel__notebook-item--notebook-in-bin"
       role="listitem"
+      :class="[
+        notebook.id === currentId &&
+          'sidepanel__notebook-item--active sidepanel__notebook-item--notebook-in-bin'
+      ]"
+      :title="notebook.title"
+      @click="workspaceStore.selectNotebookInBin(notebook.id)"
     >
-      <button
-        type="button"
-        class="nb-btn deleted"
-        :class="[notebook.id === currentId && 'is-active']"
-        :title="notebook.title"
-        @click="workspaceStore.selectNotebookInBin(notebook.id)"
-      >
-        <span class="nb-title">{{ notebook.title }}</span>
-        <span class="nb-meta">{{ formatDate(notebook.deletedAt) }}</span>
-      </button>
+      <span>{{ notebook.title }}</span>
+      <span class="sidepanel__notebook_meta-info">{{ formatDate(notebook.deletedAt) }}</span>
     </li>
   </ul>
-  <div v-else-if="mode === 'bin'" class="empty">Bin is empty.</div>
+  <div v-else-if="mode === 'bin'" class="sidepanel__test-message--empty">Bin is empty.</div>
 </template>
 
 <script setup lang="ts">
@@ -184,6 +200,7 @@ const isBinActiveNotebook = computed(() => {
   if (!id) return false
   return !!workspace.value.notebooks[id]
 })
+const isBinEmpty = computed(() => workspace.value.recycleBin.notebookOrder.length === 0)
 // Inline rename state
 const editingId = ref<string | null>(null)
 const editingTitle = ref('')
@@ -288,18 +305,17 @@ function commitRename(id: string): void {
   editingTitle.value = ''
 }
 
-// Active-mode: move current notebook to Bin
 /*
+// Active-mode: move current notebook to Bin
 function onSelectedNotebookDelete(): void {
   if (!currentId.value) return
   const ok = window.confirm('Move this notebook to the Bin?')
   if (!ok) return
   workspaceStore.deleteNotebook(currentId.value)
 }
-*/
+
 
 // Active-mode: move selected cell to Bin (soft-delete)
-/*
 function onSelectedCellDelete(): void {
   const ok = workspaceStore.softDeleteSelectedCell()
   if (!ok) {
@@ -353,167 +369,5 @@ function formatDate(iso?: string): string {
 </script>
 
 <style scoped>
-.notebooks-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.6rem 0.6rem 1rem;
-  /* Centralized font control for entire component */
-  font-family: var(--ui-font, 'Arial', sans-serif);
-  font-size: var(--sidepanel-menu-bar-font-size, 1em);
-}
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4em;
-}
-
-.title {
-  margin: 0;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-/* Replaced with .button-row-flex-wrap-base.css from css-folder
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25em;
-}*/
-.toggle-btn {
-  cursor: pointer;
-  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
-  background: var(--button-transparent-off-color, transparent);
-  color: var(--text-color, #222);
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius, 4px);
-  /* Inherit font settings from root */
-  font: inherit;
-}
-
-.toggle-btn:hover {
-  background: var(--button-hover-color, #2563eb);
-  border-color: var(--button-border-hover-color, #2563eb);
-}
-.toggle-btn.is-active {
-  background: var(--button-on-color, #2563eb);
-  color: var(--text-color);
-  border-color: var(--active-border-color, #2563eb);
-}
-.toggle-btn.is-active:hover {
-  background: var(--button-hover-color, #1d4ed8);
-  color: var(--text-color);
-  border-color: var(--button-border-hover-color, #1d4ed8);
-}
-.add-btn,
-.restore-btn {
-  cursor: pointer;
-  color: var(--text-color, blue);
-  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
-  background: var(--button-background-color, #fff);
-  padding: 0 0.4rem;
-  border-radius: 4px;
-  line-height: 1.2;
-  min-height: 1.6rem;
-  /*Bold text*/
-  font-weight: bold;
-  font: inherit;
-}
-.restore-btn:disabled {
-  opacity: 0.45;
-  filter: grayscale(0.6) blur(0.5px);
-  cursor: not-allowed;
-}
-.add-btn:hover,
-.restore-btn:hover {
-  background: var(--button-hover-color, #2563eb);
-  color: var(--text-color, #fff);
-  border-color: var(--button-border-hover-color, #2563eb);
-}
-.delete-btn,
-.empty-bin-btn {
-  cursor: pointer;
-  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
-  background: var(--button-transparent-off-color, transparent);
-  color: var(--text-color, #222);
-  padding: 0 0.4rem;
-  border-radius: 4px;
-  line-height: 1.2;
-  min-height: 1.6rem;
-  /*Bold text*/
-  font-weight: bold;
-  font: inherit;
-}
-.delete-btn:hover,
-.empty-bin-btn:hover {
-  background: var(--delete-button-hover-color, #2563eb);
-  color: var(--text-color, #fff);
-  border-color: var(--button-border-hover-color, #2563eb);
-}
-
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.2em;
-  height: 1.2em;
-}
-
-.notebook-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.nb-btn {
-  width: 100%;
-  text-align: left;
-  color: var(--text-color, #222);
-  background: var(--sidepanel-background, red);
-  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
-  padding: 0.35rem 0.45rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font: inherit;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.rename-input {
-  width: 100%;
-  font: inherit;
-  padding: 0.2rem 0.3rem;
-  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
-  border-radius: 4px;
-}
-.nb-btn:hover,
-.notebook-item.is-active .nb-btn:hover {
-  /* background: var(--button-hover-color, #2563eb); */
-  border-color: var(--button-border-hover-color, #2563eb);
-}
-.notebook-item.is-active .nb-btn {
-  background: var(--active-background-color, rgba(37, 99, 235, 0.08));
-  border-color: var(--active-border-color, #2563eb);
-}
-.nb-btn.is-active {
-  background: var(--active-background-color, rgba(37, 99, 235, 0.08));
-  border-color: var(--active-border-color, #2563eb);
-}
-.notebook-item.is-deleted .nb-btn,
-.nb-btn.deleted {
-  opacity: 0.7;
-  cursor: pointer;
-  border: var(--border-thickness, 2px) dashed var(--button-border-color, #ccc);
-}
-.nb-meta {
-  margin-left: auto;
-  font-size: 0.6rem;
-  opacity: 0.8;
-}
-.empty {
-  opacity: 0.7;
-  font-style: italic;
-}
+/** Styles for the notebooks panel are in the css folder */
 </style>

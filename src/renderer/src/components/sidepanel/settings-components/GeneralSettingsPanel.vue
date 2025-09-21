@@ -111,9 +111,9 @@
           <label for="toolbar-font-size-select">Toolbar Font Size:</label>
           <select
             id="toolbar-font-size-select"
-            v-model="fontSizeStore.fontSizes.toolbarFontSize"
+            v-model="fontSizeStore.fontSizes.topToolbarFontSize"
             :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontSizeStore.setToolbarFontSize(fontSizeStore.fontSizes.toolbarFontSize)"
+            @change="fontSizeStore.setToolbarFontSize(fontSizeStore.fontSizes.topToolbarFontSize)"
           >
             <option
               v-for="size in fontSizeOptions"
@@ -125,7 +125,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <!-- Set the font size for side panel menu bar -->
+        <!-- Set the font size for side panel menu bar 
         <div class="setting-row">
           <label for="sidepanel-menubar-font-size-select">Side Panel Menu Bar Font Size:</label>
           <select
@@ -147,7 +147,7 @@
             </option>
           </select>
           <ImplementedMark :implemented="true" />
-        </div>
+        </div>-->
         <div class="setting-row">
           <label for="sidepanel-font-size-select">Side Panel Font Size:</label>
           <select

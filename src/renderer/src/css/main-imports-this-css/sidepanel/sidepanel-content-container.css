@@ -7,7 +7,5 @@ all the specific side panel types*/
   padding: var(--sidepanel-content-padding); /* left padding for handle space */
   display: flex;
   flex-direction: column;
-
-  border: 0em solid var(--sidepanel-border-color, var(--debug-color), red); /* Debug border to visualize the container */
   background: var(--sidepanel-background, var(--debug-color), red);
 }

@@ -105,6 +105,7 @@ Design tokens (layout/spacing)
 
     /* Sidepanel notebook design */
     --sidepanel-notebook-item-padding: 0.3em 0.3em;
+    --sidepanel-notebook-item-border-width: 2px;
     --sidepanel-notebook-item-border-radius: 0.25em;
     --sidepanel-notebook-item-gap: 0.4em;
 }

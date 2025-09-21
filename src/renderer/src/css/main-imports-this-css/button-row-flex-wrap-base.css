@@ -17,7 +17,6 @@ No padding, gap, or margin defined here; these should be set in design.css
   /* No padding, gap, or margin here; set in design.css */
 }
 
-
 /* This class extends button-row-flex-wrap-base  with left margin auto */
 .button-row-flex-wrap-base.margin-left-auto {
   margin-left: auto;

@@ -15,7 +15,7 @@ export const useFontSizeStore = defineStore('fontSize', {
       rootFontSize: '16px', // Used to set the rem unit at app initialization, not user changeable
       menubarFontSize: '14px',
       statusbarFontSize: '10px',
-      sidepanelMenubarFontSize: '14px',
+      sidepanelMenubarFontSize: '14px' /* THIS IS DEPRECATED */,
       sidepanelFontSize: '14px',
       topToolbarFontSize: '16px',
       /* This (defaultCellFontSize)is the fontsize that will be set for the

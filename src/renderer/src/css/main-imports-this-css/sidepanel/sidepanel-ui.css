@@ -1,12 +1,54 @@
 /** Side panel UI styles */
 
-.button-row-flex-wrap-base__sidepanel-menubar{
-    border: 0px solid blue; /* debug */
-    padding: var(--sidepanel-menubar-padding, 0.3em);
-    margin: var(--sidepanel-menubar-top-bottom-margin, 5px);
+.sidepanel-row-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center; /* Vertically center items */
+  width: 100%; /* Full width to allow wrapping */
+  height: fit-content; /* Height adjusts based on content */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+
 }
 
-.sidepanel-menubar__button {
+.util-sidepanel-margin-left-auto {
+  margin-left: auto;
+  width: auto;
+}
+
+.util-sidepanel-flex-start {
+  justify-content: flex-start;
+}
+
+.util-sidepanel-flex-end {
+  justify-content: flex-end;
+}
+
+.util-sidepar-bottom-seperator-line {
+  border-bottom: 1px solid var(--sidepanel-divider-color, #ccc);
+  width: 100%;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Sidepanel menubar styling */
+.sidepanel-row-flex-wrap__sidepanel-menubar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: var(--ui-font, Arial, sans-serif);
+  font-size: var(--sidepanel-font-size, 12px);
+  color: var(--text-color, var(--debug-color, #222));
+  background: var(--sidepanel-background, var(--debug-color, #f0f0f0));
+  border: 0px solid blue; /* debug */
+  padding: var(--sidepanel-menubar-padding, 0.3em);
+  margin: var(--sidepanel-menubar-top-bottom-margin, 5px);
+}
+
+/* -------------------------------------------------- */
+/* Side panel buttons                                 */
+/* -------------------------------------------------- */
+
+.sidepanel__button {
   cursor: pointer;
   border: var(--border-thickness, 2px) solid var(--button-border-color, var(--debug-color, red));
   background: var(--button-transparent-off-color, var(--debug-color, red));
@@ -14,32 +56,144 @@
   padding: var(--sidepanel-menubar-button-padding);
   border-radius: var(--border-radius, 2px);
   border: 0px solid var(--side-panel-border-color, #ccc);
-  font: inherit;
+  font-size: inherit;
+  font-family: inherit;
 }
 
-.sidepanel-menubar__button--active {
+.sidepanel__button--active {
     background: var(--button-on-color, var(--debug-color, #2563eb));
     color: var(--text-color);
     border-color: var(--active-border-color, var(--debug-color, #2563eb));
 }
 
-.sidepanel-menubar__button:hover {
+.sidepanel__button:hover {
   background: var(--button-hover-color, var(--debug-color, red));
   border-color: var(--button-border-hover-color, var(--debug-color, red));
 }
 
-.sidepanel-menubar__button--disabled,
-.sidepanel-menubar__button:disabled {
-  background: var(--button-disabled-color, var(--debug-color, gray));
-  color: var(--button-disabled-text-color, var(--debug-color, darkgray));
-  border-color: var(--button-border-disabled-color, var(--debug-color, gray));
+.sidepanel__button--disabled,
+.sidepanel__button:disabled {
+  background: var(--button-disabled-color, var(--debug-color));
+  color: var(--button-disabled-text-color, var(--debug-color));
+  border-color: var(--button-border-disabled-color, var(--debug-color));
   cursor: not-allowed;
 }
 
+.sidepanel__button--disabled:hover,
+.sidepanel__button:disabled:hover {
+  background: var(--button-disabled-color, var(--debug-color));
+  border-color: var(--button-border-disabled-color, var(--debug-color));
+  cursor: not-allowed;
+}
 
-.sidepanel-menubar__button-icon {
+.sidepanel__button--icon {
   align-items: center;
   justify-content: center;
-  width: 0em;
-  height: 0em;
+}
+
+.sidepanel__button--delete {
+  background: var(--button-reset-color, salmon);
+}
+
+.sidepanel__button--delete:hover {
+  background: var(--button-reset-hover-color, #2563eb);
+  color: var(--text-color, #fff);
+}
+
+/*------------------------*/
+/* Specific test messages */
+/*------------------------*/
+.sidepanel__test-message--empty {
+  font-style: italic;
+  color: var(--text-color, gray);
+}
+
+/* -------------------------------------------------- */
+/* Sidepanel container under menubar BASESTYLE
+    - fills available width
+    - scrollable if content exceeds available space
+    - takes up remaining vertical space in side panel
+  --------------------------------------------------- */
+.sidepanel-content-container-under-menubar {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  font-family: var(--ui-font, Arial, sans-serif);
+  font-size: var(--sidepanel-font-size, 12px);
+  color: var(--text-color, var(--debug-color, #222));
+  background: var(--sidepanel-background, var(--debug-color, #f0f0f0));
+  scrollbar-width: normal;
+  overflow-y: auto; /* make settings page scroll vertically */
+  min-height: 0; /* allow children to scroll if needed */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+/* Use UI font for headings in side panel content */
+.sidepanel-content-container-under-menubar h1,
+.sidepanel-content-container-under-menubar h2,
+.sidepanel-content-container-under-menubar h3,
+.sidepanel-content-container-under-menubar h4,
+.sidepanel-content-container-under-menubar h5,
+.sidepanel-content-container-under-menubar h6 {
+	font-family: var(--ui-font, Arial, sans-serif);
+}
+/* -------------------------------------------------- */
+/* Sidepanel notebook list styling                     */
+/* -------------------------------------------------- */
+.sidepanel__notebook-list {
+  font-family: var(--ui-font, Arial, sans-serif);
+  font-size: var(--sidepanel-font-size, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sidepanel-notebook-item-gap);
+  list-style: none;
+  padding: var(--sidepanel-notebook-item-padding);
+}
+
+.sidepanel__notebook-item {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-color, #222);
+  background: var(--sidepanel-background, red);
+  cursor: pointer;
+  padding: var(--sidepanel-notebook-item-padding);
+  border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--button-border-color, #ccc);
+}
+
+.sidepanel__notebook-item--active {
+  background: var(--button-on-color, var(--debug-color, #2563eb));
+  color: var(--text-color);
+  border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--active-border-color, #ccc);
+}
+
+.sidepanel__notebook-item--notebook-in-bin {
+  font-family: inherit;
+  font-size: inherit;
+  opacity: 0.7;
+  border-style: dashed;
+
+}
+
+.sidepanel__notebook-rename-input {
+  font-family: inherit;
+  font-size: inherit;
+  border-radius: var(--border-radius, 2px);
+  flex: 1 1 auto;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  padding: 0.5em;
+  color: var(--text-color, var(--debug-color));
+  font-weight: bold;
+  background: var(--input-field-background-color, var(--debug-color, #2563eb));
+}
+
+.sidepanel__notebook_meta-info {
+  font-size: 0.8em;
+  color: var(--text-color, gray);
+  margin-left: auto;
+  opacity: 0.8;
 }
