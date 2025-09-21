@@ -1,13 +1,13 @@
 <template>
   <div
-    class="button-row-flex-wrap-base"
+    class="button-row-flex-wrap-base button-row-flex-wrap-base__sidepanel-menubar"
     role="tablist"
     aria-label="Notebook views"
   >
     <button
       type="button"
-      class="sidepanel-button"
-      :class="mode === 'notebooks' && 'sidepanel-button--on'"
+      class="sidepanel-menubar__button"
+      :class="mode === 'notebooks' && 'sidepanel-menubar__button--active'"
       role="tab"
       :aria-selected="mode === 'notebooks'"
       @click="onClickNotebooksTab"
@@ -16,26 +16,49 @@
     </button>
     <button
       type="button"
-      class="toggle-btn"
-      :class="mode === 'bin' && 'is-active'"
+      class="sidepanel-menubar__button"
+      :class="mode === 'bin' && 'sidepanel-menubar__button--active'"
       role="tab"
       :aria-selected="mode === 'bin'"
       @click="onClickBinTab"
     >
       Bin
     </button>
-    <button type="button" class="toggle-btn" :disabled="!currentId" @click="moveNotebookUp">
-      <span class="icon" aria-label="Move notebook up">↑</span>
+    <button
+      type="button"
+      class="sidepanel-menubar__button"
+      :disabled="!currentId"
+      @click="moveNotebookUp"
+    >
+      <span
+        class="sidepanel-menubar__button sidepanel-menubar__button-icon"
+        aria-label="Move notebook up"
+        >↑</span
+      >
     </button>
-    <button type="button" class="toggle-btn" :disabled="!currentId" @click="moveNotebookDown">
-      <span class="icon" aria-label="Move notebook down">↓</span>
+    <button
+      type="button"
+      class="sidepanel-menubar__button"
+      :disabled="!currentId"
+      @click="moveNotebookDown"
+    >
+      <span
+        class="sidepanel-menubar__button sidepanel-menubar__button-icon"
+        aria-label="Move notebook down"
+        >↓</span
+      >
     </button>
   </div>
 
   <!-- Row 2: action buttons (depends on mode) -->
-  <div class="row">
+  <div class="button-row-flex-wrap-base button-row-flex-wrap-base--sidepanel-menubar">
     <template v-if="mode === 'notebooks'">
-      <button type="button" class="add-btn" aria-label="Create notebook" @click="onAdd">
+      <button
+        type="button"
+        class="sidepanel-menubar__button"
+        aria-label="Create new notebook"
+        @click="onAdd"
+      >
         Create new notebook
       </button>
       <!--
@@ -443,9 +466,6 @@ function formatDate(iso?: string): string {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-}
-.notebook-item {
-  background: var(--sidepanel-background, red);
 }
 .nb-btn {
   width: 100%;

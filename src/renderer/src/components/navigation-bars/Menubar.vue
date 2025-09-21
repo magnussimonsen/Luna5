@@ -1,6 +1,6 @@
 <template>
   <div
-    class="button-row-flex-wrap-base flex-start"
+    class="button-row-flex-wrap-base flex-start menubar-colors"
     role="menubar"
     aria-label="Application main menu"
   >

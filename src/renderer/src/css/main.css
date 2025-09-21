@@ -20,11 +20,13 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/ascii-spinner.css';
 
 /* Menubar */
+@import './main-imports-this-css/menubar/menubar-colors.css';
 @import './main-imports-this-css/menubar/menubar-buttons.css';
 @import './main-imports-this-css/menubar/menubar-dropdown.css';
 @import './main-imports-this-css/menubar/menubar-dropdown-item.css';
 
 /* Top toolbar */
+
 @import './main-imports-this-css/top-toolbar/top-toolbar-container.css';
 @import './main-imports-this-css/top-toolbar/top-toolbar-buttons.css';
 
@@ -41,6 +43,7 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/sidepanel/sidepanel-content-container.css';
 @import './main-imports-this-css/sidepanel/sidepanel-ui.css';
 
+@import './main-imports-this-css/sidepanel/sidepanel-notebook/sidepanel-notebook.css';
 #app {
   /* App root layout */
   min-height: 100vh;

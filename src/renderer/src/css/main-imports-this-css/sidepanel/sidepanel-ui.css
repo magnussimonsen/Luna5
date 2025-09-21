@@ -1,37 +1,45 @@
 /** Side panel UI styles */
 
-.button-row-flex-wrap-base--sidepanel-menubar{
-    border: 10px solid blue; /* debug */
+.button-row-flex-wrap-base__sidepanel-menubar{
+    border: 0px solid blue; /* debug */
+    padding: var(--sidepanel-menubar-padding, 0.3em);
+    margin: var(--sidepanel-menubar-top-bottom-margin, 5px);
 }
 
-
-/* Different padding than menubar*/
-.sidepanel-selector-row {
-    border: 0px solid var(--side-panel-border-color, var(--debug-color, red)); /* Placeholder */
-}
-
-.sidepanel__button {
+.sidepanel-menubar__button {
   cursor: pointer;
   border: var(--border-thickness, 2px) solid var(--button-border-color, var(--debug-color, red));
   background: var(--button-transparent-off-color, var(--debug-color, red));
   color: var(--text-color, var(--debug-color, red));
-  padding: var(--sidepanel-button-padding);
+  padding: var(--sidepanel-menubar-button-padding);
   border-radius: var(--border-radius, 2px);
   border: 0px solid var(--side-panel-border-color, #ccc);
-    /* Placeholder */
-  /* Inherit font settings from root */
   font: inherit;
 }
 
-.sidepanel__button:hover {
+.sidepanel-menubar__button--active {
+    background: var(--button-on-color, var(--debug-color, #2563eb));
+    color: var(--text-color);
+    border-color: var(--active-border-color, var(--debug-color, #2563eb));
+}
+
+.sidepanel-menubar__button:hover {
   background: var(--button-hover-color, var(--debug-color, red));
   border-color: var(--button-border-hover-color, var(--debug-color, red));
 }
 
-.sidepanel__button--active {
-    background: var(--button-on-color, var(--debug-color, #2563eb));
-    color: var(--text-color);
-    border-color: var(--active-border-color, var(--debug-color, #2563eb));
-
+.sidepanel-menubar__button--disabled,
+.sidepanel-menubar__button:disabled {
+  background: var(--button-disabled-color, var(--debug-color, gray));
+  color: var(--button-disabled-text-color, var(--debug-color, darkgray));
+  border-color: var(--button-border-disabled-color, var(--debug-color, gray));
+  cursor: not-allowed;
 }
 
+
+.sidepanel-menubar__button-icon {
+  align-items: center;
+  justify-content: center;
+  width: 0em;
+  height: 0em;
+}

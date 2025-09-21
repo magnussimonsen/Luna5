@@ -3,11 +3,11 @@ all the specific side panel types*/
 
 .sidepanel-content-container {
   flex: 1;
-  overflow-y: auto;
+  /*overflow-y: auto;*/ /* Disabled to allow children to handle scrolling */
   padding: var(--sidepanel-content-padding); /* left padding for handle space */
-  height: 100%;
   display: flex;
   flex-direction: column;
-  scrollbar-width: normal;
-  border: 40px solid yellow; /* Debug border to visualize the container */
+
+  border: 0em solid var(--sidepanel-border-color, var(--debug-color), red); /* Debug border to visualize the container */
+  background: var(--sidepanel-background, var(--debug-color), red);
 }

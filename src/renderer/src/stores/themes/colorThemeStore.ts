@@ -24,14 +24,15 @@ export const useThemeStore = defineStore('theme', {
       // Workspace
       workspaceBackground: '#e0e0e0', // light gray
       workspaceBorderColor: 'gainsboro', // slightly darker gray
+      // Sidepanel
+      sidepanelBackground: 'whitesmoke',
+      sidepanelBorderColor: 'whitesmoke',
       // Main panel
       mainPanelBackground: 'blue' /* debug */,
       mainPanelBorderColor: 'gainsboro',
       // Paper preview background
       paperColor: '#ffffff',
       paperBorderColor: 'transparent',
-      // Side panel
-      sidePanelBackground: '#f0f0f0',
       // Cell
       cellBackground: '#ffffff',
       cellBorderColor: 'whitesmoke',
@@ -111,14 +112,15 @@ export const useThemeStore = defineStore('theme', {
       // Workspace
       workspaceBackground: '#222222',
       workspaceBorderColor: '#444444',
+      // Sidepanel
+      sidepanelBackground: '#111111',
+      sidepanelBorderColor: '#111111',
       // Main panel
-      mainPanelBackground: '#222222', // Replace this with workspace background color
+      mainPanelBackground: '#9B2E2E', // Replace this with workspace background color
       mainPanelBorderColor: '#444444', // Replace this with workspace border color
       // Paper preview background
       paperColor: '#333333',
       paperBorderColor: 'transparent',
-      //Side panel
-      sidePanelBackground: '#222222',
       // Cell
       cellBackground: '#222222',
       cellBorderColor: '#444444',
@@ -209,13 +211,14 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--top-toolbar-border-color', colors.topToolbarBorderColor)
       root.style.setProperty('--workspace-background', colors.workspaceBackground)
       root.style.setProperty('--workspace-border-color', colors.workspaceBorderColor)
+      root.style.setProperty('--sidepanel-background', colors.sidepanelBackground)
+      root.style.setProperty('--sidepanel-border-color', colors.sidepanelBorderColor)
       root.style.setProperty('--main-panel-background', colors.mainPanelBackground)
       root.style.setProperty('--main-panel-border-color', colors.mainPanelBorderColor)
       root.style.setProperty('--paper-color', colors.paperColor)
       root.style.setProperty('--paper-border-color', colors.paperBorderColor)
       // root.style.setProperty('--paper-margin-background-color', colors.paperMarginBackgroundColor) --- IGNORE ---
       // root.style.setProperty('--paper-cell-background', colors.paperCellBackground) --- IGNORE ---
-      root.style.setProperty('--side-panel-background', colors.sidePanelBackground)
       root.style.setProperty('--cell-background', colors.cellBackground)
       root.style.setProperty('--cell-border-color', colors.cellBorderColor)
       root.style.setProperty('--cell-margin-background-color', colors.cellMarginBackgroundColor)

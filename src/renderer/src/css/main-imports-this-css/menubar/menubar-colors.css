@@ -1,0 +1,5 @@
+/* Background color for menubar*/
+
+.menubar-colors {
+  background:  var(--menu-background, var(--debug-color), red);
+}

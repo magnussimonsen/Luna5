@@ -30,8 +30,11 @@ export type ThemeColorTypes = {
   workspaceBackground: string
   workspaceBorderColor: string
 
+  // Sidepanel
+  sidepanelBackground: string
+  sidepanelBorderColor: string
+  
   // Main panel
-
   mainPanelBackground: string
   mainPanelBorderColor: string
 

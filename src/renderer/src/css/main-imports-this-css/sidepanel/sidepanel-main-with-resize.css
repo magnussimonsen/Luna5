@@ -19,8 +19,8 @@
   border-radius: 0;
   box-sizing: border-box;
   z-index: var(--sidepanel-main-z-index, 4000);
+  background: var(--sidepanel-background, var(--debug-color), white);
 }
-
 /* While resizing: prevent text selection & show consistent cursor */
 body.sidepanel-resizing {
   cursor: ew-resize !important;
