@@ -61,7 +61,7 @@ Design tokens (layout/spacing)
     --top-toolbar-button-border-active: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
     --top-toolbar-button-border-disabled: 1px solid var(--button-border-color, var(--debug-color, #2563eb));
 
-    --workspace-container-padding: 1em 1em 1em 1em;
+    --web-workspace-container-padding: 0em 0em 0em 0em;
     
     /* Paper preview */
     --paper-margin-padding: 3em 2em 3em 3em;
@@ -87,11 +87,11 @@ Design tokens (layout/spacing)
     --menubar-dropdown-transition-duration: 0.1s;
 
     /* Cell container styling */
-    --cell-container-padding: 0.5em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
+    --cell-container-padding: 0em 0.5em 0.5em 0.5em; /* top, right, bottom, left */
     --cell-container-border: 0px solid var(--cell-border-color, red);
     --cell-container-border-radius: 0px;
-    --cell-container-border-left-not-selected: 0.5rem solid transparent;
-    --cell-container-border-left-selected: 0.5rem solid var(--active-border-color);
+    --cell-container-border-left-not-selected: 0.5em solid transparent;
+    --cell-container-border-left-selected: 0.5em solid var(--active-border-color);
 
     /* --- Sidepanel design --- */
     --sidepanel-main-top-bottom-margin: calc(var(--toolbar-margin-bottom) + 0px);

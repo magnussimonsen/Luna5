@@ -128,7 +128,14 @@
     </template>
   </div>
   <!-- Active notebooks list -->
- <hr style="border: none; border-top: 2px solid var(--divider-color); height: 1px; margin:  0 0.5em 0 0;" />
+  <hr
+    style="
+      border: none;
+      border-top: 2px solid var(--divider-color);
+      height: 1px;
+      margin: 0 0.5em 0 0;
+    "
+  />
   <ul
     v-if="mode === 'notebooks' && activeNotebooks.length"
     :class="[

@@ -38,18 +38,18 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 /* Wrapper to contain the workspace and side panel */
 .workspace-wrapper {
   position: relative; /* for the side panel overlay */
-  flex: 1 0 auto; /* take available space in parent flex column */
+  flex: 1 1 auto; /* take available space in parent flex column */
   overflow: hidden;
-   background: var(--web-workspace-background, var(--debug-color, red));
+  background: var(--web-workspace-background, var(--debug-color, red));
 }
 
 .workspace-container-web {
+  display: flex;
   position: relative;
   flex: 1 1 auto;
   width: 100%;
   height: 100%;
   overflow: hidden; /* prevent double scrollbars */
-  display: flex;
   background: var(--web-workspace-background, var(--debug-color, red));
 }
 
@@ -67,7 +67,6 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   position: relative; /* keeps any local abs children positioned correctly */
   /* Optional polish */
   box-shadow: var(--paper-box-shadow, 0 8px 16px rgba(0, 0, 0, 1));
-  background: maroon;
 }
 
 .workspace-scroll {
@@ -77,11 +76,11 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0rem 0.25rem 0.25rem 0.25rem; /* top right bottom left */
+  padding: 0em 0.25em 0.25em 0.25em; /* top right bottom left */
 }
 
 .a4-preview-scroll {
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 /* The overlay: docked right, full container height, slides L->R */

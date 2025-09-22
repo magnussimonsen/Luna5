@@ -1,30 +1,37 @@
 <template>
-  <div class="settings-panel">
-    <!-- Menu bar selection row (component) -->
-    <SettingsPanelSelectorRow
-      :current-page="currentPage"
-      :font-size="fontSizeStore.fontSizes.sidepanelMenubarFontSize"
-      @update:current-page="onUpdatePage"
+  <!-- Menu bar selection row (component)   :font-size="fontSizeStore.fontSizes.sidepanelMenubarFontSize" -->
+  <SettingsPanelSelectorRow :current-page="currentPage" @update:current-page="onUpdatePage" />
+  <!-- Content area -->
+  <div
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding',
+      'util-liststyle-none',
+      'util-margin-zero'
+    ]"
+  >
+    <hr
+      style="
+        border: none;
+        border-top: 2px solid var(--divider-color);
+        height: 1px;
+        margin: 0 0.5em 0 0;
+      "
     />
-    <!-- Content area -->
-    <div
-      class="settings-panel-content sidepanel-padding-margin-base sidepanel-y-scrolling"
-      :style="contentStyle"
-    >
-      <GeneralSettingsPanel v-if="currentPage === 'general'" />
-      <CodeSettingsPanel v-else-if="currentPage === 'code'" />
-      <CasSettingsPanel v-else-if="currentPage === 'cas'" />
-      <GenometrySettingsPanel v-else-if="currentPage === 'geometry'" />
-      <GraphicalCalculatorSettingsPanel v-else-if="currentPage === 'graphical-calculator'" />
-      <SpreadsheetsSettingsPanel v-else-if="currentPage === 'spreadsheets'" />
-      <ProbabilitySettingsPanel v-else-if="currentPage === 'probability'" />
-      <TextEditorPanel v-else-if="currentPage === 'text-editor'" />
-    </div>
+    <GeneralSettingsPanel v-if="currentPage === 'general'" />
+    <CodeSettingsPanel v-else-if="currentPage === 'code'" />
+    <CasSettingsPanel v-else-if="currentPage === 'cas'" />
+    <GenometrySettingsPanel v-else-if="currentPage === 'geometry'" />
+    <GraphicalCalculatorSettingsPanel v-else-if="currentPage === 'graphical-calculator'" />
+    <SpreadsheetsSettingsPanel v-else-if="currentPage === 'spreadsheets'" />
+    <ProbabilitySettingsPanel v-else-if="currentPage === 'probability'" />
+    <TextEditorPanel v-else-if="currentPage === 'text-editor'" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import SettingsPanelSelectorRow from './settings-components/SettingsPanelSelectorRow.vue'
 import GeneralSettingsPanel from './settings-components/GeneralSettingsPanel.vue'
 import CodeSettingsPanel from './settings-components/CodeSettingsPanel.vue'
@@ -34,7 +41,7 @@ import GraphicalCalculatorSettingsPanel from './settings-components/GraphicalCal
 import SpreadsheetsSettingsPanel from './settings-components/SpreadsheetsSettingsPanel.vue'
 import ProbabilitySettingsPanel from './settings-components/ProbabilitySettingsPanel.vue'
 import TextEditorPanel from './settings-components/TextEditorPanel.vue'
-import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
+//import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 
 type SettingsPage =
   | 'general'
@@ -45,26 +52,17 @@ type SettingsPage =
   | 'spreadsheets'
   | 'probability'
   | 'text-editor'
+  | 'code' // THIS IS PYTHON CODE EDITOR; DO NOT CVHANGE TO 'python'
 
 const currentPage: Ref<SettingsPage> = ref('general')
-const fontSizeStore = useFontSizeStore()
+// const fontSizeStore = useFontSizeStore()
 
-const contentStyle = computed(() => ({
-  fontSize: fontSizeStore.fontSizes.sidepanelFontSize
-}))
+//const contentStyle = computed(() => ({
+//  fontSize: fontSizeStore.fontSizes.sidepanelFontSize
+// }))
 
 function onUpdatePage(page: SettingsPage): void {
   currentPage.value = page
 }
 </script>
-<style scoped>
-.settings-panel {
-  display: flex;
-  flex-direction: column;
-}
-.settings-panel-content {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-}
-</style>
+<style scoped></style>

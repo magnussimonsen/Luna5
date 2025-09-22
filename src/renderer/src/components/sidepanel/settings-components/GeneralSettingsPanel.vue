@@ -108,16 +108,18 @@
           <ImplementedMark :implemented="true" />
         </div>
         <div class="setting-row">
-          <label for="toolbar-font-size-select">Toolbar Font Size:</label>
+          <label for="top-toolbar-font-size-select">Toolbar Font Size:</label>
           <select
-            id="toolbar-font-size-select"
+            id="top-toolbar-font-size-select"
             v-model="fontSizeStore.fontSizes.topToolbarFontSize"
             :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontSizeStore.setToolbarFontSize(fontSizeStore.fontSizes.topToolbarFontSize)"
+            @change="
+              fontSizeStore.setTopToolbarFontSize(fontSizeStore.fontSizes.topToolbarFontSize)
+            "
           >
             <option
               v-for="size in fontSizeOptions"
-              :key="'toolbarFontSize-' + size"
+              :key="'topToolbarFontSize-' + size"
               :value="size + 'px'"
             >
               {{ size }} px
@@ -125,29 +127,6 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <!-- Set the font size for side panel menu bar 
-        <div class="setting-row">
-          <label for="sidepanel-menubar-font-size-select">Side Panel Menu Bar Font Size:</label>
-          <select
-            id="sidepanel-menubar-font-size-select"
-            v-model="fontSizeStore.fontSizes.sidepanelMenubarFontSize"
-            :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="
-              fontSizeStore.setSidepanelMenubarFontSize(
-                fontSizeStore.fontSizes.sidepanelMenubarFontSize
-              )
-            "
-          >
-            <option
-              v-for="size in fontSizeOptions"
-              :key="'SidepanelMenuBarFontSize-' + size"
-              :value="size + 'px'"
-            >
-              {{ size }} px
-            </option>
-          </select>
-          <ImplementedMark :implemented="true" />
-        </div>-->
         <div class="setting-row">
           <label for="sidepanel-font-size-select">Side Panel Font Size:</label>
           <select
@@ -214,67 +193,6 @@ const autosaveOptions: { label: string; value: AutosaveOption }[] = [
   { label: 'After 50 changes', value: 50 },
   { label: 'After 100 changes', value: 100 }
 ]
-
-/**
- *  DEPRECATED FONT SIZE OPTIONS - MAY BE REINTRODUCED LATER
- *  <div class="setting-row">
-          <label for="default-cell-font-size-select">Default Cell Font Size:</label>
-          <select
-            id="default-cell-font-size-select"
-            v-model="fontSizeStore.fontSizes.defaultCellFontSize"
-            :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="
-              fontSizeStore.setDefaultCellFontSize(fontSizeStore.fontSizes.defaultCellFontSize)
-            "
-          >
-            <option
-              v-for="size in fontSizeOptions"
-              :key="'defaultCellFontSize-' + size"
-              :value="size + 'px'"
-            >
-              {{ size }} px
-            </option>
-          </select>
-          <ImplementedMark :implemented="false" />
-        </div>
-        <div class="setting-row">
-          <label for="fallback-font-size-select">Fallback Font Size:</label>
-          <select
-            id="fallback-font-size-select"
-            v-model="fontSizeStore.fontSizes.fallbackFontSize"
-            :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontSizeStore.setFallbackFontSize(fontSizeStore.fontSizes.fallbackFontSize)"
-          >
-            <option
-              v-for="size in fontSizeOptions"
-              :key="'fallbackFontSize-' + size"
-              :value="size + 'px'"
-            >
-              {{ size }} px
-            </option>
-          </select>
-          <ImplementedMark :implemented="false" />
-        </div>
-      </div>
-      <div class="setting-row">
-          <label for="default-font-select">Default Cell Font:</label>
-          <select
-            id="default-font-select"
-            v-model="fontStore.fonts.defaultCellFont"
-            :class="{ 'dark-mode': themeStore.isDarkMode }"
-            @change="fontStore.setDefaultCellFont(fontStore.fonts.defaultCellFont)"
-          >
-            <option
-              v-for="font in fontStore.availableFonts"
-              :key="'textFont-' + font.value"
-              :value="font.value"
-            >
-              {{ font.label }}
-            </option>
-          </select>
-          <ImplementedMark :implemented="false" />
-        </div>
- */
 </script>
 
 <style scoped>

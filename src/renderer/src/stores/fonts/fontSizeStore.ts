@@ -15,9 +15,8 @@ export const useFontSizeStore = defineStore('fontSize', {
       rootFontSize: '16px', // Used to set the rem unit at app initialization, not user changeable
       menubarFontSize: '14px',
       statusbarFontSize: '10px',
-      sidepanelMenubarFontSize: '14px' /* THIS IS DEPRECATED */,
       sidepanelFontSize: '14px',
-      topToolbarFontSize: '16px',
+      topToolbarFontSize: '14px',
       /* This (defaultCellFontSize)is the fontsize that will be set for the
       selected cell when user click the "reset font size"-button in the statusbar. */
       defaultCellFontSize: '14px',
@@ -43,9 +42,9 @@ export const useFontSizeStore = defineStore('fontSize', {
       this.fontSizes.sidepanelFontSize = size
       document.documentElement.style.setProperty('--sidepanel-font-size', size)
     },
-    setToolbarFontSize(size: string) {
+    setTopToolbarFontSize(size: string) {
       this.fontSizes.topToolbarFontSize = size
-      document.documentElement.style.setProperty('--toolbar-font-size', size)
+      document.documentElement.style.setProperty('--top-toolbar-font-size', size)
     },
     // This sets the default font size for cells when user clicks "reset font size" in statusbar
     setDefaultCellFontSize(size: string) {
@@ -103,7 +102,7 @@ export const useFontSizeStore = defineStore('fontSize', {
         this.fontSizes.sidepanelFontSize
       )
       document.documentElement.style.setProperty(
-        '--toolbar-font-size',
+        '--top-toolbar-font-size',
         this.fontSizes.topToolbarFontSize
       )
       document.documentElement.style.setProperty(

@@ -37,7 +37,7 @@
     (2) Export code from selected notebook 
      -->
     <button
-      class="top-toolbar__button--disabled"
+      class=" top-toolbar__button top-toolbar__button--disabled"
       type="button"
       title="Export code from selected cell (not implemented)"
       @click="onCodeExport"

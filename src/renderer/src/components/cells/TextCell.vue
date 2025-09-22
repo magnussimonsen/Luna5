@@ -110,7 +110,7 @@ const editor = tiptapEditor
   /* Prefer --text-font, fall back to legacy --content-font, then inherit */
   font-family: var(--text-font, var(--content-font, inherit));
   color: var(--text-color, #222);
-  padding: 0.25rem 0.4rem;
+  padding: 0.25em 0.4em;
 }
 .tiptap-editor :deep(.ProseMirror p) {
   margin: 0 0 0.5em;

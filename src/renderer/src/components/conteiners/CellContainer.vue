@@ -135,9 +135,8 @@ function onMarginClick(): void {
   border-left: 0.5em solid var(--cell-border-color, blue);
   border-radius: var(--cell-container-border-radius, 0px);
   background: var(--cell-background, blue);
-  margin-block: 0em;
   outline: none;
-  margin-bottom: 0px; /* What font size is used here if I choose to make margin 1em? */
+  margin: none;
 }
 
 .cell-container:focus-visible {
@@ -202,12 +201,9 @@ function onMarginClick(): void {
 }
 
 .cell-margin {
-  flex: 0 0 1rem;
-  display: flex;
+  flex: 0 0 2em; /* fixed width */
   flex-direction: column;
-  align-items: center;
-  padding: 0rem 0.25em 0em 0.1em /* top right bottom left */;
-  gap: 0rem;
+  padding: 0em 0em 0em 0em /* top right bottom left */;
   background: var(--cell-margin-background-color, black);
   border-right: 0px solid var(--cell-border-color);
   cursor: pointer;
@@ -237,42 +233,13 @@ function onMarginClick(): void {
   border-radius: 0px;
 }
 
-.cell-margin-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.cell-btn {
-  cursor: pointer;
-  appearance: none;
-  border: 1px solid var(--cell-border-color);
-  background: #fff;
-  padding: 0.15rem 0.35rem;
-  font-size: 0.6rem;
-  line-height: 1;
-  border-radius: 0px;
-}
-
-.cell-btn:hover:not(:disabled) {
-  background: var(--cell-selected-border);
-  color: #fff;
-  border-color: var(--cell-selected-border);
-}
-
-.cell-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
 .cell-body {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  /*padding: 0.75rem 0.9rem 0.9rem;*/
   padding: 0rem 0rem 0rem 0rem;
-  gap: 0.5rem;
+  gap: 0em;
 }
 
 .cell-hidden-placeholder {
@@ -286,15 +253,6 @@ function onMarginClick(): void {
   position: relative;
   display: block;
   overflow: hidden;
-}
-
-.cell-status {
-  font-size: 0.65rem;
-  color: var(--cell-status-color, #666);
-  opacity: 0.85;
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
 }
 
 /* Responsive tweaks */

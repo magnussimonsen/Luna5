@@ -36,7 +36,7 @@ export const useThemeStore = defineStore('theme', {
       mainPanelBackground: 'blue' /* debug IS THIS USED?*/,
       mainPanelBorderColor: 'blue' /* debug IS THIS USED?*/,
       // Divider color
-      dividerColor: 'gainsboro',
+      dividerColor: 'silver',
       // Paper preview background
       paperColor: '#ffffff',
       paperBorderColor: 'transparent',

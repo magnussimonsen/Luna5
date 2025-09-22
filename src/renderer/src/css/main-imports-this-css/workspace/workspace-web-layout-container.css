@@ -4,7 +4,6 @@ The workspace web layout container that holds both the cell list and the side pa
 
 .workspace-web-layout-container {
     display: flex;
-    justify-content: flex-start; /*  Allows left button row and right button row to be spaced apart */
     position: relative; /* establish containing block for sidepanel overlay */
 
     background: var(--web-workspace-background, var(--debug-color));
@@ -14,9 +13,9 @@ The workspace web layout container that holds both the cell list and the side pa
     width: 100%; /* Full width of parent */
 
     /* Grow to fill available space */
-    flex-grow: 1;
+    flex: 1 1 auto;
 
-    overflow-y: scroll;
+    overflow-y: auto;
 
 
 }

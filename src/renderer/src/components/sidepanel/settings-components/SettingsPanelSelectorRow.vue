@@ -1,34 +1,84 @@
 <template>
-  <div class="settings-selector-row sidepanel menubar" :style="{ fontSize }">
+  <div
+    :class="[
+      'sidepanel-row-flex-wrap',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding'
+    ]"
+  >
     <div>
-      <button :class="{ active: currentPage === 'general' }" @click="emitUpdate('general')">
+      <button
+        :class="[
+          'sidepanel__button sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'general' }
+        ]"
+        @click="emitUpdate('general')"
+      >
         General
       </button>
-      <button :class="{ active: currentPage === 'text-editor' }" @click="emitUpdate('text-editor')">
+      <button
+        :class="[
+          'sidepanel__button sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'text-editor' }
+        ]"
+        @click="emitUpdate('text-editor')"
+      >
         Text
       </button>
       <button
-        :class="{ active: currentPage === 'graphical-calculator' }"
+        :class="[
+          'sidepanel__button sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'graphical-calculator' }
+        ]"
         @click="emitUpdate('graphical-calculator')"
       >
         Graphical calculator
       </button>
-      <button :class="{ active: currentPage === 'cas' }" @click="emitUpdate('cas')">CAS</button>
-      <button :class="{ active: currentPage === 'geometry' }" @click="emitUpdate('geometry')">
+      <button
+        :class="[
+          'sidepanel__button sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'cas' }
+        ]"
+        @click="emitUpdate('cas')"
+      >
+        CAS
+      </button>
+      <button
+        :class="[
+          'sidepanel__button sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'geometry' }
+        ]"
+        @click="emitUpdate('geometry')"
+      >
         Geometry
       </button>
 
       <button
-        :class="{ active: currentPage === 'spreadsheets' }"
+        :class="[
+          'sidepanel__button sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'spreadsheets' }
+        ]"
         @click="emitUpdate('spreadsheets')"
       >
         Spreadsheets
       </button>
-      <button :class="{ active: currentPage === 'probability' }" @click="emitUpdate('probability')">
+      <button
+        :class="[
+          'sidepanel__button sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'probability' }
+        ]"
+        @click="emitUpdate('probability')"
+      >
         Probability
       </button>
-      <button :class="{ active: currentPage === 'code' }" @click="emitUpdate('code')">
-        Python
+      <button
+        :class="[
+          'sidepanel__button sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'code' }
+        ]"
+        @click="emitUpdate('code')"
+      >
+        Code editor (Python)
       </button>
     </div>
   </div>
@@ -36,6 +86,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+
 type SettingsPage =
   | 'general'
   | 'code'
@@ -45,14 +96,17 @@ type SettingsPage =
   | 'spreadsheets'
   | 'probability'
   | 'text-editor'
+  | 'code'
 
-const props = defineProps<{ currentPage: SettingsPage; fontSize?: string }>()
+// const props = defineProps<{ currentPage: SettingsPage; fontSize?: string }>()
+const props = defineProps<{ currentPage: SettingsPage }>()
 /* TO DO: Store the current page in a ref and update the settings store
 with the state of which page is currently active. State might have to be added to
 the settings store */
 const emit = defineEmits<{ (e: 'update:current-page', value: SettingsPage): void }>()
 
-const fontSize = computed(() => props.fontSize ?? '12px')
+// const fontSize = computed(() => props.fontSize ?? '12px')
+const currentPage = computed(() => props.currentPage)
 
 function emitUpdate(page: SettingsPage): void {
   emit('update:current-page', page)
