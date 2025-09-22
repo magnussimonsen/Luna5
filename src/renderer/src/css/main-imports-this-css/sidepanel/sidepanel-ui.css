@@ -49,8 +49,12 @@
   padding: 0;
 }
 
-.util-bottom-margin {
+.sidepanel-bottom-margin {
   margin-bottom: var(--sidepanel-bottom-margin, 1em);
+}
+
+.util-divider {
+  border-bottom: 2px solid var(--divider-color, #ccc);
 }
 
 

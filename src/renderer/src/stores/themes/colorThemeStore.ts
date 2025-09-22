@@ -19,19 +19,24 @@ export const useThemeStore = defineStore('theme', {
       // Background colors
       appBackground: '#ffffff',
       // Menu background colors
-      menuBackground: 'whitesmoke',
+      menuBackground: 'gainsboro',
       // Toolbar background
       topToolbarBackground: 'whitesmoke',
       topToolbarBorderColor: 'whitesmoke',
-      // Workspace
-      workspaceBackground: '#e0e0e0', // light gray
-      workspaceBorderColor: 'gainsboro', // slightly darker gray
+      // Web workspace background
+      webWorkspaceBackground: '#FFFFFF', // light gray
+      webWorkspaceBorderColor: 'gainsboro', // slightly darker gray
+      // A4 paper workspace background
+      a4WorkspaceBackground: '#e0e0e0', // light gray
+      a4WorkspaceBorderColor: 'gainsboro', // slightly darker gray
       // Sidepanel
-      sidepanelBackground: 'whitesmoke',
+      sidepanelBackground: 'gainsboro',
       sidepanelBorderColor: 'whitesmoke',
       // Main panel
-      mainPanelBackground: 'blue' /* debug */,
-      mainPanelBorderColor: 'gainsboro',
+      mainPanelBackground: 'blue' /* debug IS THIS USED?*/,
+      mainPanelBorderColor: 'blue' /* debug IS THIS USED?*/,
+      // Divider color
+      dividerColor: 'gainsboro',
       // Paper preview background
       paperColor: '#ffffff',
       paperBorderColor: 'transparent',
@@ -113,15 +118,20 @@ export const useThemeStore = defineStore('theme', {
       // Toolbar background
       topToolbarBackground: '#111111',
       topToolbarBorderColor: '#111111',
-      // Workspace
-      workspaceBackground: '#222222',
-      workspaceBorderColor: '#444444',
+      // Web workspace
+      webWorkspaceBackground: '#222222',
+      webWorkspaceBorderColor: '#444444',
+      // A4 paper workspace
+      a4WorkspaceBackground: '#222222',
+      a4WorkspaceBorderColor: '#444444',
       // Sidepanel
-      sidepanelBackground: '#111111',
+      sidepanelBackground: '#444444',
       sidepanelBorderColor: '#111111',
-      // Main panel
+      // Main panel  (NOT USED?)
       mainPanelBackground: '#9B2E2E', // Replace this with workspace background color
       mainPanelBorderColor: '#444444', // Replace this with workspace border color
+      // Divider color
+      dividerColor: '#444444',
       // Paper preview background
       paperColor: '#333333',
       paperBorderColor: 'transparent',
@@ -215,12 +225,15 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--menu-background', colors.menuBackground)
       root.style.setProperty('--top-toolbar-background', colors.topToolbarBackground)
       root.style.setProperty('--top-toolbar-border-color', colors.topToolbarBorderColor)
-      root.style.setProperty('--workspace-background', colors.workspaceBackground)
-      root.style.setProperty('--workspace-border-color', colors.workspaceBorderColor)
+      root.style.setProperty('--web-workspace-background', colors.webWorkspaceBackground)
+      root.style.setProperty('--web-workspace-border-color', colors.webWorkspaceBorderColor)
+      root.style.setProperty('--a4-workspace-background', colors.a4WorkspaceBackground)
+      root.style.setProperty('--a4-workspace-border-color', colors.a4WorkspaceBorderColor)
       root.style.setProperty('--sidepanel-background', colors.sidepanelBackground)
       root.style.setProperty('--sidepanel-border-color', colors.sidepanelBorderColor)
       root.style.setProperty('--main-panel-background', colors.mainPanelBackground)
       root.style.setProperty('--main-panel-border-color', colors.mainPanelBorderColor)
+      root.style.setProperty('--divider-color', colors.dividerColor)
       root.style.setProperty('--paper-color', colors.paperColor)
       root.style.setProperty('--paper-border-color', colors.paperBorderColor)
       // root.style.setProperty('--paper-margin-background-color', colors.paperMarginBackgroundColor) --- IGNORE ---

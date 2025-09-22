@@ -65,7 +65,7 @@
       'sidepanel-row-flex-wrap',
       'sidepanel-color-font-styling',
       'util-sub-sidepanel-container-padding',
-      'util-bottom-margin'
+      'sidepanel-bottom-margin'
     ]"
   >
     <template v-if="mode === 'notebooks'">
@@ -127,8 +127,8 @@
       </button>
     </template>
   </div>
-
   <!-- Active notebooks list -->
+ <hr style="border: none; border-top: 2px solid var(--divider-color); height: 1px; margin:  0 0.5em 0 0;" />
   <ul
     v-if="mode === 'notebooks' && activeNotebooks.length"
     :class="[

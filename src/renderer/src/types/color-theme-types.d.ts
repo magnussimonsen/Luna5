@@ -26,17 +26,24 @@ export type ThemeColorTypes = {
   topToolbarBackground: string
   topToolbarBorderColor: string
 
-  // Workspace
-  workspaceBackground: string
-  workspaceBorderColor: string
+  // Web workspace
+  webWorkspaceBackground: string
+  webWorkspaceBorderColor: string
+
+  // A4 paper workspace
+  a4WorkspaceBackground: string
+  a4WorkspaceBorderColor: string
 
   // Sidepanel
   sidepanelBackground: string
   sidepanelBorderColor: string
-  
+
   // Main panel
   mainPanelBackground: string
   mainPanelBorderColor: string
+
+  // Divider color
+  dividerColor: string
 
   // Paper preview background
   paperColor: string

@@ -142,7 +142,7 @@ onBeforeUnmount(() => {
   flex: 1 1 auto;
   /* border: 9px solid green; */
   color: var(--text-color, var(--debug-color, red));
-  background: var(--workspace-background, var(--debug-color, red));
+  background: var(--web-workspace-background, var(--debug-color, red));
   /* Take remaining space between menuBar-toolbar and statusbar */
 }
 

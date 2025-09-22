@@ -40,8 +40,7 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   position: relative; /* for the side panel overlay */
   flex: 1 0 auto; /* take available space in parent flex column */
   overflow: hidden;
-  background: var(--main-panel-background, #f0f0f0);
-  background: fuchsia; /* debug */
+   background: var(--web-workspace-background, var(--debug-color, red));
 }
 
 .workspace-container-web {
@@ -51,8 +50,7 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   height: 100%;
   overflow: hidden; /* prevent double scrollbars */
   display: flex;
-  background: var(--main-panel-background, #f0f0f0);
-  background: rgb(87 134 134);
+  background: var(--web-workspace-background, var(--debug-color, red));
 }
 
 .workspace-container-a4 {
@@ -80,7 +78,6 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0rem 0.25rem 0.25rem 0.25rem; /* top right bottom left */
-  border: 14px solid darkorchid; /* debug */
 }
 
 .a4-preview-scroll {
@@ -97,7 +94,7 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   z-index: 10;
   display: flex;
   flex-direction: column;
-  background: var(--side-panel-background, var(--debug-color, #fff));
+  background: var(--sidepanel-background, var(--debug-color, #fff));
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
   overflow: auto; /* panel scrolls independently */
   overscroll-behavior: contain;

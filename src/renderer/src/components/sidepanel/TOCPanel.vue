@@ -8,6 +8,8 @@
   >
     <h3 class="util-margin-zero">Table of Contents</h3>
   </div>
+       <hr style="border: none; border-top: 2px solid var(--divider-color); height: 1px; margin:  0 0.5em 0 0;" />
+
   <div
     :class="[
       'sidepanel-flex-column-overflow-y',
@@ -28,6 +30,7 @@
       ]"
       role="list"
     >
+
       <li v-for="h in headings" :key="h.id" :class="['sidepanel__toc-item']">
         <span
           class="sidepanel__toc-link"

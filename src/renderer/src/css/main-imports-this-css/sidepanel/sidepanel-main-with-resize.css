@@ -9,7 +9,7 @@
   transform: none;
   /* Height: stretch from below top chrome to above bottom statusbar. App.vue sets --bottom-chrome-height if needed */
   height: calc(100vh - var(--top-chrome-height, 0px) - var(--bottom-chrome-height, 0px) - 0px);
-  /*box-shadow: var(--box-shadow, 0 0 8px rgba(0, 0, 0, 0.1));*/
+  box-shadow: var(--box-shadow);
   display: flex;
   flex-direction: row;
   overflow: hidden;

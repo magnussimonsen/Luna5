@@ -8,7 +8,7 @@
 
    background: var(--red, var(--debug-color));
 
-   z-index: var(--workspace-web-layout-container-z-index, 1000);
+   z-index: var(--workspace-a4-preview-layout-container-z-index, 1000);
 
    width: 100%;
    /* Full width of parent */
