@@ -421,12 +421,12 @@ watch(
   border-bottom-right-radius: 0px;
 }
 .py-out-error {
-  margin-top: 0rem;
+  margin-top: 0em;
   border: 0px solid var(--error-border, #d92c2c);
   background: var(--error-bg, #fff1f1);
   color: var(--error-fg, #7a1010);
   border-radius: 0px;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5em 0.75em;
 }
 .section-title {
   font-size: 0.8rem;

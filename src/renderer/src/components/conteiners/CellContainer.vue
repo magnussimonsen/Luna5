@@ -22,10 +22,6 @@
       <div class="cell-index" :title="`Cell ${displayIndex}`">{{ displayIndex }}</div>
     </div>
     <div class="cell-body">
-      <!-- 
-      Optional top tools slot (e.g., toolbar) 
-      <div v-if="$slots.tools" class="cell-tools"><slot name="tools" /></div>
-      -->
       <!-- Main cell content -->
       <div class="cell-content">
         <template v-if="!hidden">
@@ -135,8 +131,9 @@ function onMarginClick(): void {
   border-left: 0.5em solid var(--cell-border-color, blue);
   border-radius: var(--cell-container-border-radius, 0px);
   background: var(--cell-background, blue);
+  margin-block: 0em;
   outline: none;
-  margin: none;
+  margin-bottom: 0px; /* What font size is used here if I choose to make margin 1em? */
 }
 
 .cell-container:focus-visible {
@@ -201,9 +198,12 @@ function onMarginClick(): void {
 }
 
 .cell-margin {
-  flex: 0 0 2em; /* fixed width */
+  flex: 0 0 1rem;
+  display: flex;
   flex-direction: column;
-  padding: 0em 0em 0em 0em /* top right bottom left */;
+  align-items: center;
+  padding: 0rem 0.25em 0em 0.1em /* top right bottom left */;
+  gap: 0rem;
   background: var(--cell-margin-background-color, black);
   border-right: 0px solid var(--cell-border-color);
   cursor: pointer;
@@ -233,13 +233,42 @@ function onMarginClick(): void {
   border-radius: 0px;
 }
 
+.cell-margin-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cell-btn {
+  cursor: pointer;
+  appearance: none;
+  border: 1px solid var(--cell-border-color);
+  background: #fff;
+  padding: 0.15rem 0.35rem;
+  font-size: 0.6rem;
+  line-height: 1;
+  border-radius: 0px;
+}
+
+.cell-btn:hover:not(:disabled) {
+  background: var(--cell-selected-border);
+  color: #fff;
+  border-color: var(--cell-selected-border);
+}
+
+.cell-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .cell-body {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  /*padding: 0.75rem 0.9rem 0.9rem;*/
   padding: 0rem 0rem 0rem 0rem;
-  gap: 0em;
+  gap: 0.5rem;
 }
 
 .cell-hidden-placeholder {
@@ -255,13 +284,24 @@ function onMarginClick(): void {
   overflow: hidden;
 }
 
+.cell-status {
+  font-size: 0.65rem;
+  color: var(--cell-status-color, #666);
+  opacity: 0.85;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 /* Responsive tweaks */
 @media (max-width: 800px) {
   .cell-margin {
     flex-basis: 2.6rem;
   }
+  /* Keep cell vertical margins at 0 to avoid unexpected gaps when layout collapses.
+     Use the parent container's `gap` if uniform spacing is desired. */
   .cell-container {
-    margin-block: 0.6rem;
+    margin-block: 0em;
   }
 }
 </style>
