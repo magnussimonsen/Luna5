@@ -104,9 +104,10 @@ Design tokens (layout/spacing)
     --sidepanel-menubar-button-border: 0px solid var(--button-border-color,transparent);
 
     /* Sidepanel content container padding */
-    --sidepanel-container-padding: 0.5em 0em 0em calc(min(5px, 0.5em) + 0.5em); /* "calc" to account for the resize handle */
+    --sidepanel-container-padding: 0.5em 0.5em 0em calc(min(5px, 0.5em) + 0.5em); /* "calc" to account for the resize handle */
     --sidepanel-sub-container-padding: 0.5em 0em 0em 0em; /* "calc" to account for the resize handle */
     --sidepanel-bottom-margin: 1em; /* top, bottom */
+
     /* Sidepanel notebook design */
     --sidepanel-notebook-item-padding: 0.3em 0.3em;
     --sidepanel-notebook-item-border-width: 2px;

@@ -1,11 +1,22 @@
 <template>
-  <div class="variables-panel sidepanel-ui-base sidepanel-padding-margin-base">
-    <h2>🚧 Work in progres</h2>
-    <h3>Variables Panel</h3>
-    <p>
-      This is the Variables panel. List of variables and functions used in this notebook will be
-      shown here.
-    </p>
+  <div
+    :class="[
+      'sidepanel-row-flex-wrap',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding'
+    ]"
+  >
+    <h3 class="util-margin-zero">Variables 🚧 Work in progress</h3>
+  </div>
+  <div
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding'
+    ]"
+  >
+    This is the Variables panel. List of variables and functions used in this notebook will be shown
+    here.
   </div>
 </template>
 
@@ -13,9 +24,4 @@
 // Add any VariablesPanel-specific logic here if needed
 </script>
 
-<style scoped>
-@import '@renderer/css/sidepanel-base.css';
-.variables-panel {
-  background-color: transparent;
-}
-</style>
+<style scoped></style>

@@ -1,12 +1,28 @@
 <template>
-  <div class="flashcards-panel sidepanel-ui-base sidepanel-padding-margin-base">
-    <h2>🚧 Work in progres</h2>
-  <h3>Flashcards</h3>
-    <p class="hint">This is a placeholder panel. Design and features to come.</p>
-    <div class="actions">
-      <button class="btn" disabled>New deck</button>
-      <button class="btn" disabled>Import deck</button>
-    </div>
+  <div
+    :class="[
+      'sidepanel-row-flex-wrap',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding'
+    ]"
+  >
+    <h3 class="util-margin-zero">Flashcards 🚧 Work in progress</h3>
+  </div>
+  <div
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding'
+    ]"
+  >
+    This panel will host the Flashcards feature. The functionality and interface will be designed to
+    match the existing Notebooks structure. Instead of a list of notebooks, it will display a list
+    of flashcard decks. Each deck will contain flashcards that users can review and manage.
+    <br /><br />
+    The flashcards will support spaced repetition, allowing users to optimize their learning
+    process. Users will be able to create, edit, and organize flashcards within decks.
+    <br /><br />
+    Additional features may include tagging flashcards and tracking progress.
   </div>
 </template>
 
@@ -14,32 +30,4 @@
 // Placeholder only; wired via sidepanelStore as 'flashcards'
 </script>
 
-<style scoped>
-@import '@renderer/css/sidepanel-base.css';
-.flashcards-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.hint {
-  margin: 0;
-  opacity: 0.75;
-  font-style: italic;
-}
-.actions {
-  display: flex;
-  gap: 0.5rem;
-}
-.btn {
-  cursor: not-allowed;
-  border: var(--border-thickness, 2px) solid var(--button-border-color, #ccc);
-  background: var(--button-background-color, #fff);
-  color: var(--text-color, #222);
-  padding: 0 0.4rem;
-  border-radius: 4px;
-  line-height: 1.2;
-  min-height: 1.6rem;
-  font-weight: bold;
-  font: inherit;
-}
-</style>
+<style scoped></style>

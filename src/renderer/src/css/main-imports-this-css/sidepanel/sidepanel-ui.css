@@ -119,7 +119,6 @@
 /* Specific test messages */
 /*------------------------*/
 .sidepanel__text-message--empty {
-  padding: var(--sidepanel-notebook-item-padding);
   font-style: italic;
   color: var(--text-color, gray);
 }

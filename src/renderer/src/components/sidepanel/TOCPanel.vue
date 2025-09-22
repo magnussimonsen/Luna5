@@ -8,7 +8,13 @@
   >
     <h3 class="util-margin-zero">Table of Contents</h3>
   </div>
-  <div :class="['sidepanel-flex-column-overflow-y','sidepanel-color-font-styling', 'util-sub-sidepanel-container-padding']">
+  <div
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding'
+    ]"
+  >
     <div v-if="!headings.length" class="sidepanel__text-message--empty">
       No headings yet. Add H1–H4 in text cells.
     </div>
