@@ -3,13 +3,13 @@
 .sidepanel-main {
   position: fixed;
   /* overlay positioned inside workspace container */
-  right: 0;
+  right: 0em;
   /* Offset from top so the panel sits below menubar+toolbar. App.vue sets --top-chrome-height dynamically */
-  top: calc(5px + var(--top-chrome-height, 0px));
+  top: calc(0px + var(--top-chrome-height, 0px));
   transform: none;
   /* Height: stretch from below top chrome to above bottom statusbar. App.vue sets --bottom-chrome-height if needed */
-  height: calc(100vh - var(--top-chrome-height, 0px) - var(--bottom-chrome-height, 0px) - 10px);
-  box-shadow: var(--box-shadow, 0 0 8px rgba(0, 0, 0, 0.1));
+  height: calc(100vh - var(--top-chrome-height, 0px) - var(--bottom-chrome-height, 0px) - 0px);
+  /*box-shadow: var(--box-shadow, 0 0 8px rgba(0, 0, 0, 0.1));*/
   display: flex;
   flex-direction: row;
   overflow: hidden;

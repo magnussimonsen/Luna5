@@ -4,8 +4,8 @@ all the specific side panel types*/
 .sidepanel-content-container {
   flex: 1;
   /*overflow-y: auto;*/ /* Disabled to allow children to handle scrolling */
-  padding: var(--sidepanel-content-padding); /* left padding for handle space */
   display: flex;
   flex-direction: column;
   background: var(--sidepanel-background, var(--debug-color), red);
+  padding: var(--sidepanel-container-padding);
 }

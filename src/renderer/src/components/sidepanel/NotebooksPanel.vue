@@ -1,12 +1,16 @@
 <template>
   <div
-    class="sidepanel-row-flex-wrap sidepanel-row-flex-wrap__sidepanel-menubar"
+    :class="[
+      'sidepanel-row-flex-wrap',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding'
+    ]"
     role="tablist"
     aria-label="Notebook views"
   >
     <button
       type="button"
-      class="sidepanel__button"
+      class="sidepanel__button sidepanel-color-font-styling"
       :class="mode === 'notebooks' && 'sidepanel__button--active'"
       role="tab"
       :aria-selected="mode === 'notebooks'"
@@ -16,7 +20,7 @@
     </button>
     <button
       type="button"
-      class="sidepanel__button"
+      class="sidepanel__button sidepanel-color-font-styling"
       :class="mode === 'bin' && 'sidepanel__button--active'"
       role="tab"
       :aria-selected="mode === 'bin'"
@@ -26,7 +30,7 @@
     </button>
     <button
       type="button"
-      class="sidepanel__button sidepanel__button-icon"
+      class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
       :disabled="!currentId || mode === 'bin'"
       @click="moveNotebookUp"
     >
@@ -34,7 +38,7 @@
     </button>
     <button
       type="button"
-      class="sidepanel__button sidepanel__button-icon"
+      class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
       :disabled="!currentId || mode === 'bin'"
       @click="moveNotebookDown"
     >
@@ -43,7 +47,7 @@
     <button
       type="button"
       title="Flag selected notebook (Not implemented yet)"
-      class="sidepanel__button sidepanel__button-icon"
+      class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
       :disabled="!currentId || mode === 'bin'"
       @click="
         () => {
@@ -56,11 +60,18 @@
   </div>
 
   <!-- Row 2: action buttons (depends on mode) -->
-  <div class="sidepanel-row-flex-wrap sidepanel-row-flex-wrap__sidepanel-menubar">
+  <div
+    :class="[
+      'sidepanel-row-flex-wrap',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding',
+      'util-bottom-margin'
+    ]"
+  >
     <template v-if="mode === 'notebooks'">
       <button
         type="button"
-        class="sidepanel__button"
+        class="sidepanel__button sidepanel-color-font-styling"
         aria-label="Create new notebook"
         @click="onAdd"
       >
@@ -89,7 +100,7 @@
     <template v-else>
       <button
         type="button"
-        class="sidepanel__button"
+        class="sidepanel__button sidepanel-color-font-styling"
         aria-label="Restore selected notebook"
         :disabled="!currentId || !isBinActiveNotebook"
         @click="onRestoreSelectedCell"
@@ -98,7 +109,7 @@
       </button>
       <button
         type="button"
-        class="sidepanel__button"
+        class="sidepanel__button sidepanel-color-font-styling"
         aria-label="Restore selected notebook"
         :disabled="!currentId || isBinActiveNotebook || isBinEmpty"
         @click="onRestoreSelectedNotebook"
@@ -107,7 +118,7 @@
       </button>
       <button
         type="button"
-        class="sidepanel__button sidepanel__button--delete"
+        class="sidepanel__button sidepanel__button--delete sidepanel-color-font-styling"
         aria-label="Empty bin"
         :disabled="isBinEmpty"
         @click="onEmptyBin"
@@ -120,7 +131,13 @@
   <!-- Active notebooks list -->
   <ul
     v-if="mode === 'notebooks' && activeNotebooks.length"
-    class="sidepanel-content-container-under-menubar sidepanel__notebook-list"
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding',
+      'util-liststyle-none',
+      'util-margin-zero'
+    ]"
     role="list"
   >
     <li
@@ -152,13 +169,28 @@
       </div>
     </li>
   </ul>
-  <div v-else-if="mode === 'notebooks'" class="sidepanel__test-message--empty">
-    No notebooks yet.
+  <div
+    v-else-if="mode === 'notebooks'"
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding',
+      'util-liststyle-none',
+      'util-margin-zero'
+    ]"
+  >
+    <span class="sidepanel__text-message--empty"> No notebooks yet.</span>
   </div>
 
   <ul
     v-if="mode === 'bin' && deletedNotebooks.length"
-    class="sidepanel-content-container-under-menubar sidepanel__notebook-list"
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding',
+      'util-liststyle-none',
+      'util-margin-zero'
+    ]"
     role="list"
     aria-label="Deleted notebooks"
   >
@@ -178,7 +210,18 @@
       <span class="sidepanel__notebook_meta-info">{{ formatDate(notebook.deletedAt) }}</span>
     </li>
   </ul>
-  <div v-else-if="mode === 'bin'" class="sidepanel__test-message--empty">Bin is empty.</div>
+  <div
+    v-else-if="mode === 'bin'"
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding',
+      'util-liststyle-none',
+      'util-margin-zero'
+    ]"
+  >
+    <span class="sidepanel__text-message--empty">Bin is empty.</span>
+  </div>
 </template>
 
 <script setup lang="ts">

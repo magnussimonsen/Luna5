@@ -23,25 +23,43 @@
   justify-content: flex-end;
 }
 
-.util-sidepar-bottom-seperator-line {
+.util-sidepanel-bottom-seperator-line {
   border-bottom: 1px solid var(--sidepanel-divider-color, #ccc);
   width: 100%;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
 
-/* Sidepanel menubar styling */
-.sidepanel-row-flex-wrap__sidepanel-menubar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.util-sidepanel-container-padding {
+  padding: var(--sidepanel-container-padding, 0.3em calc(min(5px, 0.5em) + 0.3em));
+}
+
+.util-sub-sidepanel-container-padding {
+  padding: var(--sidepanel-sub-container-padding, 0.3em calc(min(5px, 0.5em) + 0.3em));
+}
+
+.util-liststyle-none {
+  list-style: none;
+}
+.util-margin-zero {
+  margin: 0;
+}
+
+.util-padding-zero {
+  padding: 0;
+}
+
+.util-bottom-margin {
+  margin-bottom: var(--sidepanel-bottom-margin, 1em);
+}
+
+
+/* Sidepanel color and font styling */
+.sidepanel-color-font-styling {
   font-family: var(--ui-font, Arial, sans-serif);
   font-size: var(--sidepanel-font-size, 12px);
   color: var(--text-color, var(--debug-color, #222));
   background: var(--sidepanel-background, var(--debug-color, #f0f0f0));
-  border: 0px solid blue; /* debug */
-  padding: var(--sidepanel-menubar-padding, 0.3em);
-  margin: var(--sidepanel-menubar-top-bottom-margin, 5px);
 }
 
 /* -------------------------------------------------- */
@@ -51,13 +69,11 @@
 .sidepanel__button {
   cursor: pointer;
   border: var(--border-thickness, 2px) solid var(--button-border-color, var(--debug-color, red));
-  background: var(--button-transparent-off-color, var(--debug-color, red));
-  color: var(--text-color, var(--debug-color, red));
   padding: var(--sidepanel-menubar-button-padding);
   border-radius: var(--border-radius, 2px);
   border: 0px solid var(--side-panel-border-color, #ccc);
-  font-size: inherit;
-  font-family: inherit;
+  /* Custom button background styling - overrides sidepanel-color-font-styling */
+  background: var(--button-transparent-off-color, var(--debug-color, red));
 }
 
 .sidepanel__button--active {
@@ -102,7 +118,8 @@
 /*------------------------*/
 /* Specific test messages */
 /*------------------------*/
-.sidepanel__test-message--empty {
+.sidepanel__text-message--empty {
+  padding: var(--sidepanel-notebook-item-padding);
   font-style: italic;
   color: var(--text-color, gray);
 }
@@ -113,71 +130,40 @@
     - scrollable if content exceeds available space
     - takes up remaining vertical space in side panel
   --------------------------------------------------- */
-.sidepanel-content-container-under-menubar {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  font-family: var(--ui-font, Arial, sans-serif);
-  font-size: var(--sidepanel-font-size, 12px);
-  color: var(--text-color, var(--debug-color, #222));
-  background: var(--sidepanel-background, var(--debug-color, #f0f0f0));
-  scrollbar-width: normal;
-  overflow-y: auto; /* make settings page scroll vertically */
-  min-height: 0; /* allow children to scroll if needed */
-  box-sizing: border-box; /* Include padding and border in element's total width and height */
-}
-
-/* Use UI font for headings in side panel content */
-.sidepanel-content-container-under-menubar h1,
-.sidepanel-content-container-under-menubar h2,
-.sidepanel-content-container-under-menubar h3,
-.sidepanel-content-container-under-menubar h4,
-.sidepanel-content-container-under-menubar h5,
-.sidepanel-content-container-under-menubar h6 {
-	font-family: var(--ui-font, Arial, sans-serif);
-}
-/* -------------------------------------------------- */
-/* Sidepanel notebook list styling                     */
-/* -------------------------------------------------- */
-.sidepanel__notebook-list {
-  font-family: var(--ui-font, Arial, sans-serif);
-  font-size: var(--sidepanel-font-size, 12px);
+.sidepanel-flex-column-overflow-y {
   display: flex;
   flex-direction: column;
-  gap: var(--sidepanel-notebook-item-gap);
-  list-style: none;
-  padding: var(--sidepanel-notebook-item-padding);
+  flex: 1 1 auto;   /* fill remaining sidepanel space */
+  min-height: 0;    /* allow children to shrink (important) */
+  overflow-y: auto; /* the single scroll container */
+  gap: var(--sidepanel-column-item-gap);
 }
 
+/* -------------------------------------------------- */
+/* Sidepanel notebook styling                     */
+/* -------------------------------------------------- */
 .sidepanel__notebook-item {
   display: flex;
   align-items: center;
-  font-family: inherit;
-  font-size: inherit;
-  color: var(--text-color, #222);
-  background: var(--sidepanel-background, red);
   cursor: pointer;
   padding: var(--sidepanel-notebook-item-padding);
   border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--button-border-color, #ccc);
 }
 
+
+
 .sidepanel__notebook-item--active {
   background: var(--button-on-color, var(--debug-color, #2563eb));
-  color: var(--text-color);
   border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--active-border-color, #ccc);
 }
 
 .sidepanel__notebook-item--notebook-in-bin {
-  font-family: inherit;
-  font-size: inherit;
   opacity: 0.7;
   border-style: dashed;
 
 }
 
 .sidepanel__notebook-rename-input {
-  font-family: inherit;
-  font-size: inherit;
   border-radius: var(--border-radius, 2px);
   flex: 1 1 auto;
   width: 100%;
@@ -185,8 +171,8 @@
   outline: none;
   border: none;
   padding: 0.5em;
-  color: var(--text-color, var(--debug-color));
   font-weight: bold;
+  /* Custom background styling overrides sidepanel-color-font-styling */
   background: var(--input-field-background-color, var(--debug-color, #2563eb));
 }
 
@@ -196,3 +182,31 @@
   margin-left: auto;
   opacity: 0.8;
 }
+
+/* Sidepanel Table of Contents (TOC) styling */
+.sidepanel__toc-item {
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.sidepanel__toc-item:hover {
+    background: var(--button-hover-color);
+}
+
+.sidepanel__toc-link {
+  display: flex; 
+  align-items: flex-start;
+  gap: 1em;
+  width: 100%;
+  cursor: pointer;
+  color: var(--link-color, #3e55b8);
+}
+
+.sidepanel__toc-numbering {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-color, #3e55b8);
+}
+
+.sidepanel__toc-numbering::after {
+    content: '';
+  }

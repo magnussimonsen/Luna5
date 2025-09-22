@@ -1,17 +1,43 @@
 <template>
-  <div class="sidepanel-ui-base sidepanel-padding-margin-base toc-panel">
-    <h2>Table of Contents</h2>
-    <div v-if="!headings.length" class="toc-empty">No headings yet. Add H1–H4 in text cells.</div>
-    <ol v-else class="toc-list" role="list">
-      <li v-for="h in headings" :key="h.id" class="toc-item" :class="'lvl-' + h.level">
-        <button type="button" class="toc-link" @click="scrollToHeading(h)">
-          <span class="toc-num" aria-hidden="true">{{ h.numbering }}</span>
-          <span class="toc-text">{{ h.text || '(empty)' }}</span>
-        </button>
+  <div
+    :class="[
+      'sidepanel-row-flex-wrap',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding'
+    ]"
+  >
+    <h3 class="util-margin-zero">Table of Contents</h3>
+  </div>
+  <div :class="['sidepanel-flex-column-overflow-y','sidepanel-color-font-styling', 'util-sub-sidepanel-container-padding']">
+    <div v-if="!headings.length" class="sidepanel__text-message--empty">
+      No headings yet. Add H1–H4 in text cells.
+    </div>
+    <ol
+      v-else
+      :class="[
+        'sidepanel-flex-column-overflow-y',
+        'util-liststyle-none',
+        'util-margin-zero',
+        'util-padding-zero'
+      ]"
+      role="list"
+    >
+      <li v-for="h in headings" :key="h.id" :class="['sidepanel__toc-item']">
+        <span
+          class="sidepanel__toc-link"
+          tabindex="0"
+          @click="scrollToHeading(h)"
+          @keydown.enter.prevent="scrollToHeading(h)"
+          @keydown.space.prevent="scrollToHeading(h)"
+        >
+          <span class="sidepanel__toc-numbering" aria-hidden="true">{{ h.numbering }}</span>
+          <span>{{ h.text || '(empty)' }}</span>
+        </span>
       </li>
     </ol>
   </div>
 </template>
+|
 
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
@@ -152,68 +178,5 @@ watch(
 </script>
 
 <style scoped>
-@import '@renderer/css/sidepanel-base.css';
-
-.toc-panel {
-  font-size: 0.9em;
-  line-height: 1.25;
-}
-.toc-empty {
-  opacity: 0.7;
-  font-style: italic;
-  padding: 0.25em 0;
-}
-.toc-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0rem;
-}
-.toc-item {
-  display: block;
-}
-.toc-link {
-  background: none;
-  border: none;
-  padding: 0.15em 0.25em;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font: inherit;
-  color: var(--link-color, #3e55b8);
-  border-radius: 3px;
-  display: flex;
-  gap: 1em;
-  align-items: flex-start;
-}
-.toc-link:hover {
-  background: var(--button-hover-color);
-}
-.toc-num {
-  font-variant-numeric: tabular-nums;
-  color: var(--text-color, #555);
-  min-width: 0em;
-  text-align: left;
-  flex-shrink: 0;
-}
-.toc-num::after {
-  content: '';
-}
-.toc-item.lvl-1 .toc-link {
-  padding-left: 0em;
-  font-weight: 600;
-}
-.toc-item.lvl-2 .toc-link {
-  padding-left: 0em;
-}
-.toc-item.lvl-3 .toc-link {
-  padding-left: 0em;
-  font-size: 0.93em;
-}
-.toc-item.lvl-4 .toc-link {
-  padding-left: 0em;
-  font-size: 0.9em;
-}
+/* Styles are in the css folder */
 </style>

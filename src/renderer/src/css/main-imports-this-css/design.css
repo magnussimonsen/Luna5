@@ -67,7 +67,7 @@ Design tokens (layout/spacing)
     --paper-margin-padding: 3em 2em 3em 3em;
     --paper-box-shadow: 0 4px 16px black; /* Example shadow, adjust as needed */
     /* Status bar */
-    --statusbar-top-margin: var(--toolbar-margin-bottom);
+    --statusbar-top-margin: var(--top-toolbar-margin-bottom);
     --statusbar-height: 2.5em; /* It seems lik this is not wierd to the status-bar*/
     --statusbar-padding: 0.2em 0.5em 0.2em 0.5em;
     /* top, right, bottom, left */
@@ -94,18 +94,22 @@ Design tokens (layout/spacing)
     --cell-container-border-left-selected: 0.5rem solid var(--active-border-color);
 
     /* --- Sidepanel design --- */
-    --sidepanel-main-top-bottom-margin: calc(var(--toolbar-margin-bottom) + 5px);
+    --sidepanel-main-top-bottom-margin: calc(var(--toolbar-margin-bottom) + 0px);
     --sidepanel-content-padding: 0.5em; /* left padding for handle space */
+    --sidepanel-column-item-gap: 0.4em;
 
     /**-- Sidepanel menubar design **/
-    --sidepanel-menubar-padding: 0.3em;
     --sidepanel-menubar-top-bottom-margin: 0;
     --sidepanel-menubar-button-padding: 0.2em 0.4em;
     --sidepanel-menubar-button-border: 0px solid var(--button-border-color,transparent);
 
+    /* Sidepanel content container padding */
+    --sidepanel-container-padding: 0.5em 0em 0em calc(min(5px, 0.5em) + 0.5em); /* "calc" to account for the resize handle */
+    --sidepanel-sub-container-padding: 0.5em 0em 0em 0em; /* "calc" to account for the resize handle */
+    --sidepanel-bottom-margin: 1em; /* top, bottom */
     /* Sidepanel notebook design */
     --sidepanel-notebook-item-padding: 0.3em 0.3em;
     --sidepanel-notebook-item-border-width: 2px;
     --sidepanel-notebook-item-border-radius: 0.25em;
-    --sidepanel-notebook-item-gap: 0.4em;
+    
 }

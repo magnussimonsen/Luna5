@@ -95,8 +95,8 @@ export const useThemeStore = defineStore('theme', {
       /* Scrollbar colors */
       scrollbarThumbColor: 'gray',
       scrollbarTrackColor: 'lightgray',
-    /* Input field colors */
-    inputFieldBackgroundColor: 'white'
+      /* Input field colors */
+      inputFieldBackgroundColor: 'white'
     } as ThemeColorTypes,
 
     darkTheme: {
@@ -184,8 +184,8 @@ export const useThemeStore = defineStore('theme', {
       /* Scrollbar colors */
       scrollbarThumbColor: '#555555',
       scrollbarTrackColor: '#111111',
-    /* Input field colors */
-    inputFieldBackgroundColor: '#333333'
+      /* Input field colors */
+      inputFieldBackgroundColor: '#333333'
     } as ThemeColorTypes
   }),
 
