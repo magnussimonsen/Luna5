@@ -1,49 +1,46 @@
 <template>
-  <div
-    :class="[
-      'sidepanel-row-flex-wrap',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding'
-    ]"
-  >
-    <h3 class="util-margin-zero">Table of Contents</h3>
-  </div>
-       <hr style="border: none; border-top: 2px solid var(--divider-color); height: 1px; margin:  0 0.5em 0 0;" />
-
-  <div
-    :class="[
-      'sidepanel-flex-column-overflow-y',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding'
-    ]"
-  >
-    <div v-if="!headings.length" class="sidepanel__text-message--empty">
-      No headings yet. Add H1–H4 in text cells.
-    </div>
-    <ol
-      v-else
-      :class="[
-        'sidepanel-flex-column-overflow-y',
-        'util-liststyle-none',
-        'util-margin-zero',
-        'util-padding-zero'
-      ]"
-      role="list"
+  <div :class="['sidepanel-container-inside-resize-border-padding']">
+    <strong
+      :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-color-font-styling']"
     >
+      Table of Contents
+    </strong>
 
-      <li v-for="h in headings" :key="h.id" :class="['sidepanel__toc-item']">
-        <span
-          class="sidepanel__toc-link"
-          tabindex="0"
-          @click="scrollToHeading(h)"
-          @keydown.enter.prevent="scrollToHeading(h)"
-          @keydown.space.prevent="scrollToHeading(h)"
+    <!-- Divider -->
+    <Divider />
+
+    <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
+      <div v-if="!headings.length" class="sidepanel__text-message--empty">
+        No headings yet. Add H1–H4 in text cells.
+      </div>
+      <ol
+        v-else
+        :class="[
+          'sidepanel-flex-column-overflow-y',
+          'util-liststyle-none',
+          'util-margin-zero',
+          'util-padding-zero'
+        ]"
+        role="list"
+      >
+        <li
+          v-for="h in headings"
+          :key="h.id"
+          :class="[' sidepanel-row-x-y-padding', 'sidepanel__toc-item']"
         >
-          <span class="sidepanel__toc-numbering" aria-hidden="true">{{ h.numbering }}</span>
-          <span>{{ h.text || '(empty)' }}</span>
-        </span>
-      </li>
-    </ol>
+          <span
+            class="sidepanel__toc-link"
+            tabindex="0"
+            @click="scrollToHeading(h)"
+            @keydown.enter.prevent="scrollToHeading(h)"
+            @keydown.space.prevent="scrollToHeading(h)"
+          >
+            <span class="sidepanel__toc-numbering" aria-hidden="true">{{ h.numbering }}</span>
+            <span>{{ h.text || '(empty)' }}</span>
+          </span>
+        </li>
+      </ol>
+    </div>
   </div>
 </template>
 |
@@ -51,6 +48,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
+import Divider from '@renderer/components/UI/Divider.vue'
 
 /**
  * Type: TocHeading
@@ -103,8 +101,8 @@ const headings = computed<TocHeading[]>(() => {
     const html = cell.cellInputContent || cell.source || ''
     if (!html) continue
 
-    // Regex to find heading tags <h1 ...>...</h1> up to h4
-    const headingTagRegex = /<h([1-4])([^>]*)>([\s\S]*?)<\/h\1>/gi
+    // Regex to find heading tags <h1 ...>...</h1> up to h6
+    const headingTagRegex = /<h([1-6])([^>]*)>([\s\S]*?)<\/h\1>/gi
     let match: RegExpExecArray | null
     while ((match = headingTagRegex.exec(html))) {
       const level = parseInt(match[1], 10)
@@ -151,15 +149,14 @@ function scrollToHeading(heading: TocHeading): void {
     const cellElement =
       document.querySelector(`[data-cell-id="${heading.cellId}"]`) ||
       document.getElementById(heading.cellId) ||
-      (Array.from(document.querySelectorAll('h1,h2,h3,h4')).find(
+      (Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6')).find(
         (el) => el.textContent?.trim() === heading.text
       ) as HTMLElement | undefined)
 
     if (cellElement) {
-      cellElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      // Brief highlight to draw attention to the target cell
-      cellElement.classList.add('toc-highlight')
-      setTimeout(() => cellElement.classList.remove('toc-highlight'), 1200)
+      // Align the target to the top of the scrollable container.
+      // Note: use 'start' (not 'top') — valid values: 'start'|'center'|'end'|'nearest'
+      cellElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   } catch {
     // Ignore DOM errors – this is a non-critical UI enhancement

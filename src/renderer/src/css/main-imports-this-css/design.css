@@ -103,7 +103,8 @@ Design tokens (layout/spacing)
     --sidepanel-button-padding: 0.2em 0.4em 0.2em 0.4em;
     
     /* Sidepanel row styling */
-    --sidepanel-row-padding: 0.3em 0.3em; /* top, right, bottom, left */
+    --sidepanel-row-x-y-padding: 0.2em 0.4em; /* top, right, bottom, left */
+    --sidepanel-row-x-padding: 0em 0.4em; /* top, right, bottom, left */
     --sidepanel-top-row-margin: min(5px, 0.3em);
     --sidepanel-bottom-row-margin: min(5px, 0.3em);
 

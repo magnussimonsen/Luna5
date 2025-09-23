@@ -1,27 +1,23 @@
 <template>
-  <div
-    :class="[
-      'sidepanel-row-flex-wrap',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding'
-    ]"
-  >
-    <h3 class="util-margin-zero">Variables 🚧 Work in progress</h3>
-  </div>
-  <div
-    :class="[
-      'sidepanel-flex-column-overflow-y',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding'
-    ]"
-  >
-    This is the Variables panel. List of variables and functions used in this notebook will be shown
-    here.
+  <div :class="['sidepanel-container-inside-resize-border-padding']">
+    <strong
+      :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-color-font-styling']"
+    >
+      Variables and Functions
+    </strong>
+
+    <!-- Divider -->
+    <Divider />
+    
+    <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
+      <h1>🚧 Work in progress 🚧</h1>
+      <p>This is the Variables panel. List of variables and functions used in this notebook will be shown here.</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Add any VariablesPanel-specific logic here if needed
+import Divider from '@renderer/components/UI/Divider.vue'
 </script>
 
 <style scoped></style>

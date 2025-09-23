@@ -1,33 +1,35 @@
+
 <template>
-  <div
-    :class="[
-      'sidepanel-row-flex-wrap',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding'
-    ]"
-  >
-    <h3 class="util-margin-zero">Flashcards 🚧 Work in progress</h3>
-  </div>
-  <div
-    :class="[
-      'sidepanel-flex-column-overflow-y',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding'
-    ]"
-  >
-    This panel will host the Flashcards feature. The functionality and interface will be designed to
-    match the existing Notebooks structure. Instead of a list of notebooks, it will display a list
-    of flashcard decks. Each deck will contain flashcards that users can review and manage.
-    <br /><br />
-    The flashcards will support spaced repetition, allowing users to optimize their learning
-    process. Users will be able to create, edit, and organize flashcards within decks.
-    <br /><br />
-    Additional features may include tagging flashcards and tracking progress.
+  <div :class="['sidepanel-container-inside-resize-border-padding']">
+    <strong
+      :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-color-font-styling']"
+    >
+      Flashcards
+    </strong>
+
+    <!-- Divider -->
+    <Divider />
+
+    <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
+      <h1>🚧 Work in progress 🚧</h1>
+      <p>This panel will host the Flashcards feature.</p>
+
+     List of planed features:
+      <ul>
+        <li>
+          Instead of a list of notebooks, this side panel will display a list of flashcard decks.
+        </li>
+        <li>Create, view, and manage flashcards with custom text, images and audio.</li>
+        
+        <li>Support for spaced repetition algorithms to optimize learning.</li>
+        <li>Options to customize flashcard appearance and behavior.</li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Placeholder only; wired via sidepanelStore as 'flashcards'
+import Divider from '@renderer/components/UI/Divider.vue'
 </script>
 
 <style scoped></style>

@@ -1,13 +1,18 @@
 <template>
-    
   <div
-    ::class="[
+    :class="[
       'sidepanel-flex-column-overflow-y',
       'sidepanel-color-font-styling',
+      'util-padding-zero',
+      'util-margin-zero',
+      'sidepanel-top-row-margin',
+      'util-liststyle-none'
     ]"
   >
-    <strong :class="['sidepanel-row-padding', 'sidepanel__setting-row', 'sidepanel-bottom-row-margin']">General Settings</strong>
-    <div class="sidepanel__setting-row sidepanel-row-padding">
+    <strong :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']"
+      >General Settings</strong
+    >
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label>Set language:</label>
       <select
         v-model="languageStore.currentLanguage"
@@ -21,7 +26,7 @@
       <ImplementedMark :implemented="false" />
     </div>
 
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label>Enable autosave:</label>
       <select
         v-model.number="generalSettingsStore.autosaveChangeIntervalState"
@@ -34,7 +39,7 @@
       <ImplementedMark :implemented="true" />
     </div>
 
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label>
         <input v-model="generalSettingsStore.warnOnDeleteCellState" type="checkbox" />
         Warn when deleting cells
@@ -42,17 +47,19 @@
       <ImplementedMark :implemented="false" />
     </div>
 
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label>
         <input v-model="generalSettingsStore.showCellIndexNumbersState" type="checkbox" />
         Show cell index numbers
       </label>
       <ImplementedMark :implemented="false" />
     </div>
+    <strong :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']"
+      >User Interface Settings</strong
+    >
 
-    <h3>User Interface Settings</h3>
     <!-- Font Family Selectors -->
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label for="ui-font-select">User Interface Font:</label>
       <select
         id="ui-font-select"
@@ -72,7 +79,7 @@
     </div>
 
     <!-- Font Size Selectors -->
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label for="default-cell-reset-font-size-select"> Default Cell Font Size: </label>
       <select
         id="default-cell-reset-font-size-select"
@@ -90,7 +97,7 @@
       </select>
       <ImplementedMark :implemented="true" />
     </div>
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label for="menubar-font-size-select">Menu Bar Font Size:</label>
       <select
         id="menubar-font-size-select"
@@ -108,7 +115,7 @@
       </select>
       <ImplementedMark :implemented="true" />
     </div>
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label for="top-toolbar-font-size-select">Toolbar Font Size:</label>
       <select
         id="top-toolbar-font-size-select"
@@ -126,7 +133,7 @@
       </select>
       <ImplementedMark :implemented="true" />
     </div>
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label for="sidepanel-font-size-select">Side Panel Font Size:</label>
       <select
         id="sidepanel-font-size-select"
@@ -144,7 +151,7 @@
       </select>
       <ImplementedMark :implemented="true" />
     </div>
-    <div class="sidepanel__setting-row">
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label for="status-bar-font-size-select">Status Bar Font Size:</label>
       <select
         id="status-bar-font-size-select"

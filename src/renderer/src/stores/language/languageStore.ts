@@ -14,7 +14,7 @@ import { LanguageType } from '@renderer/types/language-types'
 export const useLanguageStore = defineStore('language', {
   state: () => ({
     currentLanguage: 'english' as LanguageType,
-    availableLanguages: ['english', 'norwegian'] as LanguageType[],
+    availableLanguages: ['english', 'norwegian', 'klingon', 'spanish', 'french', 'shyriiwook'] as LanguageType[],
     fallbackLanguage: 'english' as LanguageType,
     translations: {} as Record<string, string>
   }),

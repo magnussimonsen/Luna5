@@ -1,5 +1,9 @@
 /* All menubar button styles */
 
+.menubar-right-padding {
+    padding-right: 0.4em; /* Add right padding to menubar */
+}
+
 .menubar-button {
     background: transparent;
     color: var(--text-color, #fff);

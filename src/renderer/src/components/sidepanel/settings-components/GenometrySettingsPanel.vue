@@ -1,7 +1,18 @@
 <template>
-  <div class="settings-page sidepanel-ui-base">
-    <h3>Geometry Settings</h3>
-    <p>Geometry settings content goes here.</p>
+  <div   :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-padding-zero',
+      'util-margin-zero',
+      'sidepanel-top-row-margin',
+      'util-liststyle-none'
+    ]">
+    <strong :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']"
+      >Geometry Settings</strong
+    >
+    <div :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']">
+      <span> Geometry settings content goes here.</span>
+    </div>
   </div>
 </template>
 

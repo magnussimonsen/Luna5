@@ -1,6 +1,5 @@
 <template>
   <div class="sidepanel-container-inside-resize-border-padding">
-    <!-- Menu bar selection row (component)   :font-size="fontSizeStore.fontSizes.sidepanelMenubarFontSize" -->
     <SettingsPanelSelectorRow :current-page="currentPage" @update:current-page="onUpdatePage" /> 
     <!-- Content area -->
     <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">

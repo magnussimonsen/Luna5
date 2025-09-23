@@ -139,6 +139,7 @@
         'sidepanel-flex-column-overflow-y',
         'sidepanel-color-font-styling',
         'util-padding-zero',
+        'util-margin-zero',
         'sidepanel-top-row-margin',
         'util-liststyle-none'
       ]"
@@ -179,7 +180,10 @@
       :class="[
         'sidepanel-flex-column-overflow-y',
         'sidepanel-color-font-styling',
-        'util-padding-zero'
+        'util-padding-zero',
+        'util-margin-zero',
+        'sidepanel-top-row-margin',
+        'util-liststyle-none'
       ]"
     >
       <span class="sidepanel__text-message--empty"> No notebooks yet.</span>
@@ -190,7 +194,10 @@
       :class="[
         'sidepanel-flex-column-overflow-y',
         'sidepanel-color-font-styling',
-        'util-padding-zero'
+        'util-padding-zero',
+        'util-margin-zero',
+        'sidepanel-top-row-margin',
+        'util-liststyle-none'
       ]"
       role="list"
       aria-label="Deleted notebooks"
@@ -218,16 +225,17 @@
       :class="[
         'sidepanel-flex-column-overflow-y',
         'sidepanel-color-font-styling',
-         'util-padding-zero'
+        'util-padding-zero',
+        'util-margin-zero',
+        'sidepanel-top-row-margin',
+        'util-liststyle-none'
       ]"
     >
       <div
-        :class="[
-          'sidepanel__text-message--empty',
-          'sidepanel__notebook-item-transparent-border',
-
-        ]"
-      >Bin is empty.</div>
+        :class="['sidepanel__text-message--empty', 'sidepanel__notebook-item-transparent-border']"
+      >
+        Bin is empty.
+      </div>
     </div>
   </div>
 </template>

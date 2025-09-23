@@ -1,7 +1,21 @@
 <template>
-  <div class="settings-column sidepanel-ui-base">
-    <h3>Probability Settings</h3>
-    <div class="setting-row" style="opacity: 0.8">
+  <div
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-padding-zero',
+      'util-margin-zero',
+      'sidepanel-top-row-margin',
+      'util-liststyle-none'
+    ]"
+  >
+    <strong :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']"
+      >Probability Settings</strong
+    >
+    <div
+      :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']"
+      style="opacity: 0.8"
+    >
       <span>Placeholder: probability and statistics options will appear here.</span>
     </div>
   </div>
@@ -12,13 +26,6 @@
 </script>
 
 <style scoped>
-.settings-column {
-  width: 100%;
-}
-.setting-row {
-  margin-bottom: 1em;
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
+/* Styles are in the css folder */
+
 </style>

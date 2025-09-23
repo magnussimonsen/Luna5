@@ -1,5 +1,9 @@
 /* Base style for the panel content container that holds 
-all the specific side panel types*/
+all the specific side panel types
+
+NO PADDING HERE
+
+*/
 
 .sidepanel-content-container {
   flex: 1;
@@ -7,5 +11,4 @@ all the specific side panel types*/
   display: flex;
   flex-direction: column;
   background: var(--sidepanel-background, var(--debug-color), red);
-  padding: var(--sidepanel-container-padding);
 }

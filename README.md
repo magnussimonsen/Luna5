@@ -169,6 +169,28 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 ---
 ## 🖼️ Current UI Progress Snapshots and dev updates
 
+- **Sidepanel CSS:** Made sidepanel layouts consistent so inner panels scroll properly (`sidepanel-flex-column-overflow-y` + `sidepanel-container-inside-resize-border-padding`).
+- **TOC:** Now finds headings up to `h6`, scrolls the page to the top of the heading smoothly, and briefly highlights the target.
+- **Dark mode (checkboxes):** Checkboxes get a dark look using `accent-color`; the "Enable line numbers" checkbox is wired to `themeStore.isDarkMode`.
+- **Component fixes:** Fixed broken single-file components and corrected imports (notably `Divider.vue` and `SettingsPanelSelectorRow.vue`).
+- **Settings UI:** Made `CodeSettingsPanel.vue` match the `GeneralSettingsPanel.vue` layout and hooked the Max Monaco Editors control to `codeSettingsStore.maxNumberOfMonacoInstances`.
+- **Cell spacing:** Removed a responsive margin that caused unwanted vertical gaps in narrow views.
+- **Font store:** Renamed `setToolbarFontSize` → `setTopToolbarFontSize` and updated the CSS variable to `--top-toolbar-font-size`.
+- **Monaco editor plan:** Designed a lifecycle/pooling approach (`init`/`wake`/`hibernate`/`destroy` + `maxNumberOfMonacoInstances`), implementation still pending.
+
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-23-1.png" alt="UI improvments" width="450" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-23-2.png" alt="UI improvments" width="450" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-23-3.png" alt="UI improvments" width="450" />
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-23-4.png" alt="UI improvments" width="450" />
+</p>
+
 **Currently** refactoring core level CSS (all the way from #app to top level) for all top row menubar and toolbar components.
 
 Implement flexible `flex-wrap` behavior and `margin-left auto` subclass for menubar and toolbar containers (the `auto` sizing lets a group size to its content). Streamline global CSS imports by moving styles out of Vue components into a separate CSS folder for reusable row- and button-style rules, improving consistency between the menu and toolbars. Consolidate shared helper classes across components. Visual/layout-only changes; no TypeScript behavior changes.

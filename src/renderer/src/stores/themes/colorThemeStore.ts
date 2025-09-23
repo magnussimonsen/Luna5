@@ -73,7 +73,7 @@ export const useThemeStore = defineStore('theme', {
       // Divider color
       dropdownDividerColor: '#cccccc',
       // Button colors
-      buttonBorderColor: '#cccccc',
+      buttonBorderColor: 'lightgray',
       buttonHoverColor: 'lightgray',
       buttonBorderHoverColor: 'black',
       buttonBackgroundColor: 'transparent',
@@ -131,7 +131,7 @@ export const useThemeStore = defineStore('theme', {
       mainPanelBackground: '#9B2E2E', // Replace this with workspace background color
       mainPanelBorderColor: '#444444', // Replace this with workspace border color
       // Divider color
-      dividerColor: '#444444',
+      dividerColor: '#242424',
       // Paper preview background
       paperColor: '#333333',
       paperBorderColor: 'transparent',
