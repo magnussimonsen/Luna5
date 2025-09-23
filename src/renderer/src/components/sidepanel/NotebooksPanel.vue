@@ -1,83 +1,83 @@
 <template>
-  <div
-    :class="[
-      'sidepanel-row-flex-wrap',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding'
-    ]"
-    role="tablist"
-    aria-label="Notebook views"
-  >
-    <button
-      type="button"
-      class="sidepanel__button sidepanel-color-font-styling"
-      :class="mode === 'notebooks' && 'sidepanel__button--active'"
-      role="tab"
-      :aria-selected="mode === 'notebooks'"
-      @click="onClickNotebooksTab"
+  <div class="sidepanel-container-inside-resize-border-padding">
+    <div
+      :class="[
+        'sidepanel-row-flex-wrap',
+        'sidepanel-color-font-styling',
+        'sidepanel-bottom-row-margin'
+      ]"
+      role="tablist"
+      aria-label="Notebook views"
     >
-      Notebooks
-    </button>
-    <button
-      type="button"
-      class="sidepanel__button sidepanel-color-font-styling"
-      :class="mode === 'bin' && 'sidepanel__button--active'"
-      role="tab"
-      :aria-selected="mode === 'bin'"
-      @click="onClickBinTab"
-    >
-      Recycle Bin
-    </button>
-    <button
-      type="button"
-      class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
-      :disabled="!currentId || mode === 'bin'"
-      @click="moveNotebookUp"
-    >
-      <span aria-label="Move notebook up" class="icon-move-up"></span>
-    </button>
-    <button
-      type="button"
-      class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
-      :disabled="!currentId || mode === 'bin'"
-      @click="moveNotebookDown"
-    >
-      <span aria-label="Move notebook down" class="icon-move-down"></span>
-    </button>
-    <button
-      type="button"
-      title="Flag selected notebook (Not implemented yet)"
-      class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
-      :disabled="!currentId || mode === 'bin'"
-      @click="
-        () => {
-          console.log('Flag notebook - not implemented yet')
-        }
-      "
-    >
-      <span aria-label="Flag selected notebook (Not implemented yet)" class="icon-flag"></span>
-    </button>
-  </div>
-
-  <!-- Row 2: action buttons (depends on mode) -->
-  <div
-    :class="[
-      'sidepanel-row-flex-wrap',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding',
-      'sidepanel-bottom-margin'
-    ]"
-  >
-    <template v-if="mode === 'notebooks'">
       <button
         type="button"
         class="sidepanel__button sidepanel-color-font-styling"
-        aria-label="Create new notebook"
-        @click="onAdd"
+        :class="mode === 'notebooks' && 'sidepanel__button--active'"
+        role="tab"
+        :aria-selected="mode === 'notebooks'"
+        @click="onClickNotebooksTab"
       >
-        Create new notebook
+        Notebooks
       </button>
-      <!-- Temporarily disabled: these actions are moved to the Edit menu.       <button
+      <button
+        type="button"
+        class="sidepanel__button sidepanel-color-font-styling"
+        :class="mode === 'bin' && 'sidepanel__button--active'"
+        role="tab"
+        :aria-selected="mode === 'bin'"
+        @click="onClickBinTab"
+      >
+        Recycle Bin
+      </button>
+      <button
+        type="button"
+        class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
+        :disabled="!currentId || mode === 'bin'"
+        @click="moveNotebookUp"
+      >
+        <span aria-label="Move notebook up" class="icon-move-up"></span>
+      </button>
+      <button
+        type="button"
+        class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
+        :disabled="!currentId || mode === 'bin'"
+        @click="moveNotebookDown"
+      >
+        <span aria-label="Move notebook down" class="icon-move-down"></span>
+      </button>
+      <button
+        type="button"
+        title="Flag selected notebook (Not implemented yet)"
+        class="sidepanel__button sidepanel__button-icon sidepanel-color-font-styling"
+        :disabled="!currentId || mode === 'bin'"
+        @click="
+          () => {
+            console.log('Flag notebook - not implemented yet')
+          }
+        "
+      >
+        <span aria-label="Flag selected notebook (Not implemented yet)" class="icon-flag"></span>
+      </button>
+    </div>
+
+    <!-- Row 2: action buttons (depends on mode) -->
+    <div
+      :class="[
+        'sidepanel-row-flex-wrap',
+        'sidepanel-bottom-row-margin',
+        'sidepanel-color-font-styling'
+      ]"
+    >
+      <template v-if="mode === 'notebooks'">
+        <button
+          type="button"
+          class="sidepanel__button sidepanel-color-font-styling"
+          aria-label="Create new notebook"
+          @click="onAdd"
+        >
+          Create new notebook
+        </button>
+        <!-- Temporarily disabled: these actions are moved to the Edit menu.       <button
         type="button"
         class="delete-btn"
         aria-label="Move selected cell to bin"
@@ -96,138 +96,139 @@
         Delete notebook
       </button>
       -->
-    </template>
-    <template v-else>
-      <button
-        type="button"
-        class="sidepanel__button sidepanel-color-font-styling"
-        aria-label="Restore selected notebook"
-        :disabled="!currentId || !isBinActiveNotebook"
-        @click="onRestoreSelectedCell"
-      >
-        Restore cell
-      </button>
-      <button
-        type="button"
-        class="sidepanel__button sidepanel-color-font-styling"
-        aria-label="Restore selected notebook"
-        :disabled="!currentId || isBinActiveNotebook || isBinEmpty"
-        @click="onRestoreSelectedNotebook"
-      >
-        Restore notebook
-      </button>
-      <button
-        type="button"
-        class="sidepanel__button sidepanel__button--delete sidepanel-color-font-styling"
-        aria-label="Empty bin"
-        :disabled="isBinEmpty"
-        @click="onEmptyBin"
-      >
-        Empty Bin
-      </button>
-    </template>
-  </div>
-  <!-- Active notebooks list -->
-  <hr
-    style="
-      border: none;
-      border-top: 2px solid var(--divider-color);
-      height: 1px;
-      margin: 0 0.5em 0 0;
-    "
-  />
-  <ul
-    v-if="mode === 'notebooks' && activeNotebooks.length"
-    :class="[
-      'sidepanel-flex-column-overflow-y',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding',
-      'util-liststyle-none',
-      'util-margin-zero'
-    ]"
-    role="list"
-  >
-    <li
-      v-for="notebook in activeNotebooks"
-      :key="notebook.id"
-      :class="[
-        'sidepanel__notebook-item',
-        notebook.id === currentId && 'sidepanel__notebook-item sidepanel__notebook-item--active'
-      ]"
-      role="listitem"
-      :title="notebook.title"
-      :aria-current="notebook.id === currentId ? 'true' : undefined"
-      @click="select(notebook.id)"
-      @dblclick="startEditing(notebook.id, notebook.title)"
-    >
-      <span v-if="editingId !== notebook.id">{{ notebook.title }}</span>
-      <div v-else>
-        <input
-          :ref="setRenameInputRef"
-          v-model="editingTitle"
-          class="sidepanel__notebook-rename-input"
-          size="100"
-          type="text"
-          @keydown.stop
-          @click.stop
-          @keyup.enter="commitRename(notebook.id)"
-          @blur="commitRename(notebook.id)"
-        />
-      </div>
-    </li>
-  </ul>
-  <div
-    v-else-if="mode === 'notebooks'"
-    :class="[
-      'sidepanel-flex-column-overflow-y',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding',
-      'util-liststyle-none',
-      'util-margin-zero'
-    ]"
-  >
-    <span class="sidepanel__text-message--empty"> No notebooks yet.</span>
-  </div>
+      </template>
+      <template v-else>
+        <button
+          type="button"
+          class="sidepanel__button sidepanel-color-font-styling"
+          aria-label="Restore selected notebook"
+          :disabled="!currentId || !isBinActiveNotebook"
+          @click="onRestoreSelectedCell"
+        >
+          Restore cell
+        </button>
+        <button
+          type="button"
+          class="sidepanel__button sidepanel-color-font-styling"
+          aria-label="Restore selected notebook"
+          :disabled="!currentId || isBinActiveNotebook || isBinEmpty"
+          @click="onRestoreSelectedNotebook"
+        >
+          Restore notebook
+        </button>
+        <button
+          type="button"
+          class="sidepanel__button sidepanel__button--delete sidepanel-color-font-styling"
+          aria-label="Empty bin"
+          :disabled="isBinEmpty"
+          @click="onEmptyBin"
+        >
+          Empty Bin
+        </button>
+      </template>
+    </div>
 
-  <ul
-    v-if="mode === 'bin' && deletedNotebooks.length"
-    :class="[
-      'sidepanel-flex-column-overflow-y',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding',
-      'util-liststyle-none',
-      'util-margin-zero'
-    ]"
-    role="list"
-    aria-label="Deleted notebooks"
-  >
-    <li
-      v-for="notebook in deletedNotebooks"
-      :key="notebook.id"
-      class="sidepanel__notebook-item sidepanel__notebook-item--notebook-in-bin"
-      role="listitem"
+    <!-- Divider -->
+    <Divider />
+
+    <!-- Main content: notebooks list or bin list -->
+    <!-- Use a single scroll container for the entire list -->
+    <ul
+      v-if="mode === 'notebooks' && activeNotebooks.length"
       :class="[
-        notebook.id === currentId &&
-          'sidepanel__notebook-item--active sidepanel__notebook-item--notebook-in-bin'
+        'sidepanel-flex-column-overflow-y',
+        'sidepanel-color-font-styling',
+        'util-padding-zero',
+        'sidepanel-top-row-margin',
+        'util-liststyle-none'
       ]"
-      :title="notebook.title"
-      @click="workspaceStore.selectNotebookInBin(notebook.id)"
+      role="list"
     >
-      <span>{{ notebook.title }}</span>
-      <span class="sidepanel__notebook_meta-info">{{ formatDate(notebook.deletedAt) }}</span>
-    </li>
-  </ul>
-  <div
-    v-else-if="mode === 'bin'"
-    :class="[
-      'sidepanel-flex-column-overflow-y',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding',
-      'util-liststyle-none',
-      'util-margin-zero'
-    ]"
-  >
-    <span class="sidepanel__text-message--empty">Bin is empty.</span>
+      <li
+        v-for="notebook in activeNotebooks"
+        :key="notebook.id"
+        :class="[
+          'sidepanel__notebook-item',
+          'sidepanel-bottom-row-margin',
+          notebook.id === currentId && 'sidepanel__notebook-item sidepanel__notebook-item--active'
+        ]"
+        role="listitem"
+        :title="notebook.title"
+        :aria-current="notebook.id === currentId ? 'true' : undefined"
+        @click="select(notebook.id)"
+        @dblclick="startEditing(notebook.id, notebook.title)"
+      >
+        <span v-if="editingId !== notebook.id">{{ notebook.title }}</span>
+        <div v-else>
+          <input
+            :ref="setRenameInputRef"
+            v-model="editingTitle"
+            class="sidepanel__notebook-rename-input"
+            size="100"
+            type="text"
+            @keydown.stop
+            @click.stop
+            @keyup.enter="commitRename(notebook.id)"
+            @blur="commitRename(notebook.id)"
+          />
+        </div>
+      </li>
+    </ul>
+    <div
+      v-else-if="mode === 'notebooks'"
+      :class="[
+        'sidepanel-flex-column-overflow-y',
+        'sidepanel-color-font-styling',
+        'util-padding-zero'
+      ]"
+    >
+      <span class="sidepanel__text-message--empty"> No notebooks yet.</span>
+    </div>
+
+    <ul
+      v-if="mode === 'bin' && deletedNotebooks.length"
+      :class="[
+        'sidepanel-flex-column-overflow-y',
+        'sidepanel-color-font-styling',
+        'util-padding-zero'
+      ]"
+      role="list"
+      aria-label="Deleted notebooks"
+    >
+      <li
+        v-for="notebook in deletedNotebooks"
+        :key="notebook.id"
+        :class="[
+          'sidepanel__notebook-item',
+          'sidepanel-bottom-row-margin',
+          'sidepanel__notebook-item--notebook-in-bin',
+          notebook.id === currentId &&
+            'sidepanel__notebook-item--active sidepanel__notebook-item--notebook-in-bin'
+        ]"
+        role="listitem"
+        :title="notebook.title"
+        @click="workspaceStore.selectNotebookInBin(notebook.id)"
+      >
+        <span>{{ notebook.title }}</span>
+        <span class="sidepanel__notebook_meta-info">👻 {{ formatDate(notebook.deletedAt) }} </span>
+      </li>
+    </ul>
+    <div
+      v-else-if="mode === 'bin'"
+      :class="[
+        'sidepanel-flex-column-overflow-y',
+        'sidepanel-color-font-styling',
+         'util-padding-zero'
+      ]"
+    >
+      <div
+        :class="[
+          'sidepanel__text-message--empty',
+          'sidepanel__notebook-item-transparent-border',
+
+        ]"
+      >Bin is empty.</div>
+    </div>
   </div>
 </template>
 
@@ -236,6 +237,7 @@ import { computed, nextTick, ref } from 'vue'
 import type { ComponentPublicInstance } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import type { ElectronAPI } from '@electron-toolkit/preload'
+import Divider from '@renderer/components/UI/Divider.vue'
 
 const workspaceStore = useWorkspaceStore()
 

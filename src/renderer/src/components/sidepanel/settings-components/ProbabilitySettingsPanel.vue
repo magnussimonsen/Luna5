@@ -12,7 +12,6 @@
 </script>
 
 <style scoped>
-@import '@renderer/css/sidepanel-base.css';
 .settings-column {
   width: 100%;
 }

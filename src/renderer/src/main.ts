@@ -1,5 +1,4 @@
 import './css/main.css'
-import './css/settings-side-panel.css'
 
 import { createApp, watch } from 'vue'
 import App from '@renderer/App.vue'

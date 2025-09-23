@@ -1,15 +1,9 @@
 <template>
-  <div
-    :class="[
-      'sidepanel-row-flex-wrap',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding'
-    ]"
-  >
+  <div :class="['sidepanel-row-flex-wrap', 'sidepanel-color-font-styling']">
     <div>
       <button
         :class="[
-          'sidepanel__button sidepanel-color-font-styling',
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
           { 'sidepanel__button--active': currentPage === 'general' }
         ]"
         @click="emitUpdate('general')"
@@ -18,7 +12,7 @@
       </button>
       <button
         :class="[
-          'sidepanel__button sidepanel-color-font-styling',
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
           { 'sidepanel__button--active': currentPage === 'text-editor' }
         ]"
         @click="emitUpdate('text-editor')"
@@ -27,7 +21,7 @@
       </button>
       <button
         :class="[
-          'sidepanel__button sidepanel-color-font-styling',
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
           { 'sidepanel__button--active': currentPage === 'graphical-calculator' }
         ]"
         @click="emitUpdate('graphical-calculator')"
@@ -36,7 +30,7 @@
       </button>
       <button
         :class="[
-          'sidepanel__button sidepanel-color-font-styling',
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
           { 'sidepanel__button--active': currentPage === 'cas' }
         ]"
         @click="emitUpdate('cas')"
@@ -45,7 +39,7 @@
       </button>
       <button
         :class="[
-          'sidepanel__button sidepanel-color-font-styling',
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
           { 'sidepanel__button--active': currentPage === 'geometry' }
         ]"
         @click="emitUpdate('geometry')"
@@ -55,7 +49,7 @@
 
       <button
         :class="[
-          'sidepanel__button sidepanel-color-font-styling',
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
           { 'sidepanel__button--active': currentPage === 'spreadsheets' }
         ]"
         @click="emitUpdate('spreadsheets')"
@@ -64,7 +58,7 @@
       </button>
       <button
         :class="[
-          'sidepanel__button sidepanel-color-font-styling',
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
           { 'sidepanel__button--active': currentPage === 'probability' }
         ]"
         @click="emitUpdate('probability')"
@@ -73,7 +67,7 @@
       </button>
       <button
         :class="[
-          'sidepanel__button sidepanel-color-font-styling',
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
           { 'sidepanel__button--active': currentPage === 'code' }
         ]"
         @click="emitUpdate('code')"
@@ -82,10 +76,12 @@
       </button>
     </div>
   </div>
+  <Divider />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import Divider from '@renderer/components/UI/Divider.vue'
 
 type SettingsPage =
   | 'general'

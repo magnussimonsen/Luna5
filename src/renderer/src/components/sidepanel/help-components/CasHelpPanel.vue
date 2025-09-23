@@ -11,5 +11,4 @@
 </script>
 
 <style scoped>
-@import '@renderer/css/sidepanel-base.css';
 </style>

@@ -295,13 +295,5 @@ function onMarginClick(): void {
 
 /* Responsive tweaks */
 @media (max-width: 800px) {
-  .cell-margin {
-    flex-basis: 2.6rem;
-  }
-  /* Keep cell vertical margins at 0 to avoid unexpected gaps when layout collapses.
-     Use the parent container's `gap` if uniform spacing is desired. */
-  .cell-container {
-    margin-block: 0em;
-  }
 }
 </style>

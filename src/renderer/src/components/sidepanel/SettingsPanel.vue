@@ -1,32 +1,18 @@
 <template>
-  <!-- Menu bar selection row (component)   :font-size="fontSizeStore.fontSizes.sidepanelMenubarFontSize" -->
-  <SettingsPanelSelectorRow :current-page="currentPage" @update:current-page="onUpdatePage" />
-  <!-- Content area -->
-  <div
-    :class="[
-      'sidepanel-flex-column-overflow-y',
-      'sidepanel-color-font-styling',
-      'util-sub-sidepanel-container-padding',
-      'util-liststyle-none',
-      'util-margin-zero'
-    ]"
-  >
-    <hr
-      style="
-        border: none;
-        border-top: 2px solid var(--divider-color);
-        height: 1px;
-        margin: 0 0.5em 0 0;
-      "
-    />
-    <GeneralSettingsPanel v-if="currentPage === 'general'" />
-    <CodeSettingsPanel v-else-if="currentPage === 'code'" />
-    <CasSettingsPanel v-else-if="currentPage === 'cas'" />
-    <GenometrySettingsPanel v-else-if="currentPage === 'geometry'" />
-    <GraphicalCalculatorSettingsPanel v-else-if="currentPage === 'graphical-calculator'" />
-    <SpreadsheetsSettingsPanel v-else-if="currentPage === 'spreadsheets'" />
-    <ProbabilitySettingsPanel v-else-if="currentPage === 'probability'" />
-    <TextEditorPanel v-else-if="currentPage === 'text-editor'" />
+  <div class="sidepanel-container-inside-resize-border-padding">
+    <!-- Menu bar selection row (component)   :font-size="fontSizeStore.fontSizes.sidepanelMenubarFontSize" -->
+    <SettingsPanelSelectorRow :current-page="currentPage" @update:current-page="onUpdatePage" /> 
+    <!-- Content area -->
+    <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
+      <GeneralSettingsPanel v-if="currentPage === 'general'" />
+      <CodeSettingsPanel v-else-if="currentPage === 'code'" />
+      <CasSettingsPanel v-else-if="currentPage === 'cas'" />
+      <GenometrySettingsPanel v-else-if="currentPage === 'geometry'" />
+      <GraphicalCalculatorSettingsPanel v-else-if="currentPage === 'graphical-calculator'" />
+      <SpreadsheetsSettingsPanel v-else-if="currentPage === 'spreadsheets'" />
+      <ProbabilitySettingsPanel v-else-if="currentPage === 'probability'" />
+      <TextEditorPanel v-else-if="currentPage === 'text-editor'" />
+    </div>
   </div>
 </template>
 

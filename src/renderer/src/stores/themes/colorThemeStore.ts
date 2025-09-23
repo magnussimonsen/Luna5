@@ -89,7 +89,7 @@ export const useThemeStore = defineStore('theme', {
       buttonDisabledHoverColor: 'gray',
       // General reset or delete button colors
       buttonResetColor: 'darksalmon',
-      buttonResetHoverColor: 'red',
+      buttonResetHoverColor: 'tomato',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'lightgreen',
       resetZoomButtonColorOffCenter: 'salmon',

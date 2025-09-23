@@ -1,4 +1,10 @@
 <template>
+  <!-- 
+  THIS COMPONENT HAS A RESIZABLE SIDE PANEL 
+  AND NO EXTRA PADDING.
+  Use .sidepanel-container-inside-resize-border-padding in 
+  "sidepanel-ui-base" class for padding.              
+  -->
   <aside
     v-if="sidepanelStore.activePanel"
     class="sidepanel-main"

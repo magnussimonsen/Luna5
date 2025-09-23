@@ -50,7 +50,6 @@ const fontSizeStore = useFontSizeStore()
 </script>
 
 <style scoped>
-@import '@renderer/css/sidepanel-base.css';
 .text-editor-settings {
   width: 100%;
 }

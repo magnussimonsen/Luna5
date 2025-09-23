@@ -1,0 +1,1 @@
+Debug notes: The .cell-margin width change is controlled by media query in CellContainer.vue: .cell-margin { flex: 0 0 1rem; } and @media (max-width: 800px) sets .cell-margin { flex-basis: 2.6rem; } causing the sudden increase when the viewport crosses 800px. Recommendation: adjust media query or use clamp()/min() for responsive sizing.

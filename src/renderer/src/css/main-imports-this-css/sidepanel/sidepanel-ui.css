@@ -15,6 +15,11 @@
   width: auto;
 }
 
+.util-sidepanel-margin-right-auto {
+  margin-right: auto;
+  width: auto;
+}
+
 .util-sidepanel-flex-start {
   justify-content: flex-start;
 }
@@ -24,18 +29,10 @@
 }
 
 .util-sidepanel-bottom-seperator-line {
-  border-bottom: 1px solid var(--sidepanel-divider-color, #ccc);
+  border-bottom: 1px solid var(--divider-color, #ccc);
   width: 100%;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-.util-sidepanel-container-padding {
-  padding: var(--sidepanel-container-padding, 0.3em calc(min(5px, 0.5em) + 0.3em));
-}
-
-.util-sub-sidepanel-container-padding {
-  padding: var(--sidepanel-sub-container-padding, 0.3em calc(min(5px, 0.5em) + 0.3em));
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
 
 .util-liststyle-none {
@@ -49,14 +46,17 @@
   padding: 0;
 }
 
-.sidepanel-bottom-margin {
-  margin-bottom: var(--sidepanel-bottom-margin, 1em);
+/* Sidepanel main container padding */
+.sidepanel-container-inside-resize-border-padding {
+  /* Make this a column flex container so panels can size their internal scroll area.
+     Important: `min-height: 0` allows children with `min-height: 0` to shrink and
+     enables overflow-y scrolling on nested flex children. */
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: var(--sidepanel-container-inside-resize-border-padding, 0.3em calc(min(5px, 0.5em) + 0.3em));
 }
-
-.util-divider {
-  border-bottom: 2px solid var(--divider-color, #ccc);
-}
-
 
 /* Sidepanel color and font styling */
 .sidepanel-color-font-styling {
@@ -66,6 +66,24 @@
   background: var(--sidepanel-background, var(--debug-color, #f0f0f0));
 }
 
+/* Sidepanel row styling */
+.sidepanel-row {
+  padding: var(--sidepanel-row-padding);
+}
+
+.sidepanel-row-padding {
+  padding: var(--sidepanel-row-padding, 0.2em 0em 0.2em 0em); /* top, right, bottom, left */
+}
+
+.sidepanel-top-row-margin {
+  margin-top: var(--sidepanel-top-row-margin, min(5px, 0.5em));
+}
+.sidepanel-bottom-row-margin {
+  margin-bottom: var(--sidepanel-bottom-row-margin, min(5px, 0.5em));
+}
+
+
+
 /* -------------------------------------------------- */
 /* Side panel buttons                                 */
 /* -------------------------------------------------- */
@@ -73,7 +91,7 @@
 .sidepanel__button {
   cursor: pointer;
   border: var(--border-thickness, 2px) solid var(--button-border-color, var(--debug-color, red));
-  padding: var(--sidepanel-menubar-button-padding);
+  padding: var(--sidepanel-button-padding);
   border-radius: var(--border-radius, 2px);
   border: 0px solid var(--side-panel-border-color, #ccc);
   /* Custom button background styling - overrides sidepanel-color-font-styling */
@@ -153,15 +171,21 @@
   border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--button-border-color, #ccc);
 }
 
+.sidepanel__notebook-item-transparent-border {
+  display: flex;
+  align-items: center;
+  padding: var(--sidepanel-notebook-item-padding);
+  border: var(--sidepanel-notebook-item-border-width, 2px) solid transparent; /* top, right, bottom, left */
+}
+
 .sidepanel__notebook-item--active {
   background: var(--button-on-color, var(--debug-color, #2563eb));
   border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--active-border-color, #ccc);
 }
 
 .sidepanel__notebook-item--notebook-in-bin {
-  opacity: 0.7;
+  opacity: 0.8;
   border-style: dashed;
-
 }
 
 .sidepanel__notebook-rename-input {
@@ -183,8 +207,9 @@
   margin-left: auto;
   opacity: 0.8;
 }
-
-/* Sidepanel Table of Contents (TOC) styling */
+/* -------------------------------------------------- */
+/* Sidepanel Table of Contents (TOC) styling          */
+/* -------------------------------------------------- */
 .sidepanel__toc-item {
   padding: 0;
   margin: 0;
@@ -212,14 +237,20 @@
     content: '';
   }
 
-  /* Settings sidepanels */
+  /* ------------------------------------ */
+  /*     Settings sidepanels styling      */
+  /* ------------------------------------ */
 
     .sidepanel__setting-row {
       display: flex;
       align-items: center;
       gap: 0.5em;
-      margin-bottom: 0.75em;
-      padding: var(--sidepanel-settings-row-padding);
+    }
+
+    .sidepanel__setting-row--dark-mode {
+      /* Placeholder for dark mode styles (experimental) */
+      background-color: black;
+	    color: #cccccc;
     }
 
         
