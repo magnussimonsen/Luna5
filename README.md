@@ -179,16 +179,16 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 - **Monaco editor plan:** Designed a lifecycle/pooling approach (`init`/`wake`/`hibernate`/`destroy` + `maxNumberOfMonacoInstances`), implementation still pending.
 
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-09-23-1.png" alt="UI improvments" width="450" />
+  <img src="./src/development-screenshots/Luna5-2025-09-23-1.png" alt="UI improvments" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-09-23-2.png" alt="UI improvments" width="450" />
+  <img src="./src/development-screenshots/Luna5-2025-09-23-2.png" alt="UI improvments" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-09-23-3.png" alt="UI improvments" width="450" />
+  <img src="./src/development-screenshots/Luna5-2025-09-23-3.png" alt="UI improvments" width="900" />
 </p>
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-09-23-4.png" alt="UI improvments" width="450" />
+  <img src="./src/development-screenshots/Luna5-2025-09-23-4.png" alt="UI improvments" width="900" />
 </p>
 
 **Currently** refactoring core level CSS (all the way from #app to top level) for all top row menubar and toolbar components.
