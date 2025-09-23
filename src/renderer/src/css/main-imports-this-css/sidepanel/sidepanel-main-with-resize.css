@@ -13,9 +13,11 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  border-left: 0.1em solid var(--button-on-color, lightgreen);
-  border-top: 0.1em solid var(--button-on-color, lightgreen);
-  border-bottom: 0.1em solid var(--button-on-color, lightgreen);
+  border-left: min(0.3em, 5px) solid var(--button-on-color, lightgreen);
+  border-right: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
+  margin-right: min(0.5em, 8px);
+  border-top: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
+  border-bottom: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
   border-radius: 0;
   box-sizing: border-box;
   z-index: var(--sidepanel-main-z-index, 4000);
