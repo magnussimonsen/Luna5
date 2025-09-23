@@ -153,8 +153,6 @@
   border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--button-border-color, #ccc);
 }
 
-
-
 .sidepanel__notebook-item--active {
   background: var(--button-on-color, var(--debug-color, #2563eb));
   border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--active-border-color, #ccc);
@@ -213,3 +211,15 @@
 .sidepanel__toc-numbering::after {
     content: '';
   }
+
+  /* Settings sidepanels */
+
+    .sidepanel__setting-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      margin-bottom: 0.75em;
+      padding: var(--sidepanel-settings-row-padding);
+    }
+
+        

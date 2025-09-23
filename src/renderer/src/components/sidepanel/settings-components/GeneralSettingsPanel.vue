@@ -1,10 +1,17 @@
 <template>
-  <div class="general-settings-panel sidepanel-ui-base">
-    <div class="settings-columns">
-      <div class="settings-column">
+  <div
+    ::class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'util-sub-sidepanel-container-padding',
+      'util-liststyle-none',
+      'util-margin-zero'
+    ]"
+  >
+
         <h3>General Settings</h3>
 
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label>Set language:</label>
           <select
             v-model="languageStore.currentLanguage"
@@ -18,7 +25,7 @@
           <ImplementedMark :implemented="false" />
         </div>
 
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label>Enable autosave:</label>
           <select
             v-model.number="generalSettingsStore.autosaveChangeIntervalState"
@@ -31,7 +38,7 @@
           <ImplementedMark :implemented="true" />
         </div>
 
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label>
             <input v-model="generalSettingsStore.warnOnDeleteCellState" type="checkbox" />
             Warn when deleting cells
@@ -39,7 +46,7 @@
           <ImplementedMark :implemented="false" />
         </div>
 
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label>
             <input v-model="generalSettingsStore.showCellIndexNumbersState" type="checkbox" />
             Show cell index numbers
@@ -49,7 +56,7 @@
 
         <h3>User Interface Settings</h3>
         <!-- Font Family Selectors -->
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label for="ui-font-select">User Interface Font:</label>
           <select
             id="ui-font-select"
@@ -69,7 +76,7 @@
         </div>
 
         <!-- Font Size Selectors -->
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label for="default-cell-reset-font-size-select"> Default Cell Font Size: </label>
           <select
             id="default-cell-reset-font-size-select"
@@ -89,7 +96,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label for="menubar-font-size-select">Menu Bar Font Size:</label>
           <select
             id="menubar-font-size-select"
@@ -107,7 +114,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label for="top-toolbar-font-size-select">Toolbar Font Size:</label>
           <select
             id="top-toolbar-font-size-select"
@@ -127,7 +134,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label for="sidepanel-font-size-select">Side Panel Font Size:</label>
           <select
             id="sidepanel-font-size-select"
@@ -145,7 +152,7 @@
           </select>
           <ImplementedMark :implemented="true" />
         </div>
-        <div class="setting-row">
+        <div class="sidepanel__setting-row">
           <label for="status-bar-font-size-select">Status Bar Font Size:</label>
           <select
             id="status-bar-font-size-select"
@@ -164,8 +171,6 @@
           <ImplementedMark :implemented="true" />
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">

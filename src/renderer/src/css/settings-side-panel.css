@@ -29,8 +29,6 @@
 .settings-selector-row {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	gap: 0.5em;
 	padding: 0.25em 0.25em 0.5em 0.25em;
 	border-bottom: 1px solid var(--settings-divider-color);
 }

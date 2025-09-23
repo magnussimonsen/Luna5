@@ -117,5 +117,9 @@ Design tokens (layout/spacing)
     --sidepanel-notebook-item-padding: 0.3em 0.3em;
     --sidepanel-notebook-item-border-width: 2px;
     --sidepanel-notebook-item-border-radius: 0.25em;
+
+    /* Sidepanel settings pages design */
+    --sidepanel-settings-row-padding: 0em 0em; /* top, right, bottom, left */
+    --sidepanel-settings-row-gap: 0.25em;
     
 }
