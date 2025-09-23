@@ -167,8 +167,9 @@ Third-party components are licensed separately. Notably:
 See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated list of third-party dependencies and their licenses.
 
 ---
-## 🖼️ Current UI Progress Snapshots and dev updates
+# 🖼️ Current UI Progress Snapshots and dev updates
 
+**2025-09-23**
 - **Sidepanel CSS:** Made sidepanel layouts consistent so inner panels scroll properly (`sidepanel-flex-column-overflow-y` + `sidepanel-container-inside-resize-border-padding`).
 - **TOC:** Now finds headings up to `h6`, scrolls the page to the top of the heading smoothly, and briefly highlights the target.
 - **Dark mode (checkboxes):** Checkboxes get a dark look using `accent-color`; the "Enable line numbers" checkbox is wired to `themeStore.isDarkMode`.
