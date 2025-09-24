@@ -9,9 +9,8 @@ import { normalizeStringToSafeKebab } from '@renderer/utils/miscellaneous/normal
  */
 
 // Initial themes: use Monaco built-ins (no persistence)
-// const initialLightMonacoThemeId = 'vs'
-// const initialDarkMonacoThemeId = 'vs-dark'
-const initialLightMonacoThemeId = 'slush-and-poppies' // from monaco-themes
+// Use Monaco built-in `vs` as the safe default so the select has a valid value
+const initialLightMonacoThemeId = 'vs'
 const initialDarkMonacoThemeId = 'vs-dark'
 
 export const useCodeSettingsStore = defineStore('codeSettings', {
@@ -25,6 +24,7 @@ export const useCodeSettingsStore = defineStore('codeSettings', {
     enableCodeFormattingState: false,
     enableCodeSuggestionsState: false,
     // Maximum number of Monaco editor instances allowed (user-configurable)
+    // This is not currently implemented, but leaving the code here for future reference
     maxNumberOfMonacoInstances: 4
   }),
   actions: {
@@ -50,6 +50,7 @@ export const useCodeSettingsStore = defineStore('codeSettings', {
       this.enableCodeSuggestionsState = value
     },
     // Setter for max number of Monaco instances
+    // This idea is put on hold for now, but leaving the code here for future reference
     setMaxNumberOfMonacoInstances(value: number) {
       this.maxNumberOfMonacoInstances = value
     }

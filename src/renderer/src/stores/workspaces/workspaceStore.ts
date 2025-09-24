@@ -839,6 +839,49 @@ export const useWorkspaceStore = defineStore('workspace', {
     },
     setNumberOfCodeCellsVisible(count: number): void {
       this.numberOfCodeCellsVisible = count
+    },
+    /**
+     * Get a per-cell UI hint value stored on the cell object.
+     * Returns undefined when not set.
+     */
+    getCellUiHint(cellId: string, key: string): unknown {
+      try {
+        const workspace = this.getWorkspace()
+        const cell = workspace.cells[cellId]
+        if (!cell) return undefined
+        // Store hints either directly on the cell (legacy) or inside metadata
+        // Prefer direct prop when present for backward compatibility.
+        // @ts-ignore allow access to optional UI hint
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if ((cell as any)[key] !== undefined) return (cell as any)[key]
+        if (cell.metadata && (cell.metadata as Record<string, unknown>)[key] !== undefined)
+          return (cell.metadata as Record<string, unknown>)[key]
+        return undefined
+      } catch {
+        return undefined
+      }
+    },
+    /**
+     * Set a per-cell UI hint value. Stores it on the cell metadata by default.
+     */
+    setCellUiHint(cellId: string, key: string, value: unknown): void {
+      try {
+        const workspace = this.getWorkspace()
+        const cell = workspace.cells[cellId]
+        if (!cell) return
+        // Store under metadata to avoid expanding the primary schema too much.
+        if (!cell.metadata) cell.metadata = {}
+        ;(cell.metadata as Record<string, unknown>)[key] = value
+        // Also set common legacy fields directly if key matches known names
+        if (key === 'stdoutImagesZoomSliderValue' && typeof value === 'number') {
+          // @ts-ignore legacy field on PythonCell
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ;(cell as any).stdoutImagesZoomSliderValue = value
+        }
+        this.markAsUnsaved()
+      } catch {
+        /* ignore */
+      }
     }
   }
 })

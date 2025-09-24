@@ -22,7 +22,11 @@
       @select="onSelect"
       @deselect="onDeselect"
     >
-      <component :is="resolveCellComponent(cells[cellId].kind)" :cell="cells[cellId]" />
+      <component
+        :is="resolveCellComponent(cells[cellId].kind)"
+        :cell="cells[cellId]"
+        :parent-notebook-id="ownerNotebookId"
+      />
     </CellContainer>
   </div>
 </template>
@@ -50,6 +54,13 @@ const currentNotebook = computed(() => {
   const workspaceObj = workspace.value
   if (!workspaceStore.currentNotebookId) return null
   return workspaceObj.notebooks[workspaceStore.currentNotebookId] || null
+})
+
+// Notebook id that owns the cells currently rendered by this list.
+const ownerNotebookId = computed(() => {
+  return workspaceStore.viewMode === 'notebooks'
+    ? workspaceStore.currentNotebookId
+    : workspaceStore.binSelectedNotebookId
 })
 
 // Compute ordered cell ids based on view mode and bin selection

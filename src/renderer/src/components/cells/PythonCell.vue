@@ -1,41 +1,3 @@
-<!--
-Performance tip: If Monaco editor causes the side panel to open slowly, defer Monaco initialization until after the panel animation completes.
-For example, use setTimeout, requestAnimationFrame, or Vue's nextTick to delay editor setup.
-You can also lazy-load Monaco only when the Python cell is visible or focused, or show a loading spinner while Monaco loads.
-Changing the container structure will NOT fix the lag; the solution is to delay Monaco's setup until after the panel is open.
-
-PYTHON CELL & MONACO EDITOR REFACTOR PLAN
-
-Goal:
-Refactor the PythonCell component and Monaco editor lifecycle to optimize performance, memory usage, and user experience in large notebooks.
-
-Key Strategies:
-1. Selected Cell: Interactive Monaco Editor
-  - Only the selected cell has a fully interactive Monaco editor (read/write, all features).
-
-2. Visible, Deselected Cells: Read-Only Monaco
-  - Visible but deselected cells use Monaco in read-only mode for syntax highlighting.
-  - Minimize decorations, disable minimap, and restrict interactions for performance.
-
-3. Not Visible Cells: Hybernation/Rest State
-  - Cells scrolled out of view either:
-    a) Dispose their Monaco instance to free memory, or
-    b) Detach the editor DOM node but keep the instance in memory for fast reactivation.
-  - Use IntersectionObserver to track cell visibility.
-
-4. Selection Switching
-  - When a cell is selected: attach or initialize a full Monaco editor.
-  - When a cell is deselected: switch to read-only/minimal mode.
-
-5. Editor Pooling (Advanced)
-  - Maintain a pool of Monaco editor instances, reusing them for visible cells.
-  - Limit the total number of active editors (configurable in settings).
-
-Functions to Implement:
-function initializeFullMonacoEditor(cellId, container, initialValue, options) { }
-
--->
-
 <template>
   <div class="python-cell" :data-locked="isCellLocked ? 'true' : null">
     <div
@@ -48,7 +10,7 @@ function initializeFullMonacoEditor(cellId, container, initialValue, options) { 
     ></div>
     <!-- Outputs -->
     <PythonOutputText :text="props.cell.stdoutText ?? ''" />
-    <PythonOutputImages :images="props.cell.stdoutImages ?? []" />
+    <PythonOutputImages :images="props.cell.stdoutImages ?? []" :cell-id="props.cell.id" />
     <div v-if="props.cell.workerError || props.cell.stderrText" class="py-out-error" role="alert">
       <div class="section-title">Errors</div>
       <pre v-if="props.cell.stderrText" class="stderr">{{ props.cell.stderrText }}</pre>
@@ -74,16 +36,7 @@ import { ensureAllMonacoThemesDefined, applyMonacoTheme } from '@renderer/code/m
 import PythonOutputText from './python-output/PythonOutputText.vue'
 import PythonOutputImages from './python-output/PythonOutputImages.vue'
 
-// Configure worker factory (safe to set multiple times)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-;(self as any).MonacoEnvironment = {
-  getWorker() {
-    return new editorWorker()
-  }
-}
-
-const props = defineProps<{ cell: PythonCell }>()
-
+const props = defineProps<{ cell: PythonCell; parentNotebookId?: string | null }>()
 const workspaceStore = useWorkspaceStore()
 const cellSelection = useCellSelectionStore()
 const themeStore = useThemeStore()
@@ -107,12 +60,8 @@ const isVisible = ref<boolean>(true)
 let isApplyingLocalEdit = false
 
 import { parsePixelsToNumber } from '@renderer/utils/miscellaneous/parse-pixels-to-number'
-import {
-  getEditorFromPool,
-  registerAttachedEditor,
-  releaseEditorToPool,
-  setMaxPoolSize
-} from '@renderer/code/monaco/editorPool'
+// Previously we used an editor pool. That module is now archived and a shim
+// remains at the same path. We will create/dispose Monaco instances per cell.
 
 // Cells can be locked/hidden via several flags; reflect that in editor readOnly state
 const isCellLocked = computed(
@@ -142,6 +91,9 @@ let monaco: any = null
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let editorWorker: any = null
 let monacoLoaded = false
+let monacoInitializing = false
+let monacoReadyPromise: Promise<void> | null = null
+let monacoReadyResolve: (() => void) | null = null
 
 // Use shared editor pool (see src/code/monaco/editorPool.ts)
 
@@ -153,17 +105,33 @@ async function lazyInitializeMonacoEditor(): Promise<void> {
     initializeMonacoEditor()
     return
   }
+
+  // If another caller already started initializing Monaco, wait for it to finish
+  if (monacoInitializing && monacoReadyPromise) {
+    try {
+      await monacoReadyPromise
+    } catch {
+      // ignore
+    }
+    // After the shared initialization completes, ensure editor exists
+    initializeMonacoEditor()
+    return
+  }
   try {
-    const [monacoEditor, workerMod] = await Promise.all([
+    monacoInitializing = true
+    monacoReadyPromise = new Promise((resolve) => {
+      monacoReadyResolve = resolve
+    })
+
+    const results = await Promise.all([
       import('monaco-editor/esm/vs/editor/editor.api'),
-      // load CSS (side-effect)
       import('monaco-editor/min/vs/editor/editor.main.css'),
-      // python language contribution (side-effect)
       import('monaco-editor/esm/vs/basic-languages/python/python.contribution'),
       import('monaco-editor/esm/vs/editor/editor.worker?worker')
     ])
-    monaco = monacoEditor
+    monaco = results[0]
     // worker module default export is the worker constructor
+    const workerMod = results[3]
     editorWorker = workerMod && (workerMod.default ?? workerMod)
 
     // Configure worker factory
@@ -175,15 +143,36 @@ async function lazyInitializeMonacoEditor(): Promise<void> {
     }
 
     monacoLoaded = true
+    monacoInitializing = false
+    try {
+      monacoReadyResolve && monacoReadyResolve()
+    } catch {
+      /* ignore */
+    }
     // Now reuse the existing initialization logic which references `monaco` at runtime
     initializeMonacoEditor()
   } catch (err) {
     // Keep failure non-fatal in UI; log for debugging
     console.error('Failed to lazy-load Monaco editor', err)
+    monacoInitializing = false
+    try {
+      monacoReadyResolve && monacoReadyResolve()
+    } catch {
+      /* ignore */
+    }
   }
 }
 
 function initializeMonacoEditor(): void {
+  // Guard against double-creation on the same DOM node
+  if (editor) {
+    try {
+      console.debug('[PythonCell] initializeMonacoEditor: editor already exists, skipping')
+    } catch {
+      /* ignore */
+    }
+    return
+  }
   if (!editorElementRef.value) return
   const initialValue = props.cell.cellInputContent ?? props.cell.source ?? ''
   // Make sure any custom themes are registered before creating editor
@@ -193,65 +182,26 @@ function initializeMonacoEditor(): void {
   // it should be editable (unless locked); otherwise default to readOnly.
   const startingReadOnly =
     cellSelection.selectedCellId === props.cell.id ? !!isCellLocked.value : true
-  // Try to reuse an editor instance from the shared pool; falls back to creating
-  // a fresh editor when none available.
-  editor = getEditorFromPool(monaco, editorElementRef.value, initialValue, {
-    language: 'python',
-    readOnly: startingReadOnly,
-    fontFamily: fontStore.fonts.codingFont,
-    fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
-  })
-  // Register this attached editor so the pool manager knows about it. If the
-  // pool chooses to release this editor (due to settings change) it will call
-  // our onExternalRelease which should clean up local references without
-  // trying to return the editor to the pool again.
+  // Create a dedicated Monaco editor instance for this cell.
   try {
-    if (editor) {
-      registerAttachedEditor(editor, {
-        cellId: props.cell.id,
-        isVisible: () => isVisible.value,
-        isFocused: () => cellSelection.selectedCellId === props.cell.id,
-        onExternalRelease: () => {
-          // Pool asked us to dispose this attached editor. Clean up local refs
-          // without returning to pool.
-          try {
-            // dispose local listeners & layout observer
-            disposables.forEach((d) => d.dispose())
-          } catch {
-            /* ignore */
-          }
-          disposables = []
-          if (resizeObserver) {
-            try {
-              resizeObserver.disconnect()
-            } catch {
-              /* ignore */
-            }
-            resizeObserver = null
-          }
-          try {
-            if (editor) {
-              const model = editor.getModel()
-              try {
-                editor.dispose()
-              } catch {
-                /* ignore */
-              }
-              try {
-                if (model) model.dispose()
-              } catch {
-                /* ignore */
-              }
-            }
-          } catch {
-            /* ignore */
-          }
-          editor = null
-        }
-      })
-    }
-  } catch {
-    /* ignore */
+    editor = monaco.editor.create(editorElementRef.value, {
+      value: initialValue,
+      language: 'python',
+      readOnly: startingReadOnly,
+      fontFamily: fontStore.fonts.codingFont,
+      fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize),
+      lineNumbers: 'on',
+      lineNumbersMinChars: 3,
+      lineDecorationsWidth: 1,
+      minimap: { enabled: false },
+      scrollBeyondLastLine: false,
+      wordWrap: 'on',
+      automaticLayout: true,
+      scrollbar: { vertical: 'hidden', alwaysConsumeMouseWheel: false }
+    })
+  } catch (e) {
+    console.error('[PythonCell] failed to create Monaco editor', e)
+    editor = null
   }
   // Debug: report editor creation and starting readonly state
   try {
@@ -273,6 +223,34 @@ function initializeMonacoEditor(): void {
       setTimeout(() => {
         isApplyingLocalEdit = false
       }, 0)
+      // Schedule a small resize after Monaco updates its internal layout
+      try {
+        setTimeout(() => {
+          try {
+            if (!editor || !editorElementRef.value) return
+            const contentHeight = editor.getContentHeight()
+            let minHeightPx = 0
+            try {
+              const computedStyle = window.getComputedStyle(editorElementRef.value)
+              const minHeightCss = computedStyle.minHeight || '0px'
+              if (minHeightCss.endsWith('px')) minHeightPx = parseFloat(minHeightCss)
+            } catch {
+              /* ignore */
+            }
+            const targetHeight = Math.max(contentHeight, minHeightPx)
+            editorElementRef.value.style.height = `${Math.ceil(targetHeight)}px`
+            try {
+              editor.layout()
+            } catch {
+              /* ignore */
+            }
+          } catch {
+            /* ignore */
+          }
+        }, 0)
+      } catch {
+        /* ignore */
+      }
     })
   )
   // Debug: log key events to ensure keyboard reaches the editor
@@ -386,9 +364,170 @@ function initializeMonacoEditor(): void {
     editor.layout()
   }
   // Update on content size changes
+  // Use content height from the event to resize container precisely.
   disposables.push(
-    editor.onDidContentSizeChange(() => {
-      updateEditorHeightToContent()
+    editor.onDidContentSizeChange((e: { contentHeight: number }) => {
+      if (!editorElementRef.value) return
+      try {
+        const contentHeight = e?.contentHeight ?? editor.getContentHeight()
+        let minHeightPx = 0
+        try {
+          const computedStyle = window.getComputedStyle(editorElementRef.value)
+          const minHeightCss = computedStyle.minHeight || '0px'
+          if (minHeightCss.endsWith('px')) minHeightPx = parseFloat(minHeightCss)
+        } catch {
+          /* ignore */
+        }
+        const targetHeight = Math.max(contentHeight, minHeightPx)
+        editorElementRef.value.style.height = `${Math.ceil(targetHeight)}px`
+        try {
+          editor.layout()
+        } catch {
+          /* ignore */
+        }
+      } catch {
+        /* ignore */
+      }
+    })
+  )
+  // Ensure the cursor remains visible in the overall page viewport when it moves.
+  // This helps when the cell shrinks (e.g. backspacing lines) so the caret doesn't
+  // end up outside the browser viewport even though the editor internal viewport
+  // may have adjusted.
+  disposables.push(
+    editor.onDidChangeCursorPosition(() => {
+      try {
+        if (!editor) return
+        const pos = editor.getPosition()
+        if (!pos) return
+        // Ensure the editor's internal viewport shows the caret.
+        try {
+          editor.revealPositionInCenterIfOutsideViewport(pos)
+        } catch {
+          /* ignore */
+        }
+
+        // Additionally, ensure the caret stays inside the editor's internal
+        // viewport. Use `getScrolledVisiblePosition` which returns visual
+        // coordinates for the exact position (handles wrapped lines).
+        try {
+          let scrolledPos: { top: number; left: number; height: number } | null = null
+          try {
+            if (typeof editor.getScrolledVisiblePosition === 'function') {
+              scrolledPos = editor.getScrolledVisiblePosition(pos)
+            }
+          } catch {
+            scrolledPos = null
+          }
+
+          // Fallback to computing via getTopForLineNumber if `getScrolledVisiblePosition` is unavailable
+          if (!scrolledPos && typeof editor.getTopForLineNumber === 'function') {
+            try {
+              const top = editor.getTopForLineNumber(pos.lineNumber)
+              const nextTop = editor.getTopForLineNumber(pos.lineNumber + 1)
+              scrolledPos = { top, left: 0, height: (nextTop && nextTop - top) || 16 }
+            } catch {
+              scrolledPos = null
+            }
+          }
+
+          if (scrolledPos) {
+            const layoutInfo =
+              typeof editor.getLayoutInfo === 'function' ? editor.getLayoutInfo() : null
+            const visibleHeight =
+              layoutInfo && typeof layoutInfo.height === 'number' ? layoutInfo.height : null
+            const currentScrollTop =
+              typeof editor.getScrollTop === 'function' ? editor.getScrollTop() : null
+            if (visibleHeight !== null && currentScrollTop !== null) {
+              const marginPx = 8
+              const caretTop = scrolledPos.top
+              const caretBottom = scrolledPos.top + (scrolledPos.height ?? 16)
+              const viewTop = currentScrollTop + marginPx
+              const viewBottom = currentScrollTop + visibleHeight - marginPx
+              if (caretTop < viewTop) {
+                try {
+                  editor.setScrollTop(Math.max(0, caretTop - marginPx))
+                } catch {
+                  /* ignore */
+                }
+              } else if (caretBottom > viewBottom) {
+                try {
+                  editor.setScrollTop(Math.max(0, caretBottom - visibleHeight + marginPx))
+                } catch {
+                  /* ignore */
+                }
+              }
+            }
+          }
+
+          // Best-effort reveal (uses Monaco ScrollType when available)
+          try {
+            if (typeof (editor.revealPosition as unknown) === 'function') {
+              if (
+                typeof monaco !== 'undefined' &&
+                monaco &&
+                monaco.editor &&
+                monaco.editor.ScrollType
+              ) {
+                try {
+                  editor.revealPosition(pos, monaco.editor.ScrollType.Smooth)
+                } catch {
+                  try {
+                    editor.revealPositionInCenterIfOutsideViewport(pos)
+                  } catch {
+                    /* ignore */
+                  }
+                }
+              } else {
+                try {
+                  editor.revealPositionInCenterIfOutsideViewport(pos)
+                } catch {
+                  /* ignore */
+                }
+              }
+            }
+          } catch {
+            /* ignore */
+          }
+        } catch {
+          /* ignore */
+        }
+
+        // Finally, ensure the overall page viewport keeps the caret visible
+        // when the editor itself is positioned off-screen due to container
+        // collapsing or other layout changes.
+        try {
+          const scrolled =
+            editor.getScrolledVisiblePosition && editor.getScrolledVisiblePosition(pos)
+          const dom = editor.getDomNode && editor.getDomNode()
+          if (scrolled && dom && dom.getBoundingClientRect) {
+            // Only adjust the global page scroll if the editor currently has
+            // text focus (user actively typing) or as a fallback when the
+            // cell is selected but the focus API isn't available. This avoids
+            // interfering with normal mouse-wheel scrolling when other cells
+            // are active.
+            const hasFocus =
+              typeof editor.hasTextFocus === 'function'
+                ? editor.hasTextFocus()
+                : cellSelection.selectedCellId === props.cell.id
+            if (!hasFocus) return
+
+            const rect = dom.getBoundingClientRect()
+            const caretAbsoluteY = window.scrollY + rect.top + scrolled.top
+            const margin = 24 // px of breathing room
+            const viewportTop = window.scrollY + margin
+            const viewportBottom = window.scrollY + window.innerHeight - margin
+            if (caretAbsoluteY < viewportTop || caretAbsoluteY > viewportBottom) {
+              const target = Math.max(0, caretAbsoluteY - Math.floor(window.innerHeight / 2))
+              window.scrollTo({ top: target, behavior: 'auto' })
+            }
+          }
+        } catch {
+          /* ignore */
+        }
+      } catch {
+        /* ignore */
+      }
     })
   )
   // Initial apply
@@ -402,10 +541,7 @@ function initializeMonacoEditor(): void {
   }
 }
 
-// Obtain a Monaco editor instance from the pool or create a new one. When
-// reusing an editor we reparent its DOM node into the provided container and
-// set/update its model and options.
-// Editor pooling is handled by src/code/monaco/editorPool.ts (getEditorFromPool/releaseEditorToPool)
+// Per-cell Monaco instances are created and disposed by this component.
 
 onMounted(() => {
   // Use lazy loader so Monaco and its workers are only fetched when needed
@@ -456,17 +592,58 @@ onMounted(() => {
   }
 })
 
-// Watch the global settings for max Monaco instances and inform the pool
+// React to notebook changes: initialize editors when this cell's parent notebook
+// becomes the active notebook, and dispose when it is no longer active.
 watch(
-  () => codeSettingsStore.maxNumberOfMonacoInstances,
-  (v) => {
+  () => props.parentNotebookId,
+  (parentNbId) => {
     try {
-      setMaxPoolSize(v)
+      const currentNb = workspaceStore.currentNotebookId
+      // If the notebook owning this cell is now the active notebook, ensure an editor exists.
+      if (parentNbId && parentNbId === currentNb && !editor) {
+        // Eagerly initialize the editor for this python cell even if it's not currently
+        // fully visible. This implements the requested eager creation on notebook switch.
+        void lazyInitializeMonacoEditor()
+      }
+      if (parentNbId && parentNbId !== currentNb) {
+        try {
+          if (editor) disposeEditorInstance()
+        } catch {
+          /* ignore */
+        }
+      }
     } catch {
       /* ignore */
     }
   }
 )
+
+// Also react when the active notebook changes — props.parentNotebookId is static
+// for the cell, so we must watch the workspace store to eagerly init/dispose
+// editors when the user switches notebooks.
+watch(
+  () => workspaceStore.currentNotebookId,
+  (currentNb) => {
+    try {
+      const parentNbId = props.parentNotebookId
+      if (parentNbId && parentNbId === currentNb && !editor) {
+        void lazyInitializeMonacoEditor()
+      }
+      if (parentNbId && parentNbId !== currentNb) {
+        try {
+          if (editor) disposeEditorInstance()
+        } catch {
+          /* ignore */
+        }
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+)
+
+// Watch the global settings for max Monaco instances and inform the pool
+// Pool sizing is deprecated: editor pooling is archived and ignored.
 
 // Dispose helper used when cell becomes unselected or on unmount
 function disposeEditorInstance(): void {
@@ -474,8 +651,21 @@ function disposeEditorInstance(): void {
   // dispose it depending on current max pool size). Pass the configured
   // max so the pool sizing is consistent.
   try {
-    const toReleaseDisposables = disposables
+    // Dispose all registered disposables
+    try {
+      disposables.forEach((d) => {
+        try {
+          d.dispose()
+        } catch {
+          /* ignore individual failures */
+        }
+      })
+    } catch {
+      /* ignore */
+    }
     disposables = []
+
+    // Disconnect and clear the resize observer if present
     if (resizeObserver) {
       try {
         resizeObserver.disconnect()
@@ -484,15 +674,10 @@ function disposeEditorInstance(): void {
       }
       resizeObserver = null
     }
+
     if (editor) {
       try {
-        releaseEditorToPool(
-          editor,
-          toReleaseDisposables,
-          codeSettingsStore.maxNumberOfMonacoInstances
-        )
-      } catch {
-        // Fallback to hard dispose if pool release fails
+        // Dispose editor and its model
         try {
           const model = editor.getModel()
           editor.dispose()
@@ -500,6 +685,14 @@ function disposeEditorInstance(): void {
         } catch {
           /* ignore */
         }
+        // Clear any inline height previously set so layout can recalculate
+        try {
+          if (editorElementRef.value) editorElementRef.value.style.height = ''
+        } catch {
+          /* ignore */
+        }
+      } catch {
+        /* ignore */
       }
     }
   } finally {

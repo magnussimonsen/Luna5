@@ -81,6 +81,7 @@ export interface PythonCell extends BaseCell {
   stdoutText?: string // Full captured stdout
   stderrText?: string // Full captured stderr
   stdoutImages?: string[] // Data URLs extracted from stdout (e.g., matplotlib PNGs)
+  stdoutImagesZoomSliderValue?: number // UI hint for image zoom level
   displayItems?: PythonDisplayItem[] // Rich display bundle (future-friendly)
 
   /**

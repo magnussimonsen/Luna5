@@ -129,13 +129,13 @@
         for="max-monaco-instances"
         title="Limits the maximum number of Monaco code editors active at once. Lower values improve performance in large notebooks, higher values allow more cells to show syntax highlighting simultaneously."
       >
-        Max Monaco Editors:
+        Max Monaco Editors (not implemented):
       </label>
       <select
         id="max-monaco-instances"
         v-model.number="codeSettingsStore.maxNumberOfMonacoInstances"
         :class="{ 'sidepanel__setting-row--dark-mode': themeStore.isDarkMode }"
-        title="Limits the maximum number of Monaco code editors active at once. Lower values improve performance in large notebooks, higher values allow more cells to show syntax highlighting simultaneously."
+        title="(Not implemented) Limits the maximum number of Monaco code editors active at once. Lower values improve performance in large notebooks, higher values allow more cells to show syntax highlighting simultaneously."
         @change="
           codeSettingsStore.setMaxNumberOfMonacoInstances(
             codeSettingsStore.maxNumberOfMonacoInstances
