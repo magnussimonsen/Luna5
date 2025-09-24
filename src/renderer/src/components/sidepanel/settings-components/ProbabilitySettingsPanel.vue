@@ -12,11 +12,9 @@
     <strong :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']"
       >Probability Settings</strong
     >
-    <div
-      :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']"
-      style="opacity: 0.8"
-    >
-      <span>Placeholder: probability and statistics options will appear here.</span>
+
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
+      <span>Probability and statistics options will appear here.</span>
     </div>
   </div>
 </template>
@@ -27,5 +25,4 @@
 
 <style scoped>
 /* Styles are in the css folder */
-
 </style>

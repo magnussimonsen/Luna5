@@ -1,4 +1,5 @@
 import { Editor } from '@tiptap/vue-3'
+import type { Editor as CoreEditor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
@@ -12,6 +13,10 @@ import Highlight from '@tiptap/extension-highlight'
 // Math (custom) - dynamically imported or added when dependency installed
 import type { Transaction } from 'prosemirror-state'
 
+// Precise Editor type coming from the Vue wrapper. Use InstanceType to
+// capture the actual runtime instance type exported by @tiptap/vue-3.
+export type VueTiptapEditor = InstanceType<typeof import('@tiptap/vue-3').Editor>
+
 /**
  * Creates a configured TipTap editor instance for a text cell.
  * @param {Object} options - Editor options
@@ -23,8 +28,12 @@ import type { Transaction } from 'prosemirror-state'
 export function createTiptapEditor(options: {
   editable: boolean
   content: string
-  onUpdate: (props: { editor: unknown; transaction: Transaction }) => void
-}): Editor {
+  onUpdate?: (props: {
+    editor: VueTiptapEditor
+    transaction: Transaction
+    appendedTransactions?: Transaction[]
+  }) => void
+}): VueTiptapEditor {
   const { editable, content, onUpdate } = options
   return new Editor({
     editable,
@@ -42,6 +51,24 @@ export function createTiptapEditor(options: {
       Superscript
       // Math extensions can be added here if the dependency is installed
     ],
-    onUpdate
-  })
+    onUpdate: (props: {
+      editor: CoreEditor
+      transaction: Transaction
+      appendedTransactions: Transaction[]
+    }) => {
+      // Call the user-provided onUpdate with the precise VueTiptapEditor type.
+      try {
+        if (onUpdate) {
+          onUpdate({
+            editor: props.editor as unknown as VueTiptapEditor,
+            transaction: props.transaction,
+            appendedTransactions: props.appendedTransactions
+          })
+        }
+      } catch (e) {
+        // Swallow callback errors to avoid breaking the editor lifecycle
+        console.error('Error in createTiptapEditor onUpdate callback:', e)
+      }
+    }
+  }) as unknown as VueTiptapEditor
 }

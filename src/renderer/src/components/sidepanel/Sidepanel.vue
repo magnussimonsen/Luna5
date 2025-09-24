@@ -35,8 +35,8 @@ import SettingsPanel from './SettingsPanel.vue'
 const sidepanelStore = useSidepanelStore()
 const panelWidth = ref(sidepanelStore.lastPanelWidth)
 const panelContentRef = ref<HTMLElement | null>(null)
-//let minWidthScalingFactor: number = 0.01 // use 0 here and 1em in CSS
-let maxWidthScalingFactor: number = 0.75
+let minWidthScalingFactor: number = 0.05
+let maxWidthScalingFactor: number = 0.95
 let startX: number = 0
 let startWidth: number = 0
 let resizing: boolean = false
@@ -73,7 +73,7 @@ function onResize(e: MouseEvent): void {
   // Right edge is fixed; dragging handle (left edge) left increases width.
   // So delta = startX - e.clientX (positive when moving left)
   const delta = startX - e.clientX
-  const minWidth: number = 160
+  const minWidth: number = window.innerWidth * minWidthScalingFactor
   const maxWidth: number = window.innerWidth * maxWidthScalingFactor
   const next = Math.max(minWidth, Math.min(maxWidth, startWidth + delta))
   panelWidth.value = next

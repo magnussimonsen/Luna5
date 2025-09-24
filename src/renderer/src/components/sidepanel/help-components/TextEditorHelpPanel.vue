@@ -1,18 +1,19 @@
 <template>
-  <div class="sidepanel-ui-base sidepanel-padding-margin-base">
-    <h2>🚧 Work in progress</h2>
-    <h3>Text Editor help</h3>
-    <p>
-      The Text Editor is currently a simple typing area for plain text (click to type,
-      select/copy/paste).
-    </p>
-    <p>A full editor with formatting and math notation is coming.</p>
+  <div
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'sidepanel-row-x-y-padding',
+      'sidepanel-top-row-margin'
+    ]"
+  >
+    <h3>Text Editor help (work in progress)</h3>
+    <p>This section will contain text editor-related help and documentation.</p>
   </div>
 </template>
 
 <script setup lang="ts">
 // Side panel placeholder aligned with existing settings layout
 </script>
+<style scoped></style>
 
-<style scoped>
-</style>

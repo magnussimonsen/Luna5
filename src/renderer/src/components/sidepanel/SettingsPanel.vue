@@ -1,6 +1,6 @@
 <template>
   <div class="sidepanel-container-inside-resize-border-padding">
-    <SettingsPanelSelectorRow :current-page="currentPage" @update:current-page="onUpdatePage" /> 
+    <SettingsPanelSelectorRow :current-page="currentPage" @update:current-page="onUpdatePage" />
     <!-- Content area -->
     <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
       <GeneralSettingsPanel v-if="currentPage === 'general'" />

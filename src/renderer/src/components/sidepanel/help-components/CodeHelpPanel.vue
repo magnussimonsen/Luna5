@@ -7,15 +7,16 @@
       'sidepanel-top-row-margin'
     ]"
   >
-    <h2>  Python help and examples ( 🚧 work in progress 🚧) </h2>
-    <h3>Shortcuts</h3>
+    <h3>Python help and examples (work in progress)</h3>
+    <h4>Shortcuts</h4>
     <ul>
       <li>Run Python code in the selected cell: <strong>Ctrl + Enter</strong></li>
     </ul>
-    <h3>Available Offline Python Imports</h3>
-      Python's standard library is available (for example: math, datetime, json, re, statistics, etc.).<br />
+    <h4>Available Offline Python Imports</h4>
+    Python's standard library is available (for example: math, datetime, json, re, statistics,
+    etc.).<br />
     <hr />
-      The following imports are also available offline:
+    The following imports are also available offline:
     <ul>
       <!-- Core scientific stack -->
       <li><code>import numpy as np # N-dimensional arrays and numerical computing</code></li>
@@ -58,5 +59,4 @@
 // Side panel placeholder aligned with existing settings layout
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

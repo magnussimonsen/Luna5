@@ -3,14 +3,25 @@ import CloseModalButton from './modalUI/CloseModalButton.vue'
 import { reactive } from 'vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { mitLicenseText } from '@renderer/assets/licence-MIT-text'
+import pkg from '../../../../../package.json'
+
+type PackageJsonMinimal = {
+  name?: string
+  version?: string
+  author?: string
+  license?: string
+}
+const _pkg = pkg as unknown as PackageJsonMinimal
 
 const modalStore = useModalStore()
 import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-169.png'
 
 // Get Electron/Chromium/Node versions from the preload API
 const versions = reactive({ ...window.electron.process.versions })
-const LunaVersion: string = '0.5'
-const licenseType: string = `MIT License`
+const LunaVersion: string = _pkg.version || '0.0.0'
+const licenseType: string = _pkg.license || 'MIT'
+const appName: string = _pkg.name || 'luna'
+const appAuthor: string = _pkg.author || ''
 // const licenseText: string = 'placeholder for now'
 // Example: You can later fill this array with your actual dependencies
 const openSourceModules = [
@@ -39,9 +50,10 @@ const openSourceFonts = [
     <CloseModalButton :on-click="modalStore.closeAboutLunaModal" />
     <!--Logo -->
     <img :src="LunaSmallIcon" alt="Luna" class="brand-icon-about" />
-    <h2>About Luna</h2>
+    <h2>About {{ appName }}</h2>
     <p>
-      <strong>Luna version {{ LunaVersion }} ({{ licenseType }})</strong> by Magnus Simonsen
+      <strong>{{ appName }} version {{ LunaVersion }} ({{ licenseType }})</strong>
+      by {{ appAuthor || 'Unknown' }}
     </p>
 
     <section>

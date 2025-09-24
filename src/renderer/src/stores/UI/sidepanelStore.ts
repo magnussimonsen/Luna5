@@ -15,7 +15,7 @@ export const useSidepanelStore = defineStore('sidepanel', () => {
   function getAppWidthInPx(): number {
     const appWidth =
       window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-    return typeof appWidth === 'number' && !isNaN(appWidth) ? appWidth * 0.45 : 400
+    return typeof appWidth === 'number' && !isNaN(appWidth) ? appWidth * 0.50 : 400
   }
 
   const lastPanelWidth = ref<number>(getAppWidthInPx())

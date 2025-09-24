@@ -1,8 +1,14 @@
 <template>
-  <div class="sidepanel-ui-base sidepanel-padding-margin-base">
-    <h2>🚧 Work in progress</h2>
-    <h3>Probability Calculator help</h3>
-    <span>Placeholder...</span>
+  <div
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'sidepanel-row-x-y-padding',
+      'sidepanel-top-row-margin'
+    ]"
+  >
+    <h3>Probability help (work in progress)</h3>
+    <p>This section will contain probability-related help and documentation.</p>
   </div>
 </template>
 
@@ -10,5 +16,4 @@
 // Side panel placeholder aligned with existing settings layout
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
