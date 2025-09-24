@@ -40,14 +40,11 @@ type SettingsPage =
   | 'code' // THIS IS PYTHON CODE EDITOR; DO NOT CVHANGE TO 'python'
 
 const currentPage: Ref<SettingsPage> = ref('general')
-// const fontSizeStore = useFontSizeStore()
-
-//const contentStyle = computed(() => ({
-//  fontSize: fontSizeStore.fontSizes.sidepanelFontSize
-// }))
 
 function onUpdatePage(page: SettingsPage): void {
   currentPage.value = page
 }
 </script>
-<style scoped></style>
+<style scoped>
+/* Styles are in the css folder */
+</style>

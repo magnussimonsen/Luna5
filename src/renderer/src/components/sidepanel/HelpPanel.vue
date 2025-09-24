@@ -1,5 +1,5 @@
 <template>
-  <div class="help-panel">
+    <div class="sidepanel-container-inside-resize-border-padding">
     <!-- Menu bar selection row (component) -->
     <HelpPanelSelectionRow
       :current-page="currentPage"
@@ -8,10 +8,8 @@
     />
 
     <!-- Content area -->
-    <div
-      class="help-panel-content sidepanel-padding-margin-base sidepanel-y-scrolling"
-      :style="contentStyle"
-    >
+    <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
+
       <GeneralHelpPanel v-if="currentPage === 'general'" />
       <CodeHelpPanel v-else-if="currentPage === 'code'" />
       <CasHelpPanel v-else-if="currentPage === 'cas'" />
@@ -25,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import HelpPanelSelectionRow from './help-components/HelpPanelSelectionRow.vue'
 import GeneralHelpPanel from './help-components/GeneralHelpPanel.vue'
@@ -50,9 +48,6 @@ type HelpPage =
 const currentPage: Ref<HelpPage> = ref('general')
 const fontSizeStore = useFontSizeStore()
 
-const contentStyle = computed(() => ({
-  fontSize: fontSizeStore.fontSizes.sidepanelFontSize
-}))
 
 function onUpdatePage(page: HelpPage): void {
   currentPage.value = page
@@ -60,13 +55,5 @@ function onUpdatePage(page: HelpPage): void {
 </script>
 
 <style scoped>
-.help-panel {
-  display: flex;
-  flex-direction: column;
-}
-.help-panel-content {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-}
+/* Styles are in the css folder */
 </style>
