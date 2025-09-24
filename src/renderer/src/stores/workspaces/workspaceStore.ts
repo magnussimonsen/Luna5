@@ -42,6 +42,9 @@ interface LunaState {
   currentFilePath: string | null
   // Autosave support
   inputChangesSinceLastSave: number
+  // Future: UI state like
+  numberOfCellsVisible: number
+  numberOfCodeCellsVisible: number
 }
 
 /** EXPLANATION (main structure)
@@ -74,7 +77,10 @@ export const useWorkspaceStore = defineStore('workspace', {
     lastSavedAtDateTime: null, // No save timestamp initially
     currentFilePath: null, // No file path initially
     // Autosave support
-    inputChangesSinceLastSave: 0
+    inputChangesSinceLastSave: 0,
+    //  UI state like
+    numberOfCellsVisible: 0,
+    numberOfCodeCellsVisible: 0
   }),
   getters: {
     getCurrentNotebook: (state): Notebook | null => {
@@ -105,6 +111,12 @@ export const useWorkspaceStore = defineStore('workspace', {
     },
     getCurrentFilePath: (state): string | null => {
       return state.currentFilePath
+    },
+    getNumberOfCellsVisible: (state): number => {
+      return state.numberOfCellsVisible
+    },
+    getNumberOfCodeCellsVisible: (state): number => {
+      return state.numberOfCodeCellsVisible
     }
   },
   actions: {
@@ -819,6 +831,14 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.lastSavedAtDateTime = null
       this.currentFilePath = null
       this.inputChangesSinceLastSave = 0
+    },
+
+    /* UI State */
+    setNumberOfCellsVisible(count: number): void {
+      this.numberOfCellsVisible = count
+    },
+    setNumberOfCodeCellsVisible(count: number): void {
+      this.numberOfCodeCellsVisible = count
     }
   }
 })
