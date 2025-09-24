@@ -107,7 +107,12 @@ const isVisible = ref<boolean>(true)
 let isApplyingLocalEdit = false
 
 import { parsePixelsToNumber } from '@renderer/utils/miscellaneous/parse-pixels-to-number'
-import { getEditorFromPool } from '@renderer/code/monaco/editorPool'
+import {
+  getEditorFromPool,
+  registerAttachedEditor,
+  releaseEditorToPool,
+  setMaxPoolSize
+} from '@renderer/code/monaco/editorPool'
 
 // Cells can be locked/hidden via several flags; reflect that in editor readOnly state
 const isCellLocked = computed(
@@ -196,6 +201,58 @@ function initializeMonacoEditor(): void {
     fontFamily: fontStore.fonts.codingFont,
     fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
   })
+  // Register this attached editor so the pool manager knows about it. If the
+  // pool chooses to release this editor (due to settings change) it will call
+  // our onExternalRelease which should clean up local references without
+  // trying to return the editor to the pool again.
+  try {
+    if (editor) {
+      registerAttachedEditor(editor, {
+        cellId: props.cell.id,
+        isVisible: () => isVisible.value,
+        isFocused: () => cellSelection.selectedCellId === props.cell.id,
+        onExternalRelease: () => {
+          // Pool asked us to dispose this attached editor. Clean up local refs
+          // without returning to pool.
+          try {
+            // dispose local listeners & layout observer
+            disposables.forEach((d) => d.dispose())
+          } catch {
+            /* ignore */
+          }
+          disposables = []
+          if (resizeObserver) {
+            try {
+              resizeObserver.disconnect()
+            } catch {
+              /* ignore */
+            }
+            resizeObserver = null
+          }
+          try {
+            if (editor) {
+              const model = editor.getModel()
+              try {
+                editor.dispose()
+              } catch {
+                /* ignore */
+              }
+              try {
+                if (model) model.dispose()
+              } catch {
+                /* ignore */
+              }
+            }
+          } catch {
+            /* ignore */
+          }
+          editor = null
+        }
+      })
+    }
+  } catch {
+    /* ignore */
+  }
   // Debug: report editor creation and starting readonly state
   try {
     console.debug('[PythonCell] initializeMonacoEditor:', { id: props.cell.id, editor: !!editor })
@@ -220,13 +277,9 @@ function initializeMonacoEditor(): void {
   )
   // Debug: log key events to ensure keyboard reaches the editor
   try {
-    if (editor && typeof (editor as any).onKeyDown === 'function') {
-      disposables.push(
-        (editor as any).onKeyDown((ev: unknown) => {
-          console.debug('[PythonCell] editor onKeyDown', props.cell.id, ev)
-        })
-      )
-    }
+    // Skip attaching low-level key handlers here to avoid casting to `any`.
+    // If you need key-level debugging, enable it temporarily in a local
+    // branch or add a more specific type declaration for the Monaco editor.
   } catch {
     /* ignore */
   }
@@ -236,24 +289,10 @@ function initializeMonacoEditor(): void {
       const shouldBeReadOnly = !!isCellLocked.value
       try {
         editor.updateOptions({ readOnly: shouldBeReadOnly })
-        try {
-          // If monaco is available, try to read the effective readOnly option
-          if (
-            monaco &&
-            editor &&
-            typeof (editor as unknown as { getOption?: unknown }).getOption === 'function'
-          ) {
-            try {
-              // Narrow types only for this runtime check
-              const ro = (editor as any).getOption((monaco as any).editor.EditorOption.readOnly)
-              console.debug('[PythonCell] effective readOnly after updateOptions', ro)
-            } catch (e) {
-              console.debug('[PythonCell] getOption error', e)
-            }
-          }
-        } catch {
-          /* ignore */
-        }
+        // Avoid calling editor.getOption (requires stronger types). We have
+        // confirmed updateOptions was called; for deeper inspection enable
+        // a typed Monaco import or run a temporary debug patch.
+        console.debug('[PythonCell] updateOptions called for', props.cell.id)
       } catch {
         /* ignore */
       }
@@ -391,6 +430,21 @@ onMounted(() => {
             } catch {
               /* ignore */
             }
+            return
+          }
+          // If the cell becomes visible again and there is no editor, initialize
+          // a lightweight read-only editor so the cell renders with syntax
+          // highlighting. If the cell is selected we will make it writable in
+          // the selection watcher.
+          if (nowVisible && !editor) {
+            try {
+              // Use lazy loader which will create either a pooled editor or a
+              // fresh one. The created editor will be read-only unless the
+              // cell is selected (selection watcher will toggle it).
+              void lazyInitializeMonacoEditor()
+            } catch {
+              /* ignore */
+            }
           }
         },
         { root: null, threshold: 0.05 }
@@ -402,26 +456,53 @@ onMounted(() => {
   }
 })
 
+// Watch the global settings for max Monaco instances and inform the pool
+watch(
+  () => codeSettingsStore.maxNumberOfMonacoInstances,
+  (v) => {
+    try {
+      setMaxPoolSize(v)
+    } catch {
+      /* ignore */
+    }
+  }
+)
+
 // Dispose helper used when cell becomes unselected or on unmount
 function disposeEditorInstance(): void {
-  disposables.forEach((d) => d.dispose())
-  disposables = []
-  if (resizeObserver) {
-    try {
-      resizeObserver.disconnect()
-    } catch {
-      /* ignore */
+  // Release to pool (the pool will either keep the editor for reuse or
+  // dispose it depending on current max pool size). Pass the configured
+  // max so the pool sizing is consistent.
+  try {
+    const toReleaseDisposables = disposables
+    disposables = []
+    if (resizeObserver) {
+      try {
+        resizeObserver.disconnect()
+      } catch {
+        /* ignore */
+      }
+      resizeObserver = null
     }
-    resizeObserver = null
-  }
-  if (editor) {
-    try {
-      const model = editor.getModel()
-      editor.dispose()
-      if (model) model.dispose()
-    } catch {
-      /* ignore */
+    if (editor) {
+      try {
+        releaseEditorToPool(
+          editor,
+          toReleaseDisposables,
+          codeSettingsStore.maxNumberOfMonacoInstances
+        )
+      } catch {
+        // Fallback to hard dispose if pool release fails
+        try {
+          const model = editor.getModel()
+          editor.dispose()
+          if (model) model.dispose()
+        } catch {
+          /* ignore */
+        }
+      }
     }
+  } finally {
     editor = null
   }
 }
