@@ -88,9 +88,29 @@
 .top-toolbar__button--highlight-active {
   background: var(--button-highlight-color, orange);
   color: var(--ui-text-color, var(--debug-color));
-  border: var(--button-border-on-color, var(--debug-color, orange)) 2px solid;
   font-size: var(--top-toolbar-font-size);
   font-family: var(--ui-font);
+}
+
+/* Visible indicator for icon-only highlight buttons when active.
+   Adds a small white circle in the center so the active state is obvious
+   even when the button background is a bright highlight color. */
+.top-toolbar__button--highlight-active.top-toolbar__button--icon {
+  position: relative; /* create positioning context for the dot */
+}
+.top-toolbar__button--highlight-active.top-toolbar__button--icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  /*background: var(--high-contrast-color, white);*/
+  background: yellow;
+  opacity: 1;
+  pointer-events: none;
 }
 
 /* Disabled state (modifier + native attr for robustness) */
