@@ -143,7 +143,6 @@ function onMarginClick(): void {
 </script>
 
 <style scoped>
-/* Posible problem: Using em instead of rem - unclear how this will affect layout */
 .cell-container {
   position: relative;
   display: flex;
@@ -153,7 +152,8 @@ function onMarginClick(): void {
   background: var(--cell-background, blue);
   margin-block: 0em;
   outline: none;
-  margin-bottom: 0px; /* What font size is used here if I choose to make margin 1em? */
+  margin-bottom: 0px;
+  width: 100%;
 }
 
 .cell-container:focus-visible {
@@ -218,12 +218,12 @@ function onMarginClick(): void {
 }
 
 .cell-margin {
-  flex: 0 0 1rem;
+  flex: 0 0 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0rem 0.25em 0em 0.1em /* top right bottom left */;
-  gap: 0rem;
+  padding: 0em 0.25em 0em 0.1em /* top right bottom left */;
+  gap: 0em;
   background: var(--cell-margin-background-color, black);
   border-right: 0px solid var(--cell-border-color);
   cursor: pointer;
@@ -253,42 +253,18 @@ function onMarginClick(): void {
   border-radius: 0px;
 }
 
-.cell-margin-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.cell-btn {
-  cursor: pointer;
-  appearance: none;
-  border: 1px solid var(--cell-border-color);
-  background: #fff;
-  padding: 0.15rem 0.35rem;
-  font-size: 0.6rem;
-  line-height: 1;
-  border-radius: 0px;
-}
-
-.cell-btn:hover:not(:disabled) {
-  background: var(--cell-selected-border);
-  color: #fff;
-  border-color: var(--cell-selected-border);
-}
-
-.cell-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
 .cell-body {
-  flex: 1 1 auto;
+  position: relative;
   display: flex;
+  margin-block: 0;
+  min-height: 0;  
   flex-direction: column;
   min-width: 0;
+  width: 100%;
   /*padding: 0.75rem 0.9rem 0.9rem;*/
-  padding: 0rem 0rem 0rem 0rem;
-  gap: 0.5rem;
+  padding: 0em 0em 0em 0em;
+  gap: 0.5em;
+  border: 1px blue solid;
 }
 
 .cell-hidden-placeholder {
