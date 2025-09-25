@@ -103,17 +103,18 @@ onBeforeUnmount(() => {
     <div ref="toolbarRef">
       <Toolbar />
     </div>
-    <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
-      <CellList />
+    <div class="scroll-container">
+      <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
+        <CellList />
+      </div>
+      <div
+        v-else-if="layoutMode === 'a4Preview'"
+        class="workspace-a4-preview-layout-container"
+        :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }"
+      >
+        A4 preview layout mode (coming soon)
+      </div>
     </div>
-    <div
-      v-else-if="layoutMode === 'a4Preview'"
-      class="workspace-a4-preview-layout-container"
-      :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }"
-    >
-      A4 preview layout mode (coming soon)
-    </div>
-
     <Sidepanel />
 
     <!-- Global modals (kept at root so they can render overlays) -->
@@ -132,8 +133,15 @@ onBeforeUnmount(() => {
   height: 100vh;
   width: 100vw;
 }
-/* ----------------------------------------------------------------------- */
-/* Section:  Container for statusbar at bottom of app                      */
+
+.scroll-container {
+  position: relative;
+  flex: 1 1 auto; /* take up all available space */
+  min-height: 0; /* allow inner scrollers to work */
+  min-width: 0; /* prevent horizontal overflow from inner scrollers */
+  overflow: scroll; /* this container should not scroll */
+  border: 5px red solid;
+}
 
 .statusbar-container {
   flex: 0 0 auto;

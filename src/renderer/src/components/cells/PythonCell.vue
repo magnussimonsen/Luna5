@@ -87,58 +87,66 @@ function registerCuratedMonacoThemesIfNeeded(): void {
   ensureAllMonacoThemesDefined()
 }
 
+
+
 // Using an eager Monaco import; initializeMonacoEditor will use the imported `monaco` object.
 
 function initializeMonacoEditor(): void {
-  // Guard against double-creation on the same DOM node
-  if (editor) {
-    try {
-      console.debug('[PythonCell] initializeMonacoEditor: editor already exists, skipping')
-    } catch {
-      /* ignore */
-    }
-    return
-  }
-  if (!editorElementRef.value) return
+  if (editor || !editorElementRef.value) return
+
   const initialValue = props.cell.cellInputContent ?? props.cell.source ?? ''
-  // Make sure any custom themes are registered before creating editor
-  // (built-ins like 'vs' / 'vs-dark' work without this).
   registerCuratedMonacoThemesIfNeeded()
-  // Determine the desired starting readOnly state. If the cell is selected
-  // it should be editable (unless locked); otherwise default to readOnly.
-  const startingReadOnly =
-    cellSelection.selectedCellId === props.cell.id ? !!isCellLocked.value : true
-  // Create a dedicated Monaco editor instance for this cell.
-  try {
-    editor = monaco.editor.create(editorElementRef.value, {
-      value: initialValue,
-      language: 'python',
-      readOnly: startingReadOnly,
-      fontFamily: fontStore.fonts.codingFont,
-      fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize),
-      lineNumbers: 'on',
-      lineNumbersMinChars: 3,
-      lineDecorationsWidth: 1,
-      minimap: { enabled: false },
-      scrollBeyondLastLine: false,
-      wordWrap: 'on',
-      automaticLayout: true,
-      scrollbar: { vertical: 'hidden', alwaysConsumeMouseWheel: false }
+
+  editor = monaco.editor.create(editorElementRef.value, {
+    value: initialValue,
+    language: 'python',
+    readOnly: cellSelection.selectedCellId === props.cell.id ? !!isCellLocked.value : true,
+
+    // Model B config
+    automaticLayout: true,
+    wordWrap: 'on',
+    wrappingIndent: 'same',
+    scrollBeyondLastLine: false,
+    scrollbar: {
+      vertical: 'hidden',
+      horizontal: 'auto',
+      alwaysConsumeMouseWheel: false
+    },
+    mouseWheelScrollSensitivity: 1,
+    fastScrollSensitivity: 5,
+    smoothScrolling: true,
+    cursorSurroundingLines: 3,
+    cursorSurroundingLinesStyle: 'all',
+    cursorSmoothCaretAnimation: 'on',
+
+    minimap: { enabled: false },
+    lineNumbers: 'on',
+    lineNumbersMinChars: 3,
+    lineDecorationsWidth: 1,
+    fontFamily: fontStore.fonts.codingFont,
+    fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
+  })
+
+  // ---- HEIGHT SYNC (Model B) ----
+  const mount = editorElementRef.value
+
+  const syncHeight = (h?: number): void => {
+    const contentHeight = h ?? editor.getContentHeight()
+    // rAF ensures we write after Monaco’s internal layout settles
+    requestAnimationFrame(() => {
+      mount.style.height = `${Math.ceil(contentHeight)}px`
+      editor.layout()
     })
-    editor.updateOptions({
-      smoothScrolling: true,
-      cursorSurroundingLines: 3,
-      cursorSurroundingLinesStyle: 'all',
-      renderLineHighlight: 'all'
-    })
-  } catch (e) {
-    console.error('[PythonCell] failed to create Monaco editor', e)
-    editor = null
   }
+
+  // Initial sizing, then keep in sync on content changes
+  syncHeight()
+  disposables.push(
+    editor.onDidContentSizeChange((e: { contentHeight: number }) => syncHeight(e.contentHeight))
+  )
   // Debug: report editor creation and starting readonly state
   try {
     console.debug('[PythonCell] initializeMonacoEditor:', { id: props.cell.id, editor: !!editor })
-    console.debug('[PythonCell] startingReadOnly', startingReadOnly)
   } catch {
     /* ignore */
   }
@@ -640,7 +648,6 @@ watch(
   min-height: 0;
   width: 100%;
   overflow: visible; /* allow outer scroller (.cell-containers-list) to handle scrolling */
-
   border: 1px solid var(--cell-border-color);
   background: var(--cell-background, #fff);
 
@@ -655,6 +662,7 @@ watch(
   min-height: 0;
   height: var(--editor-height, 320px);
   overflow: hidden; /* Monaco renders its own scrollbars inside the mount */
+  box-sizing: border-box;
 }
 
 .py-out-error {

@@ -11,7 +11,7 @@ The workspace web layout container that holds both the cell list and the side pa
     height:100%;
     min-height:0; /* allow inner flex child to shrink/scroll */
     /*overflow-y: auto;*/
-    overflow: hidden;  /* no outer scroll, only inner cell list scroll */
+    overflow: scroll;  /* no outer scroll, only inner cell list scroll */
     background: var(--web-workspace-background, var(--debug-color));
     border: 20px solid olive; /* debug */
     box-sizing: border-box;

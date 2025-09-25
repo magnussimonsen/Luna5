@@ -3,16 +3,17 @@
 /* The list is the ONLY outer scroller */
 .cell-containers-list {
   box-sizing: border-box;
-  position: relative; 
+  position: absolute; 
+  /*position: relative;*/ 
   display: flex; 
   flex-direction: column;
   min-height:0; 
   width:100%;
 
-  overflow: scroll; /* sole column scroller */
+  overflow-y: hidden; /* sole column scroller */
 
   gap: 0;
   padding-right: 5em;
-  border: 8px solid blue;
+  border: 0px solid blue;
 }
 
