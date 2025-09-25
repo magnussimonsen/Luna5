@@ -636,12 +636,11 @@ watch(
 <style scoped>
 /* Wrapper should NOT scroll */
 .python-cell-wrapper {
-  display: flex;
+  display: absolute;
   flex-direction: column;
   border: 1px solid var(--cell-border-color);
   background: var(--cell-background, #fff);
   border: 2px solid red;
-  overflow: visible;  
   min-height: 0;
   width: 100% ;
 }
@@ -649,7 +648,6 @@ watch(
 /* This is the actual Monaco mount node */
 /* Monaco mount node: fixed viewport */
 .python-editor {
-  overflow: hidden;
   display: block;
   min-height: 0;
   height: 50%;

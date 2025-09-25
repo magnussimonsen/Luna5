@@ -261,7 +261,6 @@ function onMarginClick(): void {
   flex-direction: column;
   min-width: 0;
   width: 100%;
-  /*padding: 0.75rem 0.9rem 0.9rem;*/
   padding: 0em 0em 0em 0em;
   gap: 0.5em;
   border: 1px blue solid;

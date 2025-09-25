@@ -4,7 +4,6 @@
 .cell-containers-list {
   position: relative;
   display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
   gap: 0;
   padding-right: 0.5em;
