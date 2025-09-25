@@ -3,14 +3,14 @@
 /* The list is the ONLY outer scroller */
 .cell-containers-list {
   box-sizing: border-box;
-  position: absolute; 
+  position: fixed; 
   /*position: relative;*/ 
-  display: flex; 
+  display: absolute; 
   flex-direction: column;
   min-height:0; 
   width:100%;
 
-  overflow-y: scroll; /* sole column scroller */
+  overflow-y: visible; /* sole column scroller */
 
   gap: 0;
   padding-right: 5em;
