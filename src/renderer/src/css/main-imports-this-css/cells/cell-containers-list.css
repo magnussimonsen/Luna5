@@ -9,7 +9,7 @@
   min-height:0; 
   width:100%;
 
-  overflow-y: scroll; /* sole column scroller */
+  overflow: scroll; /* sole column scroller */
 
   gap: 0;
   padding-right: 5em;
