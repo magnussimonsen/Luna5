@@ -1,9 +1,9 @@
 <template>
-  <div class="text-cell-wrapper" :data-locked="isLocked ? 'true' : null">
+  <div class="text-cell-wrapper" :data-locked="isCellLocked ? 'true' : null">
     <div
       v-if="editor"
       class="tiptap-editor"
-      :class="{ 'is-locked': isLocked }"
+      :class="{ 'is-locked': isCellLocked }"
       :style="{
         fontSize: textCellFontSize,
         fontFamily: 'var(--text-font, var(--content-font, inherit))'
@@ -42,16 +42,16 @@ const textEditorsStore = useTextEditorsStore()
 
 // Derived reactive values
 const textCellFontSize = computed(() => fontSizeStore.fontSizes.textEditorCellFontSize)
-const isLocked = computed<boolean>(function computeIsLocked() {
+const isCellLocked = computed<boolean>(function computeIsLocked() {
   return !!cell.hidden || !!cell.softLocked || !!cell.hardLocked || !!cell.softDeleted
 })
 
 // -- Editor Initialization --------------------------------------------------
 const tiptapEditor = createTiptapEditor({
-  editable: !isLocked.value,
+  editable: !isCellLocked.value,
   content: cell.cellInputContent || '',
   onUpdate: ({ editor }) => {
-    if (isLocked.value) return
+    if (isCellLocked.value) return
     const htmlContent = (editor as VueTiptapEditor).getHTML()
     workspaceStore.setCellInputContent(cell.id, htmlContent)
   }
@@ -62,7 +62,7 @@ textEditorsStore.registerEditorForCell(cell.id, tiptapEditor)
 
 // -- Watchers ---------------------------------------------------------------
 /** Keep editor editable state synced with lock flags. */
-watch(isLocked, function onLockStateChanged(locked) {
+watch(isCellLocked, function onLockStateChanged(locked) {
   tiptapEditor.setEditable(!locked)
 })
 
@@ -97,6 +97,7 @@ const editor = tiptapEditor
   border: 1px solid var(--cell-border-color);
   background: var(--cell-background, #fff);
   border-radius: 2px;
+  width: 100%;
 }
 .tiptap-editor.is-locked {
   opacity: 0.75;
@@ -129,14 +130,14 @@ const editor = tiptapEditor
 .tiptap-editor :deep(table) {
   border-collapse: collapse;
   width: 100%;
-  margin: 0.4rem 0 0.8rem;
+  margin: 0.4em 0 0.8em;
 }
 .tiptap-editor :deep(th),
 .tiptap-editor :deep(td) {
   border: 1px solid var(--border-color, #d0d7de);
-  padding: 0.25rem 0.4rem;
+  padding: 0.25em 0.4em;
   vertical-align: top;
-  min-width: 2rem;
+  min-width: 2em;
 }
 .tiptap-editor :deep(th) {
   background: var(--cell-margin-background-color, #f3f5f7);
@@ -149,6 +150,6 @@ const editor = tiptapEditor
 .tiptap-loading {
   font-style: italic;
   opacity: 0.7;
-  padding: 0.25rem 0.4rem;
+  padding: 0.25em 0.4em;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
-  <div class="python-cell" :data-locked="isCellLocked ? 'true' : null">
+  <div class="python-cell-wrapper" :data-locked="isCellLocked ? 'true' : null">
     <div
       ref="editorElementRef"
-      class="python-cell-editor"
+      class="python-editor"
       data-primary-editor="true"
       role="textbox"
       :aria-readonly="isCellLocked ? 'true' : 'false'"
@@ -30,9 +30,8 @@ import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { ensureAllMonacoThemesDefined, applyMonacoTheme } from '@renderer/code/monaco/monaco-theme'
 
-// Monaco will be lazy-loaded. See `lazyInitializeMonacoEditor` below.
-// We load the ESM API, CSS, python contribution and the worker dynamically at runtime
-// to avoid increasing the initial bundle size.
+// Monaco is imported eagerly and initialized synchronously.
+// We import the API and python contribution statically for a simpler setup.
 import PythonOutputText from './python-output/PythonOutputText.vue'
 import PythonOutputImages from './python-output/PythonOutputImages.vue'
 
@@ -60,8 +59,12 @@ const isVisible = ref<boolean>(true)
 let isApplyingLocalEdit = false
 
 import { parsePixelsToNumber } from '@renderer/utils/miscellaneous/parse-pixels-to-number'
+// Eagerly import Monaco for a simple, non-lazy setup
+// Note: this avoids dynamic lazy-loading of the editor and worker.
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 // Previously we used an editor pool. That module is now archived and a shim
 // remains at the same path. We will create/dispose Monaco instances per cell.
+
 
 // Cells can be locked/hidden via several flags; reflect that in editor readOnly state
 const isCellLocked = computed(
@@ -85,83 +88,7 @@ function registerCuratedMonacoThemesIfNeeded(): void {
   ensureAllMonacoThemesDefined()
 }
 
-// Module-scoped references to the dynamically loaded Monaco and worker
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let monaco: any = null
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let editorWorker: any = null
-let monacoLoaded = false
-let monacoInitializing = false
-let monacoReadyPromise: Promise<void> | null = null
-let monacoReadyResolve: (() => void) | null = null
-
-// Use shared editor pool (see src/code/monaco/editorPool.ts)
-
-// Lazy-load Monaco (API + CSS + python language) and the worker, then run
-// the existing `initializeMonacoEditor` logic which expects Monaco to be present.
-async function lazyInitializeMonacoEditor(): Promise<void> {
-  if (monacoLoaded) {
-    // Monaco already available => just initialize
-    initializeMonacoEditor()
-    return
-  }
-
-  // If another caller already started initializing Monaco, wait for it to finish
-  if (monacoInitializing && monacoReadyPromise) {
-    try {
-      await monacoReadyPromise
-    } catch {
-      // ignore
-    }
-    // After the shared initialization completes, ensure editor exists
-    initializeMonacoEditor()
-    return
-  }
-  try {
-    monacoInitializing = true
-    monacoReadyPromise = new Promise((resolve) => {
-      monacoReadyResolve = resolve
-    })
-
-    const results = await Promise.all([
-      import('monaco-editor/esm/vs/editor/editor.api'),
-      import('monaco-editor/min/vs/editor/editor.main.css'),
-      import('monaco-editor/esm/vs/basic-languages/python/python.contribution'),
-      import('monaco-editor/esm/vs/editor/editor.worker?worker')
-    ])
-    monaco = results[0]
-    // worker module default export is the worker constructor
-    const workerMod = results[3]
-    editorWorker = workerMod && (workerMod.default ?? workerMod)
-
-    // Configure worker factory
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(self as any).MonacoEnvironment = {
-      getWorker() {
-        return new editorWorker()
-      }
-    }
-
-    monacoLoaded = true
-    monacoInitializing = false
-    try {
-      monacoReadyResolve && monacoReadyResolve()
-    } catch {
-      /* ignore */
-    }
-    // Now reuse the existing initialization logic which references `monaco` at runtime
-    initializeMonacoEditor()
-  } catch (err) {
-    // Keep failure non-fatal in UI; log for debugging
-    console.error('Failed to lazy-load Monaco editor', err)
-    monacoInitializing = false
-    try {
-      monacoReadyResolve && monacoReadyResolve()
-    } catch {
-      /* ignore */
-    }
-  }
-}
+// Using an eager Monaco import; initializeMonacoEditor will use the imported `monaco` object.
 
 function initializeMonacoEditor(): void {
   // Guard against double-creation on the same DOM node
@@ -198,6 +125,12 @@ function initializeMonacoEditor(): void {
       wordWrap: 'on',
       automaticLayout: true,
       scrollbar: { vertical: 'hidden', alwaysConsumeMouseWheel: false }
+    })
+    editor.updateOptions({
+      smoothScrolling: true,
+      cursorSurroundingLines: 3,
+      cursorSurroundingLinesStyle: 'all',
+      renderLineHighlight: 'all'
     })
   } catch (e) {
     console.error('[PythonCell] failed to create Monaco editor', e)
@@ -345,6 +278,7 @@ function initializeMonacoEditor(): void {
   } catch {
     /* ignore */
   }
+  // No outer-scroller caret-following helpers: Monaco will manage its own internal viewport.
   // Sync editor container height to content height for auto-grow
   const updateEditorHeightToContent = (): void => {
     if (!editor || !editorElementRef.value) return
@@ -390,146 +324,7 @@ function initializeMonacoEditor(): void {
       }
     })
   )
-  // Ensure the cursor remains visible in the overall page viewport when it moves.
-  // This helps when the cell shrinks (e.g. backspacing lines) so the caret doesn't
-  // end up outside the browser viewport even though the editor internal viewport
-  // may have adjusted.
-  disposables.push(
-    editor.onDidChangeCursorPosition(() => {
-      try {
-        if (!editor) return
-        const pos = editor.getPosition()
-        if (!pos) return
-        // Ensure the editor's internal viewport shows the caret.
-        try {
-          editor.revealPositionInCenterIfOutsideViewport(pos)
-        } catch {
-          /* ignore */
-        }
-
-        // Additionally, ensure the caret stays inside the editor's internal
-        // viewport. Use `getScrolledVisiblePosition` which returns visual
-        // coordinates for the exact position (handles wrapped lines).
-        try {
-          let scrolledPos: { top: number; left: number; height: number } | null = null
-          try {
-            if (typeof editor.getScrolledVisiblePosition === 'function') {
-              scrolledPos = editor.getScrolledVisiblePosition(pos)
-            }
-          } catch {
-            scrolledPos = null
-          }
-
-          // Fallback to computing via getTopForLineNumber if `getScrolledVisiblePosition` is unavailable
-          if (!scrolledPos && typeof editor.getTopForLineNumber === 'function') {
-            try {
-              const top = editor.getTopForLineNumber(pos.lineNumber)
-              const nextTop = editor.getTopForLineNumber(pos.lineNumber + 1)
-              scrolledPos = { top, left: 0, height: (nextTop && nextTop - top) || 16 }
-            } catch {
-              scrolledPos = null
-            }
-          }
-
-          if (scrolledPos) {
-            const layoutInfo =
-              typeof editor.getLayoutInfo === 'function' ? editor.getLayoutInfo() : null
-            const visibleHeight =
-              layoutInfo && typeof layoutInfo.height === 'number' ? layoutInfo.height : null
-            const currentScrollTop =
-              typeof editor.getScrollTop === 'function' ? editor.getScrollTop() : null
-            if (visibleHeight !== null && currentScrollTop !== null) {
-              const marginPx = 8
-              const caretTop = scrolledPos.top
-              const caretBottom = scrolledPos.top + (scrolledPos.height ?? 16)
-              const viewTop = currentScrollTop + marginPx
-              const viewBottom = currentScrollTop + visibleHeight - marginPx
-              if (caretTop < viewTop) {
-                try {
-                  editor.setScrollTop(Math.max(0, caretTop - marginPx))
-                } catch {
-                  /* ignore */
-                }
-              } else if (caretBottom > viewBottom) {
-                try {
-                  editor.setScrollTop(Math.max(0, caretBottom - visibleHeight + marginPx))
-                } catch {
-                  /* ignore */
-                }
-              }
-            }
-          }
-
-          // Best-effort reveal (uses Monaco ScrollType when available)
-          try {
-            if (typeof (editor.revealPosition as unknown) === 'function') {
-              if (
-                typeof monaco !== 'undefined' &&
-                monaco &&
-                monaco.editor &&
-                monaco.editor.ScrollType
-              ) {
-                try {
-                  editor.revealPosition(pos, monaco.editor.ScrollType.Smooth)
-                } catch {
-                  try {
-                    editor.revealPositionInCenterIfOutsideViewport(pos)
-                  } catch {
-                    /* ignore */
-                  }
-                }
-              } else {
-                try {
-                  editor.revealPositionInCenterIfOutsideViewport(pos)
-                } catch {
-                  /* ignore */
-                }
-              }
-            }
-          } catch {
-            /* ignore */
-          }
-        } catch {
-          /* ignore */
-        }
-
-        // Finally, ensure the overall page viewport keeps the caret visible
-        // when the editor itself is positioned off-screen due to container
-        // collapsing or other layout changes.
-        try {
-          const scrolled =
-            editor.getScrolledVisiblePosition && editor.getScrolledVisiblePosition(pos)
-          const dom = editor.getDomNode && editor.getDomNode()
-          if (scrolled && dom && dom.getBoundingClientRect) {
-            // Only adjust the global page scroll if the editor currently has
-            // text focus (user actively typing) or as a fallback when the
-            // cell is selected but the focus API isn't available. This avoids
-            // interfering with normal mouse-wheel scrolling when other cells
-            // are active.
-            const hasFocus =
-              typeof editor.hasTextFocus === 'function'
-                ? editor.hasTextFocus()
-                : cellSelection.selectedCellId === props.cell.id
-            if (!hasFocus) return
-
-            const rect = dom.getBoundingClientRect()
-            const caretAbsoluteY = window.scrollY + rect.top + scrolled.top
-            const margin = 24 // px of breathing room
-            const viewportTop = window.scrollY + margin
-            const viewportBottom = window.scrollY + window.innerHeight - margin
-            if (caretAbsoluteY < viewportTop || caretAbsoluteY > viewportBottom) {
-              const target = Math.max(0, caretAbsoluteY - Math.floor(window.innerHeight / 2))
-              window.scrollTo({ top: target, behavior: 'auto' })
-            }
-          }
-        } catch {
-          /* ignore */
-        }
-      } catch {
-        /* ignore */
-      }
-    })
-  )
+  // No custom caret/outside-scroll handling: rely on Monaco's built-in behavior.
   // Initial apply
   updateEditorHeightToContent()
   // Re-layout on container width changes
@@ -547,7 +342,8 @@ onMounted(() => {
   // Use lazy loader so Monaco and its workers are only fetched when needed
   // Initialize only if this cell is selected at mount time
   if (cellSelection.selectedCellId === props.cell.id) {
-    void lazyInitializeMonacoEditor()
+    // Initialize Monaco eagerly
+    void initializeMonacoEditor()
   }
 
   // Observe visibility of the editor container so we can hybernate/destroy
@@ -574,10 +370,8 @@ onMounted(() => {
           // the selection watcher.
           if (nowVisible && !editor) {
             try {
-              // Use lazy loader which will create either a pooled editor or a
-              // fresh one. The created editor will be read-only unless the
-              // cell is selected (selection watcher will toggle it).
-              void lazyInitializeMonacoEditor()
+              // Initialize a lightweight editor instance now that the cell is visible.
+              initializeMonacoEditor()
             } catch {
               /* ignore */
             }
@@ -601,9 +395,9 @@ watch(
       const currentNb = workspaceStore.currentNotebookId
       // If the notebook owning this cell is now the active notebook, ensure an editor exists.
       if (parentNbId && parentNbId === currentNb && !editor) {
-        // Eagerly initialize the editor for this python cell even if it's not currently
-        // fully visible. This implements the requested eager creation on notebook switch.
-        void lazyInitializeMonacoEditor()
+        // Initialize the editor for this python cell even if it's not currently
+        // fully visible.
+        initializeMonacoEditor()
       }
       if (parentNbId && parentNbId !== currentNb) {
         try {
@@ -627,7 +421,7 @@ watch(
     try {
       const parentNbId = props.parentNotebookId
       if (parentNbId && parentNbId === currentNb && !editor) {
-        void lazyInitializeMonacoEditor()
+        initializeMonacoEditor()
       }
       if (parentNbId && parentNbId !== currentNb) {
         try {
@@ -800,28 +594,26 @@ onBeforeUnmount(() => {
 watch(
   () => cellSelection.selectedCellId,
   (newId, oldId) => {
-    if (newId === props.cell.id) {
+      if (newId === props.cell.id) {
       // selected now
       // Initialize (or reuse) the editor, then ensure it's writable & focused
-      void lazyInitializeMonacoEditor().then(() => {
-        // Wait a tick so the editor DOM (possibly reparented) is settled,
-        // then ensure it's editable and focused.
-        void nextTick(() => {
-          setTimeout(() => {
-            try {
-              if (editor) {
-                editor.updateOptions({ readOnly: !!isCellLocked.value })
-                try {
-                  editor.focus()
-                } catch {
-                  /* ignore */
-                }
+      // Initialize sync and then focus after a tick
+      initializeMonacoEditor()
+      void nextTick(() => {
+        setTimeout(() => {
+          try {
+            if (editor) {
+              editor.updateOptions({ readOnly: !!isCellLocked.value })
+              try {
+                editor.focus()
+              } catch {
+                /* ignore */
               }
-            } catch {
-              /* ignore */
             }
-          }, 0)
-        })
+          } catch {
+            /* ignore */
+          }
+        }, 0)
       })
     } else if (oldId === props.cell.id) {
       // just unselected: if the cell remains visible, keep the editor around
@@ -842,20 +634,23 @@ watch(
 </script>
 
 <style scoped>
-.python-cell {
-  font-family: var(--content-font, inherit);
-  color: var(--text-color, #222);
+/* Wrapper should NOT scroll */
+.python-cell-wrapper {
+  display: absolute;
+  flex-direction: column;
+  border: 1px solid var(--cell-border-color);
+  background: var(--cell-background, #fff);
+  border: 2px solid red;
+  min-height: 0;
+  width: 100% ;
 }
-.python-cell-editor {
-  width: 100%;
-  /* Let the editor auto-grow with content; JS sets explicit height in px. */
-  min-height: 1em;
-  height: auto;
-  overflow: hidden;
-  border: 0px solid var(--cell-border-color);
-  /*Right border radius*/
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
+
+/* This is the actual Monaco mount node */
+/* Monaco mount node: fixed viewport */
+.python-editor {
+  display: block;
+  min-height: 0;
+  height: 50%;
 }
 .py-out-error {
   margin-top: 0em;

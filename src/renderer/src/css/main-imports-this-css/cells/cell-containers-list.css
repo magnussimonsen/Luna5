@@ -1,15 +1,17 @@
 
 /* Style for the container where the cells are displayed */
+/* The list is the ONLY outer scroller */
 .cell-containers-list {
-    position: relative;
-    display: flex;
-    flex: 1 1 auto; /* Allow to grow and shrink, initial size auto */
-    flex-direction: column;
-    background: var(transparent, var(--debug-color));
-    border: 0px solid red; /* Debug border, remove or change as needed */
-    padding-right: 0.5em;
-    margin: 0em 0em 0em 0.5em; /* top right bottom left */
-    min-height: 0; /* allow children to shrink (important) */
-    gap: 0px; /* space between cells */
-
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-right: 0.5em;
+  margin: 1em;
+  border: 8px solid blue;
+  overflow-y: auto;
+  max-height: 100%;
+  min-height: 0;
+  width: 100%;
 }
+
