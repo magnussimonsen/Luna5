@@ -106,7 +106,6 @@ onBeforeUnmount(() => {
     <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
       <CellList />
     </div>
-
     <div
       v-else-if="layoutMode === 'a4Preview'"
       class="workspace-a4-preview-layout-container"
@@ -141,19 +140,4 @@ onBeforeUnmount(() => {
   width: 100%;
   /* Prevent it from growing */
 }
-
-/* ----------------------------------------------------------------------- */
-/* Section: Workspace and side panel web layout mode                       */
-.web--workspace-layout {
-  position: relative;
-  display: flex;
-  flex: 1 1 auto;
-  /* border: 9px solid green; */
-  color: var(--text-color, var(--debug-color, red));
-  background: var(--web-workspace-background, var(--debug-color, red));
-  /* Take remaining space between menuBar-toolbar and statusbar */
-}
-
-/* ----------------------------------------------------------------------- */
-/* Section: Workspace and side panel A4 Preview layout mode                       */
 </style>

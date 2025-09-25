@@ -25,7 +25,7 @@
   `flex:0 0 auto; width:100%;`  *(fixed bottom strip)*
 
 * **Workspace (web mode)**
-  **`.workspace-web-layout-container`**: `display:flex; position:relative; flex:1 1 auto; width:100%; overflow-y:auto;`
+  **`.workspace-web-layout-container`**: `display:flex; position:relative; flex:1 1 auto; width:100%; overflow-y:auto; z-index:var(--workspace-web-layout-container-z-index,1000);`
   **Role:** parent that holds the cell list and sidepanel; establishes containing block for sidepanel overlays.
   **Implication:** this becomes a **scroll container**. If the cell list (`.cell-containers-list`) also has `overflow-y:auto`, choose **one** to be the vertical scroller to avoid nested scroll contexts.
 
@@ -36,24 +36,26 @@
 
 ## 2) Workspace → Notebook (scroll column)
 
-* **` .cell-containers-list`** *(the vertical scroller for cells)*
-  `display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-y:auto; max-height:100%; gap:0;`
-  **Role:** *Primary vertical scrolling container.*
+* **`.cell-containers-list`** *(vertical scroller for cells)*
+  `position:relative; display:flex; flex-direction:column; flex:1 1 auto; min-height:0; max-height:100%; overflow-y:auto; gap:0; padding-right:0.5em; margin:1em; width:100%;`
 
-* **` .cell-container`** *(one row per cell)*
-  `display:flex; min-height:0;`
-  **Role:** flex row wrapper; must not become a scroll container.
+* **`.cell-container`** *(one row per cell)*
+  `position:relative; display:flex; width:100%;`
 
-* **` .python-cell-wrapper`** *(cell content wrapper)*
-  `display:flex; flex-direction:column; min-height:0; overflow:visible;`
-  **Role:** prevent intermediate scrolling; let either Monaco or list scroll.
+* **`.cell-margin`** *(gutter/index area)*
+  `flex:0 0 1em; display:flex; flex-direction:column; align-items:center;`
 
-* **` .python-editor`** *(Monaco mount node)*
-  `width:100%; min-height:0;`
-  **Choose ONE scroll model:**
+* **`.cell-body`** *(cell main column)*
+  `position:relative; display:flex; flex-direction:column; min-height:0; min-width:0; width:100%;`
 
-  * **Model A (Monaco scrolls)** → add `height:320px; overflow:hidden;` and **do not** auto-resize to content.
-  * **Model B (Outer list scrolls; editor auto-grows)** → no fixed height; keep `overflow:hidden;` and retain JS that sets `style.height = editor.getContentHeight()`; **plus** caret-follow for `.cell-containers-list`.
+* **`.cell-content`** *(content container)*
+  `position:relative; display:block; overflow:hidden;`
+
+* **`.python-cell-wrapper`** *(python cell content wrapper)*
+  `display:absolute; flex-direction:column; min-height:0; width:100%;`
+
+* **`.python-editor`** *(Monaco mount)*
+  `display:block; min-height:0; height:50%;`
 
 ---
 
@@ -86,7 +88,3 @@ editor.updateOptions({
 
 * **Model A only:** no caret-follow JS needed.
 * **Model B:** add caret-follow bound to `.cell-containers-list`.
-
----
-
-*Append further containers here as we drill down (tiptap editor, outputs, sidepanel, modals, etc.).*

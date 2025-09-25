@@ -1,7 +1,6 @@
 <!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
 <!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
 
-
 <template>
   <div class="cell-containers-list">
     <CellContainer

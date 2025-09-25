@@ -145,15 +145,21 @@ function onMarginClick(): void {
 <style scoped>
 .cell-container {
   position: relative;
-  display: flex;
+  display: flex; /* row: .cell-margin + .cell-body */
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-height: 0; /* allow inner scrollers to work */
+  min-width: 0; /* prevent horizontal overflow from .cell-body */
+  align-items: stretch; /* let .cell-body fill height */
+  overflow: scroll; /* this container should not scroll */
+
   border: solid 1px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
   border-left: 0.5em solid var(--cell-border-color, blue);
   border-radius: var(--cell-container-border-radius, 0px);
   background: var(--cell-background, blue);
-  margin-block: 0em;
+
   outline: none;
-  margin-bottom: 0px;
-  width: 100%;
 }
 
 .cell-container:focus-visible {
@@ -218,10 +224,11 @@ function onMarginClick(): void {
 }
 
 .cell-margin {
-  flex: 0 0 1em;
+  flex: 1 1 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   padding: 0em 0.25em 0em 0.1em /* top right bottom left */;
   gap: 0em;
   background: var(--cell-margin-background-color, black);
@@ -256,11 +263,11 @@ function onMarginClick(): void {
 .cell-body {
   position: relative;
   display: flex;
-  margin-block: 0;
-  min-height: 0;  
   flex-direction: column;
+  min-height: 0;
   min-width: 0;
   width: 100%;
+
   padding: 0em 0em 0em 0em;
   gap: 0.5em;
   border: 1px blue solid;

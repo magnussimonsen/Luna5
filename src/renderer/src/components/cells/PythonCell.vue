@@ -65,7 +65,6 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 // Previously we used an editor pool. That module is now archived and a shim
 // remains at the same path. We will create/dispose Monaco instances per cell.
 
-
 // Cells can be locked/hidden via several flags; reflect that in editor readOnly state
 const isCellLocked = computed(
   () =>
@@ -594,7 +593,7 @@ onBeforeUnmount(() => {
 watch(
   () => cellSelection.selectedCellId,
   (newId, oldId) => {
-      if (newId === props.cell.id) {
+    if (newId === props.cell.id) {
       // selected now
       // Initialize (or reuse) the editor, then ensure it's writable & focused
       // Initialize sync and then focus after a tick
@@ -634,35 +633,41 @@ watch(
 </script>
 
 <style scoped>
-/* Wrapper should NOT scroll */
+/* Wrapper should NOT scroll: it contains the editor mount and outputs */
 .python-cell-wrapper {
-  display: absolute;
+  display: flex;
   flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  overflow: visible; /* allow outer scroller (.cell-containers-list) to handle scrolling */
+
   border: 1px solid var(--cell-border-color);
   background: var(--cell-background, #fff);
-  border: 2px solid red;
-  min-height: 0;
-  width: 100% ;
+
+  box-sizing: border-box;
 }
 
-/* This is the actual Monaco mount node */
-/* Monaco mount node: fixed viewport */
+/* Monaco mount node: give a sane default height but allow override via CSS var
+   and JS (the component may set an inline height when auto-growing). */
 .python-editor {
   display: block;
+  width: 100%;
   min-height: 0;
-  height: 50%;
+  height: var(--editor-height, 320px);
+  overflow: hidden; /* Monaco renders its own scrollbars inside the mount */
 }
+
 .py-out-error {
-  margin-top: 0em;
+  margin-top: 0.5em;
   border: 0px solid var(--error-border, #d92c2c);
   background: var(--error-bg, #fff1f1);
   color: var(--error-fg, #7a1010);
-  border-radius: 0px;
+  border-radius: 4px;
   padding: 0.5em 0.75em;
 }
 .section-title {
   font-size: 0.8rem;
-  opacity: 0.7;
+  opacity: 0.85;
   margin-bottom: 0.25rem;
 }
 .stderr {
@@ -677,8 +682,8 @@ watch(
   user-select: text;
 }
 .python-cell[data-locked='true'] {
-  /* WHAT DOES THIS DO? */
+  /* Visual hint for locked cells; keeps content readable while indicating state */
   opacity: 0.9;
-  filter: grayscale(0.1);
+  filter: grayscale(0.06);
 }
 </style>

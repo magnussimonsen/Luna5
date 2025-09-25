@@ -14,7 +14,7 @@
       <div
         :class="{
           'workspace-container-web': layoutMode === 'web',
-          'workspace-container-a4': layoutMode === 'a4Preview'
+          'workspace-a4-preview-layout-container': layoutMode === 'a4Preview'
         }"
       >
         <slot />
@@ -43,16 +43,6 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   background: var(--web-workspace-background, var(--debug-color, red));
 }
 
-.workspace-container-web {
-  display: flex;
-  position: relative;
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  overflow: hidden; /* prevent double scrollbars */
-  background: var(--web-workspace-background, var(--debug-color, red));
-}
-
 .workspace-container-a4 {
   /* A4: fixed page width, centered, never pushes the StatusBar */
   /* Keep the container flexible vertically inside the flex column parent */
@@ -67,6 +57,19 @@ const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
   position: relative; /* keeps any local abs children positioned correctly */
   /* Optional polish */
   box-shadow: var(--paper-box-shadow, 0 8px 16px rgba(0, 0, 0, 1));
+  z-index: var(--workspace-a4-preview-layout-container-z-index, 1000);
+}
+
+/* Work in progress */
+.workspace-a4-preview-layout-container {
+  display: flex;
+  justify-content: flex-start;
+  /*  Allows left button row and right button row to be spaced apart */
+  background: var(--red, var(--debug-color));
+  width: 100%;
+  /* Full width of parent */
+  /* Grow to fill available space */
+  flex-grow: 1;
 }
 
 .workspace-scroll {

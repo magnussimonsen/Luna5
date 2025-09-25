@@ -2,16 +2,20 @@
 /* Style for the container where the cells are displayed */
 /* The list is the ONLY outer scroller */
 .cell-containers-list {
-  position: relative;
-  display: flex;
+  box-sizing: border-box;
+  position: absolute; 
+  display:flex; 
   flex-direction: column;
+  min-height:0; 
+  width:100%;
+  height: 100%;
+  overflow-y: scroll; /* sole column scroller */
+
   gap: 0;
-  padding-right: 0.5em;
-  margin: 1em;
+  padding-right: 5em;
   border: 8px solid blue;
-  overflow-y: auto;
-  max-height: 100%;
-  min-height: 0;
-  width: 100%;
+
+  
+
 }
 
