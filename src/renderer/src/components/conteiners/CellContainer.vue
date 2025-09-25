@@ -21,24 +21,22 @@
     <div class="cell-margin" @click.stop="onMarginClick">
       <div class="cell-index" :title="`Cell ${displayIndex}`">{{ displayIndex }}</div>
     </div>
-    <div class="cell-body">
-      <!-- Main cell content -->
-      <div class="cell-content">
-        <template v-if="!hidden">
-          <slot />
-        </template>
-        <template v-else>
-          <div
-            class="cell-hidden-placeholder hidden-stripes-bg"
-            aria-label="Hidden cell placeholder"
-          ></div>
-        </template>
-      </div>
-      <!-- 
+    <!-- Main cell content(cell-body div is deprecated) -->
+    <div class="cell-content">
+      <template v-if="!hidden">
+        <slot />
+      </template>
+      <template v-else>
+        <div
+          class="cell-hidden-placeholder hidden-stripes-bg"
+          aria-label="Hidden cell placeholder"
+        ></div>
+      </template>
+    </div>
+    <!-- 
       Optional status/footer slot 
       <div v-if="$slots.status" class="cell-status"><slot name="status" /></div>
       -->
-    </div>
   </div>
 </template>
 
@@ -152,11 +150,11 @@ function onMarginClick(): void {
   min-height: 0; /* allow inner scrollers to work */
   min-width: 0; /* prevent horizontal overflow from .cell-body */
   align-items: stretch; /* let .cell-body fill height */
-  overflow: scroll; /* this container should not scroll */
+  overflow: hidden; /* this container should not scroll */
 
   border: solid 1px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
   border-left: 0.5em solid var(--cell-border-color, blue);
-  border-radius: var(--cell-container-border-radius, 0px);
+  border-radius: 0px;
   background: var(--cell-background, blue);
 
   outline: none;
@@ -224,7 +222,7 @@ function onMarginClick(): void {
 }
 
 .cell-margin {
-  flex: 1 1 1em;
+  flex: 1 1 10em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -260,19 +258,6 @@ function onMarginClick(): void {
   border-radius: 0px;
 }
 
-.cell-body {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  min-width: 0;
-  width: 100%;
-
-  padding: 0em 0em 0em 0em;
-  gap: 0.5em;
-  border: 1px blue solid;
-}
-
 .cell-hidden-placeholder {
   height: 1em;
   width: 100%;
@@ -282,8 +267,16 @@ function onMarginClick(): void {
 
 .cell-content {
   position: relative;
-  display: block;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  padding: 0em 0em 0em 0em;
+  border: 5px purple solid;
+  box-sizing: border-box;
 }
 
 .cell-status {
