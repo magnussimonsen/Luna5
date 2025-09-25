@@ -10,10 +10,10 @@
   min-height:0; 
   width:100%;
 
-  overflow-y: hidden; /* sole column scroller */
+  overflow-y: scroll; /* sole column scroller */
 
   gap: 0;
   padding-right: 5em;
-  border: 0px solid blue;
+  border: 40px solid blue;
 }
 

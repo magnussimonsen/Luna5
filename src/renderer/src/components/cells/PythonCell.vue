@@ -87,8 +87,6 @@ function registerCuratedMonacoThemesIfNeeded(): void {
   ensureAllMonacoThemesDefined()
 }
 
-
-
 // Using an eager Monaco import; initializeMonacoEditor will use the imported `monaco` object.
 
 function initializeMonacoEditor(): void {
