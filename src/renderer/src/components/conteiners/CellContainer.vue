@@ -250,7 +250,7 @@ function onMarginClick(): void {
 .cell-container.is-flagged .cell-index {
   background: var(--flagged-cell-color, gold);
   padding: 0em 0.25em;
-  border-radius: 0px;d
+  border-radius: 0px;
 }
 
 .cell-body {
