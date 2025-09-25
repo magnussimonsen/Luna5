@@ -12,7 +12,7 @@
     <strong :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']"
       >Graphical Calculator Settings</strong
     >
-    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']"> 
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <span>Graphical calculator settings content goes here.</span>
     </div>
   </div>

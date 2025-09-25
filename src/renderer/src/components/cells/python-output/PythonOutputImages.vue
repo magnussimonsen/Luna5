@@ -28,13 +28,59 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
+import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
-defineProps<{ images: string[] }>()
+const props = defineProps<{ images: string[]; cellId?: string }>()
 
-// Zoom percent (50% - 200%)
+// Zoom percent (5 - 100)
 const zoom = ref<number>(50)
 const sliderId = `py-fig-zoom-${Math.random().toString(36).slice(2, 8)}`
+
+const workspaceStore = useWorkspaceStore()
+
+// Load stored zoom for this cell (if present) when component mounts
+onMounted(() => {
+  try {
+    const cellId = props.cellId
+    if (!cellId) return
+    const stored = workspaceStore.getCellUiHint(cellId, 'stdoutImagesZoomSliderValue')
+    if (typeof stored === 'number') {
+      zoom.value = Math.max(5, Math.min(100, stored))
+    }
+  } catch {
+    /* ignore */
+  }
+})
+
+// Debounced writer to persist zoom; avoid rapid writes while sliding
+let writeTimer: number | null = null
+watch(
+  () => zoom.value,
+  (next) => {
+    try {
+      const cellId = props.cellId
+      if (!cellId) return
+      if (writeTimer) {
+        clearTimeout(writeTimer)
+      }
+      writeTimer = window.setTimeout(() => {
+        try {
+          workspaceStore.setCellUiHint(
+            cellId,
+            'stdoutImagesZoomSliderValue',
+            Math.max(5, Math.min(100, Math.round(next)))
+          )
+        } catch {
+          /* ignore */
+        }
+        writeTimer = null
+      }, 150)
+    } catch {
+      /* ignore */
+    }
+  }
+)
 
 // Luna4-style smooth zoom: image width follows slider percent directly
 const imgWidthStyle = computed(() => ({ width: `${zoom.value}%` }))

@@ -42,6 +42,9 @@ export type ThemeColorTypes = {
   mainPanelBackground: string
   mainPanelBorderColor: string
 
+  // High contranst colors for accessibility
+  highContrastColor: string
+
   // Divider color
   dividerColor: string
 

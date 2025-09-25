@@ -28,8 +28,8 @@ import { computed, onBeforeUnmount, watch } from 'vue'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import type { TextCell } from '@renderer/types/notebook-cell-types'
-import { EditorContent, Editor as VueEditor } from '@tiptap/vue-3'
-import { createTiptapEditor } from '@renderer/code/tiptap/tiptap-initialization'
+import { EditorContent } from '@tiptap/vue-3'
+import { createTiptapEditor, VueTiptapEditor } from '@renderer/code/tiptap/tiptap-initialization'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 
 // Props
@@ -52,7 +52,7 @@ const tiptapEditor = createTiptapEditor({
   content: cell.cellInputContent || '',
   onUpdate: ({ editor }) => {
     if (isLocked.value) return
-    const htmlContent = (editor as VueEditor).getHTML()
+    const htmlContent = (editor as VueTiptapEditor).getHTML()
     workspaceStore.setCellInputContent(cell.id, htmlContent)
   }
 })

@@ -14,10 +14,10 @@ import Toolbar from '@renderer/components/conteiners/ToolbarContainer.vue'
 import CellList from '@renderer/components/conteiners/CellList.vue'
 import Statusbar from '@renderer/components/navigation-bars/Statusbar.vue'
 import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
-
+import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
+import { useModalStore } from '@renderer/stores/UI/modalStore'
 // Modals and sidepanel are currently not referenced directly in this file.
 // They are imported where needed by child components.
-// import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 // import SaveAsModal from '@renderer/components/modals/SaveAsModal.vue'
 // import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
@@ -33,6 +33,7 @@ import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-wa
 const menubarStore = useMenubarStore()
 const toolbarStore = useToolbarStore()
 const sidepanelStore = useSidepanelStore()
+const modalStore = useModalStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
@@ -106,11 +107,18 @@ onBeforeUnmount(() => {
       <CellList />
     </div>
 
-    <div v-else-if="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">
-      A4
+    <div
+      v-else-if="layoutMode === 'a4Preview'"
+      class="workspace-a4-preview-layout-container"
+      :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }"
+    >
+      A4 preview layout mode (coming soon)
     </div>
 
     <Sidepanel />
+
+    <!-- Global modals (kept at root so they can render overlays) -->
+    <AboutLunaModal v-if="modalStore.isAboutLunaModalOpen" />
 
     <div ref="statusbarRef" class="statusbar-container">
       <Statusbar />

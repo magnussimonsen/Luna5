@@ -75,10 +75,13 @@
   padding: var(--sidepanel-row-x-padding); /* top, right, bottom, left */
 }
 
-.sidepanel-top-row-margin {
+.sidepanel-row-y-padding {
+  padding: var(--sidepanel-row-y-padding, 0.2em 0); /* top, right, bottom, left */
+}
+.sidepanel-top-row-margin { /* y margin only */
   margin-top: var(--sidepanel-top-row-margin, min(5px, 0.5em));
 }
-.sidepanel-bottom-row-margin {
+.sidepanel-bottom-row-margin { /* y margin only */
   margin-bottom: var(--sidepanel-bottom-row-margin, min(5px, 0.5em));
 }
 

@@ -35,6 +35,8 @@ export const useThemeStore = defineStore('theme', {
       // Main panel
       mainPanelBackground: 'blue' /* debug IS THIS USED?*/,
       mainPanelBorderColor: 'blue' /* debug IS THIS USED?*/,
+      // High contranst colors for accessibility
+      highContrastColor: 'black',
       // Divider color
       dividerColor: 'silver',
       // Paper preview background
@@ -130,6 +132,8 @@ export const useThemeStore = defineStore('theme', {
       // Main panel  (NOT USED?)
       mainPanelBackground: '#9B2E2E', // Replace this with workspace background color
       mainPanelBorderColor: '#444444', // Replace this with workspace border color
+      // High contranst colors for accessibility
+      highContrastColor: 'white',
       // Divider color
       dividerColor: '#242424',
       // Paper preview background
@@ -233,6 +237,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--sidepanel-border-color', colors.sidepanelBorderColor)
       root.style.setProperty('--main-panel-background', colors.mainPanelBackground)
       root.style.setProperty('--main-panel-border-color', colors.mainPanelBorderColor)
+      root.style.setProperty('--high-contrast-color', colors.highContrastColor)
       root.style.setProperty('--divider-color', colors.dividerColor)
       root.style.setProperty('--paper-color', colors.paperColor)
       root.style.setProperty('--paper-border-color', colors.paperBorderColor)

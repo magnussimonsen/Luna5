@@ -1,18 +1,23 @@
 <template>
-  <div class="sidepanel-ui-base sidepanel-padding-margin-base">
-    <h2>🚧 Work in progress</h2>
-    <h2>Python help and examples</h2>
-    <h3>Shortcuts</h3>
-    <ul class="shortcuts-list">
+  <div
+    :class="[
+      'sidepanel-flex-column-overflow-y',
+      'sidepanel-color-font-styling',
+      'sidepanel-row-x-y-padding',
+      'sidepanel-top-row-margin'
+    ]"
+  >
+    <h3>Python help and examples (work in progress)</h3>
+    <h4>Shortcuts</h4>
+    <ul>
       <li>Run Python code in the selected cell: <strong>Ctrl + Enter</strong></li>
     </ul>
-    <h3>Available Offline Python Imports</h3>
-    <p>
-      Python's standard library is available (for example: <code>math</code>, <code>json</code>,
-      <code>re</code>, <code>pathlib</code>).
-    </p>
-    <p>The following imports are also available offline:</p>
-    <ul class="imports-list">
+    <h4>Available Offline Python Imports</h4>
+    Python's standard library is available (for example: math, datetime, json, re, statistics,
+    etc.).<br />
+    <hr />
+    The following imports are also available offline:
+    <ul>
       <!-- Core scientific stack -->
       <li><code>import numpy as np # N-dimensional arrays and numerical computing</code></li>
       <li><code>import pandas as pd # data frames and data analysis</code></li>
@@ -54,5 +59,4 @@
 // Side panel placeholder aligned with existing settings layout
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

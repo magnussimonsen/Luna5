@@ -18,6 +18,8 @@ export interface BaseCell {
   hardDeleted?: boolean // If true the cell is listed for permanent deletion
   baseCellInputContent?: string // Mostly for development
   baseCellOutputContent?: string // Mostly for development
+  isCellVisible?: boolean // UI hint, not persisted
+  isCellFocused?: boolean // UI hint, not persisted
   metadata?: Record<string, unknown>
 }
 
@@ -79,6 +81,7 @@ export interface PythonCell extends BaseCell {
   stdoutText?: string // Full captured stdout
   stderrText?: string // Full captured stderr
   stdoutImages?: string[] // Data URLs extracted from stdout (e.g., matplotlib PNGs)
+  stdoutImagesZoomSliderValue?: number // UI hint for image zoom level
   displayItems?: PythonDisplayItem[] // Rich display bundle (future-friendly)
 
   /**

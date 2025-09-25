@@ -6,3 +6,4 @@ out
 *.log*
 src/renderer/ignore/**
 public/pyodide-0.28.2/**
+luna4code/** 

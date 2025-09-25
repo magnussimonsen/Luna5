@@ -9,7 +9,13 @@
     <!-- Divider -->
     <Divider />
 
-    <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
+    <div
+      :class="[
+        'sidepanel-flex-column-overflow-y',
+        'sidepanel-row-x-y-padding',
+        'sidepanel-color-font-styling'
+      ]"
+    >
       <div v-if="!headings.length" class="sidepanel__text-message--empty">
         No headings yet. Add H1–H4 in text cells.
       </div>
@@ -26,7 +32,7 @@
         <li
           v-for="h in headings"
           :key="h.id"
-          :class="[' sidepanel-row-x-y-padding', 'sidepanel__toc-item']"
+          :class="['sidepanel-row-x-y-padding', 'sidepanel__toc-item']"
         >
           <span
             class="sidepanel__toc-link"

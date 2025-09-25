@@ -1,6 +1,6 @@
 <template>
   <div class="sidepanel-container-inside-resize-border-padding">
-    <SettingsPanelSelectorRow :current-page="currentPage" @update:current-page="onUpdatePage" /> 
+    <SettingsPanelSelectorRow :current-page="currentPage" @update:current-page="onUpdatePage" />
     <!-- Content area -->
     <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
       <GeneralSettingsPanel v-if="currentPage === 'general'" />
@@ -40,14 +40,11 @@ type SettingsPage =
   | 'code' // THIS IS PYTHON CODE EDITOR; DO NOT CVHANGE TO 'python'
 
 const currentPage: Ref<SettingsPage> = ref('general')
-// const fontSizeStore = useFontSizeStore()
-
-//const contentStyle = computed(() => ({
-//  fontSize: fontSizeStore.fontSizes.sidepanelFontSize
-// }))
 
 function onUpdatePage(page: SettingsPage): void {
   currentPage.value = page
 }
 </script>
-<style scoped></style>
+<style scoped>
+/* Styles are in the css folder */
+</style>

@@ -9,18 +9,27 @@
 //
 // If you add a new theme JSON file, import it at the top and add it to the 'themes' array.
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import SlushAndPoppies from '@renderer/code/monaco/monaco-curated-light-themes/Slush and Poppies.json'
-import SolarizedLight from '@renderer/code/monaco/monaco-curated-light-themes/Solarized-light.json'
-import Dracula from '@renderer/code/monaco/monaco-curated-dark-themes/Dracula.json'
-
+import Eiffel from '@renderer/code/monaco/monaco-curated-light-themes/Eiffel.json'
+import IDLE from '@renderer/code/monaco/monaco-curated-light-themes/IDLE.json'
+import TextmateMacClassic from '@renderer/code/monaco/monaco-curated-light-themes/Textmate (Mac Classic).json'
+import XcodeDefault from '@renderer/code/monaco/monaco-curated-light-themes/Xcode_default.json'
+import Blackboard from '@renderer/code/monaco/monaco-curated-dark-themes/Blackboard.json'
+import Sunburst from '@renderer/code/monaco/monaco-curated-dark-themes/Sunburst.json'
+import VibrantInk from '@renderer/code/monaco/monaco-curated-dark-themes/Vibrant Ink.json'
 // Monaco's built-in themes (always available)
 export const builtinMonacoThemes: string[] = ['vs', 'vs-dark', 'hc-black']
 
 // Curated Luna themes. Add new themes here as needed.
 const themes = [
-  { id: 'slush-and-poppies', data: SlushAndPoppies },
-  { id: 'solarized-light', data: SolarizedLight },
-  { id: 'dracula', data: Dracula }
+  // Light themes
+  { id: 'idle', data: IDLE },
+  { id: 'eiffel', data: Eiffel },
+  { id: 'textmate-mac-classic', data: TextmateMacClassic },
+  { id: 'xcode-default', data: XcodeDefault },
+  // Dark themes
+  { id: 'blackboard', data: Blackboard },
+  { id: 'sunburst', data: Sunburst },
+  { id: 'vibrant-ink', data: VibrantInk }
 ]
 
 let themesRegistered = false
@@ -36,12 +45,15 @@ function toSafeThemeId(themeId: string): string {
 
 // Returns IDs of available light themes
 export function getCuratedLightMonacoThemeIds(): string[] {
-  return ['slush-and-poppies', 'solarized-light']
+  // Only expose these curated light themes in the settings dropdown;
+  // the builtin 'vs' is already prepended by the settings component.
+  return ['idle', 'eiffel', 'textmate-mac-classic', 'xcode-default']
 }
 
 // Returns IDs of available dark themes
 export function getCuratedDarkMonacoThemeIds(): string[] {
-  return ['dracula']
+  // Only expose these curated dark themes in the settings dropdown.
+  return ['vibrant-ink', 'sunburst', 'blackboard']
 }
 
 // Registers all curated themes with Monaco (safe to call multiple times)
@@ -49,9 +61,51 @@ export function ensureAllMonacoThemesDefined(): void {
   if (themesRegistered) return
   for (const theme of themes) {
     try {
-      monaco.editor.defineTheme(theme.id, theme.data as monaco.editor.IStandaloneThemeData)
-    } catch {
-      // ignore define errors for individual themes
+      // Defensive normalization: ensure tokens and colors are in expected format
+      const raw = theme.data as unknown
+      const normalized: Record<string, unknown> = { ...(raw as Record<string, unknown>) }
+
+      const rulesCandidate = (raw as Record<string, unknown>)['rules']
+      if (Array.isArray(rulesCandidate)) {
+        normalized.rules = rulesCandidate.map((r) => {
+          const out = { ...(r as Record<string, unknown>) }
+          if (typeof out.token === 'string') out.token = out.token.trim()
+          if (typeof out.fontStyle === 'string') out.fontStyle = out.fontStyle.trim()
+          if (typeof out.foreground === 'string') {
+            const fg = (out.foreground as string).trim()
+            out.foreground = fg.startsWith('#') ? fg : `#${fg}`
+          }
+          if (typeof out.background === 'string') {
+            const bg = (out.background as string).trim()
+            out.background = bg.startsWith('#') ? bg : `#${bg}`
+          }
+          return out
+        })
+      }
+
+      const colorsCandidate = (raw as Record<string, unknown>)['colors']
+      if (colorsCandidate && typeof colorsCandidate === 'object') {
+        const colorsObj = colorsCandidate as Record<string, unknown>
+        const colorsCopy: Record<string, string> = {}
+        for (const [k, v] of Object.entries(colorsObj)) {
+          if (typeof v === 'string') {
+            const s = v.trim()
+            colorsCopy[k] = s.startsWith('#') ? s : `#${s}`
+          }
+        }
+        normalized.colors = colorsCopy
+      }
+
+      monaco.editor.defineTheme(
+        theme.id,
+        normalized as unknown as monaco.editor.IStandaloneThemeData
+      )
+    } catch (e) {
+      try {
+        console.debug('[monaco-theme] failed to define theme', theme.id, e)
+      } catch {
+        /* ignore */
+      }
     }
   }
   themesRegistered = true

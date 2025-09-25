@@ -8,10 +8,15 @@
 
     <!-- Divider -->
     <Divider />
-    
-    <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
-      <h1>🚧 Work in progress 🚧</h1>
-      <p>This is the Variables panel. List of variables and functions used in this notebook will be shown here.</p>
+    <div
+      :class="[
+        'sidepanel-flex-column-overflow-y',
+        'sidepanel-row-x-y-padding',
+        'sidepanel-color-font-styling'
+      ]"
+    >
+      This is the Variables panel. List of variables and functions used in this notebook will be
+      shown here.
     </div>
   </div>
 </template>

@@ -103,7 +103,21 @@ function onSelect(e?: MouseEvent): void {
       (contentRoot?.querySelector(primarySelector) as HTMLElement | null) ||
       (contentRoot?.querySelector(fallbackSelector) as HTMLElement | null)
     if (editor) {
-      editor.focus({ preventScroll: true })
+      // If the selection originated from a mouse click, avoid scrolling
+      // the page (preserve current viewport). If selection was caused by
+      // keyboard navigation or programmatic select (no MouseEvent), allow
+      // the browser to scroll the editor into view so the caret stays visible.
+      const preventScroll = e instanceof MouseEvent
+      try {
+        editor.focus({ preventScroll })
+      } catch {
+        try {
+          // Fallback to default focus call if options unsupported
+          editor.focus()
+        } catch {
+          /* ignore */
+        }
+      }
     } else {
       rootEl.value?.focus()
     }
@@ -117,7 +131,13 @@ function onMarginClick(): void {
     emit('deselect')
   } else {
     emit('select', props.cellId)
-    nextTick(() => rootEl.value?.focus())
+    nextTick(() => {
+      try {
+        rootEl.value?.focus()
+      } catch {
+        /* ignore */
+      }
+    })
   }
 }
 </script>
