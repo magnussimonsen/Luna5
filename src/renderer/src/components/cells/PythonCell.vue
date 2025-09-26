@@ -62,6 +62,9 @@ import { parsePixelsToNumber } from '@renderer/utils/miscellaneous/parse-pixels-
 // Eagerly import Monaco for a simple, non-lazy setup
 // Note: this avoids dynamic lazy-loading of the editor and worker.
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+// Ensure the python language contribution (tokenizer) is loaded so Monaco can colorize python source
+// Register the python language contribution so Monaco recognizes the language and tokenizer
+import 'monaco-editor/esm/vs/basic-languages/python/python.contribution'
 // Previously we used an editor pool. That module is now archived and a shim
 // remains at the same path. We will create/dispose Monaco instances per cell.
 
@@ -99,8 +102,6 @@ function initializeMonacoEditor(): void {
     value: initialValue,
     language: 'python',
     readOnly: cellSelection.selectedCellId === props.cell.id ? !!isCellLocked.value : true,
-
-    // Model B config
     automaticLayout: true,
     wordWrap: 'on',
     wrappingIndent: 'same',
@@ -125,7 +126,6 @@ function initializeMonacoEditor(): void {
     fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
   })
 
-  // ---- HEIGHT SYNC (Model B) ----
   const mount = editorElementRef.value
 
   const syncHeight = (h?: number): void => {
@@ -142,6 +142,71 @@ function initializeMonacoEditor(): void {
   disposables.push(
     editor.onDidContentSizeChange((e: { contentHeight: number }) => syncHeight(e.contentHeight))
   )
+  // Ensure the editor caret remains visible inside the outer scroll container
+  // (e.g. .workspace-web-layout-container). Monaco only manages its internal
+  // viewport, so we must scroll the nearest outer scroller when the cursor moves
+  // due to keyboard navigation.
+  const findClosestScrollableAncestor = (el: HTMLElement | null): HTMLElement | null => {
+    let node: HTMLElement | null = el
+    while (node) {
+      if (node.classList && node.classList.contains('workspace-web-layout-container')) return node
+      const style = window.getComputedStyle(node)
+      const overflowY = style.overflowY
+      if (overflowY === 'auto' || overflowY === 'scroll') return node
+      node = node.parentElement
+    }
+    // fallback to document scrolling element
+    return (document.scrollingElement as HTMLElement) || document.body
+  }
+
+  const ensureCaretVisibleInAncestor = (): void => {
+    try {
+      if (!editor || !editorElementRef.value) return
+      const pos = editor.getPosition()
+      if (!pos) return
+      // Get caret position in pixels relative to the editor's DOM node
+      const scPos = editor.getScrolledVisiblePosition(pos)
+      if (!scPos) return
+      const editorDom = editor.getDomNode()
+      if (!editorDom) return
+      const caretViewportY = editorDom.getBoundingClientRect().top + scPos.top
+
+      const ancestor = findClosestScrollableAncestor(editorElementRef.value)
+      if (!ancestor) return
+      const ancRect = ancestor.getBoundingClientRect()
+      const margin = 20
+
+      if (caretViewportY < ancRect.top + margin) {
+        // caret above visible area -> scroll up
+        const delta = caretViewportY - (ancRect.top + margin)
+        ancestor.scrollBy({ top: delta, behavior: 'smooth' })
+      } else if (caretViewportY > ancRect.bottom - margin) {
+        // caret below visible area -> scroll down
+        const delta = caretViewportY - (ancRect.bottom - margin)
+        ancestor.scrollBy({ top: delta, behavior: 'smooth' })
+      }
+    } catch {
+      /* ignore errors in caret visibility helper */
+    }
+  }
+
+  // Subscribe to cursor movement and focus events so outer container follows the caret
+  try {
+    disposables.push(
+      editor.onDidChangeCursorPosition(() => {
+        // Slight delay to allow Monaco internal painting/layout to settle
+        requestAnimationFrame(() => ensureCaretVisibleInAncestor())
+      })
+    )
+    // Also ensure on focus we reveal the caret
+    disposables.push(
+      editor.onDidFocusEditorText(() => {
+        requestAnimationFrame(() => ensureCaretVisibleInAncestor())
+      })
+    )
+  } catch {
+    /* ignore if editor API not present */
+  }
   // Debug: report editor creation and starting readonly state
   try {
     console.debug('[PythonCell] initializeMonacoEditor:', { id: props.cell.id, editor: !!editor })
@@ -529,6 +594,27 @@ watch(
     applyMonacoTheme(selectedMonacoThemeId.value)
     if (editor) {
       editor.layout()
+    }
+  }
+)
+
+// Also watch the resolved theme id directly so changes propagate reliably
+// even if callers mutate the underlying settings in different ways.
+watch(
+  () => selectedMonacoThemeId.value,
+  (id) => {
+    try {
+      registerCuratedMonacoThemesIfNeeded()
+      applyMonacoTheme(id)
+      if (editor) {
+        try {
+          editor.layout()
+        } catch {
+          /* ignore */
+        }
+      }
+    } catch {
+      /* ignore */
     }
   }
 )

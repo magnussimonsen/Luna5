@@ -37,7 +37,7 @@
 }
 
 .menubar-button.lock-cell-active {
-  background: var(--soft-locked-border-color, orange);
+  background: var(--soft-locked-color, orange);
   color: var(--ui-text-color, #fff);
 }
 

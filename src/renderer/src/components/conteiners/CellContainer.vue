@@ -186,7 +186,7 @@ function onMarginClick(): void {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--cell-locked-overlay, rgba(255, 255, 255, 0.6));
+  border-color: var(--soft-locked-color, #2563eb);
   pointer-events: none;
   border-radius: 8px;
 }
@@ -200,11 +200,16 @@ function onMarginClick(): void {
   padding: 0em 0em;
   box-sizing: border-box;
   cursor: pointer;
-  background: var(--cell-margin-background, #f9fafb);
+  background: var(--cell-margin-background-color, #f9fafb);
 }
 
 .cell-margin.is-selected {
   background: var(--active-border-color, #e0e7ff);
+}
+
+.cell-margin.is-locked {
+  background: var(--soft-locked-color, #2563eb);
+  
 }
 
 .cell-container.is-disabled .cell-margin {
@@ -226,7 +231,7 @@ function onMarginClick(): void {
 }
 
 .cell-container.is-flagged .cell-index {
-  background: var(--flagged-cell-color, #f59e0b);
+  background: var(--flagged-cell-color, red);
   color: #fff;
 }
 

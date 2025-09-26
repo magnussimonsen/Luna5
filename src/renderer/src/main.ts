@@ -1,4 +1,5 @@
 import './css/main.css'
+// Monaco editor base styles (required for tokens/selection/scrollbars)
 
 import { createApp, watch } from 'vue'
 import App from '@renderer/App.vue'

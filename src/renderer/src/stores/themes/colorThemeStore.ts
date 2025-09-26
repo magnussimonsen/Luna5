@@ -255,7 +255,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--active-background-color', colors.activeBackgroundColor)
       root.style.setProperty('--active-border-color', colors.activeBorderColor)
       root.style.setProperty('--active-border-color-hover', colors.activeBorderColorHover)
-      root.style.setProperty('--soft-locked-border-color', colors.softLockedColor)
+      root.style.setProperty('--soft-locked-color', colors.softLockedColor)
       root.style.setProperty('--hide-cell-color', colors.hideCellColor)
       root.style.setProperty('--cell-locked-overlay', colors.cellLockedOverlay)
       root.style.setProperty('--focus-visible-border-color', colors.focusVisibleBorderColor)
