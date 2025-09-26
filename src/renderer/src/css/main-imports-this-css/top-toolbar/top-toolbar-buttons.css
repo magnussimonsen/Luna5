@@ -116,7 +116,7 @@
 /* Disabled state (modifier + native attr for robustness) */
 .top-toolbar__button--disabled,
 .top-toolbar__button:disabled {
-  opacity: 0.8;
+  opacity: 0.5;
   background: transparent;
   color: var(--ui-text-color, var(--debug-color));
   cursor: not-allowed;

@@ -19,7 +19,7 @@ This component displays the appropriate toolbar for the currently selected cell 
       v-if="currentToolbarComponent"
       :cell-id="selectedCellId"
       :kind="selectedCellKind"
-      :is-hidden="selectedCellIsHidden"
+      :is-cell-hidden="selectedCellIsHidden"
       :is-soft-locked="selectedCellIsSoftLocked"
       :is-hard-locked="selectedCellIsHardLocked"
       :is-flagged="selectedCellIsFlagged"
@@ -48,15 +48,20 @@ const toolbarComponents = {
   // future: markdown: MarkdownCellToolbar, etc.
 } as const
 
-// Wee neeed to compute this from cell selection store
-// (If you need these, define them as computed properties or inside a function/object)
-
 const selectedCellId = computed(() => unref(selectionStore.selectedCellId))
 const selectedCellKind = computed(() => unref(selectionStore.selectedCellKind))
-const selectedCellIsHidden = computed(() => !!unref(selectionStore.selectedCellIsHidden))
-const selectedCellIsSoftLocked = computed(() => !!unref(selectionStore.selectedCellIsSoftLocked))
-const selectedCellIsHardLocked = computed(() => !!unref(selectionStore.selectedCellIsHardLocked))
-const selectedCellIsFlagged = computed(() => !!unref(selectionStore.selectedCellIsFlagged))
+
+// IMPORTANT Always read live state from the workspace
+const selectedCell = computed(() => {
+  const ws = workspaceStore.getWorkspace()
+  const id = selectedCellId.value
+  return id ? (ws.cells[id] ?? null) : null
+})
+
+const selectedCellIsHidden = computed(() => !!selectedCell.value?.hidden)
+const selectedCellIsSoftLocked = computed(() => !!selectedCell.value?.softLocked)
+const selectedCellIsHardLocked = computed(() => !!selectedCell.value?.hardLocked)
+const selectedCellIsFlagged = computed(() => !!selectedCell.value?.flagged)
 
 // Computes which toolbar component to show based on the selected cell type
 const currentToolbarComponent = computed(() => {
