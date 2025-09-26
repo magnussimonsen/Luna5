@@ -18,7 +18,18 @@
     @click="onSelect($event)"
     @blur="$emit('blur', cellId)"
   >
-    <div class="cell-margin" @click.stop="onMarginClick">
+    <div
+      class="cell-margin"
+      :class="{
+        'is-selected': selected,
+        'is-in-bin': inBin,
+        'is-locked': locked,
+        'is-disabled': disabled,
+        'is-hidden': hidden,
+        'is-flagged': flagged
+      }"
+      @click.stop="onMarginClick"
+    >
       <div class="cell-index" :title="`Cell ${displayIndex}`">{{ displayIndex }}</div>
     </div>
     <!-- Main cell content(cell-body div is deprecated) -->
@@ -33,10 +44,6 @@
         ></div>
       </template>
     </div>
-    <!-- 
-      Optional status/footer slot 
-      <div v-if="$slots.status" class="cell-status"><slot name="status" /></div>
-      -->
   </div>
 </template>
 
@@ -145,25 +152,24 @@ function onMarginClick(): void {
   min-width: 0;
   min-height: 0;
   align-items: stretch;
+  box-sizing: border-box;
 
   /* Card look */
   background: var(--cell-background, #ffffff);
-  border: 1px solid var(--cell-border-color, #e6e6e6);
+  border: 2px solid var(--cell-border-color, #e6e6e6);
   border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
-  margin-bottom: 12px;
+  margin-bottom: 2px;
   padding: 0; /* inner padding lives in .cell-content */
-  overflow: visible;
+  overflow: hidden;
   outline: none;
 }
 
 .cell-container:focus-visible {
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+  outline: normal;
 }
 
 .cell-container.is-selected {
   border-color: var(--active-border-color, #2563eb);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.06);
 }
 
 .cell-container.is-in-bin {
@@ -187,14 +193,18 @@ function onMarginClick(): void {
 
 /* Left gutter (cell margin) */
 .cell-margin {
-  flex: 0 0 3.5rem; /* fixed gutter */
+  flex: 0 0 2.5em; /* fixed gutter */
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 0.6rem 0.5rem;
+  padding: 0em 0em;
   box-sizing: border-box;
   cursor: pointer;
-  background: transparent;
+  background: var(--cell-margin-background, #f9fafb);
+}
+
+.cell-margin.is-selected {
+  background: var(--active-border-color, #e0e7ff);
 }
 
 .cell-container.is-disabled .cell-margin {
@@ -205,13 +215,13 @@ function onMarginClick(): void {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.6rem;
-  height: 1.6rem;
-  font-size: 0.75rem;
+  width: 1.6em;
+  height: 1.6em;
+  font-size: 0.75em;
   font-weight: 600;
   color: var(--text-color, #374151);
-  background: var(--cell-index-bg, #f3f4f6);
-  border-radius: 9999px; /* circle */
+  border-radius: 50%;
+  margin-top: 0.4em;
   user-select: none;
 }
 
@@ -231,20 +241,11 @@ function onMarginClick(): void {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  padding: 0.75rem 1rem;
-  gap: 0.5rem;
+  padding: 0.5em 0.5em;
+  gap: 0em;
   min-width: 0;
   box-sizing: border-box;
   overflow: visible; /* outer scroller handles scrolling */
-}
-
-.cell-status {
-  font-size: 0.75rem;
-  color: var(--cell-status-color, #6b7280);
-  opacity: 0.9;
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
 }
 
 @media (max-width: 800px) {

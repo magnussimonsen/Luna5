@@ -135,12 +135,13 @@ onBeforeUnmount(() => {
 }
 
 .scroll-container {
+  /* Can be removed i think but keep for now */
   position: relative;
   flex: 1 1 auto; /* take up all available space */
   min-height: 0; /* allow inner scrollers to work */
   min-width: 0; /* prevent horizontal overflow from inner scrollers */
   overflow: hidden; /* this container should not scroll */
-  border: 5px red solid;
+  border: 0px red solid; /* DEBUG */
 }
 
 .statusbar-container {
