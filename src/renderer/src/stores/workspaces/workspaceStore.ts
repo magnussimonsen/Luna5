@@ -614,6 +614,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.markAsUnsaved()
       return newCell
     },
+
     // --- Toggle soft lock on selected cell ---
     toggleSoftLockSelectedCell(): boolean {
       const workspace = this.getWorkspace()
@@ -625,8 +626,10 @@ export const useWorkspaceStore = defineStore('workspace', {
       cell.softLocked = !cell.softLocked
       cell.updatedAt = new Date().toISOString()
       this.markAsUnsaved()
+      console.log('Toggled soft lock on cell', cellId, 'now', cell.softLocked)
       return true
     },
+    
     // --- Toggle hidden on selected cell ---
     toggleHiddenSelectedCell(): boolean {
       const workspace = this.getWorkspace()
@@ -638,6 +641,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       cell.hidden = !cell.hidden
       cell.updatedAt = new Date().toISOString()
       this.markAsUnsaved()
+      console.log('Toggled hidden on cell', cellId, 'now', cell.hidden)
       return true
     },
     // --- Toogle flaged on selected cell ---

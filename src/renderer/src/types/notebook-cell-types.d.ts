@@ -6,6 +6,7 @@
 export type CellKind = 'text-cell' | 'markdown-cell' | 'python-cell'
 
 export interface BaseCell {
+  cellIndex: number // Position in the notebook
   id: string
   kind: CellKind
   createdAt: string

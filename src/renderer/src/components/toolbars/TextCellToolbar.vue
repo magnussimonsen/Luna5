@@ -2,20 +2,21 @@
   <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
        currently selected cell's editor via the store. ...-->
   <div
-    v-if="activeTextEditor"
     class="button-row-flex-wrap-base"
     :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
     aria-label="Text cell formatting toolbar"
   >
     <!-- BOLD -->
+    <span>{{ isSoftLocked }}</span>
+    <span>{{ isCellHidden }}</span>
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-bold"
       type="button"
       :class="{ 'top-toolbar__button--active': isActive('bold') }"
       title="Bold (Ctrl+B)"
       aria-label="Bold"
-      :disabled="!canRunCommand('toggleBold')"
+      :disabled="!canRunCommand('toggleBold') || isCellLocked || isCellHidden"
       @click="toggleBold"
     ></button>
 
@@ -26,7 +27,7 @@
       :class="{ 'top-toolbar__button--active': isActive('italic') }"
       title="Italic (Ctrl+I)"
       aria-label="Italic"
-      :disabled="!canRunCommand('toggleItalic')"
+      :disabled="!canRunCommand('toggleItalic') || isCellLocked || isCellHidden"
       @click="toggleItalic"
     ></button>
 
@@ -37,7 +38,7 @@
       :class="{ 'top-toolbar__button--active': isActive('underline') }"
       title="Underline"
       aria-label="Underline"
-      :disabled="!canRunCommand('toggleUnderline')"
+      :disabled="!canRunCommand('toggleUnderline') || isCellLocked || isCellHidden"
       @click="toggleUnderline"
     ></button>
 
@@ -48,7 +49,7 @@
       :class="{ 'top-toolbar__button--active': isActive('subscript') }"
       title="Subscript"
       aria-label="Subscript"
-      :disabled="!canRunCommand('toggleSubscript')"
+      :disabled="!canRunCommand('toggleSubscript') || isCellLocked || isCellHidden"
       @click="toggleSubscript"
     ></button>
 
@@ -59,7 +60,7 @@
       :class="{ 'top-toolbar__button--active': isActive('superscript') }"
       title="Superscript"
       aria-label="Superscript"
-      :disabled="!canRunCommand('toggleSuperscript')"
+      :disabled="!canRunCommand('toggleSuperscript') || isCellLocked || isCellHidden"
       @click="toggleSuperscript"
     ></button>
 
@@ -70,7 +71,7 @@
       :class="{ 'top-toolbar__button--active': isActive('bulletList') }"
       title="Bullet list"
       aria-label="Bullet list"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleBulletList"
     ></button>
 
@@ -81,7 +82,7 @@
       :class="{ active: isActive('orderedList') }"
       title="Numbered list"
       aria-label="Numbered list"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleOrderedList"
     ></button>
 
@@ -92,7 +93,7 @@
       :class="{ 'top-toolbar__button--active': isActiveHeading(1) }"
       title="Heading 1"
       aria-label="Heading 1"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleHeading(1)"
     ></button>
     <button
@@ -101,7 +102,7 @@
       :class="{ 'top-toolbar__button--active': isActiveHeading(2) }"
       title="Heading 2"
       aria-label="Heading 2"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleHeading(2)"
     ></button>
     <button
@@ -110,7 +111,7 @@
       :class="{ 'top-toolbar__button--active': isActiveHeading(3) }"
       title="Heading 3"
       aria-label="Heading 3"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleHeading(3)"
     ></button>
     <button
@@ -119,7 +120,7 @@
       :class="{ 'top-toolbar__button--active': isActiveHeading(4) }"
       title="Heading 4"
       aria-label="Heading 4"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleHeading(4)"
     ></button>
     <!-- REMOVE HEADING 5 
@@ -139,7 +140,7 @@
       type="button"
       title="Insert link (coming soon)"
       aria-label="Insert link (coming soon)"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="() => {}"
     ></button>
     <!-- button placeholder for insert image-->
@@ -148,7 +149,7 @@
       type="button"
       title="Insert image (coming soon)"
       aria-label="Insert image (coming soon)"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="() => {}"
     ></button>
 
@@ -176,6 +177,7 @@
       ]"
       title="Highlight Red"
       aria-label="Highlight Red"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleHighlight('red-highlighting')"
     ></button>
 
@@ -191,6 +193,7 @@
       :style="{ backgroundColor: resolveHighlightColor('green-highlighting', isDarkMode) }"
       title="Highlight Blue"
       aria-label="Highlight Blue"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleHighlight('green-highlighting')"
     ></button>
 
@@ -206,6 +209,7 @@
       :style="{ backgroundColor: resolveHighlightColor('blue-highlighting', isDarkMode) }"
       title="Highlight Green"
       aria-label="Highlight Green"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="toggleHighlight('blue-highlighting')"
     ></button>
 
@@ -216,7 +220,7 @@
       type="button"
       title="Insert 3x3 table"
       aria-label="Insert table"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="insertTable"
     ></button>
     <button
@@ -229,7 +233,7 @@
       type="button"
       title="Add row after"
       aria-label="Add row"
-      :disabled="!isTableActive"
+      :disabled="!activeTextEditor || !isTableActive || isCellLocked || isCellHidden"
       @click="addRow"
     ></button>
     <button
@@ -242,7 +246,7 @@
       type="button"
       title="Add column after"
       aria-label="Add column"
-      :disabled="!isTableActive"
+      :disabled="!activeTextEditor || !isTableActive || isCellLocked || isCellHidden"
       @click="addColumn"
     ></button>
     <button
@@ -255,11 +259,11 @@
       type="button"
       title="Delete row"
       aria-label="Delete row"
-      :disabled="!isTableActive"
+      :disabled="!activeTextEditor || !isTableActive || isCellLocked || isCellHidden"
       @click="deleteRow"
     ></button>
     <button
-       :class="[
+      :class="[
         'top-toolbar__button',
         'top-toolbar__button--icon',
         { 'top-toolbar__button--disabled': !isTableActive },
@@ -268,7 +272,7 @@
       type="button"
       title="Delete column"
       aria-label="Delete column"
-      :disabled="!isTableActive"
+      :disabled="!activeTextEditor || !isTableActive || isCellLocked || isCellHidden"
       @click="deleteColumn"
     ></button>
     <button
@@ -281,7 +285,7 @@
       type="button"
       title="Delete table"
       aria-label="Delete table"
-      :disabled="!isTableActive"
+      :disabled="!activeTextEditor || !isTableActive || isCellLocked || isCellHidden"
       @click="deleteTable"
     ></button>
 
@@ -293,7 +297,7 @@
       type="button"
       title="Insert Math Live Input Field with virtual keyboard (coming soon)"
       aria-label="Insert Math Live Input Field with virtual keyboard (coming soon)"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="placeholderMathLive"
     ></button>
 
@@ -302,11 +306,10 @@
       type="button"
       title="Insert LaTeX input field with KaTeX (coming soon)"
       aria-label="Insert LaTeX input field with KaTeX (coming soon)"
-      :disabled="!activeTextEditor"
+      :disabled="!activeTextEditor || isCellLocked || isCellHidden"
       @click="placeholderKaTeX"
     ></button>
   </div>
-  <div v-else>Editor not ready</div>
 </template>
 
 <script setup lang="ts">
@@ -317,24 +320,40 @@
  * the editor instance via the selection + textEditors stores so the toolbar
  * can live anywhere in the component tree.
  */
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
-import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import type { Editor } from '@tiptap/vue-3'
 import type { HeadingLevel } from '@renderer/types/heading-level-type'
 import type { HighlightColor } from '../../types/highlight-colors-types'
 import { resolveHighlightColor } from '../../code/highlight/highlight-colors'
+
 // Stores
 const themeStore = useThemeStore()
-const cellSelectionStore = useCellSelectionStore()
 const textEditorsStore = useTextEditorsStore()
+
+// Props passed from ToolbarContainer.vue
+const props = defineProps<{
+  cellId?: string | null
+  kind?: string | null
+  isCellHidden?: boolean
+  isSoftLocked?: boolean
+  isHardLocked?: boolean
+  isFlagged?: boolean
+  inBin?: boolean
+  parentNotebookId?: string | null
+}>()
 
 // Reactive refs
 const isDarkMode = computed(() => !!themeStore.isDarkMode)
+// Resolve the active TipTap editor via the passed-in cell id
 const activeTextEditor = computed<Editor | null>(() =>
-  textEditorsStore.getEditorByCellId(cellSelectionStore.selectedCellId)
+  textEditorsStore.getEditorByCellId(props.cellId)
 )
+
+// Cells can be locked/hidden via props supplied by ToolbarContainer
+const isCellLocked = computed(() => !!unref(props.isSoftLocked) || !!unref(props.isHardLocked))
+const isCellHidden = computed(() => !!unref(props.isCellHidden))
 
 function isHighlightActive(color: string): boolean {
   // Simplified active check: toolbar now always applies resolved hex values,

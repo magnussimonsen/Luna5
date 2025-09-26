@@ -178,7 +178,7 @@ function onMarginClick(): void {
 }
 
 .cell-container.is-hidden {
-  opacity: 0.6;
+  opacity: 0.8;
   filter: grayscale(0.06);
 }
 
@@ -209,7 +209,6 @@ function onMarginClick(): void {
 
 .cell-margin.is-locked {
   background: var(--soft-locked-color, #2563eb);
-  
 }
 
 .cell-container.is-disabled .cell-margin {

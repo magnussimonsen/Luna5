@@ -61,7 +61,7 @@ export const useThemeStore = defineStore('theme', {
       activeBorderColor: 'lightgreen',
       activeBorderColorHover: 'lightgreen',
       // Soft locked
-      softLockedColor: 'orange',
+      softLockedColor: 'goldenrod',
       // Locked overlay
       cellLockedOverlay: 'rgba(0, 0, 0, 0.06)',
       // Hidden cell color
@@ -157,7 +157,7 @@ export const useThemeStore = defineStore('theme', {
       activeBorderColor: 'darkgreen',
       activeBorderColorHover: 'darkgreen',
       // Soft locked
-      softLockedColor: 'saddlebrown',
+      softLockedColor: 'sienna',
       // Locked overlay
       cellLockedOverlay: 'rgba(255, 255, 255, 0.06)',
       // Hidden cell color

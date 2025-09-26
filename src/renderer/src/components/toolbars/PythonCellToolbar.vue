@@ -10,7 +10,7 @@
       class="top-toolbar__button"
       :class="{ 'top-toolbar__button--active': isRunning }"
       type="button"
-      :disabled="!canRun || isRunning"
+      :disabled="!canRun || isRunning || isLocked || isHidden"
       :title="isRunning ? 'Run (working)…' : 'Run selected Python cell (Ctrl + Enter)'"
       @click="() => onRun(false)"
     >
@@ -25,7 +25,7 @@
       class="top-toolbar__button"
       :class="{ 'top-toolbar__button--active': !canRun }"
       type="button"
-      :disabled="!canRun"
+      :disabled="!canRun || isRunning || isLocked || isHidden"
       :title="'Delete output (Ctrl + Shift + Enter)'"
       @click="onClearOutputs"
     >
@@ -56,7 +56,7 @@
     <button
       class="top-toolbar__button top-toolbar__button--reset"
       type="button"
-      :disabled="!canReset"
+      :disabled="!canReset || isLocked || isHidden"
       :title="
         isRunning
           ? 'Reset Python worker'
@@ -90,8 +90,23 @@ const selectedKind = computed(() => selectionStore.selectedCellKind)
 
 const isDarkMode = computed(() => !!themeStore.isDarkMode)
 
-const canRun = computed(() => selectedCellId.value && selectedKind.value === 'python-cell')
-const canReset = canRun
+const isLocked = computed(() => {
+  const id = selectedCellId.value
+  if (!id) return false
+  const ws = workspaceStore.getWorkspace()
+  const cell = ws.cells[id]
+  if (!cell || cell.kind !== 'python-cell') return false
+  return !!cell.softLocked
+})
+
+const isHidden = computed(() => {
+  const id = selectedCellId.value
+  if (!id) return false
+  const ws = workspaceStore.getWorkspace()
+  const cell = ws.cells[id]
+  if (!cell || cell.kind !== 'python-cell') return false
+  return !!cell.hidden
+})
 
 const isRunning = computed(() => {
   const id = selectedCellId.value
@@ -101,6 +116,9 @@ const isRunning = computed(() => {
   if (!cell || cell.kind !== 'python-cell') return false
   return cell.exec?.status === 'running'
 })
+
+const canRun = computed(() => selectedCellId.value && selectedKind.value === 'python-cell')
+const canReset = canRun
 
 import { spinnerChar, startSpinner, stopSpinner } from '@renderer/code/animations/ascii-spinner'
 

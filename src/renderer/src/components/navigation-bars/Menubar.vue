@@ -481,6 +481,7 @@ const handleToggleHidden = (): void => {
   if (!ok) console.warn('No cell selected to hide/show')
 }
 
+
 // Edit → Bin actions
 const handleMoveCellToBin = (): void => {
   if (isSelectedCellLocked.value || isSelectedCellHidden.value) {
