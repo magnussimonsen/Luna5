@@ -142,7 +142,7 @@ function onMarginClick(): void {
 
 <style scoped>
 .cell-container {
-  position: relative;
+  position: absolute;
   display: flex; /* row: .cell-margin + .cell-body */
   flex-direction: row;
   width: 100%;
@@ -222,7 +222,7 @@ function onMarginClick(): void {
 }
 
 .cell-margin {
-  flex: 1 1 10em;
+  flex: 1 1 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -266,7 +266,7 @@ function onMarginClick(): void {
 }
 
 .cell-content {
-  position: relative;
+  position: absolute;
   display: flex;
   flex-direction: column;
   min-height: 0;
