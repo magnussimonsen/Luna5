@@ -139,7 +139,7 @@ onBeforeUnmount(() => {
   flex: 1 1 auto; /* take up all available space */
   min-height: 0; /* allow inner scrollers to work */
   min-width: 0; /* prevent horizontal overflow from inner scrollers */
-  overflow: scroll; /* this container should not scroll */
+  overflow: hidden; /* this container should not scroll */
   border: 5px red solid;
 }
 

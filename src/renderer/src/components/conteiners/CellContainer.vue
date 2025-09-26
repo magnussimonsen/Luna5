@@ -273,7 +273,7 @@ function onMarginClick(): void {
   min-width: 0;
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  overflow: hidden;
   padding: 0em 0em 0em 0em;
   border: 5px purple solid;
   box-sizing: border-box;
