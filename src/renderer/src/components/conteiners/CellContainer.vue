@@ -16,7 +16,7 @@
     :aria-selected="selected ? 'true' : 'false'"
     tabindex="0"
     @click="onSelect($event)"
-    @blur="emit('blur', cellId)"
+    @blur="$emit('blur', cellId)"
   >
     <div class="cell-margin" @click.stop="onMarginClick">
       <div class="cell-index" :title="`Cell ${displayIndex}`">{{ displayIndex }}</div>
@@ -65,13 +65,13 @@ const emit = defineEmits<{
   (e: 'deselect'): void
   (e: 'focus', cellId: string): void
   (e: 'blur', cellId: string): void
-  (e: 'moveUp', cellId: string): void // Dont need this. Movement of cells is handled by buttons in menubar-component
-  (e: 'moveDown', cellId: string): void // Dont need this. Movement of cells is handled by buttons in menubar-component
-  (e: 'delete', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
-  (e: 'duplicate', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
-  (e: 'toggleLock', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
-  (e: 'requestFocusAbove', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
-  (e: 'requestFocusBelow', cellId: string): void // Dont need this. This is handled by buttons in menubar-component
+  (e: 'moveUp', cellId: string): void
+  (e: 'moveDown', cellId: string): void
+  (e: 'delete', cellId: string): void
+  (e: 'duplicate', cellId: string): void
+  (e: 'toggleLock', cellId: string): void
+  (e: 'requestFocusAbove', cellId: string): void
+  (e: 'requestFocusBelow', cellId: string): void
 }>()
 
 const displayIndex = computed(() => props.index + 1)
@@ -101,16 +101,11 @@ function onSelect(e?: MouseEvent): void {
       (contentRoot?.querySelector(primarySelector) as HTMLElement | null) ||
       (contentRoot?.querySelector(fallbackSelector) as HTMLElement | null)
     if (editor) {
-      // If the selection originated from a mouse click, avoid scrolling
-      // the page (preserve current viewport). If selection was caused by
-      // keyboard navigation or programmatic select (no MouseEvent), allow
-      // the browser to scroll the editor into view so the caret stays visible.
       const preventScroll = e instanceof MouseEvent
       try {
         editor.focus({ preventScroll })
       } catch {
         try {
-          // Fallback to default focus call if options unsupported
           editor.focus()
         } catch {
           /* ignore */
@@ -123,7 +118,6 @@ function onSelect(e?: MouseEvent): void {
 }
 
 function onMarginClick(): void {
-  // Click in the margin toggles selection: deselect if selected, otherwise select this cell
   if (props.disabled) return
   if (props.selected) {
     emit('deselect')
@@ -141,154 +135,125 @@ function onMarginClick(): void {
 </script>
 
 <style scoped>
+/* Jupyter-like notebook cell styling */
 .cell-container {
-  position: absolute;
-  display: flex; /* row: .cell-margin + .cell-body */
+  position: relative;
+  display: flex; /* row: left gutter + content */
   flex-direction: row;
   width: 100%;
-  height: 100%;
-  min-height: 0; /* allow inner scrollers to work */
-  min-width: 0; /* prevent horizontal overflow from .cell-body */
-  align-items: stretch; /* let .cell-body fill height */
-  overflow: hidden; /* this container should not scroll */
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  align-items: stretch;
 
-  border: solid 1px var(--cell-margin-background-color); /* invisible border to avoid layout shift on selection */
-  border-left: 0.5em solid var(--cell-border-color, blue);
-  border-radius: 0px;
-  background: var(--cell-background, blue);
-
+  /* Card look */
+  background: var(--cell-background, #ffffff);
+  border: 1px solid var(--cell-border-color, #e6e6e6);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+  margin-bottom: 12px;
+  padding: 0; /* inner padding lives in .cell-content */
+  overflow: visible;
   outline: none;
 }
 
 .cell-container:focus-visible {
-  border-left: solid 0.5em var(--focus-visible-border-color, blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
 .cell-container.is-selected {
-  border: solid 1px var(--active-border-color);
-  border-left: solid 0.5em var(--active-border-color);
-  background: var(transparent, yellow);
+  border-color: var(--active-border-color, #2563eb);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.06);
 }
 
-/* When a cell is locked and selected, highlight with softLockedColor */
-.cell-container.is-locked.is-selected {
-  border-color: var(--soft-locked-border-color, orange);
-  border: solid 1px var(--soft-locked-border-color, orange);
-  border-left: 0.5em solid var(--soft-locked-border-color, blue); /* Keep left bar as-is */
-}
-
-/* When a cell is locked but NOT selected, tint top/right/bottom borders with locked color */
-.cell-container.is-locked:not(.is-selected) {
-  border-top: 1px solid var(--soft-locked-border-color, orange);
-  border-right: 1px solid var(--soft-locked-border-color, orange);
-  border-bottom: 1px solid var(--soft-locked-border-color, orange);
-  /* Keep the existing left bar as-is */
-}
-
-/* Bin view styling */
 .cell-container.is-in-bin {
+  opacity: 0.95;
   border-style: dashed;
-  opacity: 0.9;
-}
-.cell-container.is-in-bin.is-selected {
-  opacity: 1;
-  border-color: var(--active-border-color);
-  background: var(--active-background-color, rgba(37, 99, 235, 0.08));
 }
 
 .cell-container.is-hidden {
-  background: var(--hide-cell-color, cyan);
-}
-.cell-container.is-hidden .cell-body {
-  padding: 0;
-}
-
-/* Left bar removed for simpler visual; reintroduce if stronger affordance needed */
-
-.cell-container {
-  cursor: default;
-}
-.cell-container.is-selected {
-  cursor: default;
+  opacity: 0.6;
+  filter: grayscale(0.06);
 }
 
 .cell-container.is-locked::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--cell-locked-overlay, rgba(0, 0, 0, 0.06));
+  background: var(--cell-locked-overlay, rgba(255, 255, 255, 0.6));
   pointer-events: none;
-  border-radius: 0px;
+  border-radius: 8px;
 }
 
+/* Left gutter (cell margin) */
 .cell-margin {
-  flex: 1 1 2em;
+  flex: 0 0 3.5rem; /* fixed gutter */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  padding: 0em 0.25em 0em 0.1em /* top right bottom left */;
-  gap: 0em;
-  background: var(--cell-margin-background-color, black);
-  border-right: 0px solid var(--cell-border-color);
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.6rem 0.5rem;
+  box-sizing: border-box;
   cursor: pointer;
+  background: transparent;
 }
 
-/* Subtle affordance on hover; disabled state shows not-allowed */
 .cell-container.is-disabled .cell-margin {
   cursor: not-allowed;
 }
 
-.cell-margin:hover {
-  border-right-color: var(--active-border-color);
-}
-
 .cell-index {
-  padding: 0em 0.25em;
-  font-size: 0.75em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--text-color, #555);
+  color: var(--text-color, #374151);
+  background: var(--cell-index-bg, #f3f4f6);
+  border-radius: 9999px; /* circle */
   user-select: none;
 }
 
-/* Flagged state: highlight index background only */
 .cell-container.is-flagged .cell-index {
-  background: var(--flagged-cell-color, gold);
-  padding: 0em 0.25em;
-  border-radius: 0px;
+  background: var(--flagged-cell-color, #f59e0b);
+  color: #fff;
 }
 
 .cell-hidden-placeholder {
   height: 1em;
   width: 100%;
   opacity: 1;
-  border-radius: 0px;
+  border-radius: 4px;
 }
 
 .cell-content {
-  position: absolute;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  padding: 0.75rem 1rem;
+  gap: 0.5rem;
   min-width: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  padding: 0em 0em 0em 0em;
-  border: 5px purple solid;
   box-sizing: border-box;
+  overflow: visible; /* outer scroller handles scrolling */
 }
 
 .cell-status {
-  font-size: 0.65rem;
-  color: var(--cell-status-color, #666);
-  opacity: 0.85;
+  font-size: 0.75rem;
+  color: var(--cell-status-color, #6b7280);
+  opacity: 0.9;
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
 }
 
-/* Responsive tweaks */
 @media (max-width: 800px) {
+  .cell-margin {
+    flex: 0 0 3rem;
+    padding: 0.5rem 0.4rem;
+  }
+  .cell-content {
+    padding: 0.6rem 0.8rem;
+  }
 }
 </style>
