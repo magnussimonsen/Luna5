@@ -1,4 +1,5 @@
 <!--
+
 ToolbarContainer.vue
 
 This component displays the appropriate toolbar for the currently selected cell in the workspace.

@@ -1,3 +1,4 @@
+<!-- src\renderer\src\components\toolbars\TextCellToolbar.vue -->
 <template>
   <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
        currently selected cell's editor via the store. ...-->
@@ -9,7 +10,7 @@
   >
     <!-- BOLD -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-bold"
+      class="top-toolbar__button top-toolbar__button--icon icon-bold top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActive('bold') }"
       title="Bold (Ctrl+B)"
@@ -20,7 +21,7 @@
 
     <!-- ITALIC -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-italic"
+      class="top-toolbar__button top-toolbar__button--icon icon-italic top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActive('italic') }"
       title="Italic (Ctrl+I)"
@@ -31,7 +32,7 @@
 
     <!-- UNDERLINE -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-underline"
+      class="top-toolbar__button top-toolbar__button--icon icon-underline top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActive('underline') }"
       title="Underline"
@@ -42,7 +43,7 @@
 
     <!-- SUBSCRIPT -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-subscript"
+      class="top-toolbar__button top-toolbar__button--icon icon-subscript top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActive('subscript') }"
       title="Subscript"
@@ -53,7 +54,7 @@
 
     <!-- SUPERSCRIPT -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-superscript"
+      class="top-toolbar__button top-toolbar__button--icon icon-superscript top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActive('superscript') }"
       title="Superscript"
@@ -66,7 +67,7 @@
 
     <!-- BULLET LIST -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-bullet-list"
+      class="top-toolbar__button top-toolbar__button--icon icon-bullet-list top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActive('bulletList') }"
       title="Bullet list"
@@ -77,7 +78,7 @@
 
     <!-- ORDERED LIST -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-numbered-list"
+      class="top-toolbar__button top-toolbar__button--icon icon-numbered-list top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ active: isActive('orderedList') }"
       title="Numbered list"
@@ -88,7 +89,7 @@
 
     <!-- HEADING 1-5 -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-heading-1"
+      class="top-toolbar__button top-toolbar__button--icon icon-heading-1 top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActiveHeading(1) }"
       title="Heading 1"
@@ -97,7 +98,7 @@
       @click="toggleHeading(1)"
     ></button>
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-heading-2"
+      class="top-toolbar__button top-toolbar__button--icon icon-heading-2 top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActiveHeading(2) }"
       title="Heading 2"
@@ -106,7 +107,7 @@
       @click="toggleHeading(2)"
     ></button>
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-heading-3"
+      class="top-toolbar__button top-toolbar__button--icon icon-heading-3 top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActiveHeading(3) }"
       title="Heading 3"
@@ -115,7 +116,7 @@
       @click="toggleHeading(3)"
     ></button>
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-heading-4"
+      class="top-toolbar__button top-toolbar__button--icon icon-heading-4 top-toolbar__button--transparent-when-disabled"
       type="button"
       :class="{ 'top-toolbar__button--active': isActiveHeading(4) }"
       title="Heading 4"
@@ -136,7 +137,7 @@
     -->
     <!-- button placeholder for insert link-->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-link"
+      class="top-toolbar__button top-toolbar__button--icon icon-link top-toolbar__button--transparent-when-disabled"
       type="button"
       title="Insert link (coming soon)"
       aria-label="Insert link (coming soon)"
@@ -145,7 +146,7 @@
     ></button>
     <!-- button placeholder for insert image-->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-image"
+      class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"
       type="button"
       title="Insert image (coming soon)"
       aria-label="Insert image (coming soon)"
@@ -173,6 +174,7 @@
         'top-toolbar__button--icon',
         'top-toolbar__button--highlight',
         'icon-highlight-pen',
+        'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--highlight-active': isHighlightActive('red-highlighting') }
       ]"
       title="Highlight Red"
@@ -187,6 +189,7 @@
         'top-toolbar__button--icon',
         'top-toolbar__button--highlight',
         'icon-highlight-pen',
+          'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--highlight-active': isHighlightActive('green-highlighting') }
       ]"
       type="button"
@@ -203,6 +206,7 @@
         'top-toolbar__button--icon',
         'top-toolbar__button--highlight',
         'icon-highlight-pen',
+          'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--highlight-active': isHighlightActive('blue-highlighting') }
       ]"
       type="button"
@@ -216,7 +220,7 @@
     <!-- Table controls with disabled states -->
 
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-table"
+      class="top-toolbar__button top-toolbar__button--icon icon-table top-toolbar__button--transparent-when-disabled"
       type="button"
       title="Insert 3x3 table"
       aria-label="Insert table"
@@ -227,6 +231,7 @@
       :class="[
         'top-toolbar__button',
         'top-toolbar__button--icon',
+        'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--disabled': !isTableActive },
         'icon-insert-table-row-below'
       ]"
@@ -242,6 +247,7 @@
       :class="[
         'top-toolbar__button',
         'top-toolbar__button--icon',
+        'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--disabled': !isTableActive },
         'icon-insert-table-column-right'
       ]"
@@ -257,6 +263,7 @@
       :class="[
         'top-toolbar__button',
         'top-toolbar__button--icon',
+        'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--disabled': !isTableActive },
         'icon-delete-table-row'
       ]"
@@ -272,6 +279,7 @@
       :class="[
         'top-toolbar__button',
         'top-toolbar__button--icon',
+        'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--disabled': !isTableActive },
         'icon-delete-table-column'
       ]"
@@ -287,6 +295,7 @@
       :class="[
         'top-toolbar__button',
         'top-toolbar__button--icon',
+        'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--disabled': !isTableActive },
         'icon-delete-table'
       ]"
@@ -303,7 +312,7 @@
 
     <!-- Math (placeholder) -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-math"
+      class="top-toolbar__button top-toolbar__button--icon icon-math top-toolbar__button--transparent-when-disabled"
       type="button"
       title="Insert Math Live Input Field with virtual keyboard (coming soon)"
       aria-label="Insert Math Live Input Field with virtual keyboard (coming soon)"
@@ -312,7 +321,7 @@
     ></button>
 
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-LaTeX"
+      class="top-toolbar__button top-toolbar__button--icon icon-LaTeX top-toolbar__button--transparent-when-disabled"
       type="button"
       title="Insert LaTeX input field with KaTeX (coming soon)"
       aria-label="Insert LaTeX input field with KaTeX (coming soon)"

@@ -35,12 +35,12 @@ Keep this file aligned with ThemeColorTypes and colorThemeStore.
     --python-stdout-background: #ffffff;
     --python-image-background: #ffffff;
 
-    /* Active/selection */
+    /* Active/selection/start */
     --active-background-color: lightgreen;
     --active-border-color: lightgreen;
     --active-border-color-hover: lightgreen;
     --soft-locked-border-color: orange;
-
+    
     /* Buttons */
     --button-background-color: transparent;
     --button-border-color: #cccccc;

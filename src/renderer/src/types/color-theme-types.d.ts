@@ -68,6 +68,10 @@ export type ThemeColorTypes = {
   activeBorderColor: string
   activeBorderColorHover: string
 
+  // Runcode button colors (for running cells, solving equations, etc.)
+  runcodeBackgroundColor: string
+  runcodeHoverBackgroundColor: string
+
   // Locked/hidden elements
   softLockedColor: string
   cellLockedOverlay: string

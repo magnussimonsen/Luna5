@@ -26,6 +26,16 @@ export const useThemeStore = defineStore('theme', {
       // Web workspace background
       webWorkspaceBackground: '#FFFFFF', // light gray
       webWorkspaceBorderColor: 'gainsboro', // slightly darker gray
+       // Button colors
+      buttonBorderColor: 'lightgray',
+      buttonHoverColor: 'palegreen', // palegreen 
+      buttonBorderHoverColor: 'black',
+      buttonBackgroundColor: 'transparent',
+      buttonTransparentOffColor: 'transparent',
+      buttonOnColor: 'lightgreen',
+      buttonBorderOnColor: 'lightgreen',
+      buttonHardOffColor: 'salmon',
+      deleteButtonHoverColor: 'firebrick',
       // A4 paper workspace background
       a4WorkspaceBackground: '#e0e0e0', // light gray
       a4WorkspaceBorderColor: 'gainsboro', // slightly darker gray
@@ -60,6 +70,9 @@ export const useThemeStore = defineStore('theme', {
       activeBackgroundColor: 'lightgreen',
       activeBorderColor: 'lightgreen',
       activeBorderColorHover: 'lightgreen',
+      // Button to start/run something (run python cell, solve equation, etc.)
+      runcodeBackgroundColor: 'lightgreen',
+      runcodeHoverBackgroundColor: 'palegreen',
       // Soft locked
       softLockedColor: 'goldenrod',
       // Locked overlay
@@ -74,16 +87,6 @@ export const useThemeStore = defineStore('theme', {
       sliderTrackColor: '#888888',
       // Divider color
       dropdownDividerColor: '#cccccc',
-      // Button colors
-      buttonBorderColor: 'lightgray',
-      buttonHoverColor: 'lightgray',
-      buttonBorderHoverColor: 'black',
-      buttonBackgroundColor: 'transparent',
-      buttonTransparentOffColor: 'transparent',
-      buttonOnColor: 'lightgreen',
-      buttonBorderOnColor: 'green',
-      buttonHardOffColor: 'salmon',
-      deleteButtonHoverColor: 'firebrick',
       // Disabled button colors
       buttonDisabledColor: 'transparent',
       buttonDisabledBorderColor: 'darkgray',
@@ -94,9 +97,9 @@ export const useThemeStore = defineStore('theme', {
       buttonResetHoverColor: 'tomato',
       /* Reset zoom button color */
       resetZoomButtonColorCenter: 'lightgreen',
-      resetZoomButtonColorOffCenter: 'salmon',
+      resetZoomButtonColorOffCenter: 'darksalmon',
       /* Flagged cells */
-      flaggedCellColor: 'salmon', // flagged cell index background
+      flaggedCellColor: 'darksalmon', // flagged cell index background
       /* Links */
       linkColor: 'green',
       /* Scrollbar colors */
@@ -123,6 +126,16 @@ export const useThemeStore = defineStore('theme', {
       // Web workspace
       webWorkspaceBackground: '#222222',
       webWorkspaceBorderColor: '#444444',
+      // Button colors
+      buttonBorderColor: '#555555',
+      buttonHoverColor: 'gray',
+      buttonBorderHoverColor: 'whitesmoke',
+      buttonBackgroundColor: 'transparent',
+      buttonTransparentOffColor: 'transparent',
+      buttonOnColor: 'darkgreen',
+      buttonBorderOnColor: 'darkgreen',
+      buttonHardOffColor: 'darkred',
+      deleteButtonHoverColor: 'lightgray',
       // A4 paper workspace
       a4WorkspaceBackground: '#222222',
       a4WorkspaceBorderColor: '#444444',
@@ -156,6 +169,9 @@ export const useThemeStore = defineStore('theme', {
       activeBackgroundColor: 'darkgreen',
       activeBorderColor: 'darkgreen',
       activeBorderColorHover: 'darkgreen',
+      // Button to start/run something (run python cell, solve equation, etc.)
+      runcodeBackgroundColor: 'darkgreen', // dark theme runcode button color
+      runcodeHoverBackgroundColor: 'forestgreen', // dark theme runcode button hover color
       // Soft locked
       softLockedColor: 'sienna',
       // Locked overlay
@@ -170,16 +186,6 @@ export const useThemeStore = defineStore('theme', {
       sliderTrackColor: '#888888',
       // Divider color
       dropdownDividerColor: '#555555',
-      // Button colors
-      buttonBorderColor: '#555555',
-      buttonHoverColor: 'dimgray',
-      buttonBorderHoverColor: 'whitesmoke',
-      buttonBackgroundColor: 'transparent',
-      buttonTransparentOffColor: 'transparent',
-      buttonOnColor: 'darkgreen',
-      buttonBorderOnColor: 'darkgreen',
-      buttonHardOffColor: 'darkred',
-      deleteButtonHoverColor: 'darkred',
       // Disabled button colors
       buttonDisabledColor: 'transparent',
       buttonDisabledBorderColor: 'darkgray',
@@ -255,6 +261,8 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--active-background-color', colors.activeBackgroundColor)
       root.style.setProperty('--active-border-color', colors.activeBorderColor)
       root.style.setProperty('--active-border-color-hover', colors.activeBorderColorHover)
+      root.style.setProperty('--runcode-background-color', colors.runcodeBackgroundColor)
+      root.style.setProperty('--runcode-hover-background-color', colors.runcodeHoverBackgroundColor)
       root.style.setProperty('--soft-locked-color', colors.softLockedColor)
       root.style.setProperty('--hide-cell-color', colors.hideCellColor)
       root.style.setProperty('--cell-locked-overlay', colors.cellLockedOverlay)

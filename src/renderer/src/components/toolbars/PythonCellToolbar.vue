@@ -1,3 +1,4 @@
+<!--src\renderer\src\components\toolbars\PythonCellToolbar.vue-->
 <template>
   <div
     class="button-row-flex-wrap-base flex-start"
@@ -7,10 +8,10 @@
   >
     <!-- Run button with spinner when running -->
     <button
-      class="top-toolbar__button"
-      :class="{ 'top-toolbar__button--active': isRunning }"
+      class="top-toolbar__button top-toolbar__button--runcode"
+      :class="{ 'top-toolbar__button--runcode-is-running': isRunning }"
       type="button"
-      :disabled="!canRun || isRunning || isLocked || isHidden"
+      :disabled="!canRun || isRunning || isCellLockedComputed || isCellHiddenComputed"
       :title="isRunning ? 'Run (working)…' : 'Run selected Python cell (Ctrl + Enter)'"
       @click="() => onRun(false)"
     >
@@ -25,7 +26,7 @@
       class="top-toolbar__button"
       :class="{ 'top-toolbar__button--active': !canRun }"
       type="button"
-      :disabled="!canRun || isRunning || isLocked || isHidden"
+      :disabled="!canRun || isRunning || isCellLockedComputed || isCellHiddenComputed"
       :title="'Delete output (Ctrl + Shift + Enter)'"
       @click="onClearOutputs"
     >
@@ -56,7 +57,7 @@
     <button
       class="top-toolbar__button top-toolbar__button--reset"
       type="button"
-      :disabled="!canReset || isLocked || isHidden"
+      :disabled="!canReset || isCellLockedComputed || isCellHiddenComputed"
       :title="
         isRunning
           ? 'Reset Python worker'
@@ -71,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onMounted, onUnmounted, watch, unref } from 'vue'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
@@ -81,6 +82,24 @@ import {
 } from '@renderer/code/pyodide-worker/client'
 import { SHORTCUT_EVENTS } from '@renderer/utils/shortcuts'
 
+// Props passed from ToolbarContainer.vue
+const props = defineProps<{
+  cellId?: string | null
+  kind?: string | null
+  isCellHidden?: boolean
+  isSoftLocked?: boolean
+  isHardLocked?: boolean
+  isFlagged?: boolean
+  inBin?: boolean
+  parentNotebookId?: string | null
+}>()
+
+// Derived booleans (same pattern as TextCellToolbar.vue)
+const isCellLockedComputed = computed(
+  () => !!unref(props.isSoftLocked) || !!unref(props.isHardLocked)
+)
+const isCellHiddenComputed = computed(() => !!unref(props.isCellHidden))
+
 const selectionStore = useCellSelectionStore()
 const workspaceStore = useWorkspaceStore()
 const themeStore = useThemeStore()
@@ -89,24 +108,6 @@ const selectedCellId = computed(() => selectionStore.selectedCellId)
 const selectedKind = computed(() => selectionStore.selectedCellKind)
 
 const isDarkMode = computed(() => !!themeStore.isDarkMode)
-
-const isLocked = computed(() => {
-  const id = selectedCellId.value
-  if (!id) return false
-  const ws = workspaceStore.getWorkspace()
-  const cell = ws.cells[id]
-  if (!cell || cell.kind !== 'python-cell') return false
-  return !!cell.softLocked
-})
-
-const isHidden = computed(() => {
-  const id = selectedCellId.value
-  if (!id) return false
-  const ws = workspaceStore.getWorkspace()
-  const cell = ws.cells[id]
-  if (!cell || cell.kind !== 'python-cell') return false
-  return !!cell.hidden
-})
 
 const isRunning = computed(() => {
   const id = selectedCellId.value

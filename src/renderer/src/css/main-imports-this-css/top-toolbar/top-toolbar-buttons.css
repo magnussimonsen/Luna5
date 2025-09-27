@@ -34,12 +34,61 @@
   font-family: var(--ui-font);
 }
 
-.top-toolbar__button:active {
+.top-toolbar__button:active,
+.top-toolbar__button--active:active {
   background: var(--button-on-color, var(--debug-color));
   color: var(--ui-text-color, var(--debug-color));
   font-size: var(--top-toolbar-font-size);
   font-family: var(--ui-font);
 }
+
+/* Shared disabled look (no background change) */
+.top-toolbar__button:disabled,
+.top-toolbar__button--disabled {
+  opacity: 0.5;
+  color: var(--ui-text-color, var(--debug-color));
+  cursor: not-allowed;
+  font-size: var(--top-toolbar-font-size);
+  font-family: var(--ui-font);
+}
+
+/* Only these get transparent bg when disabled */
+.top-toolbar__button--transparent-when-disabled:disabled,
+.top-toolbar__button--transparent-when-disabled.top-toolbar__button--disabled {
+  background: transparent;
+}
+
+.top-toolbar__button--runcode {
+    background: var(--runcode-background-color, var(--debug-color, lightgray));
+    color: var(--ui-text-color, var(--debug-color));
+}
+.top-toolbar__button--runcode:hover {
+    background: var(--runcode-hover-background-color, var(--debug-color, lightgray));
+    color: var(--ui-text-color, var(--debug-color));
+}
+
+.top-toolbar__button--runcode:active,
+.top-toolbar__button--runcode-active {
+    background: var(--runcode-background-color, var(--debug-color, lightgray));
+    color: var(--ui-text-color, var(--debug-color));
+}
+
+.top-toolbar__button--runcode-is-running {
+    opacity: 0.7;
+    background: var(--start-active-background-color, var(--debug-color, lightgray));
+    color: var(--ui-text-color, var(--debug-color));
+    cursor: not-allowed;
+}
+
+.top-toolbar__button--runcode:disabled, 
+.top-toolbar__button--runcode-disabled {
+    opacity: 0.7;
+    background: transparent, var(--debug-color, lightgray);
+    color: var(--ui-text-color, var(--debug-color));
+    cursor: not-allowed;
+}
+
+
 
 /* ------------  Modifiers ----------------- */
 
@@ -48,19 +97,6 @@
   font-size: var(--top-toolbar-font-size);
   font-family: var(--ui-font);
   color: var(--ui-text-color, var(--debug-color));
-}
-
-/* On off buttons */
-.top-toolbar__button--active {
-  background: var(--button-on-color, lightgreen);
-  color: var(--ui-text-color, var(--debug-color)); /* Placeholder for future  var(--active-text-color)*/
-}
-
-.top-toolbar__button--active:hover {
-  background: var(--button-on-color, lightgreen);
-  color: var(--ui-text-color, var(--debug-color)); /* Placeholder for future  var(--active-text-hover-color)*/
-  font-size: var(--top-toolbar-font-size);
-  font-family: var(--ui-font);
 }
 
 /* “Reset/danger” variant */
@@ -113,16 +149,6 @@
   pointer-events: none;
 }
 
-/* Disabled state (modifier + native attr for robustness) */
-.top-toolbar__button--disabled,
-.top-toolbar__button:disabled {
-  opacity: 0.5;
-  background: transparent;
-  color: var(--ui-text-color, var(--debug-color));
-  cursor: not-allowed;
-  font-size: var(--top-toolbar-font-size);
-  font-family: var(--ui-font);
-}
 
 /* Margin utilities class to push buttons to the right without 
 using the "button-row-flex-wrap-base flex-end"-style wrappers
