@@ -10,7 +10,7 @@
   min-height:0; 
   width:100%;
   overflow-y: hidden;
-  gap: 4px;
+  gap: min(4px,0.3em);
   padding-right: 1em;
   border: 0px solid blue; /* for debugging */
 }
