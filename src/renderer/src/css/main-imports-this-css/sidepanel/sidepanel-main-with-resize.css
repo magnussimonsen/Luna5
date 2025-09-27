@@ -18,7 +18,7 @@
   margin-right: min(0.5em, 8px);
   border-top: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
   border-bottom: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
-  border-radius: 8px 2px 2px 8px;
+  border-radius: var(--border-radius) 2px 2px var(--border-radius);
   box-sizing: border-box;
   z-index: var(--sidepanel-main-z-index, 4000);
   background: var(--sidepanel-background, var(--debug-color), white);
@@ -34,7 +34,7 @@ body.sidepanel-resizing {
   position: absolute;
   top: 0;
   left: 0;
-  width: min(5px, 0.5em);
+  width: min(10px,1em);
   /* Thin handle for resizing */
   cursor: ew-resize;
   background: var(--button-on-color, lightgreen);

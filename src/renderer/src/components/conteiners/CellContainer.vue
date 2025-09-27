@@ -137,7 +137,7 @@ function onMarginClick(): void {
   /* Card look */
   background: var(--cell-background, #fff);
   border: 2px solid var(--cell-border-color, #e6e6e6);
-  border-radius: 6px;
+  border-radius: var(--border-radius, min(10px, 1em));
   overflow: hidden;
   outline: none;
 }
@@ -158,7 +158,6 @@ function onMarginClick(): void {
   inset: 0;
   border-radius: 6px;
   pointer-events: none;
-
 }
 
 .cell[data-disabled] {
@@ -187,7 +186,7 @@ function onMarginClick(): void {
 }
 
 .cell[data-locked] .cell__gutter {
-  background: var(--soft-locked-color, #2563eb)
+  background: var(--soft-locked-color, #2563eb);
 }
 
 .cell[data-disabled] .cell__gutter {
@@ -235,6 +234,5 @@ function onMarginClick(): void {
   height: 100%;
   width: 100%;
   border-radius: 0px;
-  
 }
 </style>

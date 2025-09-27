@@ -4,33 +4,29 @@
 // and ensures that the color theme is consistent across the application.
 
 export type ThemeColorTypes = {
+  // Palette (branding / accent colors)
   lunaPalatte1: string
   lunaPalatte2: string
   lunaPalatte3: string
   lunaPalatte4: string
+  lunaPalatte5: string
+  lunaPalatte6: string
+  lunaPalatte7: string
 
+  // Development / debug
   debugColor: string
 
+  // Core backgrounds
   appBackground: string
-  menuBackground: string
-  menuBackgroundHover: string
-
-  cellBackground: string
-  cellBorderColor: string
-  cellMarginBackgroundColor: string
-
-  // Python cell
-  pythonStdOutBackground: string
-  pythonImageBackground: string
-
-  topToolbarBackground: string
-  topToolbarBorderColor: string
-
-  // Web workspace
   webWorkspaceBackground: string
   webWorkspaceBorderColor: string
 
-  // A4 paper workspace
+  // Menu / Toolbar
+  menuBackground: string
+  topToolbarBackground: string
+  topToolbarBorderColor: string
+
+  // A4 / paper workspace
   a4WorkspaceBackground: string
   a4WorkspaceBorderColor: string
 
@@ -38,81 +34,76 @@ export type ThemeColorTypes = {
   sidepanelBackground: string
   sidepanelBorderColor: string
 
-  // Main panel
-  mainPanelBackground: string
-  mainPanelBorderColor: string
-
-  // High contranst colors for accessibility
-  highContrastColor: string
-
-  // Divider color
-  dividerColor: string
-
-  // Paper preview background
+  // Paper preview
   paperColor: string
   paperBorderColor: string
-  // paperMarginBackgroundColor: string --- IGNORE ---
-  // paperCellBackground: string --- IGNORE ---
-  sidePanelBackground: string
 
-  // Text colors
+  // Cell (general)
+  cellBackground: string
+  cellBorderColor: string
+  cellMarginBackgroundColor: string
+
+  // Python cell outputs
+  pythonStdOutBackground: string
+  pythonImageBackground: string
+
+  // Text / UI
   textColor: string
   UITextColor: string
 
-  // Main border colors
+  // Borders & dividers
   borderColor: string
   dropdownBorderColor: string
+  dividerColor: string
+  dropdownDividerColor: string
 
-  // Active elements
+  // Active / selection
   activeBackgroundColor: string
   activeBorderColor: string
   activeBorderColorHover: string
 
-  // Runcode button colors (for running cells, solving equations, etc.)
+  // Run / action buttons
   runcodeBackgroundColor: string
   runcodeHoverBackgroundColor: string
 
-  // Locked/hidden elements
-  softLockedColor: string
-  cellLockedOverlay: string
-  hideCellColor: string
-
-  focusVisibleBorderColor: string
-
-  // Slider colors
-  sliderBackground: string
-  sliderThumbColor: string
-  sliderTrackColor: string
-
-  // Dropdown colors
-  dropdownDividerColor: string
-
-  // Button colors
+  // Standard buttons
   buttonBackgroundColor: string
   buttonBorderColor: string
   buttonHoverColor: string
   buttonBorderHoverColor: string
+  buttonTransparentOffColor: string
 
-  // Toggle button colors
+  // Toggle button states
   buttonOnColor: string
   buttonBorderOnColor: string
-  buttonTransparentOffColor: string
   buttonHardOffColor: string
 
-  // Delete button colors
-  deleteButtonHoverColor: string
-
-  // Disabled button colors
+  // Disabled button styles
   buttonDisabledColor: string
   buttonDisabledBorderColor: string
   buttonDisabledTextColor: string
   buttonDisabledHoverColor: string
 
-  // Python worker Reset button colors
+  // Reset / destructive buttons
   buttonResetColor: string
   buttonResetHoverColor: string
+  deleteButtonHoverColor: string
 
-  // Zoom buttons
+  // Soft lock / locked / hidden
+  softLockedColor: string
+  cellLockedOverlay: string
+  hideCellColor: string
+
+  // Focus / accessibility
+  focusVisibleBorderColor: string
+  highContrastColor: string
+
+  // Sliders
+  sliderBackground: string
+  sliderThumbColor: string
+  sliderTrackColor: string
+
+  // Zoom controls
   resetZoomButtonColorCenter: string
   resetZoomButtonColorOffCenter: string
 
@@ -122,10 +113,10 @@ export type ThemeColorTypes = {
   // Links
   linkColor: string
 
-  // Sctollbar colors
+  // Scrollbar
   scrollbarThumbColor: string
   scrollbarTrackColor: string
 
-  // Input field colors
+  // Input fields
   inputFieldBackgroundColor: string
 }

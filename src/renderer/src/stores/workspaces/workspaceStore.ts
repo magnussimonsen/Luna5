@@ -1,6 +1,55 @@
 // This is one of the core stores
 // It manages the workspace state and provides actions to manipulate it.
 
+/**
+ * Core Data Structures
+ *
+ * 1. Workspace
+ *    - id: Unique identifier for the workspace
+ *    - name: Display name of the workspace
+ *    - createdAt: Creation timestamp
+ *    - updatedAt: Last modification timestamp
+ *    - cells: Record of cell IDs to Cell objects (unsorted)
+ *    - notebooks: Record of notebook IDs to Notebook objects
+ *    - notebookOrder: Array of notebook IDs for ordering
+ *    - recycleBin: Contains deleted notebooks and cells
+ *    - Other metadata (e.g., lastSelectedNotebookIdNotebooks)
+ *
+ * 2. Cell (BaseCell)
+ *    The main building block of the notebook:
+ *    - id: Unique identifier for the cell
+ *    - kind: Cell type ('text-cell', 'python-cell', 'markdown-cell')
+ *    - cellInputContent: User-editable content (string)
+ *    - metadata: Additional metadata as key-value pairs
+ *    - createdAt: Creation timestamp
+ *    - updatedAt: Last modification timestamp
+ *    - softDeleted/hardDeleted: Deletion flags
+ *    - hidden/softLocked/hardLocked/flagged: UI state flags
+ *    - Specific to PythonCell: stdoutText, stderrText, stdoutImages, exec (execution state), etc.
+ *    - Specific to TextCell/MarkdownCell: Additional properties if any
+ *
+ * 3. Notebook
+ *    - id: Unique identifier for the notebook
+ *    - name: Display name
+ *    - cellOrder: Array of cell IDs representing the order in the notebook
+ *    - lastSelectedCellId: Remembered selected cell
+ *    - createdAt/updatedAt: Timestamps
+ *
+ * Key Features
+ * - Multi-cell support: Workspaces contain multiple cells that can be of different types
+ * - Active state management: Tracks which workspace and cell are currently active (via cellSelectionStore)
+ * - Change tracking: Uses isDirty flags to track unsaved changes
+ * - Timestamps: All entities have creation and update timestamps
+ * - Rich output support: Supports various output types including errors, streams, and display data (for Python cells)
+ *
+ * This structure allows for a typical notebook experience where users can:
+ * - Create multiple workspaces (documents/notebooks)
+ * - Add different types of cells (text, Python, markdown)
+ * - Execute code cells and capture outputs
+ * - Navigate between active cells
+ * - Track changes and save work
+ */
+
 import { defineStore } from 'pinia'
 import { createEmptyWorkspace } from '@renderer/code/notebook-core/model/workspace-initial'
 import type { Workspace, Notebook } from '@renderer/code/notebook-core/model/schema'
@@ -46,21 +95,6 @@ interface LunaState {
   numberOfCellsVisible: number
   numberOfCodeCellsVisible: number
 }
-
-/** EXPLANATION (main structure)
- * The workspace and notebook interface is defined in the schema.ts
- * Workspace contains:
- *    - Record of notebook IDs and their corresponding Notebook objects
- *    - A unsorted Record of cell IDs and their corresponding Cell objects
- *    - Recycle Bin Object
- *    - Other metadata
- * Notebook contains:
- *    - A array of cell IDs, where the order of cell IDs in the array represents the order of cells in the notebook.
- *    - Other metadata
- * The Recycle Bin contains:
- *    - A record of deleted notebooks and their metadata
- *    - A record of deleted cells and their metadata
- */
 
 export const useWorkspaceStore = defineStore('workspace', {
   state: (): LunaState => ({
@@ -629,7 +663,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       console.log('Toggled soft lock on cell', cellId, 'now', cell.softLocked)
       return true
     },
-    
+
     // --- Toggle hidden on selected cell ---
     toggleHiddenSelectedCell(): boolean {
       const workspace = this.getWorkspace()

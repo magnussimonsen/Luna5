@@ -6,6 +6,7 @@
     --icon-arrow-move-down: '🠋'; /* previously &#129035; */
     --icon-flag: '⚑';
     --icon-settings: '⚙';
+    --icon-local-llm-client: '🤖';
     --icon-help: '?';
     --icon-python: '🐍';
     /* Text / formatting */
@@ -69,6 +70,7 @@
 .icon-settings::before { content: var(--icon-settings); }
 .icon-help::before { content: var(--icon-help); }
 .icon-python::before { content: var(--icon-python); }
+.icon-local-llm-client::before { content: var(--icon-local-llm-client); }
 
 /* Text editor icons (use CSS variables so we can override easily) */
 .icon-bold::before { content: var(--icon-bold); }

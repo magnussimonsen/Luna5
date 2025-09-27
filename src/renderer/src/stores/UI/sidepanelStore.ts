@@ -9,13 +9,21 @@ export const useSidepanelStore = defineStore('sidepanel', () => {
   const statusbarHeight = ref<number>(0)
 
   // Existing sidepanel state
-  const allowedPanels = ['flashcards', 'notebooks', 'toc', 'variables', 'help', 'settings']
+  const allowedPanels = [
+    'flashcards',
+    'notebooks',
+    'toc',
+    'variables',
+    'help',
+    'settings',
+    'localLLMclient'
+  ]
   const activePanel = ref<PanelName | null>(null)
 
   function getAppWidthInPx(): number {
     const appWidth =
       window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-    return typeof appWidth === 'number' && !isNaN(appWidth) ? appWidth * 0.50 : 400
+    return typeof appWidth === 'number' && !isNaN(appWidth) ? appWidth * 0.5 : 400
   }
 
   const lastPanelWidth = ref<number>(getAppWidthInPx())

@@ -1,3 +1,11 @@
 /* Types for side panel management in the application */
-const allowedPanels = ['flashcards', 'notebooks', 'toc', 'variables', 'help', 'settings']
+const allowedPanels = [
+  'flashcards',
+  'notebooks',
+  'toc',
+  'variables',
+  'help',
+  'settings',
+  'localLLMclient'
+]
 export type PanelName = (typeof allowedPanels)[number]

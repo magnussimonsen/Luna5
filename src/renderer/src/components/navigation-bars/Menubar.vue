@@ -274,6 +274,14 @@
       </div>
       <div
         class="menubar-button"
+        :class="{ active: sidepanelStore.activePanel === 'localLLMclient' }"
+        @click="handleTogglePanel('localLLMclient')"
+      >
+        <span class="icon-local-llm-client" aria-hidden="true"></span>
+        <!-- <span class="sr-only">Settings</span> -->
+      </div>
+      <div
+        class="menubar-button"
         :class="{ active: sidepanelStore.activePanel === 'settings' }"
         @click="handleTogglePanel('settings')"
       >
@@ -480,7 +488,6 @@ const handleToggleHidden = (): void => {
   const ok = workspaceStore.toggleHiddenSelectedCell()
   if (!ok) console.warn('No cell selected to hide/show')
 }
-
 
 // Edit → Bin actions
 const handleMoveCellToBin = (): void => {
