@@ -5,64 +5,115 @@ Keep this file aligned with ThemeColorTypes and colorThemeStore.
 */
 
 :root {
-    /* Dev helper */
+    /* Dev / Palette */
     --debug-color: red;
+    --luna-palette-1: red;
+    --luna-palette-2: blue;
+    --luna-palette-3: green;
+    --luna-palette-4: yellow;
+    --luna-palette-5: purple;
+    --luna-palette-6: orange;
+    --luna-palette-7: teal;
 
-    /* Backgrounds */
+    /* Core backgrounds */
     --app-background: #ffffff;
-    --main-panel-background: #ffffff;
-    --side-panel-background: #f0f0f0;
-    --menu-background: whitesmoke;
-    --tool-bar-background: whitesmoke;
+    --web-workspace-background: #ffffff;
+    --web-workspace-border-color: gainsboro;
 
-    /* Text */
-    --text-color: #222222;
-    --ui-text-color: #222222;
+    /* Menu / Toolbar */
+    --menu-background: gainsboro;
+    --top-toolbar-background: whitesmoke;
+    --top-toolbar-border-color: whitesmoke;
 
-    /* Borders/dividers */
-    --border-color: #dddddd;
-    --dropdown-border-color: #cccccc;
-    --dropdown-divider-color: #cccccc;
+    /* A4 / paper workspace */
+    --a4-workspace-background: #e0e0e0;
+    --a4-workspace-border-color: gainsboro;
 
-    /* Cells */
+    /* Sidepanel */
+    --sidepanel-background: gainsboro;
+    --sidepanel-border-color: whitesmoke;
+
+    /* Paper preview */
+    --paper-color: #ffffff;
+    --paper-border-color: transparent;
+
+    /* Cell (general) */
     --cell-background: #ffffff;
     --cell-border-color: whitesmoke;
     --cell-margin-background-color: #f0f0f0;
-    --cell-locked-overlay: rgba(0, 0, 0, 0.06);
-    --hide-cell-color: whitesmoke;
 
-    /* Python cell */
+    /* Python cell outputs */
     --python-stdout-background: #ffffff;
     --python-image-background: #ffffff;
 
-    /* Active/selection/start */
+    /* Text / UI text */
+    --text-color: #222222;
+    --ui-text-color: #222222;
+
+    /* Borders & dividers */
+    --border-color: #dddddd;
+    --dropdown-border-color: #cccccc;
+    --divider-color: silver;
+    --dropdown-divider-color: #cccccc;
+
+    /* Active / selection */
     --active-background-color: lightgreen;
     --active-border-color: lightgreen;
     --active-border-color-hover: lightgreen;
-    --soft-locked-border-color: orange;
-    
-    /* Buttons */
+
+    /* Run / action buttons */
+    --runcode-background-color: lightgreen;
+    --runcode-hover-background-color: #8d8d8dff;
+
+    /* Buttons (visual states) */
     --button-background-color: transparent;
-    --button-border-color: #cccccc;
-    --button-hover-color: lightgray;
+    --button-border-color: lightgray;
+    --button-hover-color: #aaaaaa;
     --button-border-hover-color: black;
     --button-on-color: lightgreen;
+    --button-border-on-color: lightgreen;
     --button-transparent-off-color: transparent;
     --button-hard-off-color: salmon;
-    --delete-button-hover-color: lightcoral;
 
-    /* Python worker reset button */
-    --button-reset-python-worker-color: transparent;
-    --button-reset-python-worker-hover-color: lightcoral;
+    /* Disabled button styles */
+    --button-disabled-color: transparent;
+    --button-disabled-border-color: darkgray;
+    --button-disabled-text-color: #aaa;
+    --button-disabled-hover-color: gray;
 
-    /* Zoom reset */
-    --reset-zoom-button-color: lightblue;
+    /* Reset / destructive buttons */
+    --button-reset-color: darksalmon;
+    --button-reset-hover-color: tomato;
+    --delete-button-hover-color: firebrick;
 
-    /* Focus/slider */
+    /* Soft lock / locked / hidden */
+    --soft-locked-color: #ff994bff;
+    --cell-locked-overlay: rgba(0, 0, 0, 0.06);
+    --hide-cell-color: whitesmoke;
+
+    /* Focus / accessibility */
     --focus-visible-border-color: blue;
-    --slider-background: #cccccc;
+    --high-contrast-color: black;
 
-    /* Legacy/aliases (kept for existing CSS; prefer new tokens above) */
+    /* Slider styles */
+    --slider-background: #cccccc;
+    --slider-thumb-color: #ffffff;
+    --slider-track-color: #888888;
+
+    /* Reset zoom */
+    --reset-zoom-button-color-Center: lightgreen;
+    --reset-zoom-button-color-OffCenter: darksalmon;
+
+    /* Flagged / links / scrollbars */
+    --flagged-cell-color: darksalmon;
+    --link-color: green;
+    --scrollbar-thumb-color: gray;
+    --scrollbar-track-color: lightgray;
+
+    /* Input fields */
+    --input-field-background-color: white;
+
+    /* Legacy / aliases for backward compatibility */
     --color-text: var(--text-color);
     --color-background: var(--app-background);
     --cell-selected-border: var(--active-border-color);
