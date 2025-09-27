@@ -1,16 +1,14 @@
 <template>
   <div
     ref="rootEl"
-    class="cell-container"
-    :class="{
-      'is-selected': selected,
-      'is-in-bin': inBin,
-      'is-locked': locked,
-      'is-disabled': disabled,
-      'is-hidden': hidden,
-      'is-flagged': flagged
-    }"
+    class="cell"
     :data-kind="kind"
+    :data-selected="selected || null"
+    :data-in-bin="inBin || null"
+    :data-locked="locked || null"
+    :data-disabled="disabled || null"
+    :data-hidden="hidden || null"
+    :data-flagged="flagged || null"
     role="group"
     :aria-label="ariaLabel"
     :aria-selected="selected ? 'true' : 'false'"
@@ -18,28 +16,17 @@
     @click="onSelect($event)"
     @blur="$emit('blur', cellId)"
   >
-    <div
-      class="cell-margin"
-      :class="{
-        'is-selected': selected,
-        'is-in-bin': inBin,
-        'is-locked': locked,
-        'is-disabled': disabled,
-        'is-hidden': hidden,
-        'is-flagged': flagged
-      }"
-      @click.stop="onMarginClick"
-    >
-      <div class="cell-index" :title="`Cell ${displayIndex}`">{{ displayIndex }}</div>
+    <div class="cell__gutter" :title="`Cell ${displayIndex}`" @click.stop="onMarginClick">
+      <div class="cell__index">{{ displayIndex }}</div>
     </div>
-    <!-- Main cell content(cell-body div is deprecated) -->
-    <div class="cell-content">
+
+    <div class="cell__content">
       <template v-if="!hidden">
         <slot />
       </template>
       <template v-else>
         <div
-          class="cell-hidden-placeholder hidden-stripes-bg"
+          class="cell__hidden-placeholder hidden-stripes-bg"
           aria-label="Hidden cell placeholder"
         ></div>
       </template>
@@ -64,7 +51,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-// Expose individual prop refs so template class bindings (selected, flagged, etc.) react correctly
 const { selected, inBin, locked, disabled, hidden, flagged } = toRefs(props)
 
 const emit = defineEmits<{
@@ -89,20 +75,15 @@ const ariaLabel = computed(
 
 function onSelect(e?: MouseEvent): void {
   if (props.disabled) return
-  // Always mark as selected
   emit('select', props.cellId)
-  // If the click originated inside an interactive/editable element, don't steal focus
   const target = (e?.target as HTMLElement | null) || null
-  // Prefer an explicit primary editor marker, then fall back to generic editors
   const primarySelector = '[data-primary-editor="true"]'
   const fallbackSelector = '[contenteditable="true"], input, textarea, [role="textbox"]'
-  // Expand interactive detection so clicks on controls don't get overridden by container focus
   const detectionSelector = `${primarySelector}, ${fallbackSelector}, button, [role="button"], a[href], select, [tabindex]:not([tabindex="-1"])`
   const interactive = target?.closest(detectionSelector)
   if (interactive) return
-  // Otherwise, try to focus the first inner editor; fallback to container for keyboard nav
   nextTick(() => {
-    const contentRootEl = rootEl.value?.querySelector('.cell-content') as HTMLElement | null
+    const contentRootEl = rootEl.value?.querySelector('.cell__content') as HTMLElement | null
     const contentRoot = contentRootEl || rootEl.value
     const editor =
       (contentRoot?.querySelector(primarySelector) as HTMLElement | null) ||
@@ -115,7 +96,7 @@ function onSelect(e?: MouseEvent): void {
         try {
           editor.focus()
         } catch {
-          /* ignore */
+          console.warn('Failed to focus cell editor')
         }
       }
     } else {
@@ -134,7 +115,7 @@ function onMarginClick(): void {
       try {
         rootEl.value?.focus()
       } catch {
-        /* ignore */
+        console.warn('Failed to focus cell container')
       }
     })
   }
@@ -142,80 +123,79 @@ function onMarginClick(): void {
 </script>
 
 <style scoped>
-/* Jupyter-like notebook cell styling */
-.cell-container {
+/* ===== Base cell ===== */
+.cell {
   position: relative;
-  display: flex; /* row: left gutter + content */
+  display: flex;
   flex-direction: row;
   width: 100%;
-  box-sizing: border-box;
   min-width: 0;
   min-height: 0;
   align-items: stretch;
   box-sizing: border-box;
 
   /* Card look */
-  background: var(--cell-background, #ffffff);
+  background: var(--cell-background, #fff);
   border: 2px solid var(--cell-border-color, #e6e6e6);
-  border-radius: 8px;
-  margin-bottom: 2px;
-  padding: 0; /* inner padding lives in .cell-content */
+  border-radius: 6px;
   overflow: hidden;
   outline: none;
 }
 
-.cell-container:focus-visible {
-  outline: normal;
-}
-
-.cell-container.is-selected {
+/* ===== States (attribute-driven) ===== */
+.cell[data-selected] {
   border-color: var(--active-border-color, #2563eb);
 }
 
-.cell-container.is-in-bin {
+.cell[data-in-bin] {
   opacity: 0.95;
   border-style: dashed;
 }
 
-.cell-container.is-hidden {
-  opacity: 0.8;
-  filter: grayscale(0.06);
-}
-
-.cell-container.is-locked::after {
+.cell[data-locked]::after {
   content: '';
   position: absolute;
   inset: 0;
-  border-color: var(--soft-locked-color, #2563eb);
+  border-radius: 6px;
   pointer-events: none;
-  border-radius: 8px;
+
 }
 
-/* Left gutter (cell margin) */
-.cell-margin {
-  flex: 0 0 2.5em; /* fixed gutter */
+.cell[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.cell[data-hidden] {
+  opacity: 0.8;
+}
+
+/* ===== Gutter ===== */
+.cell__gutter {
+  flex: 0 0 1.5em; /* fixed gutter */
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 0em 0em;
+  padding: 0em 0;
   box-sizing: border-box;
   cursor: pointer;
   background: var(--cell-margin-background-color, #f9fafb);
 }
 
-.cell-margin.is-selected {
-  background: var(--active-border-color, #e0e7ff);
+.cell[data-selected] .cell__gutter {
+  background: var(--active-border-color, #eef2ff); /* light indigo */
 }
 
-.cell-margin.is-locked {
-  background: var(--soft-locked-color, #2563eb);
+.cell[data-locked] .cell__gutter {
+  background: var(--soft-locked-color, #2563eb)
 }
 
-.cell-container.is-disabled .cell-margin {
+.cell[data-disabled] .cell__gutter {
   cursor: not-allowed;
 }
 
-.cell-index {
+/* Index badge */
+.cell__index {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -225,40 +205,38 @@ function onMarginClick(): void {
   font-weight: 600;
   color: var(--text-color, #374151);
   border-radius: 50%;
-  margin-top: 0.4em;
+  margin-top: 0em;
   user-select: none;
 }
 
-.cell-container.is-flagged .cell-index {
-  background: var(--flagged-cell-color, red);
+.cell[data-flagged] .cell__index {
+  background: var(--flagged-cell-color, #ef4444);
   color: #fff;
 }
 
-.cell-hidden-placeholder {
-  height: 1em;
-  width: 100%;
-  opacity: 1;
-  border-radius: 4px;
-}
-
-.cell-content {
+/* ===== Content ===== */
+.cell__content {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  padding: 0.5em 0.5em;
-  gap: 0em;
+  padding: 0.5em;
+  gap: 0;
   min-width: 0;
   box-sizing: border-box;
-  overflow: visible; /* outer scroller handles scrolling */
+  overflow: visible;
 }
 
-@media (max-width: 800px) {
-  .cell-margin {
-    flex: 0 0 3rem;
-    padding: 0.5rem 0.4rem;
-  }
-  .cell-content {
-    padding: 0.6rem 0.8rem;
-  }
+/* When hidden, collapse padding to make the placeholder tight */
+.cell[data-hidden] .cell__content {
+  justify-content: center;
+  padding: 0;
+}
+
+/* Hidden placeholder */
+.cell__hidden-placeholder {
+  height: 100%;
+  width: 100%;
+  border-radius: 0px;
+  
 }
 </style>

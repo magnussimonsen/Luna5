@@ -18,7 +18,7 @@
   margin-right: min(0.5em, 8px);
   border-top: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
   border-bottom: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
-  border-radius: 0;
+  border-radius: 8px 2px 2px 8px;
   box-sizing: border-box;
   z-index: var(--sidepanel-main-z-index, 4000);
   background: var(--sidepanel-background, var(--debug-color), white);

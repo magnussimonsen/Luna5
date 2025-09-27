@@ -7,7 +7,6 @@ NO PADDING HERE
 
 .sidepanel-content-container {
   flex: 1;
-  /*overflow-y: auto;*/ /* Disabled to allow children to handle scrolling */
   display: flex;
   flex-direction: column;
   background: var(--sidepanel-background, var(--debug-color), red);

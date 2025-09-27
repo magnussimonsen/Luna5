@@ -2,7 +2,10 @@
 <!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
 
 <template>
-  <div class="cell-containers-list">
+  <div
+    class="cell-containers-list"
+    :style="{ transform: 'scale(' + zoomScale + ')', transformOrigin: 'top left' }"
+  >
     <CellContainer
       v-for="(cellId, idx) in orderedCellIds"
       :key="cellId"
@@ -30,14 +33,17 @@
 import { computed, type Component } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
+import { useZoomStatesStore } from '@renderer/stores/UI/zoomStatesStore' // For zoom state management
 import CellContainer from './CellContainer.vue'
 import TextCell from '@renderer/components/cells/TextCell.vue'
 import PythonCell from '@renderer/components/cells/PythonCell.vue'
 import type { Cell } from '@renderer/types/notebook-cell-types'
 
+const zoomStatesStore = useZoomStatesStore() // For zoom state management
 const workspaceStore = useWorkspaceStore()
 const selectionStore = useCellSelectionStore()
 
+const zoomScale = computed(() => zoomStatesStore.zoomScale)
 const workspace = computed(() => workspaceStore.getWorkspace())
 
 if (!workspaceStore.currentNotebookId) {

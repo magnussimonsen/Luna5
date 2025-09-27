@@ -26,9 +26,9 @@ export const useThemeStore = defineStore('theme', {
       // Web workspace background
       webWorkspaceBackground: '#FFFFFF', // light gray
       webWorkspaceBorderColor: 'gainsboro', // slightly darker gray
-       // Button colors
+      // Button colors
       buttonBorderColor: 'lightgray',
-      buttonHoverColor: 'palegreen', // palegreen 
+      buttonHoverColor: '#aaaaaa', // palegreen
       buttonBorderHoverColor: 'black',
       buttonBackgroundColor: 'transparent',
       buttonTransparentOffColor: 'transparent',
@@ -72,9 +72,9 @@ export const useThemeStore = defineStore('theme', {
       activeBorderColorHover: 'lightgreen',
       // Button to start/run something (run python cell, solve equation, etc.)
       runcodeBackgroundColor: 'lightgreen',
-      runcodeHoverBackgroundColor: 'palegreen',
+      runcodeHoverBackgroundColor: '#8d8d8dff',
       // Soft locked
-      softLockedColor: 'goldenrod',
+      softLockedColor: '#ffbd7bff', // peru
       // Locked overlay
       cellLockedOverlay: 'rgba(0, 0, 0, 0.06)',
       // Hidden cell color
