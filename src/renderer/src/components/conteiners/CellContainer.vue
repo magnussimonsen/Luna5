@@ -202,16 +202,14 @@ function onMarginClick(): void {
   width: 1.6em;
   height: 1.6em;
   font-size: 0.75em;
-  font-weight: 600;
   color: var(--text-color, #374151);
-  border-radius: 50%;
+  border-radius: 4px;
   margin-top: 0em;
   user-select: none;
 }
 
 .cell[data-flagged] .cell__index {
   background: var(--flagged-cell-color, #ef4444);
-  color: #fff;
 }
 
 /* ===== Content ===== */

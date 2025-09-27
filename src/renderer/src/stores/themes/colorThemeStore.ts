@@ -74,7 +74,7 @@ export const useThemeStore = defineStore('theme', {
       runcodeBackgroundColor: 'lightgreen',
       runcodeHoverBackgroundColor: '#8d8d8dff',
       // Soft locked
-      softLockedColor: '#ffbd7bff', // peru
+      softLockedColor: '#ff994bff', // peru
       // Locked overlay
       cellLockedOverlay: 'rgba(0, 0, 0, 0.06)',
       // Hidden cell color
