@@ -175,7 +175,7 @@ We fixed a bug where the code editor inside a cell could go blank when you moved
 Also: prepared a new theme store (not yet active) at colorThemeStoreTestingNewSchema.ts; made many large UI tweaks and refactored the CSS to make it more modular and easier to maintain, including: reworked the CSS for cell borders (global border radius variable added and streamlined CSS for buttons/flex-rows) across cell types, menubar, toolbar and sidebar, and added a placeholder sidepanel for a future local LLM client (e.g., Ollama).
 
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-09-28.png" alt="" width="900" />
+  <img src="./src/development-screenshots/Luna5-2025-09-28.png" alt="" width="900" /> 
 </p>
 
 **2025-09-23**
