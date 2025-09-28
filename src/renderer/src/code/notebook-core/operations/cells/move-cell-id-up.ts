@@ -11,6 +11,7 @@ export function moveCellIdUp(
   notebookId: string,
   cellId: string
 ): boolean {
+  console.log('[moveCellIdUp] called', { notebookId, cellId })
   const notebook = workspace.notebooks[notebookId]
   if (!notebook) return false
   const order = notebook.cellOrder
@@ -19,6 +20,7 @@ export function moveCellIdUp(
   if (idx <= 0) return false
   // swap with previous
   ;[order[idx - 1], order[idx]] = [order[idx], order[idx - 1]]
+  console.log('[moveCellIdUp] moved', { notebookId, cellId, newOrder: order.slice() })
   return true
 }
 

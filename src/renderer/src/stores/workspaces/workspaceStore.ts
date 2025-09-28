@@ -83,6 +83,10 @@ interface LunaState {
   workspace: Workspace | null
   initialized: boolean
   currentNotebookId: string | null
+  // Transient flag used to indicate cell/notebook reordering is in progress.
+  // Components like PythonCell.vue can check this to avoid disposing editors
+  // while the DOM is being re-ordered by move operations.
+  isReordering: boolean
   viewMode: 'notebooks' | 'bin'
   binSelectedNotebookId: string | null
   // File save state
@@ -103,6 +107,8 @@ export const useWorkspaceStore = defineStore('workspace', {
     workspace: null, // Workspace is null until initialized
     initialized: false, // Indicates if the workspace has been initialized
     currentNotebookId: null, // Current notebook ID is null until set
+    // Transient UI flag to indicate that a reordering operation is active.
+    isReordering: false,
     // Add example: currentBinNotebookId ? in order to keep track of the currently selected notebook in the bin
     viewMode: 'notebooks', // 'notebooks' or 'bin' view mode
     binSelectedNotebookId: null,
@@ -610,11 +616,29 @@ export const useWorkspaceStore = defineStore('workspace', {
       const cellSelectionStore = useCellSelectionStore()
       const selectedCellId = cellId || cellSelectionStore.selectedCellId
       if (!selectedCellId) return false
-      const result = operationsMoveCellIdUp(workspace, notebookId, selectedCellId)
-      if (result) {
-        this.markAsUnsaved()
+      // Set transient reordering flag so UI components can avoid disposals.
+      this.isReordering = true
+      console.log('[workspaceStore] isReordering set true (moveSelectedCellUp)', {
+        notebookId,
+        cellId: selectedCellId
+      })
+      try {
+        const result = operationsMoveCellIdUp(workspace, notebookId, selectedCellId)
+        if (result) {
+          this.markAsUnsaved()
+        }
+        return result
+      } finally {
+        // Defer clearing briefly to allow DOM patching to settle in components.
+        // Use setTimeout to yield to the browser render task.
+        setTimeout(() => {
+          this.isReordering = false
+          console.log('[workspaceStore] isReordering cleared (moveSelectedCellUp)', {
+            notebookId,
+            cellId: selectedCellId
+          })
+        }, 1000)
       }
-      return result
     },
     // Move selected (or provided) cell down one position in the current notebook.
     moveSelectedCellDown(cellId?: string): boolean {
@@ -623,11 +647,26 @@ export const useWorkspaceStore = defineStore('workspace', {
       const cellSelectionStore = useCellSelectionStore()
       const selectedCellId = cellId || cellSelectionStore.selectedCellId
       if (!selectedCellId) return false
-      const result = operationsMoveCellIdDown(workspace, notebookId, selectedCellId)
-      if (result) {
-        this.markAsUnsaved()
+      this.isReordering = true
+      console.log('[workspaceStore] isReordering set true (moveSelectedCellDown)', {
+        notebookId,
+        cellId: selectedCellId
+      })
+      try {
+        const result = operationsMoveCellIdDown(workspace, notebookId, selectedCellId)
+        if (result) {
+          this.markAsUnsaved()
+        }
+        return result
+      } finally {
+        setTimeout(() => {
+          this.isReordering = false
+          console.log('[workspaceStore] isReordering cleared (moveSelectedCellDown)', {
+            notebookId,
+            cellId: selectedCellId
+          })
+        }, 1000)
       }
-      return result
     },
     //--- Cell Creation ---
     addTextCell(content = 'function: addTextCell in workspaceStore.ts'): TextCell {

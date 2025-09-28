@@ -53,15 +53,15 @@ let disposables: Array<{ dispose: () => void }> = []
 // Resize observer to re-layout the editor when the container size changes
 let resizeObserver: ResizeObserver | null = null
 // Track whether the cell is currently visible in the viewport
-let visibilityObserver: IntersectionObserver | null = null
-const isVisible = ref<boolean>(true)
 // Guard flag to avoid echoing local edits back into the model watcher
 let isApplyingLocalEdit = false
+// (No visibility-based disposal) keep editors mounted until unmount/notebook change
 
 import { parsePixelsToNumber } from '@renderer/utils/miscellaneous/parse-pixels-to-number'
 // Eagerly import Monaco for a simple, non-lazy setup
 // Note: this avoids dynamic lazy-loading of the editor and worker.
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+// Monaco initialization moved to initialize-monaco-editor.ts
+import { initializeMonacoEditorForCell } from '@renderer/code/monaco/initialize-monaco-editor-for-cell'
 // Ensure the python language contribution (tokenizer) is loaded so Monaco can colorize python source
 // Register the python language contribution so Monaco recognizes the language and tokenizer
 import 'monaco-editor/esm/vs/basic-languages/python/python.contribution'
@@ -90,162 +90,120 @@ function registerCuratedMonacoThemesIfNeeded(): void {
   ensureAllMonacoThemesDefined()
 }
 
-// Using an eager Monaco import; initializeMonacoEditor will use the imported `monaco` object.
-
+/**
+ * initializeMonacoEditor
+ *
+ * Purpose:
+ * - Create and wire a Monaco editor instance for this cell's mount node.
+ *
+ * What it does:
+ * - Uses `initializeMonacoEditorForCell` (shared initializer) to create the
+ *   editor, disposables and optional ResizeObserver.
+ * - Hooks editor content changes back into the workspace store via
+ *   `workspaceStore.setCellInputContent` while guarding against echoing local
+ *   edits (using `isApplyingLocalEdit`).
+ * - Applies theme and font options and ensures placeholder/source text is
+ *   present if the model started empty.
+ * - When the cell is selected, it also sets the editor readOnly state
+ *   appropriately, focuses the editor and places the caret at the end.
+ *
+ * Inputs/Dependencies (captured from outer scope):
+ * - `editorElementRef` (mount node), `props.cell` for ids and text,
+ *   `fontStore` / `fontSizeStore` for font settings, `selectedMonacoThemeId`
+ *   for theme, and `workspaceStore` for content updates.
+ *
+ * Outputs/Side-effects:
+ * - Assigns `editor`, `disposables` and `resizeObserver` in outer scope.
+ * - Updates store content via `workspaceStore.setCellInputContent` on edits.
+ * - Focuses and manipulates the editor when the cell is selected.
+ *
+ * Lifecycle contract:
+ * - The function returns nothing; callers/components must call
+ *   `disposeEditorInstance()` and `disconnectVisibilityObserver()` when the
+ *   component is torn down to remove listeners, disconnect observers and
+ *   release Monaco resources. Disposables pushed into `disposables` are
+ *   expected to be disposed by `disposeEditorInstance()`.
+ *
+ * Notes:
+ * - The editor is created read-only by default. The component toggles
+ *   writable state for the selected cell after initialization.
+ * - This function keeps the creation logic minimal — heavy init details
+ *   live in the shared initializer module for better reuse and testing.
+ */
 function initializeMonacoEditor(): void {
+  console.log('[PythonCell] initializeMonacoEditor start', { cellId: props.cell.id })
+  // Guard: don't re-create if an editor already exists or mount node is missing
   if (editor || !editorElementRef.value) return
 
+  // Compute the initial text value to show in the editor. Prefer explicit
+  // `cellInputContent` (user edits) and fall back to the original `source`.
   const initialValue = props.cell.cellInputContent ?? props.cell.source ?? ''
-  registerCuratedMonacoThemesIfNeeded()
 
-  editor = monaco.editor.create(editorElementRef.value, {
-    value: initialValue,
-    language: 'python',
-    readOnly: cellSelection.selectedCellId === props.cell.id ? !!isCellLocked.value : true,
-    automaticLayout: true,
-    wordWrap: 'on',
-    wrappingIndent: 'same',
-    scrollBeyondLastLine: false,
-    scrollbar: {
-      vertical: 'hidden',
-      horizontal: 'auto',
-      alwaysConsumeMouseWheel: false
-    },
-    mouseWheelScrollSensitivity: 1,
-    fastScrollSensitivity: 5,
-    smoothScrolling: true,
-    cursorSurroundingLines: 3,
-    cursorSurroundingLinesStyle: 'all',
-    cursorSmoothCaretAnimation: 'on',
+  // Collect current font settings so the shared initializer can apply them
+  const fontFamily = fontStore.fonts.codingFont
+  const fontSizePx = parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
 
-    minimap: { enabled: false },
-    lineNumbers: 'on',
-    lineNumbersMinChars: 3,
-    lineDecorationsWidth: 1,
-    fontFamily: fontStore.fonts.codingFont,
-    fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
-  })
-
-  const mount = editorElementRef.value
-
-  const syncHeight = (h?: number): void => {
-    const contentHeight = h ?? editor.getContentHeight()
-    // rAF ensures we write after Monaco’s internal layout settles
-    requestAnimationFrame(() => {
-      mount.style.height = `${Math.ceil(contentHeight)}px`
-      editor.layout()
-    })
-  }
-
-  // Initial sizing, then keep in sync on content changes
-  syncHeight()
-  disposables.push(
-    editor.onDidContentSizeChange((e: { contentHeight: number }) => syncHeight(e.contentHeight))
-  )
-  // Ensure the editor caret remains visible inside the outer scroll container
-  // (e.g. .workspace-web-layout-container). Monaco only manages its internal
-  // viewport, so we must scroll the nearest outer scroller when the cursor moves
-  // due to keyboard navigation.
-  const findClosestScrollableAncestor = (el: HTMLElement | null): HTMLElement | null => {
-    let node: HTMLElement | null = el
-    while (node) {
-      if (node.classList && node.classList.contains('workspace-web-layout-container')) return node
-      const style = window.getComputedStyle(node)
-      const overflowY = style.overflowY
-      if (overflowY === 'auto' || overflowY === 'scroll') return node
-      node = node.parentElement
-    }
-    // fallback to document scrolling element
-    return (document.scrollingElement as HTMLElement) || document.body
-  }
-
-  const ensureCaretVisibleInAncestor = (): void => {
-    try {
-      if (!editor || !editorElementRef.value) return
-      const pos = editor.getPosition()
-      if (!pos) return
-      // Get caret position in pixels relative to the editor's DOM node
-      const scPos = editor.getScrolledVisiblePosition(pos)
-      if (!scPos) return
-      const editorDom = editor.getDomNode()
-      if (!editorDom) return
-      const caretViewportY = editorDom.getBoundingClientRect().top + scPos.top
-
-      const ancestor = findClosestScrollableAncestor(editorElementRef.value)
-      if (!ancestor) return
-      const ancRect = ancestor.getBoundingClientRect()
-      const margin = 20
-
-      if (caretViewportY < ancRect.top + margin) {
-        // caret above visible area -> scroll up
-        const delta = caretViewportY - (ancRect.top + margin)
-        ancestor.scrollBy({ top: delta, behavior: 'smooth' })
-      } else if (caretViewportY > ancRect.bottom - margin) {
-        // caret below visible area -> scroll down
-        const delta = caretViewportY - (ancRect.bottom - margin)
-        ancestor.scrollBy({ top: delta, behavior: 'smooth' })
-      }
-    } catch {
-      /* ignore errors in caret visibility helper */
-    }
-  }
-
-  // Subscribe to cursor movement and focus events so outer container follows the caret
-  try {
-    disposables.push(
-      editor.onDidChangeCursorPosition(() => {
-        // Slight delay to allow Monaco internal painting/layout to settle
-        requestAnimationFrame(() => ensureCaretVisibleInAncestor())
-      })
-    )
-    // Also ensure on focus we reveal the caret
-    disposables.push(
-      editor.onDidFocusEditorText(() => {
-        requestAnimationFrame(() => ensureCaretVisibleInAncestor())
-      })
-    )
-  } catch {
-    /* ignore if editor API not present */
-  }
-  // Debug: report editor creation and starting readonly state
-  try {
-    console.debug('[PythonCell] initializeMonacoEditor:', { id: props.cell.id, editor: !!editor })
-  } catch {
-    /* ignore */
-  }
-  // Propagate edits into the workspace
-  disposables.push(
-    editor.onDidChangeModelContent(() => {
-      if (!editor) return
-      const value = editor.getValue()
-      // Mark that this change originated from the editor to avoid echoing
-      // the store update back into setValue (which would reset the cursor)
+  // Create the editor via the shared initializer. This moves the heavy
+  // setup (monaco.editor.create, event wiring, resize observer) into a
+  // reusable module and returns the created editor plus cleanup handles.
+  const result = initializeMonacoEditorForCell({
+    mount: editorElementRef.value,
+    initialValue,
+    fontFamily,
+    fontSizePx,
+    onContentChange: (value: string) => {
+      // Mark local edits so the external watcher doesn't echo them back
       isApplyingLocalEdit = true
       workspaceStore.setCellInputContent(props.cell.id, value)
-      // Release the flag on next tick
       setTimeout(() => {
         isApplyingLocalEdit = false
       }, 0)
-      // Schedule a small resize after Monaco updates its internal layout
+    },
+    selectedThemeId: selectedMonacoThemeId.value
+  })
+
+  // Store the returned editor and the disposables/observer so they can be
+  // disposed later by `disposeEditorInstance()` when the component unmounts.
+  editor = result.editor
+  disposables = result.disposables
+  resizeObserver = result.resizeObserver
+
+  console.log('[PythonCell] initializeMonacoEditor done', {
+    cellId: props.cell.id,
+    editorPresent: !!editor
+  })
+
+  try {
+    // If this cell is currently selected in the UI, make it writable (unless
+    // it's locked) and focus the editor so the user can start typing.
+    if (cellSelection.selectedCellId === props.cell.id) {
+      const shouldBeReadOnly = !!isCellLocked.value
+      try {
+        editor.updateOptions({ readOnly: shouldBeReadOnly })
+      } catch {
+        /* ignore */
+      }
+
+      // Focus and move the caret to the end of the buffer. We do this inside
+      // a small timeout so the DOM/Monaco internal layout has settled.
       try {
         setTimeout(() => {
           try {
-            if (!editor || !editorElementRef.value) return
-            const contentHeight = editor.getContentHeight()
-            let minHeightPx = 0
-            try {
-              const computedStyle = window.getComputedStyle(editorElementRef.value)
-              const minHeightCss = computedStyle.minHeight || '0px'
-              if (minHeightCss.endsWith('px')) minHeightPx = parseFloat(minHeightCss)
-            } catch {
-              /* ignore */
-            }
-            const targetHeight = Math.max(contentHeight, minHeightPx)
-            editorElementRef.value.style.height = `${Math.ceil(targetHeight)}px`
-            try {
-              editor.layout()
-            } catch {
-              /* ignore */
+            editor.focus()
+            const model = editor.getModel()
+            if (model) {
+              const lineCount = Math.max(1, model.getLineCount())
+              try {
+                // Place caret at end of last line and reveal it in the
+                // viewport so keyboard input starts at the end.
+                editor.setPosition({
+                  lineNumber: lineCount,
+                  column: model.getLineMaxColumn(lineCount)
+                })
+                editor.revealPositionInCenterIfOutsideViewport({ lineNumber: lineCount, column: 1 })
+              } catch {
+                /* ignore */
+              }
             }
           } catch {
             /* ignore */
@@ -254,70 +212,12 @@ function initializeMonacoEditor(): void {
       } catch {
         /* ignore */
       }
-    })
-  )
-  // Debug: log key events to ensure keyboard reaches the editor
-  try {
-    // Skip attaching low-level key handlers here to avoid casting to `any`.
-    // If you need key-level debugging, enable it temporarily in a local
-    // branch or add a more specific type declaration for the Monaco editor.
-  } catch {
-    /* ignore */
-  }
-  // If this cell is currently selected, ensure the editor is writable (unless locked)
-  try {
-    if (cellSelection.selectedCellId === props.cell.id) {
-      const shouldBeReadOnly = !!isCellLocked.value
+
+      // After focusing, ensure the editor is writable if the cell isn't
+      // locked. We call updateOptions again defensively in case theme/font
+      // application above touched options.
       try {
-        editor.updateOptions({ readOnly: shouldBeReadOnly })
-        // Avoid calling editor.getOption (requires stronger types). We have
-        // confirmed updateOptions was called; for deeper inspection enable
-        // a typed Monaco import or run a temporary debug patch.
-        console.debug('[PythonCell] updateOptions called for', props.cell.id)
-      } catch {
-        /* ignore */
-      }
-      // Focus and place caret at the end so keyboard input works immediately.
-      // Do this after a tiny delay so the DOM move has settled.
-      try {
-        setTimeout(() => {
-          try {
-            editor.focus()
-            console.debug('[PythonCell] focus attempt for', props.cell.id)
-            const model = editor.getModel()
-            if (model) {
-              const lineCount = Math.max(1, model.getLineCount())
-              try {
-                editor.setPosition({
-                  lineNumber: lineCount,
-                  column: model.getLineMaxColumn(lineCount)
-                })
-                editor.revealPositionInCenterIfOutsideViewport({
-                  lineNumber: lineCount,
-                  column: 1
-                })
-                console.debug('[PythonCell] moved caret for', props.cell.id)
-              } catch (e) {
-                console.debug('[PythonCell] position error', e)
-              }
-            }
-          } catch (e) {
-            console.debug('[PythonCell] focus error', e)
-          }
-        }, 0)
-      } catch (e) {
-        console.debug('[PythonCell] scheduling focus error', e)
-      }
-      // Force writable for selected cell (double-check)
-      try {
-        if (!isCellLocked.value) {
-          try {
-            editor.updateOptions({ readOnly: false })
-            console.debug('[PythonCell] forced readOnly=false for', props.cell.id)
-          } catch (e) {
-            console.debug('[PythonCell] error forcing readOnly=false', e)
-          }
-        }
+        if (!isCellLocked.value) editor.updateOptions({ readOnly: false })
       } catch {
         /* ignore */
       }
@@ -325,18 +225,18 @@ function initializeMonacoEditor(): void {
   } catch {
     /* ignore */
   }
-  // Now switch to the desired theme
-  applyMonacoTheme(selectedMonacoThemeId.value)
-  // Ensure font options are respected after creation as well
+
+  // Apply the selected theme and font settings. These are best-effort and
+  // non-fatal — failures here should not break the component.
   try {
-    editor.updateOptions({
-      fontFamily: fontStore.fonts.codingFont,
-      fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
-    })
+    applyMonacoTheme(selectedMonacoThemeId.value)
+    editor.updateOptions({ fontFamily, fontSize: fontSizePx })
   } catch {
     /* ignore */
   }
-  // Defensive: ensure placeholder source appears if model started empty
+
+  // If the editor model started empty but the cell has source text, write
+  // that source into the editor so the cell shows meaningful content.
   try {
     if (editor && !editor.getValue() && props.cell.source) {
       isApplyingLocalEdit = true
@@ -348,62 +248,52 @@ function initializeMonacoEditor(): void {
   } catch {
     /* ignore */
   }
-  // No outer-scroller caret-following helpers: Monaco will manage its own internal viewport.
-  // Sync editor container height to content height for auto-grow
-  const updateEditorHeightToContent = (): void => {
-    if (!editor || !editorElementRef.value) return
-    const contentHeight = editor.getContentHeight()
-    let minHeightPx = 0
-    try {
-      const computedStyle = window.getComputedStyle(editorElementRef.value)
-      const minHeightCss = computedStyle.minHeight || '0px'
-      if (minHeightCss.endsWith('px')) {
-        minHeightPx = parseFloat(minHeightCss)
+}
+
+/**
+ * scheduleInitializeMonacoEditor
+ * Ensures we only initialize Monaco when the mount node is attached to the
+ * document. Vue may move DOM nodes during reorders which can cause Monaco to
+ * render into a node that is not yet connected. This helper defers the
+ * initialization until the node is connected (with a retry loop) and then
+ * forces a layout shortly after creation.
+ */
+function scheduleInitializeMonacoEditor(): void {
+  if (editor || isUnmounting) return
+  // Postpone until nextTick so Vue has applied DOM updates for reorders
+  void nextTick(() => {
+    let retries = 0
+    const MAX_RETRIES = 12 // ~600ms at 50ms interval
+    const RETRY_MS = 50
+
+    const tryInit = (): void => {
+      if (editor || isUnmounting) return
+      const mount = editorElementRef.value
+      const attached = !!(mount && (mount.isConnected || document.contains(mount)))
+      if (attached) {
+        try {
+          initializeMonacoEditor()
+          // Force a layout after a short delay so Monaco renders correctly
+          setTimeout(() => {
+            try {
+              if (editor) editor.layout()
+            } catch {
+              /* ignore */
+            }
+          }, 50)
+        } catch {
+          /* ignore */
+        }
+      } else if (retries < MAX_RETRIES) {
+        retries += 1
+        setTimeout(tryInit, RETRY_MS)
+      } else {
+        // Give up silently if the mount never appeared; this is non-fatal.
       }
-    } catch {
-      /* ignore */
     }
-    const targetHeight = Math.max(contentHeight, minHeightPx)
-    editorElementRef.value.style.height = `${Math.ceil(targetHeight)}px`
-    editor.layout()
-  }
-  // Update on content size changes
-  // Use content height from the event to resize container precisely.
-  disposables.push(
-    editor.onDidContentSizeChange((e: { contentHeight: number }) => {
-      if (!editorElementRef.value) return
-      try {
-        const contentHeight = e?.contentHeight ?? editor.getContentHeight()
-        let minHeightPx = 0
-        try {
-          const computedStyle = window.getComputedStyle(editorElementRef.value)
-          const minHeightCss = computedStyle.minHeight || '0px'
-          if (minHeightCss.endsWith('px')) minHeightPx = parseFloat(minHeightCss)
-        } catch {
-          /* ignore */
-        }
-        const targetHeight = Math.max(contentHeight, minHeightPx)
-        editorElementRef.value.style.height = `${Math.ceil(targetHeight)}px`
-        try {
-          editor.layout()
-        } catch {
-          /* ignore */
-        }
-      } catch {
-        /* ignore */
-      }
-    })
-  )
-  // No custom caret/outside-scroll handling: rely on Monaco's built-in behavior.
-  // Initial apply
-  updateEditorHeightToContent()
-  // Re-layout on container width changes
-  if (editorElementRef.value && 'ResizeObserver' in window) {
-    resizeObserver = new ResizeObserver(() => {
-      updateEditorHeightToContent()
-    })
-    resizeObserver.observe(editorElementRef.value)
-  }
+
+    tryInit()
+  })
 }
 
 // Per-cell Monaco instances are created and disposed by this component.
@@ -412,48 +302,14 @@ onMounted(() => {
   // Use lazy loader so Monaco and its workers are only fetched when needed
   // Initialize only if this cell is selected at mount time
   if (cellSelection.selectedCellId === props.cell.id) {
-    // Initialize Monaco eagerly
-    void initializeMonacoEditor()
+    // Initialize Monaco eagerly, but schedule to ensure the mount node is attached
+    void scheduleInitializeMonacoEditor()
   }
 
-  // Observe visibility of the editor container so we can hybernate/destroy
-  // Monaco instances when the cell scrolls out of view (to save memory).
-  try {
-    if (editorElementRef.value && 'IntersectionObserver' in window) {
-      visibilityObserver = new IntersectionObserver(
-        (entries) => {
-          const e = entries[0]
-          const nowVisible = !!e && e.isIntersecting
-          isVisible.value = nowVisible
-          // If the cell becomes invisible and it is not selected, destroy the editor
-          if (!nowVisible && cellSelection.selectedCellId !== props.cell.id) {
-            try {
-              disposeEditorInstance()
-            } catch {
-              /* ignore */
-            }
-            return
-          }
-          // If the cell becomes visible again and there is no editor, initialize
-          // a lightweight read-only editor so the cell renders with syntax
-          // highlighting. If the cell is selected we will make it writable in
-          // the selection watcher.
-          if (nowVisible && !editor) {
-            try {
-              // Initialize a lightweight editor instance now that the cell is visible.
-              initializeMonacoEditor()
-            } catch {
-              /* ignore */
-            }
-          }
-        },
-        { root: null, threshold: 0.05 }
-      )
-      visibilityObserver.observe(editorElementRef.value)
-    }
-  } catch {
-    /* ignore if IO not available */
-  }
+  // Adjust the visibility observer logic to prevent unnecessary disposal
+  // No IntersectionObserver-based disposal: keep editors mounted unless
+  // the notebook changes or the component unmounts. This simplifies lifecycle
+  // and avoids transient disposal during DOM reorders.
 })
 
 // React to notebook changes: initialize editors when this cell's parent notebook
@@ -464,12 +320,12 @@ watch(
     try {
       const currentNb = workspaceStore.currentNotebookId
       // If the notebook owning this cell is now the active notebook, ensure an editor exists.
-      if (parentNbId && parentNbId === currentNb && !editor) {
+      if (parentNbId && parentNbId === currentNb && !editor && !isUnmounting) {
         // Initialize the editor for this python cell even if it's not currently
         // fully visible.
         initializeMonacoEditor()
       }
-      if (parentNbId && parentNbId !== currentNb) {
+      if (parentNbId && parentNbId !== currentNb && !isUnmounting) {
         try {
           if (editor) disposeEditorInstance()
         } catch {
@@ -490,10 +346,10 @@ watch(
   (currentNb) => {
     try {
       const parentNbId = props.parentNotebookId
-      if (parentNbId && parentNbId === currentNb && !editor) {
-        initializeMonacoEditor()
+      if (parentNbId && parentNbId === currentNb && !editor && !isUnmounting) {
+        scheduleInitializeMonacoEditor()
       }
-      if (parentNbId && parentNbId !== currentNb) {
+      if (parentNbId && parentNbId !== currentNb && !isUnmounting) {
         try {
           if (editor) disposeEditorInstance()
         } catch {
@@ -511,6 +367,7 @@ watch(
 
 // Dispose helper used when cell becomes unselected or on unmount
 function disposeEditorInstance(): void {
+  console.log('[PythonCell] disposeEditorInstance start', { cellId: props.cell.id })
   // Release to pool (the pool will either keep the editor for reuse or
   // dispose it depending on current max pool size). Pass the configured
   // max so the pool sizing is consistent.
@@ -561,24 +418,13 @@ function disposeEditorInstance(): void {
     }
   } finally {
     editor = null
+    console.log('[PythonCell] disposeEditorInstance done', { cellId: props.cell.id })
   }
 }
 
-// Clean up visibility observer when component is destroyed
+// No-op: we don't use an IntersectionObserver anymore.
 function disconnectVisibilityObserver(): void {
-  if (visibilityObserver && editorElementRef.value) {
-    try {
-      visibilityObserver.unobserve(editorElementRef.value)
-    } catch {
-      /* ignore */
-    }
-    try {
-      visibilityObserver.disconnect()
-    } catch {
-      /* ignore */
-    }
-    visibilityObserver = null
-  }
+  /* intentionally left blank */
 }
 
 // Theme reactivity: when dark mode or selected theme changes,
@@ -653,9 +499,11 @@ watch(
   () => [props.cell.cellInputContent, props.cell.source] as const,
   ([nextInput, nextSource]) => {
     if (!editor) return
-    if (isApplyingLocalEdit) return
+    if (isApplyingLocalEdit) return // Do not echo local edits back
     // Prefer explicit input content; otherwise fall back to original source text
     const targetValue = nextInput ?? nextSource ?? ''
+    // Normalize text for comparison: convert CRLF -> LF, NBSP -> space,
+    // and strip trailing newlines so we only treat meaningful changes as diffs.
     const normalize = (s: string): string =>
       s
         .replace(/\r\n/g, '\n')
@@ -675,7 +523,10 @@ watch(isCellLocked, (locked) => {
   editor.updateOptions({ readOnly: locked })
 })
 
+let isUnmounting = false
+
 onBeforeUnmount(() => {
+  isUnmounting = true
   disposeEditorInstance()
   disconnectVisibilityObserver()
 })
@@ -689,7 +540,7 @@ watch(
       // selected now
       // Initialize (or reuse) the editor, then ensure it's writable & focused
       // Initialize sync and then focus after a tick
-      initializeMonacoEditor()
+      scheduleInitializeMonacoEditor()
       void nextTick(() => {
         setTimeout(() => {
           try {
@@ -707,21 +558,22 @@ watch(
         }, 0)
       })
     } else if (oldId === props.cell.id) {
-      // just unselected: if the cell remains visible, keep the editor around
-      // (so it stays visible and responsive); if it is not visible, dispose it
-      if (!isVisible.value) {
-        disposeEditorInstance()
-      } else {
-        // If still visible, switch to read-only to avoid accidental edits
-        try {
-          if (editor) editor.updateOptions({ readOnly: true })
-        } catch {
-          /* ignore */
-        }
+      // just unselected: keep the editor mounted to avoid churn; make it read-only
+      try {
+        if (editor) editor.updateOptions({ readOnly: true })
+      } catch {
+        /* ignore */
       }
     }
   }
 )
+
+// If a store-level reordering operation starts, cancel any pending dispose
+// timers immediately so components don't accidentally dispose while the
+// DOM is being patched/moved. Also, avoid scheduling new disposals while
+// reordering is active (handled in the IntersectionObserver callback).
+// Previously we cleared pending visibility disposals when reordering started.
+// Since we removed visibility-based disposal, there's no need for this watcher.
 </script>
 
 <style scoped>

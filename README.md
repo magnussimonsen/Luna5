@@ -168,9 +168,19 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 
 ---
 # 🖼️ Current UI Progress Snapshots and dev updates
+**2025-09-28**
+Fix: Editors disappearing when moving Python cells
+We fixed a bug where the code editor inside a cell could go blank when you moved cells up or down. The app used to remove editors when a cell briefly went out of view during a move; that occasionally destroyed the editor at the wrong time. We removed that behavior and now keep editors in place (and only create them once their container is ready), so reordering no longer makes editors disappear. This may use a little more memory; if needed we can later add a safe cleanup/pooling solution. (But currently I do not know why this bug happended in the first place, but it has something to do with the "moving cell up or down"-functionality combined with the functions that destroys the monaco editor for cells that are no longer in view, to save memory).
+
+Also: prepared a new theme store (not yet active) at colorThemeStoreTestingNewSchema.ts; made many large UI tweaks and refactored the CSS to make it more modular and easier to maintain, including: reworked the CSS for cell borders (global border radius variable added and streamlined CSS for buttons/flex-rows) across cell types, menubar, toolbar and sidebar, and added a placeholder sidepanel for a future local LLM client (e.g., Ollama).
+
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-28.png" alt="" width="900" />
+</p>
 
 **2025-09-23**
-- **Sidepanel CSS:** Made sidepanel layouts consistent so inner panels scroll properly (`sidepanel-flex-column-overflow-y` + `sidepanel-container-inside-resize-border-padding`).
+
+**Sidepanel CSS:** Made sidepanel layouts consistent so inner panels scroll properly (`sidepanel-flex-column-overflow-y` + `sidepanel-container-inside-resize-border-padding`).
 - **TOC:** Now finds headings up to `h6`, scrolls the page to the top of the heading smoothly, and briefly highlights the target.
 - **Dark mode (checkboxes):** Checkboxes get a dark look using `accent-color`; the "Enable line numbers" checkbox is wired to `themeStore.isDarkMode`.
 - **Component fixes:** Fixed broken single-file components and corrected imports (notably `Divider.vue` and `SettingsPanelSelectorRow.vue`).
