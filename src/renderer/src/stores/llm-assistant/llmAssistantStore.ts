@@ -38,7 +38,7 @@ export const useLlmAssistantStore = defineStore('llmAssistant', () => {
       this.connectionFlag = flag
     }, // ERROR: Object is possibly 'undefined'.
 
-    // gettersand setters to call workspace store such that we can only import this store in components
+    // getters and setters to call workspace store such that we can only import this store in components
     // that need to interact with the LLM assistant.
     getRunLlmAssistantCommand: () => workspace.getRunLlmAssistantCommand,
     getUseLlmAssistantStoreServerPath: () => workspace.getUseLlmAssistantStoreServerPath,
