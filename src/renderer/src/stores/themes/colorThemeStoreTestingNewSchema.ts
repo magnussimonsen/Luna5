@@ -25,10 +25,10 @@ import { defineStore } from 'pinia'
 // ----------------------
 type Mode = 'light' | 'dark'
 type DualColor = { light: string; dark: string }
-export type ThemeColorTypes = Record<string, string>
+export type ThemeColorTypesV2 = Record<string, string>
 
 /**
- * Descriptive palette keys; only "bg" is abbreviated (as you asked).
+ * Descriptive palette keys
  */
 type Palette = {
   PrimaryBg: DualColor
@@ -118,15 +118,15 @@ const basePalette: Palette = {
 // ----------------------
 // Helpers
 // ----------------------
-function extractPalette(mode: Mode): ThemeColorTypes {
-  const out: ThemeColorTypes = {}
+function extractPalette(mode: Mode): ThemeColorTypesV2 {
+  const out: ThemeColorTypesV2 = {}
   for (const [k, v] of Object.entries(basePalette) as [keyof Palette, DualColor][]) {
     out[k] = v[mode]
   }
   return out
 }
 
-function setCssVars(map: ThemeColorTypes): void {
+function setCssVars(map: ThemeColorTypesV2): void {
   const root = document.documentElement
   for (const [key, value] of Object.entries(map)) {
     const varName = '--' + key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
@@ -137,7 +137,7 @@ function setCssVars(map: ThemeColorTypes): void {
 // ----------------------
 // Store with your original action names
 // ----------------------
-export const useThemeStore = defineStore('theme', {
+export const useThemeStoreV2 = defineStore('theme', {
   state: () => {
     const lightTokens = extractPalette('light')
     const darkTokens = extractPalette('dark')
@@ -159,21 +159,21 @@ export const useThemeStore = defineStore('theme', {
       this.applyTheme(themeColors)
     },
 
-    setLightTheme(colors: ThemeColorTypes) {
+    setLightTheme(colors: ThemeColorTypesV2) {
       const derived = extractPalette('light')
       this.isDarkMode = false
       this.lightTheme = { ...derived, ...colors }
       this.applyTheme(this.lightTheme)
     },
 
-    setDarkTheme(colors: ThemeColorTypes) {
+    setDarkTheme(colors: ThemeColorTypesV2) {
       const derived = extractPalette('dark')
       this.isDarkMode = true
       this.darkTheme = { ...derived, ...colors }
       this.applyTheme(this.darkTheme)
     },
 
-    applyTheme(colors: ThemeColorTypes) {
+    applyTheme(colors: ThemeColorTypesV2) {
       setCssVars(colors)
       const root = document.documentElement
       root.dataset.theme = this.isDarkMode ? 'dark' : 'light'

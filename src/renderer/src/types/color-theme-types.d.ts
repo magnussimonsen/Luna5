@@ -3,6 +3,9 @@
 // This file defines the ThemeColors type used in the color theme store
 // and ensures that the color theme is consistent across the application.
 
+// This file will be replaced by the types from  colorThemeStoreTestingNewSchema.ts
+// once that store is fully adopted and the old one removed.
+
 export type ThemeColorTypes = {
   // Palette (branding / accent colors)
   lunaPalatte1: string

@@ -43,6 +43,7 @@ Design tokens (layout/spacing/metrics)
 
     /* Menubar button */
     --menubar-button-padding: 0.2em 0.4em;
+    /*--menubar-button-radius: 0.50em; Use --button-border-radius */
     /* t r b l */
     --menubar-button-logo-padding: 0em 0.1em 0em 0.3em;
     /* t r b l */
