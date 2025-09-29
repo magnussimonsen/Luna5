@@ -93,7 +93,7 @@
   cursor: pointer;
   border: var(--border-thickness, 2px) solid var(--button-border-color, var(--debug-color, red));
   padding: var(--sidepanel-button-padding);
-  border-radius: var(--border-radius, 2px);
+  border-radius: var(--button-border-radius, 0.25em);
   border: 0px solid var(--side-panel-border-color, #ccc);
   /* Custom button background styling - overrides sidepanel-color-font-styling */
   background: var(--button-transparent-off-color, var(--debug-color, red));
@@ -170,6 +170,7 @@
   cursor: pointer;
   padding: var(--sidepanel-notebook-item-padding);
   border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--button-border-color, #ccc);
+  border-radius: var(--button-border-radius, 0.35em);
 }
 
 .sidepanel__notebook-item-transparent-border { /* USE THIS FOR TITLES IN SIDEPANEL */

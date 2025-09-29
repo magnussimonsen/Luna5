@@ -372,6 +372,7 @@ const resetFontSizeBtnStyle = computed(() => ({
   border-radius: var(--status-bar-button-radius, 2px);
   font: inherit; /* inherit reactive ui font + size from footer */
   cursor: pointer;
+  border-radius: var(--button-border-radius, 0.25em);
 }
 
 .btn-status-bar:hover {

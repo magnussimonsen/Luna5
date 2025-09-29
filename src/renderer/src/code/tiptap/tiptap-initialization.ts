@@ -1,6 +1,9 @@
+// src\renderer\src\types\tiptap-types.d.ts
 import { Editor } from '@tiptap/vue-3'
 import type { Editor as CoreEditor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
+import type { TiptapDocumentConfig } from '@renderer/types/tiptap-types'
+import type { Extension } from '@tiptap/core'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
@@ -39,7 +42,14 @@ export function createTiptapEditor(options: {
     editable,
     content,
     extensions: [
-      StarterKit.configure({}),
+      StarterKit.configure({
+        // @ts-expect-error TipTap types do not allow document config, but it works at runtime
+        document: { content: 'block*' } as TiptapDocumentConfig,
+        trailingNode: {
+          node: 'paragraph',
+          notAfter: ['heading']
+        }
+      }) as unknown as Extension,
       Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' }),
       // Enable the built-in highlight extension with multicolor support
       Highlight.configure({ multicolor: true }),

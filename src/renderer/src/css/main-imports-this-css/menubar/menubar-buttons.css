@@ -13,6 +13,7 @@
     font-size: var(--menubar-font-size); 
     font-family: var(--ui-font);
     color: var(--ui-text-color, var(--debug-color));
+    border-radius: var(--button-border-radius, 0.50em);
 }
 
 .menubar-button:hover {
