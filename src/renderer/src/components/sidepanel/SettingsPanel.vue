@@ -27,7 +27,7 @@ import GraphicalCalculatorSettingsPanel from './settings-components/GraphicalCal
 import SpreadsheetsSettingsPanel from './settings-components/SpreadsheetsSettingsPanel.vue'
 import ProbabilitySettingsPanel from './settings-components/ProbabilitySettingsPanel.vue'
 import TextEditorPanel from './settings-components/TextEditorPanel.vue'
-import LLMAssistantPanel from './settings-components/LLMAssistantPanel.vue' 
+import LLMAssistantPanel from './settings-components/LLMAssistantSettingsPanel.vue' 
 //import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 
 type SettingsPage =

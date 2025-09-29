@@ -31,7 +31,7 @@ import NotebooksPanel from './NotebooksPanel.vue'
 import TOCPanel from './TOCPanel.vue'
 import VariablesPanel from './VariablesPanel.vue'
 import SettingsPanel from './SettingsPanel.vue'
-import LocalLMMClientPanel from './LLMAssistant.vue'
+import LocalLMMClientPanel from './LLMAssistantPanel.vue'
 
 const sidepanelStore = useSidepanelStore()
 const panelWidth = ref(sidepanelStore.lastPanelWidth)

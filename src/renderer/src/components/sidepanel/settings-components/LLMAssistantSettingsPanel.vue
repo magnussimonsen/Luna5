@@ -67,6 +67,10 @@
       <ImplementedMark :implemented="false" />
     </div>
     <hr />
+    When test connection is clicked and connectionFlag is true and the LLM assistan chat will be
+    enabled in the LLM sidepanel. Luna then runs "ollama list" in the background and a list of
+    models is fetched to populate the dropdown list of available models in the LLM assistant chat
+    sidepanel.
     <p>Dev check for reactivity run Command Field: {{ runCommandField }}</p>
     <p>Dev check for reactivity server Path Field: {{ serverPathField }}</p>
   </div>
