@@ -170,7 +170,11 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 **2024-09-29**
 Added basic link support. Failed to get Ctrl+Click working—plain clicks still open the browser, which is irritating. Modifier‑click + tooltip postponed. 
 
-Added `.button-row-flex-wrap-base-inline` (with `--active`) to wrap small pop‑up editor groups (e.g. the link URL input) so they shrink to content and get a clear mode border without layout jank. Full‑width rows now use a transparent 2px border (`.button-row-flex-wrap-base--transparent-border`) so activating a cluster just swaps the border color without layout jank. This is a pattern we can reuse for future mini editors in the top toolbar (color picker, math, etc.). Screenshots below show the link cluster toggled on and off.
+Added `.button-row-flex-wrap-base-inline` (with `--active`) to wrap small pop‑up editor groups (e.g. the link URL input) so they shrink to content and get a clear mode border without layout jank. Full‑width rows now use a transparent 2px border (`.button-row-flex-wrap-base--transparent-border`) so activating a cluster just swaps the border color—no shift. 
+
+Reused the same pattern for the table controls: the Insert Table button now lives in a cluster that, when the caret is inside a table, activates (border) and reveals row / column / delete buttons; when outside, only the insert button is shown. This pattern will scale for future mini editors (color picker, math, etc.). 
+
+Screenshots below show the link cluster and the insert table cluster toggled on and off.
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-29-1.png" alt="" width="900" /> 
 </p>

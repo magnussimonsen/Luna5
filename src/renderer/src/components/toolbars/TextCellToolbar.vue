@@ -268,96 +268,91 @@
       @click="toggleHighlight('blue-highlighting')"
     ></button>
 
-    <!-- Table controls with disabled states -->
-
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-table top-toolbar__button--transparent-when-disabled"
-      type="button"
-      title="Insert 3x3 table"
-      aria-label="Insert table"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="insertTable"
-    ></button>
-    <button
-      :class="[
-        'top-toolbar__button',
-        'top-toolbar__button--icon',
-        'top-toolbar__button--transparent-when-disabled',
-        { 'top-toolbar__button--disabled': !isTableActive },
-        'icon-insert-table-row-below'
-      ]"
-      type="button"
-      title="Add row after"
-      aria-label="Add row"
-      :disabled="
-        !activeTextEditor || !isTableActive || isCellLockedComputed || isCellHiddenComputed
-      "
-      @click="addRow"
-    ></button>
-    <button
-      :class="[
-        'top-toolbar__button',
-        'top-toolbar__button--icon',
-        'top-toolbar__button--transparent-when-disabled',
-        { 'top-toolbar__button--disabled': !isTableActive },
-        'icon-insert-table-column-right'
-      ]"
-      type="button"
-      title="Add column after"
-      aria-label="Add column"
-      :disabled="
-        !activeTextEditor || !isTableActive || isCellLockedComputed || isCellHiddenComputed
-      "
-      @click="addColumn"
-    ></button>
-    <button
-      :class="[
-        'top-toolbar__button',
-        'top-toolbar__button--icon',
-        'top-toolbar__button--transparent-when-disabled',
-        { 'top-toolbar__button--disabled': !isTableActive },
-        'icon-delete-table-row'
-      ]"
-      type="button"
-      title="Delete row"
-      aria-label="Delete row"
-      :disabled="
-        !activeTextEditor || !isTableActive || isCellLockedComputed || isCellHiddenComputed
-      "
-      @click="deleteRow"
-    ></button>
-    <button
-      :class="[
-        'top-toolbar__button',
-        'top-toolbar__button--icon',
-        'top-toolbar__button--transparent-when-disabled',
-        { 'top-toolbar__button--disabled': !isTableActive },
-        'icon-delete-table-column'
-      ]"
-      type="button"
-      title="Delete column"
-      aria-label="Delete column"
-      :disabled="
-        !activeTextEditor || !isTableActive || isCellLockedComputed || isCellHiddenComputed
-      "
-      @click="deleteColumn"
-    ></button>
-    <button
-      :class="[
-        'top-toolbar__button',
-        'top-toolbar__button--icon',
-        'top-toolbar__button--transparent-when-disabled',
-        { 'top-toolbar__button--disabled': !isTableActive },
-        'icon-delete-table'
-      ]"
-      type="button"
-      title="Delete table"
-      aria-label="Delete table"
-      :disabled="
-        !activeTextEditor || !isTableActive || isCellLockedComputed || isCellHiddenComputed
-      "
-      @click="deleteTable"
-    ></button>
+    <!-- Table controls cluster (mirrors link cluster pattern). Shows only insert button when not inside a table; reveals row/column/delete controls and active border when within a table -->
+    <div
+      class="button-row-flex-wrap-base-inline"
+      :class="{
+        'button-row-flex-wrap-base-inline button-row-flex-wrap-base-inline--active': isTableActive
+      }"
+    >
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-table top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isTableActive }"
+        title="Insert 3x3 table"
+        aria-label="Insert table"
+        :aria-pressed="isTableActive ? 'true' : 'false'"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="insertTable"
+      ></button>
+      <template v-if="isTableActive">
+        <button
+          :class="[
+            'top-toolbar__button',
+            'top-toolbar__button--icon',
+            'top-toolbar__button--transparent-when-disabled',
+            'icon-insert-table-row-below'
+          ]"
+          type="button"
+          title="Add row after"
+          aria-label="Add row"
+          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          @click="addRow"
+        ></button>
+        <button
+          :class="[
+            'top-toolbar__button',
+            'top-toolbar__button--icon',
+            'top-toolbar__button--transparent-when-disabled',
+            'icon-insert-table-column-right'
+          ]"
+          type="button"
+          title="Add column after"
+          aria-label="Add column"
+          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          @click="addColumn"
+        ></button>
+        <button
+          :class="[
+            'top-toolbar__button',
+            'top-toolbar__button--icon',
+            'top-toolbar__button--transparent-when-disabled',
+            'icon-delete-table-row'
+          ]"
+          type="button"
+          title="Delete row"
+          aria-label="Delete row"
+          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          @click="deleteRow"
+        ></button>
+        <button
+          :class="[
+            'top-toolbar__button',
+            'top-toolbar__button--icon',
+            'top-toolbar__button--transparent-when-disabled',
+            'icon-delete-table-column'
+          ]"
+          type="button"
+          title="Delete column"
+          aria-label="Delete column"
+          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          @click="deleteColumn"
+        ></button>
+        <button
+          :class="[
+            'top-toolbar__button',
+            'top-toolbar__button--icon',
+            'top-toolbar__button--transparent-when-disabled',
+            'icon-delete-table'
+          ]"
+          type="button"
+          title="Delete table"
+          aria-label="Delete table"
+          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          @click="deleteTable"
+        ></button>
+      </template>
+    </div>
 
     <!-- visual separator -->
 
