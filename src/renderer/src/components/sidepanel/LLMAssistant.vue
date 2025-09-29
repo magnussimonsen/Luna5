@@ -3,7 +3,7 @@
     <strong
       :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-color-font-styling']"
     >
-      Local LLM Client
+      Chat with local LLMs
     </strong>
 
     <!-- Divider -->
@@ -15,7 +15,7 @@
         'sidepanel-color-font-styling'
       ]"
     >
-      This is a UI client for running local LLMs using ollama.
+      This is a UI client for running local LLMs using Ollama.
     </div>
   </div>
 </template>

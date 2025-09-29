@@ -74,6 +74,15 @@
       >
         Code editor (Python)
       </button>
+      <button
+        :class="[
+          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
+          { 'sidepanel__button--active': currentPage === 'llm-assistant' }
+        ]"
+        @click="emitUpdate('llm-assistant')"
+      >
+        LLM assistant
+      </button>
     </div>
   </div>
   <Divider />
@@ -93,6 +102,7 @@ type SettingsPage =
   | 'probability'
   | 'text-editor'
   | 'code'
+  | 'llm-assistant'
 
 // const props = defineProps<{ currentPage: SettingsPage; fontSize?: string }>()
 const props = defineProps<{ currentPage: SettingsPage }>()

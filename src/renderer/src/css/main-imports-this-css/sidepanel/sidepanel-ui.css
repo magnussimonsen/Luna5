@@ -99,6 +99,13 @@
   background: var(--button-transparent-off-color, var(--debug-color, red));
 }
 
+.sidepanel__button--border {
+  border: var(--sidepanel-button-border, 20px solid blue);
+}
+.sidepanel__button--box-shadow {
+  box-shadow: var(--sidepanel-button-box-shadow, 4px 4px 8px rgba(0, 0, 0, 0.25));
+}
+
 .sidepanel__button--active {
     background: var(--button-on-color, var(--debug-color, #2563eb));
     color: var(--text-color);

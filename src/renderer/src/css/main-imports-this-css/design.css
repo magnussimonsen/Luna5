@@ -145,7 +145,8 @@ Design tokens (layout/spacing/metrics)
     /* Buttons / clickables (deduplicated; keep the larger padding) */
     --sidepanel-button-padding: 0.3em 0.4em;
     /* t r b l */
-    --sidepanel-button-border: 0px solid var(--button-border-color, transparent);
+    --sidepanel-button-border: 1px solid black;
+    --sidepanel-button-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
 
     /* Dividers */
     --sidepanel-divider-height: 0px;

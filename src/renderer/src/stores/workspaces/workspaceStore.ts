@@ -98,6 +98,10 @@ interface LunaState {
   // Future: UI state like
   numberOfCellsVisible: number
   numberOfCodeCellsVisible: number
+  // LLM assistant persistent settings (migrated into workspace)
+  runLlmAssistantCommand: string
+  useLlmAssistantStoreServerPath: string
+  connectionFlag: boolean
 }
 
 export const useWorkspaceStore = defineStore('workspace', {
@@ -120,7 +124,12 @@ export const useWorkspaceStore = defineStore('workspace', {
     inputChangesSinceLastSave: 0,
     //  UI state like
     numberOfCellsVisible: 0,
-    numberOfCodeCellsVisible: 0
+    numberOfCodeCellsVisible: 0,
+    // LM assistant states is set here
+    runLlmAssistantCommand: '',
+    useLlmAssistantStoreServerPath: '',
+    // connection flag for the Ollama/LLM server
+    connectionFlag: false
   }),
   getters: {
     getCurrentNotebook: (state): Notebook | null => {
@@ -157,6 +166,16 @@ export const useWorkspaceStore = defineStore('workspace', {
     },
     getNumberOfCodeCellsVisible: (state): number => {
       return state.numberOfCodeCellsVisible
+    },
+    // LLM assistant getters (migrated from llmAssistant store)
+    getRunLlmAssistantCommand: (state): string => {
+      return state.runLlmAssistantCommand
+    },
+    getUseLlmAssistantStoreServerPath: (state): string => {
+      return state.useLlmAssistantStoreServerPath
+    },
+    getConnectionFlag: (state): boolean => {
+      return state.connectionFlag
     }
   },
   actions: {
@@ -185,6 +204,16 @@ export const useWorkspaceStore = defineStore('workspace', {
       } else {
         workspace.recycleBin.lastSelectedNotebookId = undefined
       }
+    },
+    // --- LLM assistant setters (migrated) ---
+    setRunLlmAssistantCommand(command: string): void {
+      this.runLlmAssistantCommand = command
+    },
+    setLlmAssistantServerPath(path: string): void {
+      this.useLlmAssistantStoreServerPath = path
+    },
+    setConnectionFlag(flag: boolean): void {
+      this.connectionFlag = flag
     },
     // Helper: first non-soft-deleted cell id in a notebook
     _getFirstActiveCellId(workspace: Workspace, notebookId: string): string | null {

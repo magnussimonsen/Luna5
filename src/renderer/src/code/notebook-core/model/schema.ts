@@ -51,4 +51,7 @@ export interface Workspace {
   // UI/session metadata for Notebooks view
   // Remember which notebook was last selected in the Notebooks view
   lastSelectedNotebookIdNotebooks?: string
+  // Remember the run command and the server path for the LLM assistant (ollama)
+  runLlmAssistantCommand?: string
+  useLlmAssistantStoreServerPath?: string
 }
