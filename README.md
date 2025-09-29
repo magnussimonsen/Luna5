@@ -181,6 +181,9 @@ Screenshots below show the link cluster and the insert table cluster toggled on 
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-29-2.png" alt="" width="900" /> 
 </p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-29-3.png" alt="" width="900" /> 
+</p>
 
 
 **2025-09-28**

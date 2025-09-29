@@ -49,7 +49,7 @@ No padding, gap, or margin defined here; these should be set in design.css
   width: auto; /* shrink to fit content */
   height: fit-content;
   box-sizing: border-box;
-  border: solid 2px transparent;
+  border: solid 2px 0 2px 0 transparent;
  }
 
 .button-row-flex-wrap-base-inline--active

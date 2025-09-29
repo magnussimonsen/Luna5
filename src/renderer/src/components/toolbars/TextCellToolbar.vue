@@ -123,6 +123,7 @@
       :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
       @click="toggleHeading(4)"
     ></button>
+
     <!-- REMOVE HEADING 5 
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-heading-5"
@@ -134,89 +135,7 @@
       @click="toggleHeading(5)"
     ></button>
     -->
-    <!-- INSERT / EDIT LINK -->
-    <div
-      class="button-row-flex-wrap-base-inline"
-      :class="{
-        'button-row-flex-wrap-base-inline button-row-flex-wrap-base-inline--active':
-          linkInputVisible
-      }"
-    >
-      <button
-        ref="linkButtonEl"
-        class="top-toolbar__button top-toolbar__button--icon icon-link top-toolbar__button--transparent-when-disabled"
-        type="button"
-        :class="{ 'top-toolbar__button--active': isLinkActive || linkInputVisible }"
-        :title="
-          linkInputVisible
-            ? 'Close link editor'
-            : isLinkActive
-              ? 'Edit or remove link'
-              : 'Insert link'
-        "
-        :aria-label="
-          linkInputVisible
-            ? 'Close link editor'
-            : isLinkActive
-              ? 'Edit or remove link'
-              : 'Insert link'
-        "
-        :aria-pressed="isLinkActive || linkInputVisible ? 'true' : 'false'"
-        :aria-expanded="linkInputVisible ? 'true' : 'false'"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-        @click="onClickLinkButton"
-      ></button>
-      <div v-if="linkInputVisible" class="inline-link-editor">
-        <input
-          ref="linkInputEl"
-          v-model="linkUrlInput"
-          type="text"
-          class="inline-link-editor__input"
-          placeholder="https://example.com"
-          @keyup.enter.prevent="applyLinkFromInput"
-          @keyup.esc.prevent="cancelLinkUI"
-        />
-        <button
-          type="button"
-          class="top-toolbar__button top-toolbar__button--transparent-when-disabled"
-          title="Apply link"
-          @click="applyLinkFromInput"
-        >
-          {{ isLinkActive ? 'Update link' : 'Add link' }}
-        </button>
-        <button
-          v-if="isLinkActive"
-          type="button"
-          class="top-toolbar__button top-toolbar__button--transparent-when-disabled"
-          title="Cancel link editing"
-          @click="removeLinkViaUI"
-        >
-          Remove link
-        </button>
-      </div>
-    </div>
-    <!-- button placeholder for insert image-->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"
-      type="button"
-      title="Insert image (coming soon)"
-      aria-label="Insert image (coming soon)"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="() => {}"
-    ></button>
 
-    <!-- Highlight buttons: fixed four tokens; background set by resolver -->
-    <!-- ORANGE REMOVED 
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-highlight-pen"
-      type="button"
-      :style="{ backgroundColor: resolveHighlightColor('orange-highlighting', isDarkMode) }"
-      :class="{ 'is-active': isHighlightActive('orange-highlighting') }"
-      title="Highlight Orange"
-      aria-label="Highlight Orange"
-      @click="toggleHighlight('orange-highlighting')"
-    ></button>
-    -->
     <button
       type="button"
       :style="{ backgroundColor: resolveHighlightColor('red-highlighting', isDarkMode) }"
@@ -267,6 +186,19 @@
       :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
       @click="toggleHighlight('blue-highlighting')"
     ></button>
+
+    <!-- Highlight buttons: fixed four tokens; background set by resolver -->
+    <!-- ORANGE REMOVED 
+    <button
+      class="top-toolbar__button top-toolbar__button--icon icon-highlight-pen"
+      type="button"
+      :style="{ backgroundColor: resolveHighlightColor('orange-highlighting', isDarkMode) }"
+      :class="{ 'is-active': isHighlightActive('orange-highlighting') }"
+      title="Highlight Orange"
+      aria-label="Highlight Orange"
+      @click="toggleHighlight('orange-highlighting')"
+    ></button>
+    -->
 
     <!-- Table controls cluster (mirrors link cluster pattern). Shows only insert button when not inside a table; reveals row/column/delete controls and active border when within a table -->
     <div
@@ -354,7 +286,76 @@
       </template>
     </div>
 
-    <!-- visual separator -->
+    <!-- INSERT / EDIT LINK -->
+    <div
+      class="button-row-flex-wrap-base-inline"
+      :class="{
+        'button-row-flex-wrap-base-inline button-row-flex-wrap-base-inline--active':
+          linkInputVisible
+      }"
+    >
+      <button
+        ref="linkButtonEl"
+        class="top-toolbar__button top-toolbar__button--icon icon-link top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isLinkActive || linkInputVisible }"
+        :title="
+          linkInputVisible
+            ? 'Close link editor'
+            : isLinkActive
+              ? 'Edit or remove link'
+              : 'Insert link'
+        "
+        :aria-label="
+          linkInputVisible
+            ? 'Close link editor'
+            : isLinkActive
+              ? 'Edit or remove link'
+              : 'Insert link'
+        "
+        :aria-pressed="isLinkActive || linkInputVisible ? 'true' : 'false'"
+        :aria-expanded="linkInputVisible ? 'true' : 'false'"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="onClickLinkButton"
+      ></button>
+      <div v-if="linkInputVisible" class="inline-link-editor">
+        <input
+          ref="linkInputEl"
+          v-model="linkUrlInput"
+          type="text"
+          class="inline-link-editor__input"
+          placeholder="https://example.com"
+          @keyup.enter.prevent="applyLinkFromInput"
+          @keyup.esc.prevent="cancelLinkUI"
+        />
+        <button
+          type="button"
+          class="top-toolbar__button top-toolbar__button--transparent-when-disabled"
+          title="Apply link"
+          @click="applyLinkFromInput"
+        >
+          {{ isLinkActive ? 'Update link' : 'Add link' }}
+        </button>
+        <button
+          v-if="isLinkActive"
+          type="button"
+          class="top-toolbar__button top-toolbar__button--transparent-when-disabled"
+          title="Cancel link editing"
+          @click="removeLinkViaUI"
+        >
+          Remove link
+        </button>
+      </div>
+    </div>
+    <!-- button placeholder for insert image-->
+    <button
+      class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"
+      type="button"
+      title="Insert image (coming soon)"
+      aria-label="Insert image (coming soon)"
+      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+      @click="() => {}"
+    ></button>
 
     <!-- Math (placeholder) -->
     <button

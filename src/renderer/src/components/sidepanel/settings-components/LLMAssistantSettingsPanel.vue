@@ -67,14 +67,18 @@
       <ImplementedMark :implemented="false" />
     </div>
     <hr />
-    <p>When test connection is clicked and connectionFlag is true, the LLM assistant chat will be
-    enabled in the LLM sidepanel. Luna then runs "ollama list" command in the background and a list of
-    models is fetched to populate the dropdown list of available models in the LLM assistant chat
-    sidepanel.</p>
+    <p>
+      When test connection is clicked and connectionFlag is true, the LLM assistant chat will be
+      enabled in the LLM sidepanel. Luna then runs "ollama list" command in the background and a
+      list of models is fetched to populate the dropdown list of available models in the LLM
+      assistant chat sidepanel.
+    </p>
 
-    <p>We may keep the run command as a fallback command if the user has a custom setup.
-    If run command field is empty, we assume "ollama run --model--" where model is selected in the chat
-    sidepanel.</p>
+    <p>
+      We may keep the run command as a fallback command if the user has a custom setup. If run
+      command field is empty, we assume "ollama run --model--" where model is selected in the chat
+      sidepanel.
+    </p>
     <p>Dev check for reactivity run Command Field: {{ runCommandField }}</p>
     <p>Dev check for reactivity server Path Field: {{ serverPathField }}</p>
   </div>
