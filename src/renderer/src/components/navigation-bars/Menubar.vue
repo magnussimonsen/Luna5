@@ -274,8 +274,8 @@
       </div>
       <div
         class="menubar-button"
-        :class="{ active: sidepanelStore.activePanel === 'localLLMclient' }"
-        @click="handleTogglePanel('localLLMclient')"
+        :class="{ active: sidepanelStore.activePanel === 'localLlmClient' }"
+        @click="handleTogglePanel('localLlmClient')"
       >
         <span class="icon-local-llm-client" aria-hidden="true"></span>
         <!-- <span class="sr-only">Settings</span> -->

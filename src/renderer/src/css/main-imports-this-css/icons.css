@@ -9,6 +9,8 @@
     --icon-local-llm-client: '🤖';
     --icon-help: '?';
     --icon-python: '🐍';
+    --icon-cancel: '❌';
+    --icon-check: '✓';
     /* Text / formatting */
     --icon-bold: '𝐁';
     --icon-italic: '𝙄';
@@ -50,16 +52,6 @@
     --icon-math-katex-block: 'Insert KaTeX';
     --icon-math-katex-inline: 'Insert Katex Inline';
 
-/* Icon utility classes (global) */
-.icon, .icon-flag, .icon-move-up, .icon-move-down, .icon-settings, .icon-help, .icon-python {
-    display: inline-block;
-    line-height: 1;
-    font-size: 1em;
-    vertical-align: middle;
-    /* Inherit color so theme changes propagate */
-    color: currentColor;
-}
-
 /* Placeholder icon */
 .icon-empty-toolbar::before { content: var(--icon-empty-toolbar); }
 
@@ -71,6 +63,8 @@
 .icon-help::before { content: var(--icon-help); }
 .icon-python::before { content: var(--icon-python); }
 .icon-local-llm-client::before { content: var(--icon-local-llm-client); }
+.icon-cancel::before { content: var(--icon-cancel); }
+.icon-check::before { content: var(--icon-check); }
 
 /* Text editor icons (use CSS variables so we can override easily) */
 .icon-bold::before { content: var(--icon-bold); }

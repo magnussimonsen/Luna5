@@ -18,7 +18,7 @@ The top toolbar container that holds the toolbars for the selected cell.
 
     z-index: var(--top-toolbar-z-index, 2000);
 
-    padding: var(--top-toolbar-container-padding, 0.2em 0.5em);
+    padding: var(--top-toolbar-container-padding, 0.5em 0.5em);
 
     margin-bottom: var(--top-toolbar-margin-bottom, min(5px,0.5em));
 }

@@ -9,7 +9,7 @@
     
     background: transparent;
 
-    border: var(--top-toolbar-button-border);
+    border: var(--top-toolbar-button-border); /* e.g. "2px solid transparent" */
     border-radius: var(--button-border-radius, min(4px, 0.5em));
     height: var(--top-toolbar-button-height, 1em);
     min-width: var(--top-toolbar-button-min-width, 1em);
@@ -33,8 +33,9 @@
   font-family: var(--ui-font);
 }
 
-.top-toolbar__button:active,
-.top-toolbar__button--active:active {
+/* Persistent active state (formatting toggled on). Previously missing so
+   buttons like Bold/Italic never visually appeared active. */
+.top-toolbar__button--active {
   background: var(--button-on-color, var(--debug-color));
   color: var(--ui-text-color, var(--debug-color));
   font-size: var(--top-toolbar-font-size);

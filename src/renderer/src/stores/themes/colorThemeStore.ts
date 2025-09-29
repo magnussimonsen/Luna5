@@ -68,7 +68,7 @@ export const useThemeStore = defineStore('theme', {
 
       // Run / action buttons
       runcodeBackgroundColor: 'lightgreen',
-      runcodeHoverBackgroundColor: '#8d8d8dff',
+      runcodeHoverBackgroundColor: '#aaaaaa',
 
       // Standard buttons
       buttonBackgroundColor: 'transparent',
@@ -88,7 +88,7 @@ export const useThemeStore = defineStore('theme', {
 
       // Reset / destructive buttons
       buttonResetColor: 'darksalmon',
-      buttonResetHoverColor: 'tomato',
+      buttonResetHoverColor: '#aaaaaa',
       deleteButtonHoverColor: 'firebrick',
 
       // Soft lock / locked UI

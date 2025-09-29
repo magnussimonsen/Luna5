@@ -16,7 +16,7 @@ export const useSidepanelStore = defineStore('sidepanel', () => {
     'variables',
     'help',
     'settings',
-    'localLLMclient'
+    'localLlmClient'
   ]
   const activePanel = ref<PanelName | null>(null)
 

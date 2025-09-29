@@ -11,7 +11,7 @@
       <SpreadsheetsSettingsPanel v-else-if="currentPage === 'spreadsheets'" />
       <ProbabilitySettingsPanel v-else-if="currentPage === 'probability'" />
       <TextEditorPanel v-else-if="currentPage === 'text-editor'" />
-      <LLMAssistantPanel v-else-if="currentPage === 'llm-assistant'" />
+      <LlmAssistantSettingsPanel v-else-if="currentPage === 'llm-assistant'" />
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@ import GraphicalCalculatorSettingsPanel from './settings-components/GraphicalCal
 import SpreadsheetsSettingsPanel from './settings-components/SpreadsheetsSettingsPanel.vue'
 import ProbabilitySettingsPanel from './settings-components/ProbabilitySettingsPanel.vue'
 import TextEditorPanel from './settings-components/TextEditorPanel.vue'
-import LLMAssistantPanel from './settings-components/LLMAssistantSettingsPanel.vue' 
+import LlmAssistantSettingsPanel from './settings-components/LlmAssistantSettingsPanel.vue'
 //import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 
 type SettingsPage =

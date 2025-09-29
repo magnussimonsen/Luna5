@@ -11,7 +11,7 @@
     ]"
   >
     <strong :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']"
-      >LLM Assistant Settings</strong
+      >LLM Assistant Settings (Work in Progress)</strong
     >
     <ol class="llm-assistant-steps sidepanel-bottom-row-margin">
       <li>
@@ -33,7 +33,7 @@
         :class="{ 'sidepanel__setting-row--dark-mode': themeStore.isDarkMode }"
         placeholder="e.g., ollama run llama2"
       />
-      <ImplementedMark :implemented="true" />
+      <ImplementedMark :implemented="false" />
     </div>
     <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label for="llm-server-path">Ollama server URL:</label>
@@ -44,7 +44,7 @@
         :class="{ 'sidepanel__setting-row--dark-mode': themeStore.isDarkMode }"
         placeholder="e.g., http://localhost:1234"
       />
-      <ImplementedMark :implemented="true" />
+      <ImplementedMark :implemented="false" />
     </div>
     <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <button
@@ -67,10 +67,14 @@
       <ImplementedMark :implemented="false" />
     </div>
     <hr />
-    When test connection is clicked and connectionFlag is true and the LLM assistan chat will be
-    enabled in the LLM sidepanel. Luna then runs "ollama list" in the background and a list of
+    <p>When test connection is clicked and connectionFlag is true, the LLM assistant chat will be
+    enabled in the LLM sidepanel. Luna then runs "ollama list" command in the background and a list of
     models is fetched to populate the dropdown list of available models in the LLM assistant chat
-    sidepanel.
+    sidepanel.</p>
+
+    <p>We may keep the run command as a fallback command if the user has a custom setup.
+    If run command field is empty, we assume "ollama run --model--" where model is selected in the chat
+    sidepanel.</p>
     <p>Dev check for reactivity run Command Field: {{ runCommandField }}</p>
     <p>Dev check for reactivity server Path Field: {{ serverPathField }}</p>
   </div>

@@ -6,6 +6,17 @@ Base styles for button rows that need to wrap flexibly.
 No padding, gap, or margin defined here; these should be set in design.css
 */
 
+/*
+  2025-09-29 (Inline variant note)
+  Added `.button-row-flex-wrap-base-inline` plus the state modifier
+  `.button-row-flex-wrap-base-inline--active` for sub-groups inside a
+  toolbar (e.g. the link button + its inline link editor). The base
+  class stretches to full width; the inline variant shrinks to its
+  content so multiple clusters can sit side-by-side without forcing
+  a line break. Apply the `--active` modifier when the owning control
+  (e.g. link mode) is toggled to visually delineate the inline group.
+*/
+
 .button-row-flex-wrap-base {
   display: flex;
   flex-wrap: wrap;
@@ -15,6 +26,36 @@ No padding, gap, or margin defined here; these should be set in design.css
   box-sizing: border-box; /* Include padding and border in element's total width and height */
   /*background-color: var(--button-row-background-color, transparent);  Default to transparent if not set */
   /* No padding, gap, or margin here; set in design.css */
+}
+
+/* Rows that do not have .button-row-flex-wrap-base-inline need this style in order for
+   all rows to have the same height. Currently(29-09-2025) only used in top-toolbar */
+.button-row-flex-wrap-base--transparent-border {
+  border: solid 2px transparent;
+  border-radius: var(--button-border-radius, min(4px, 0.5em));
+}
+
+/* Inline-flow variant: For toolbar children that needs to be
+  marked as active with active colored border when mother button is active.
+  For example link input field controls that appear when link button is toggled on.
+*/
+
+.button-row-flex-wrap-base-inline
+ {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  width: auto; /* shrink to fit content */
+  height: fit-content;
+  box-sizing: border-box;
+  border: solid 2px transparent;
+ }
+
+.button-row-flex-wrap-base-inline--active
+ { 
+  border: solid 2px var(--button-on-color, var(--debug-color));
+  border-radius: var(--button-border-radius, min(4px, 0.5em));
 }
 
 .button-row-flex-wrap-base:disabled {

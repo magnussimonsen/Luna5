@@ -1,4 +1,3 @@
-<!-- src\renderer\src\components\toolbars\TextCellToolbar.vue -->
 <template>
   <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
        currently selected cell's editor via the store. ...-->
@@ -135,15 +134,67 @@
       @click="toggleHeading(5)"
     ></button>
     -->
-    <!-- button placeholder for insert link-->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-link top-toolbar__button--transparent-when-disabled"
-      type="button"
-      title="Insert link (coming soon)"
-      aria-label="Insert link (coming soon)"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="() => {}"
-    ></button>
+    <!-- INSERT / EDIT LINK -->
+    <div
+      class="button-row-flex-wrap-base-inline"
+      :class="{
+        'button-row-flex-wrap-base-inline button-row-flex-wrap-base-inline--active':
+          linkInputVisible
+      }"
+    >
+      <button
+        ref="linkButtonEl"
+        class="top-toolbar__button top-toolbar__button--icon icon-link top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isLinkActive || linkInputVisible }"
+        :title="
+          linkInputVisible
+            ? 'Close link editor'
+            : isLinkActive
+              ? 'Edit or remove link'
+              : 'Insert link'
+        "
+        :aria-label="
+          linkInputVisible
+            ? 'Close link editor'
+            : isLinkActive
+              ? 'Edit or remove link'
+              : 'Insert link'
+        "
+        :aria-pressed="isLinkActive || linkInputVisible ? 'true' : 'false'"
+        :aria-expanded="linkInputVisible ? 'true' : 'false'"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="onClickLinkButton"
+      ></button>
+      <div v-if="linkInputVisible" class="inline-link-editor">
+        <input
+          ref="linkInputEl"
+          v-model="linkUrlInput"
+          type="text"
+          class="inline-link-editor__input"
+          placeholder="https://example.com"
+          @keyup.enter.prevent="applyLinkFromInput"
+          @keyup.esc.prevent="cancelLinkUI"
+        />
+        <button
+          type="button"
+          class="top-toolbar__button top-toolbar__button--transparent-when-disabled"
+          title="Apply link"
+          @click="applyLinkFromInput"
+        >
+          {{ isLinkActive ? 'Update link' : 'Add link' }}
+        </button>
+        <button
+          v-if="isLinkActive"
+          type="button"
+          class="top-toolbar__button top-toolbar__button--transparent-when-disabled"
+          title="Cancel link editing"
+          @click="removeLinkViaUI"
+        >
+          Remove link
+        </button>
+      </div>
+    </div>
     <!-- button placeholder for insert image-->
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"
@@ -189,7 +240,7 @@
         'top-toolbar__button--icon',
         'top-toolbar__button--highlight',
         'icon-highlight-pen',
-          'top-toolbar__button--transparent-when-disabled',
+        'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--highlight-active': isHighlightActive('green-highlighting') }
       ]"
       type="button"
@@ -206,7 +257,7 @@
         'top-toolbar__button--icon',
         'top-toolbar__button--highlight',
         'icon-highlight-pen',
-          'top-toolbar__button--transparent-when-disabled',
+        'top-toolbar__button--transparent-when-disabled',
         { 'top-toolbar__button--highlight-active': isHighlightActive('blue-highlighting') }
       ]"
       type="button"
@@ -339,13 +390,14 @@
  * the editor instance via the selection + textEditors stores so the toolbar
  * can live anywhere in the component tree.
  */
-import { computed, unref } from 'vue'
+import { computed, unref, ref, nextTick, watch, onBeforeUnmount } from 'vue'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import type { Editor } from '@tiptap/vue-3'
 import type { HeadingLevel } from '@renderer/types/heading-level-type'
 import type { HighlightColor } from '../../types/highlight-colors-types'
 import { resolveHighlightColor } from '../../code/highlight/highlight-colors'
+//import { link } from 'fs'
 
 // Stores
 const themeStore = useThemeStore()
@@ -376,15 +428,16 @@ const isCellLockedComputed = computed(
 )
 const isCellHiddenComputed = computed(() => !!unref(props.isCellHidden))
 
+// A shared ref that increments on editor selection / transaction changes so
+// isActive-style helpers become reactive.
+const selectionVersion = ref(0)
+
 function isHighlightActive(color: string): boolean {
-  // Simplified active check: toolbar now always applies resolved hex values,
-  // so we only need to check the editor for the concrete hex. Keep a try/catch
-  // to defensively handle editors that may not expose the mark in some contexts.
+  void selectionVersion.value
   const resolved = resolveHighlightColor(color as HighlightColor, isDarkMode.value)
   if (!activeTextEditor.value) return false
-  const edAny = activeTextEditor.value as any
   try {
-    return !!edAny.isActive('highlight', { color: resolved })
+    return !!(activeTextEditor.value as any).isActive('highlight', { color: resolved })
   } catch {
     return false
   }
@@ -531,13 +584,191 @@ function placeholderKaTeX(): void {
   console.log('KaTeX button in toolbar clicked.  Feature coming soon!')
 }
 
-// Active state helpers
+// Active state helpers (reactive via selectionVersion)
 function isActive(markOrNode: string, attrs?: Record<string, unknown>): boolean {
+  void selectionVersion.value
   return !!activeTextEditor.value?.isActive(markOrNode, attrs)
 }
 function isActiveHeading(level: number): boolean {
-  const result = !!activeTextEditor.value?.isActive('heading', { level })
-  console.log('isActiveHeading', level, result)
-  return result
+  void selectionVersion.value
+  return !!activeTextEditor.value?.isActive('heading', { level })
 }
+
+// ---------------------------------------------------------------------------
+// Link handling (simplified)
+const isLinkActive = computed(() => {
+  void selectionVersion.value
+  return !!activeTextEditor.value?.isActive('link')
+})
+const linkInputVisible = ref(false)
+const linkUrlInput = ref('')
+const linkInputEl = ref<HTMLInputElement | null>(null)
+
+function normalizeUrl(raw: string): string {
+  const s = raw.trim()
+  if (!s) return ''
+  return /^(https?:|mailto:|#|\/)/i.test(s) ? s : `https://${s}`
+}
+
+function focusLinkInput(): void {
+  void nextTick(() => {
+    try {
+      linkInputEl.value?.focus()
+      linkInputEl.value?.select()
+    } catch {
+      /* ignore */
+    }
+  })
+}
+
+function onClickLinkButton(): void {
+  // Toggle behavior: if editor is already visible, close it.
+  if (linkInputVisible.value) {
+    linkInputVisible.value = false
+    return
+  }
+  const ed: any = activeTextEditor.value
+  if (!ed) return
+  if (isLinkActive.value) {
+    linkUrlInput.value = ed.getAttributes('link')?.href || ''
+  } else {
+    const { from, to } = ed.state.selection
+    const selText = (ed.state.doc as any).textBetween(from, to, ' ')
+    linkUrlInput.value = selText && selText.length < 150 ? selText : ''
+  }
+  linkInputVisible.value = true
+  focusLinkInput()
+}
+
+function clearStoredLinkMark(ed: any): void {
+  try {
+    const linkType = ed.state.schema.marks.link
+    if (linkType) {
+      ed.view.dispatch(ed.state.tr.removeStoredMark(linkType))
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
+function moveCaretToEnd(ed: any): void {
+  try {
+    const endPos = ed.state.selection.to
+    ed.commands.setTextSelection(endPos)
+  } catch {
+    /* ignore */
+  }
+}
+
+function applyLinkFromInput(): void {
+  const ed: any = activeTextEditor.value
+  if (!ed) return
+  const finalUrl = normalizeUrl(linkUrlInput.value)
+
+  // Remove link if url cleared
+  if (!finalUrl) {
+    if (isLinkActive.value) {
+      ed.chain().focus().extendMarkRange('link').unsetLink().run()
+    }
+    linkInputVisible.value = false
+    return
+  }
+
+  const { from, to } = ed.state.selection
+  if (isLinkActive.value) {
+    ed.chain().focus().extendMarkRange('link').setLink({ href: finalUrl }).run()
+  } else if (from === to) {
+    // Insert text for URL then apply link
+    ed.chain()
+      .focus()
+      .insertContent(finalUrl)
+      .setTextSelection({ from, to: from + finalUrl.length })
+      .setLink({ href: finalUrl })
+      .run()
+  } else {
+    ed.chain().focus().setLink({ href: finalUrl }).run()
+  }
+
+  moveCaretToEnd(ed)
+  clearStoredLinkMark(ed)
+  linkInputVisible.value = false
+}
+
+function removeLinkViaUI(): void {
+  const ed: any = activeTextEditor.value
+  if (!ed) return
+  ed.chain().focus().extendMarkRange('link').unsetLink().run()
+  linkInputVisible.value = false
+}
+
+function cancelLinkUI(): void {
+  linkInputVisible.value = false
+}
+
+// ---------------------------------------------------------------------------
+// Selection / transaction event bridging for reactivity
+const detachHandlers: Array<() => void> = []
+watch(
+  () => activeTextEditor.value,
+  (editor) => {
+    while (detachHandlers.length) {
+      try {
+        detachHandlers.pop()?.()
+      } catch {
+        /* ignore */
+      }
+    }
+    if (!editor) return
+    const events = ['selectionUpdate', 'transaction', 'update', 'focus', 'blur']
+    events.forEach((evt) => {
+      const handler = (): void => {
+        if (!(handler as any)._scheduled) {
+          ;(handler as any)._scheduled = true
+          requestAnimationFrame(() => {
+            ;(handler as any)._scheduled = false
+            selectionVersion.value++
+          })
+        }
+      }
+      ;(editor as any).on(evt, handler)
+      detachHandlers.push(() => {
+        try {
+          ;(editor as any).off(evt, handler)
+        } catch {
+          /* ignore */
+        }
+      })
+    })
+    selectionVersion.value++
+  },
+  { immediate: true }
+)
+
+onBeforeUnmount(() => {
+  while (detachHandlers.length) {
+    try {
+      detachHandlers.pop()?.()
+    } catch {
+      /* ignore */
+    }
+  }
+})
 </script>
+
+<style scoped>
+.inline-link-editor {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 0px 4px;
+}
+.inline-link-editor__input {
+  font: inherit;
+  padding: 0px 4px;
+  min-width: 180px;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: var(--border-radius, 4px);
+  background: transparent;
+  color: var(--text-color, #222);
+}
+</style>

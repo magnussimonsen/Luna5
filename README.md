@@ -167,6 +167,20 @@ See also: [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for a consolidated 
 
 ---
 # 🖼️ Current UI Progress Snapshots and dev updates
+**2024-09-29**
+Added basic link support. Failed to get Ctrl+Click working—plain clicks still open the browser, which is irritating. Modifier‑click + tooltip postponed. 
+
+Also added .button-row-flex-wrap-base-inline plus --active to wrap small pop‑up editor groups (like the link URL input) so they show a clear is-active-mode border without janking layout. 
+
+Added sub classes for .button-row-flex-wrap-base with transparent 2px border for consistent height, so turning a child cluster on just swaps border color—no shift. Result: cleaner grouping, no wobble, easier to add future mini editors (color, math, etc.). Screenshots below where link button is toggled  on and off illustrate this.
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-29-1.png" alt="" width="900" /> 
+</p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-09-29-2.png" alt="" width="900" /> 
+</p>
+
+
 **2025-09-28**
 Fix: Editors disappearing when moving Python cells
 We fixed a bug where the code editor inside a cell could go blank when you moved cells up or down. The app used to remove editors when a cell briefly went out of view during a move; that occasionally destroyed the editor at the wrong time. We removed that behavior and now keep editors in place (and only create them once their container is ready), so reordering no longer makes editors disappear. This may use a little more memory; if needed we can later add a safe cleanup/pooling solution. (But currently I do not know why this bug happended in the first place, but it has something to do with the "moving cell up or down"-functionality combined with the functions that destroys the monaco editor for cells that are no longer in view, to save memory).

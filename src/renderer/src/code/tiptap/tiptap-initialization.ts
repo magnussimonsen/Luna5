@@ -12,6 +12,7 @@ import TableCell from '@tiptap/extension-table-cell'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
 import Highlight from '@tiptap/extension-highlight'
+import Link from '@tiptap/extension-link'
 // Subscript/superscript are optional
 // Math (custom) - dynamically imported or added when dependency installed
 import type { Transaction } from 'prosemirror-state'
@@ -53,6 +54,14 @@ export function createTiptapEditor(options: {
       Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' }),
       // Enable the built-in highlight extension with multicolor support
       Highlight.configure({ multicolor: true }),
+      // Link support (added for toolbar Insert Link button). We disable openOnClick so
+      // users can keep typing without the system browser opening accidentally.
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        linkOnPaste: true,
+        HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' }
+      }),
       Table.configure({ resizable: true }),
       TableRow,
       TableHeader,
