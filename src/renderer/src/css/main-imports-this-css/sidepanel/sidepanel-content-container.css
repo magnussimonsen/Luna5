@@ -10,4 +10,5 @@ NO PADDING HERE
   display: flex;
   flex-direction: column;
   background: var(--sidepanel-background, var(--debug-color), red);
+  overflow: hidden;
 }

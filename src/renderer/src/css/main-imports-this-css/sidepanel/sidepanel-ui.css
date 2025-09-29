@@ -158,6 +158,7 @@
   flex: 1 1 auto;   /* fill remaining sidepanel space */
   min-height: 0;    /* allow children to shrink (important) */
   overflow-y: auto; /* the single scroll container */
+  overflow-x: hidden; /* prevent horizontal scroll */
   gap: var(--sidepanel-column-item-gap);
 }
 

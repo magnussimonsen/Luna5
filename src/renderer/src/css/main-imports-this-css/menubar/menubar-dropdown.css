@@ -13,7 +13,7 @@
   border: none;
   padding: var( --menubar-dropdown-trigger-padding, 0.3em 0.6em 0.3em 0.6em); /* top, right, bottom, left */
   cursor: pointer;
-  border-radius: var(--menubar-dropdown-trigger-border-radius, 0px);
+  border-radius: var(--button-border-radius, min(4px, 0.5em));
 
   font-size: var(--menubar-font-size);  
   font-family: var(--ui-font);

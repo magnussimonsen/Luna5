@@ -10,8 +10,7 @@
     background: transparent;
 
     border: var(--top-toolbar-button-border);
-    border-radius: var(--top-toolbar-button-radius, 0);
-
+    border-radius: var(--button-border-radius, min(4px, 0.5em));
     height: var(--top-toolbar-button-height, 1em);
     min-width: var(--top-toolbar-button-min-width, 1em);
     cursor: pointer;

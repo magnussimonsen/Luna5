@@ -16,8 +16,10 @@ Main CSS entry for the renderer
 
 /* Miscellaneous */
 @import './main-imports-this-css/button-row-flex-wrap-base.css';
-@import './main-imports-this-css/implemented-not-implemented.css';
-@import './main-imports-this-css/ascii-spinner.css';
+
+@import './main-imports-this-css/miscellaneous/implemented-not-implemented.css';
+@import './main-imports-this-css/miscellaneous/ascii-spinner.css';
+@import './main-imports-this-css/miscellaneous/hidden-cell-linear-gradient-style.css';
 
 /* Menubar */
 @import './main-imports-this-css/menubar/menubar-colors.css';
@@ -31,7 +33,6 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/top-toolbar/top-toolbar-buttons.css';
 
 /* Cells */
-@import './main-imports-this-css/hidden-cell-linear-gradient-style.css';
 @import './main-imports-this-css/cells/cell-containers-list.css';
 
 /* Workspace */
