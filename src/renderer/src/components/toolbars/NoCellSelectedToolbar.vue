@@ -2,7 +2,7 @@
   <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
        currently selected cell's editor via the store. -->
   <div
-    class="button-row-flex-wrap-base"
+    class="row-flex-wrap-base"
     :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
     aria-label="Placeholder toolbar - no cell selected"

@@ -1,72 +1,73 @@
 <!--src\renderer\src\components\toolbars\PythonCellToolbar.vue-->
 <template>
   <div
-    class="button-row-flex-wrap-base button-row-flex-wrap-base--transparent-border"
+    class="row-flex-wrap-base"
     :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
     aria-label="Python cell toolbar"
   >
-    <!-- Run button with spinner when running -->
-    <button
-      class="top-toolbar__button top-toolbar__button--runcode"
-      :class="{ 'top-toolbar__button--runcode-is-running': isRunning }"
-      type="button"
-      :disabled="!canRun || isRunning || isCellLockedComputed || isCellHiddenComputed"
-      :title="isRunning ? 'Run (working)…' : 'Run selected Python cell (Ctrl + Enter)'"
-      @click="() => onRun(false)"
-    >
-      <span class="ascii-spinner" :style="{ visibility: isRunning ? 'visible' : 'hidden' }">
-        {{ spinnerChar }}
-      </span>
-      <span class="label">Run python code</span>
-      <span class="spin-wrap" aria-hidden="true"> </span>
-    </button>
-    <!-- Clear python outputs  -->
-    <button
-      class="top-toolbar__button"
-      :class="{ 'top-toolbar__button--active': !canRun }"
-      type="button"
-      :disabled="!canRun || isRunning || isCellLockedComputed || isCellHiddenComputed"
-      :title="'Delete output (Ctrl + Shift + Enter)'"
-      @click="onClearOutputs"
-    >
-      <span class="label">Delete output from selected cell</span>
-    </button>
-    <!-- Core idea: (not implemented yet)
+    <div class="row-flex-wrap-base-child util-transparent-border">
+      <button
+        class="top-toolbar__button top-toolbar__button--runcode"
+        :class="{ 'top-toolbar__button--runcode-is-running': isRunning }"
+        type="button"
+        :disabled="!canRun || isRunning || isCellLockedComputed || isCellHiddenComputed"
+        :title="isRunning ? 'Run (working)…' : 'Run selected Python cell (Ctrl + Enter)'"
+        @click="() => onRun(false)"
+      >
+        <span class="ascii-spinner" :style="{ visibility: isRunning ? 'visible' : 'hidden' }">
+          {{ spinnerChar }}
+        </span>
+        <span class="label">Run code</span>
+        <span class="spin-wrap" aria-hidden="true"> </span>
+      </button>
+      <!-- Clear python outputs  -->
+      <button
+        class="top-toolbar__button"
+        :class="{ 'top-toolbar__button--active': !canRun }"
+        type="button"
+        :disabled="!canRun || isRunning || isCellLockedComputed || isCellHiddenComputed"
+        :title="'Delete output (Ctrl + Shift + Enter)'"
+        @click="onClearOutputs"
+      >
+        <span class="label">Remove output</span>
+      </button>
+      <!-- Core idea: (not implemented yet)
     Add Button that when pressed opens a electron built in "modal" with theese options: 
     (1) Export code from selected cell 
     (2) Export code from selected notebook 
      -->
-    <button
-      class="top-toolbar__button top-toolbar__button--disabled"
-      type="button"
-      title="Export code from selected cell (not implemented)"
-      @click="onCodeExport"
-    >
-      <span class="label">Export code</span>
-    </button>
+      <button
+        class="top-toolbar__button top-toolbar__button--disabled"
+        type="button"
+        title="Export code from selected cell (not implemented)"
+        @click="onCodeExport"
+      >
+        <span class="label">Export code</span>
+      </button>
 
-    <!-- Section: Using margin-left-auto instead of flex-end -->
-    <!-- <div
-      class="button-row-flex-wrap-base flex-end"
+      <!-- Section: Using margin-left-auto instead of flex-end -->
+      <!-- <div
+      class="row-flex-wrap-base flex-end"
       :class="{ 'is-dark': isDarkMode }"
       role="toolbar"
       aria-label="Python cell toolbar"
     >
     -->
-    <button
-      class="top-toolbar__button top-toolbar__button--reset"
-      type="button"
-      :disabled="!canReset || isCellLockedComputed || isCellHiddenComputed"
-      :title="
-        isRunning
-          ? 'Reset Python worker'
-          : 'Reset Python worker and clear outputs for selected Python cell'
-      "
-      @click="onReset"
-    >
-      Reset python
-    </button>
+      <button
+        class="top-toolbar__button top-toolbar__button--reset"
+        type="button"
+        :disabled="!canReset || isCellLockedComputed || isCellHiddenComputed"
+        :title="
+          isRunning
+            ? 'Reset Python worker'
+            : 'Reset Python worker and clear outputs for selected Python cell'
+        "
+        @click="onReset"
+      >
+        Reset python
+      </button>
+    </div>
   </div>
   <!-- </div> -->
 </template>

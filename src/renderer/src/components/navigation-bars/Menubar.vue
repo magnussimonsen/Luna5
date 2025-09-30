@@ -1,6 +1,6 @@
 <template>
   <div
-    class="button-row-flex-wrap-base flex-start menubar-colors menubar-right-padding"
+    class="row-flex-wrap-base flex-start menubar-colors menubar-right-padding"
     role="menubar"
     aria-label="Application main menu"
   >
@@ -242,7 +242,7 @@
     <!-------------------------------------------------------------------------------------------->
     <!-- Right side: Side panel toggles: Notebooks, TOC, Variables, Flashcards, Settings, Help -->
     <!-------------------------------------------------------------------------------------------->
-    <div class="button-row-flex-wrap-base margin-left-auto">
+    <div class="row-flex-wrap-base margin-left-auto">
       <div
         class="menubar-button"
         :class="{ active: sidepanelStore.activePanel === 'notebooks' }"

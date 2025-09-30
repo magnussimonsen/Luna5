@@ -17,7 +17,7 @@ No padding, gap, or margin defined here; these should be set in design.css
   (e.g. link mode) is toggled to visually delineate the inline group.
 */
 
-.button-row-flex-wrap-base {
+.row-flex-wrap-base {   /* Change name to row-flex-wrap-base !!! */
   display: flex;
   flex-wrap: wrap;
   align-items: center; /* Vertically center items */
@@ -25,40 +25,34 @@ No padding, gap, or margin defined here; these should be set in design.css
   height: fit-content; /* Height adjusts based on content */
   box-sizing: border-box; /* Include padding and border in element's total width and height */
   /*background-color: var(--button-row-background-color, transparent);  Default to transparent if not set */
-  /* No padding, gap, or margin here; set in design.css */
+  gap: 0.2em 0em;
+  padding: 2px 0em; /* Vertical padding only */
 }
 
-/* Rows that do not have .button-row-flex-wrap-base-inline need this style in order for
-   all rows to have the same height. Currently(29-09-2025) only used in top-toolbar */
-.button-row-flex-wrap-base--transparent-border {
-  border: solid 2px transparent;
-  border-radius: var(--button-border-radius, min(4px, 0.5em));
-}
-
-/* Inline-flow variant: For toolbar children that needs to be
-  marked as active with active colored border when mother button is active.
-  For example link input field controls that appear when link button is toggled on.
-*/
-
-.button-row-flex-wrap-base-inline
- {
+/* Child of row-flex-wrap-base to apply padding and border not width 100% */
+.row-flex-wrap-base-child{
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  width: auto; /* shrink to fit content */
   height: fit-content;
   box-sizing: border-box;
-  border: solid 2px 0 2px 0 transparent;
- }
-
-.button-row-flex-wrap-base-inline--active
- { 
-  border: solid 2px var(--button-on-color, var(--debug-color));
+  gap: 0.2em 0em;
+  padding: 0em 0em;
+  margin: 0em 0em;
+}
+.util-transparent-border {
+  border: solid 2px transparent;
+  border-left: 0px solid transparent;
+  border-right: 0px solid transparent;
   border-radius: var(--button-border-radius, min(4px, 0.5em));
 }
 
-.button-row-flex-wrap-base:disabled {
+.util-active-border {
+  border: solid 2px var(--button-on-color, var(--debug-color));
+  border-radius: var(--button-border-radius, min(4px, 0.5em));
+} 
+
+.row-flex-wrap-base:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   user-select: none;
@@ -66,7 +60,7 @@ No padding, gap, or margin defined here; these should be set in design.css
 }
 
 /* This class extends button-row-flex-wrap-base  with left margin auto */
-.button-row-flex-wrap-base.margin-left-auto {
+.row-flex-wrap-base.margin-left-auto {
   margin-left: auto;
   /* Do not force full width here; allow the element to size to content so
      `margin-left: auto` pushes it to the right edge of the parent flex container. */
@@ -74,12 +68,12 @@ No padding, gap, or margin defined here; these should be set in design.css
 }
 
 /* This class extends button-row-flex-wrap-base  with flex start alignment */
-.button-row-flex-wrap-base.flex-start {
+.row-flex-wrap-base.flex-start {
   justify-content: flex-start;
 }
 
 /* This class extends button-row-flex-wrap-base  with flex end alignment */
-.button-row-flex-wrap-base.flex-end {
+.row-flex-wrap-base.flex-end {
   justify-content: flex-end;
 }
 
