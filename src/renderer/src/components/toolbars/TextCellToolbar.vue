@@ -1,12 +1,14 @@
 <template>
   <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
        currently selected cell's editor via the store. ...-->
+     
   <div
-    class="button-row-flex-wrap-base"
+    class="row-flex-wrap-base"
     :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
     aria-label="Text cell formatting toolbar"
   >
+  <div class="row-flex-wrap-base-child util-transparent-border">
     <!-- BOLD -->
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-bold top-toolbar__button--transparent-when-disabled"
@@ -186,7 +188,7 @@
       :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
       @click="toggleHighlight('blue-highlighting')"
     ></button>
-
+  </div>
     <!-- Highlight buttons: fixed four tokens; background set by resolver -->
     <!-- ORANGE REMOVED 
     <button
@@ -201,10 +203,11 @@
     -->
 
     <!-- Table controls cluster (mirrors link cluster pattern). Shows only insert button when not inside a table; reveals row/column/delete controls and active border when within a table -->
+    
     <div
-      class="button-row-flex-wrap-base-inline"
+      class="row-flex-wrap-base-child util-transparent-border"
       :class="{
-        'button-row-flex-wrap-base-inline button-row-flex-wrap-base-inline--active': isTableActive
+        'util-active-border': isTableActive
       }"
     >
       <button
@@ -287,13 +290,14 @@
     </div>
 
     <!-- INSERT / EDIT LINK -->
+
     <div
-      class="button-row-flex-wrap-base-inline"
+    class="row-flex-wrap-base-child util-transparent-border"
       :class="{
-        'button-row-flex-wrap-base-inline button-row-flex-wrap-base-inline--active':
+        'util-active-border':
           linkInputVisible
       }"
-    >
+    > 
       <button
         ref="linkButtonEl"
         class="top-toolbar__button top-toolbar__button--icon icon-link top-toolbar__button--transparent-when-disabled"
@@ -347,6 +351,7 @@
         </button>
       </div>
     </div>
+
     <!-- button placeholder for insert image-->
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"

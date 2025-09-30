@@ -1,7 +1,7 @@
 <!--src\renderer\src\components\toolbars\PythonCellToolbar.vue-->
 <template>
   <div
-    class="button-row-flex-wrap-base button-row-flex-wrap-base--transparent-border"
+    class="row-flex-wrap-base row-flex-wrap-base--transparent-border"
     :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
     aria-label="Python cell toolbar"
@@ -48,7 +48,7 @@
 
     <!-- Section: Using margin-left-auto instead of flex-end -->
     <!-- <div
-      class="button-row-flex-wrap-base flex-end"
+      class="row-flex-wrap-base flex-end"
       :class="{ 'is-dark': isDarkMode }"
       role="toolbar"
       aria-label="Python cell toolbar"
