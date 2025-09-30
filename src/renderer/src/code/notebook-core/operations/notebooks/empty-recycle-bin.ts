@@ -1,4 +1,5 @@
 import type { Workspace } from '../../model/schema'
+import { recalculateNotebookCellIndexes } from './add-cell-to-notebook'
 
 /**
  * Permanently clears the recycle bin by hard-deleting:
@@ -8,6 +9,7 @@ import type { Workspace } from '../../model/schema'
  */
 export function emptyRecycleBin(workspace: Workspace): void {
   const rb = workspace.recycleBin
+  const affectedNotebookIds = new Set<string>()
 
   // 1) Hard delete notebooks that are in the recycle bin
   for (const nbId of [...rb.notebookOrder]) {
@@ -40,6 +42,7 @@ export function emptyRecycleBin(workspace: Workspace): void {
       // Remove from notebook order if present
       const idx = notebook.cellOrder.indexOf(cellId)
       if (idx !== -1) notebook.cellOrder.splice(idx, 1)
+      affectedNotebookIds.add(meta.notebookId)
     }
     // Remove the actual cell
     delete workspace.cells[cellId]
@@ -54,4 +57,8 @@ export function emptyRecycleBin(workspace: Workspace): void {
   rb.notebooks = {}
   rb.cellOrder = []
   rb.notebookOrder = []
+
+  for (const notebookId of affectedNotebookIds) {
+    recalculateNotebookCellIndexes(workspace, notebookId)
+  }
 }

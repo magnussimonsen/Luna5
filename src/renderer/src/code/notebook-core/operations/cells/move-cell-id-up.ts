@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import type { Workspace } from '../../model/schema'
+import { recalculateNotebookCellIndexes } from '../notebooks/add-cell-to-notebook'
 
 /**
  * Move a cell ID one position up within the specified notebook's cellOrder.
@@ -21,6 +22,7 @@ export function moveCellIdUp(
   // swap with previous
   ;[order[idx - 1], order[idx]] = [order[idx], order[idx - 1]]
   console.log('[moveCellIdUp] moved', { notebookId, cellId, newOrder: order.slice() })
+  recalculateNotebookCellIndexes(workspace, notebookId)
   return true
 }
 

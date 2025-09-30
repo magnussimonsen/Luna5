@@ -1,4 +1,5 @@
 import type { Workspace, Notebook } from '../../model/schema'
+import { recalculateNotebookCellIndexes } from './add-cell-to-notebook'
 
 /**
  * Restore a soft-deleted notebook from the recycle bin.
@@ -37,5 +38,6 @@ export function restoreNotebookFromBin(workspace: Workspace, notebookId: string)
   const nIdx = workspace.recycleBin.notebookOrder.indexOf(notebookId)
   if (nIdx !== -1) workspace.recycleBin.notebookOrder.splice(nIdx, 1)
 
+  recalculateNotebookCellIndexes(workspace, notebookId)
   return notebookId
 }

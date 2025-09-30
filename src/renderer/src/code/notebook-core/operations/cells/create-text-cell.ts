@@ -8,6 +8,7 @@ export function createTextCell(content = 'New text cell'): TextCell {
   const id = uuid()
   const now = new Date().toISOString()
   return {
+    cellIndex: -1,
     id,
     kind: 'text-cell',
     source: content,

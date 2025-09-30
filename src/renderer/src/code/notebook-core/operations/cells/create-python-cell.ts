@@ -8,6 +8,7 @@ export function createPythonCell(source = '# New Python cell'): PythonCell {
   const id = uuid()
   const now = new Date().toISOString()
   return {
+    cellIndex: -1,
     id,
     kind: 'python-cell',
     language: 'python',

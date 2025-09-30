@@ -22,4 +22,17 @@ export function addCellToNotebook(
 	} else {
 		notebook.cellOrder.push(cell.id)
 	}
+	recalculateNotebookCellIndexes(workspace, notebookId)
+}
+
+export function recalculateNotebookCellIndexes(workspace: Workspace, notebookId: string): void {
+	const notebook = workspace.notebooks[notebookId]
+	if (!notebook) return
+	const { cellOrder } = notebook
+	for (let index = 0; index < cellOrder.length; index += 1) {
+		const cellId = cellOrder[index]
+		const cell = workspace.cells[cellId]
+		if (!cell) continue
+		cell.cellIndex = index
+	}
 }
