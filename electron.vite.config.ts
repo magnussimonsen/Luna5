@@ -16,7 +16,15 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [vue()],
+    plugins: [
+      vue({
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag) => tag === 'math-field'
+          }
+        }
+      })
+    ],
     server: {
       watch: {
         ignored: ['src/renderer/ignore/**'] // Ignore code from Luna4

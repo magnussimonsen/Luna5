@@ -99,35 +99,41 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div id="app-layout">
-    <div ref="menubarRef">
-      <Menubar />
-    </div>
-    <div ref="toolbarRef">
-      <Toolbar />
-    </div>
-    <div class="scroll-container">
-      <div v-if="showMathLivePlayground" class="mathlive-playground-wrapper">
+    <template v-if="showMathLivePlayground">
+      <div class="mathlive-playground-wrapper">
         <MathLivePlayground />
       </div>
-      <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
-        <CellList />
-      </div>
-      <div
-        v-else-if="layoutMode === 'a4Preview'"
-        class="workspace-a4-preview-layout-container"
-        :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }"
-      >
-        A4 preview layout mode (coming soon)
-      </div>
-    </div>
-    <Sidepanel />
+    </template>
+    <template v-else>
+      <div class="scroll-container">
+        <div ref="menubarRef">
+          <Menubar />
+        </div>
 
-    <!-- Global modals (kept at root so they can render overlays) -->
-    <AboutLunaModal v-if="modalStore.isAboutLunaModalOpen" />
+        <div ref="toolbarRef">
+          <Toolbar />
+        </div>
 
-    <div ref="statusbarRef" class="statusbar-container">
-      <Statusbar />
-    </div>
+        <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
+          <CellList />
+        </div>
+        <div
+          v-else-if="layoutMode === 'a4Preview'"
+          class="workspace-a4-preview-layout-container"
+          :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }"
+        >
+          A4 preview layout mode (coming soon)
+        </div>
+      </div>
+      <Sidepanel />
+
+      <!-- Global modals (kept at root so they can render overlays) -->
+      <AboutLunaModal v-if="modalStore.isAboutLunaModalOpen" />
+
+      <div ref="statusbarRef" class="statusbar-container">
+        <Statusbar />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -140,7 +146,6 @@ onBeforeUnmount(() => {
 }
 
 .scroll-container {
-  /* Can be removed i think but keep for now */
   position: relative;
   flex: 1 1 auto; /* take up all available space */
   min-height: 0; /* allow inner scrollers to work */
@@ -159,5 +164,6 @@ onBeforeUnmount(() => {
   padding: 16px;
   display: flex;
   justify-content: center;
+  z-index: 10000;
 }
 </style>
