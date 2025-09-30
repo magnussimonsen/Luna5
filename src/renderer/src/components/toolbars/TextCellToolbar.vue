@@ -1,132 +1,136 @@
 <template>
   <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
        currently selected cell's editor via the store. ...-->
-     
+
   <div
     class="row-flex-wrap-base"
     :class="{ 'is-dark': isDarkMode }"
     role="toolbar"
     aria-label="Text cell formatting toolbar"
   >
-  <div class="row-flex-wrap-base-child util-transparent-border">
-    <!-- BOLD -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-bold top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActive('bold') }"
-      title="Bold (Ctrl+B)"
-      aria-label="Bold"
-      :disabled="!canRunCommand('toggleBold') || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleBold"
-    ></button>
+    <div class="row-flex-wrap-base-child util-transparent-border">
+      <!-- BOLD -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-bold top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActive('bold') }"
+        title="Bold (Ctrl+B)"
+        aria-label="Bold"
+        :disabled="!canRunCommand('toggleBold') || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleBold"
+      ></button>
 
-    <!-- ITALIC -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-italic top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActive('italic') }"
-      title="Italic (Ctrl+I)"
-      aria-label="Italic"
-      :disabled="!canRunCommand('toggleItalic') || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleItalic"
-    ></button>
+      <!-- ITALIC -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-italic top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActive('italic') }"
+        title="Italic (Ctrl+I)"
+        aria-label="Italic"
+        :disabled="!canRunCommand('toggleItalic') || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleItalic"
+      ></button>
 
-    <!-- UNDERLINE -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-underline top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActive('underline') }"
-      title="Underline"
-      aria-label="Underline"
-      :disabled="!canRunCommand('toggleUnderline') || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleUnderline"
-    ></button>
+      <!-- UNDERLINE -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-underline top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActive('underline') }"
+        title="Underline"
+        aria-label="Underline"
+        :disabled="
+          !canRunCommand('toggleUnderline') || isCellLockedComputed || isCellHiddenComputed
+        "
+        @click="toggleUnderline"
+      ></button>
 
-    <!-- SUBSCRIPT -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-subscript top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActive('subscript') }"
-      title="Subscript"
-      aria-label="Subscript"
-      :disabled="!canRunCommand('toggleSubscript') || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleSubscript"
-    ></button>
+      <!-- SUBSCRIPT -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-subscript top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActive('subscript') }"
+        title="Subscript"
+        aria-label="Subscript"
+        :disabled="
+          !canRunCommand('toggleSubscript') || isCellLockedComputed || isCellHiddenComputed
+        "
+        @click="toggleSubscript"
+      ></button>
 
-    <!-- SUPERSCRIPT -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-superscript top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActive('superscript') }"
-      title="Superscript"
-      aria-label="Superscript"
-      :disabled="
-        !canRunCommand('toggleSuperscript') || isCellLockedComputed || isCellHiddenComputed
-      "
-      @click="toggleSuperscript"
-    ></button>
+      <!-- SUPERSCRIPT -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-superscript top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActive('superscript') }"
+        title="Superscript"
+        aria-label="Superscript"
+        :disabled="
+          !canRunCommand('toggleSuperscript') || isCellLockedComputed || isCellHiddenComputed
+        "
+        @click="toggleSuperscript"
+      ></button>
 
-    <!-- BULLET LIST -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-bullet-list top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActive('bulletList') }"
-      title="Bullet list"
-      aria-label="Bullet list"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleBulletList"
-    ></button>
+      <!-- BULLET LIST -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-bullet-list top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActive('bulletList') }"
+        title="Bullet list"
+        aria-label="Bullet list"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleBulletList"
+      ></button>
 
-    <!-- ORDERED LIST -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-numbered-list top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ active: isActive('orderedList') }"
-      title="Numbered list"
-      aria-label="Numbered list"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleOrderedList"
-    ></button>
+      <!-- ORDERED LIST -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-numbered-list top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ active: isActive('orderedList') }"
+        title="Numbered list"
+        aria-label="Numbered list"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleOrderedList"
+      ></button>
 
-    <!-- HEADING 1-5 -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-heading-1 top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActiveHeading(1) }"
-      title="Heading 1"
-      aria-label="Heading 1"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleHeading(1)"
-    ></button>
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-heading-2 top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActiveHeading(2) }"
-      title="Heading 2"
-      aria-label="Heading 2"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleHeading(2)"
-    ></button>
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-heading-3 top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActiveHeading(3) }"
-      title="Heading 3"
-      aria-label="Heading 3"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleHeading(3)"
-    ></button>
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-heading-4 top-toolbar__button--transparent-when-disabled"
-      type="button"
-      :class="{ 'top-toolbar__button--active': isActiveHeading(4) }"
-      title="Heading 4"
-      aria-label="Heading 4"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleHeading(4)"
-    ></button>
+      <!-- HEADING 1-5 -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-heading-1 top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActiveHeading(1) }"
+        title="Heading 1"
+        aria-label="Heading 1"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleHeading(1)"
+      ></button>
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-heading-2 top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActiveHeading(2) }"
+        title="Heading 2"
+        aria-label="Heading 2"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleHeading(2)"
+      ></button>
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-heading-3 top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActiveHeading(3) }"
+        title="Heading 3"
+        aria-label="Heading 3"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleHeading(3)"
+      ></button>
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-heading-4 top-toolbar__button--transparent-when-disabled"
+        type="button"
+        :class="{ 'top-toolbar__button--active': isActiveHeading(4) }"
+        title="Heading 4"
+        aria-label="Heading 4"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleHeading(4)"
+      ></button>
 
-    <!-- REMOVE HEADING 5 
+      <!-- REMOVE HEADING 5 
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-heading-5"
       type="button"
@@ -138,57 +142,57 @@
     ></button>
     -->
 
-    <button
-      type="button"
-      :style="{ backgroundColor: resolveHighlightColor('red-highlighting', isDarkMode) }"
-      :class="[
-        'top-toolbar__button',
-        'top-toolbar__button--icon',
-        'top-toolbar__button--highlight',
-        'icon-highlight-pen',
-        'top-toolbar__button--transparent-when-disabled',
-        { 'top-toolbar__button--highlight-active': isHighlightActive('red-highlighting') }
-      ]"
-      title="Highlight Red"
-      aria-label="Highlight Red"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleHighlight('red-highlighting')"
-    ></button>
+      <button
+        type="button"
+        :style="{ backgroundColor: resolveHighlightColor('red-highlighting', isDarkMode) }"
+        :class="[
+          'top-toolbar__button',
+          'top-toolbar__button--icon',
+          'top-toolbar__button--highlight',
+          'icon-highlight-pen',
+          'top-toolbar__button--transparent-when-disabled',
+          { 'top-toolbar__button--highlight-active': isHighlightActive('red-highlighting') }
+        ]"
+        title="Highlight Red"
+        aria-label="Highlight Red"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleHighlight('red-highlighting')"
+      ></button>
 
-    <button
-      :class="[
-        'top-toolbar__button',
-        'top-toolbar__button--icon',
-        'top-toolbar__button--highlight',
-        'icon-highlight-pen',
-        'top-toolbar__button--transparent-when-disabled',
-        { 'top-toolbar__button--highlight-active': isHighlightActive('green-highlighting') }
-      ]"
-      type="button"
-      :style="{ backgroundColor: resolveHighlightColor('green-highlighting', isDarkMode) }"
-      title="Highlight Blue"
-      aria-label="Highlight Blue"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleHighlight('green-highlighting')"
-    ></button>
+      <button
+        :class="[
+          'top-toolbar__button',
+          'top-toolbar__button--icon',
+          'top-toolbar__button--highlight',
+          'icon-highlight-pen',
+          'top-toolbar__button--transparent-when-disabled',
+          { 'top-toolbar__button--highlight-active': isHighlightActive('green-highlighting') }
+        ]"
+        type="button"
+        :style="{ backgroundColor: resolveHighlightColor('green-highlighting', isDarkMode) }"
+        title="Highlight Blue"
+        aria-label="Highlight Blue"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleHighlight('green-highlighting')"
+      ></button>
 
-    <button
-      :class="[
-        'top-toolbar__button',
-        'top-toolbar__button--icon',
-        'top-toolbar__button--highlight',
-        'icon-highlight-pen',
-        'top-toolbar__button--transparent-when-disabled',
-        { 'top-toolbar__button--highlight-active': isHighlightActive('blue-highlighting') }
-      ]"
-      type="button"
-      :style="{ backgroundColor: resolveHighlightColor('blue-highlighting', isDarkMode) }"
-      title="Highlight Green"
-      aria-label="Highlight Green"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="toggleHighlight('blue-highlighting')"
-    ></button>
-  </div>
+      <button
+        :class="[
+          'top-toolbar__button',
+          'top-toolbar__button--icon',
+          'top-toolbar__button--highlight',
+          'icon-highlight-pen',
+          'top-toolbar__button--transparent-when-disabled',
+          { 'top-toolbar__button--highlight-active': isHighlightActive('blue-highlighting') }
+        ]"
+        type="button"
+        :style="{ backgroundColor: resolveHighlightColor('blue-highlighting', isDarkMode) }"
+        title="Highlight Green"
+        aria-label="Highlight Green"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleHighlight('blue-highlighting')"
+      ></button>
+    </div>
     <!-- Highlight buttons: fixed four tokens; background set by resolver -->
     <!-- ORANGE REMOVED 
     <button
@@ -203,7 +207,7 @@
     -->
 
     <!-- Table controls cluster (mirrors link cluster pattern). Shows only insert button when not inside a table; reveals row/column/delete controls and active border when within a table -->
-    
+
     <div
       class="row-flex-wrap-base-child util-transparent-border"
       :class="{
@@ -292,12 +296,11 @@
     <!-- INSERT / EDIT LINK -->
 
     <div
-    class="row-flex-wrap-base-child util-transparent-border"
+      class="row-flex-wrap-base-child util-transparent-border"
       :class="{
-        'util-active-border':
-          linkInputVisible
+        'util-active-border': linkInputVisible
       }"
-    > 
+    >
       <button
         ref="linkButtonEl"
         class="top-toolbar__button top-toolbar__button--icon icon-link top-toolbar__button--transparent-when-disabled"
@@ -352,20 +355,18 @@
       </div>
     </div>
 
-    <div
-    class="row-flex-wrap-base-child util-transparent-border"> 
+    <div class="row-flex-wrap-base-child util-transparent-border">
+      <!-- button placeholder for insert image-->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"
+        type="button"
+        title="Insert image (coming soon)"
+        aria-label="Insert image (coming soon)"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="() => {}"
+      ></button>
 
-    <!-- button placeholder for insert image-->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"
-      type="button"
-      title="Insert image (coming soon)"
-      aria-label="Insert image (coming soon)"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="() => {}"
-    ></button>
-
-    <!-- 
+      <!-- 
     Math (placeholder)
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-math top-toolbar__button--transparent-when-disabled"
@@ -376,24 +377,24 @@
       @click="placeholderMathLive"
     ></button>
     -->
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-katex-inline top-toolbar__button--transparent-when-disabled"
-      type="button"
-      title="Insert inline math (LaTeX / KaTeX)"
-      aria-label="Insert inline math (LaTeX / KaTeX)"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="insertKatexInline"
-    ></button>
-    <button
-      class="top-toolbar__button top-toolbar__button--icon icon-katex-block top-toolbar__button--transparent-when-disabled"
-      type="button"
-      title="Insert block math (LaTeX / KaTeX)"
-      aria-label="Insert block math (LaTeX / KaTeX)"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="insertKatexBlock"
-    ></button>
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-katex-inline top-toolbar__button--transparent-when-disabled"
+        type="button"
+        title="Insert inline math (LaTeX / KaTeX)"
+        aria-label="Insert inline math (LaTeX / KaTeX)"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="insertKatexInline"
+      ></button>
+      <button
+        class="top-toolbar__button top-toolbar__button--icon icon-katex-block top-toolbar__button--transparent-when-disabled"
+        type="button"
+        title="Insert block math (LaTeX / KaTeX)"
+        aria-label="Insert block math (LaTeX / KaTeX)"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="insertKatexBlock"
+      ></button>
+    </div>
   </div>
-</div>
 </template>
 
 <script setup lang="ts">

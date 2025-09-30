@@ -112,7 +112,7 @@ const editor = tiptapEditor
   /* Prefer --text-font, fall back to legacy --content-font, then inherit */
   font-family: var(--text-font, var(--content-font, inherit));
   color: var(--text-color, #222);
-  padding: 0em 0.4em;  /* Added horizontal padding for better text spacing */
+  padding: 0em 0.4em; /* Added horizontal padding for better text spacing */
 }
 .tiptap-editor :deep(.ProseMirror p) {
   margin: 0 0 0.5em;
@@ -123,7 +123,7 @@ const editor = tiptapEditor
 .tiptap-editor :deep(.ProseMirror h3),
 .tiptap-editor :deep(.ProseMirror h4),
 .tiptap-editor :deep(.ProseMirror h5),
-.tiptap-editor :deep(.ProseMirror h6){
+.tiptap-editor :deep(.ProseMirror h6) {
   margin: 0em;
 }
 .tiptap-editor :deep(.ProseMirror p:last-child) {
