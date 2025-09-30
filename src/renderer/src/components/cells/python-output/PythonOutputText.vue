@@ -1,6 +1,6 @@
 <template>
   <div v-if="text && text.length" class="py-out-text">
-    <div class="section-title">&#8628;</div>
+    <div class="section-title"></div>
     <pre class="stdout" data-testid="python-stdout">{{ text }}</pre>
   </div>
   <div v-else class="py-out-text empty" aria-hidden="true"></div>
