@@ -352,6 +352,9 @@
       </div>
     </div>
 
+    <div
+    class="row-flex-wrap-base-child util-transparent-border"> 
+
     <!-- button placeholder for insert image-->
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"
@@ -381,6 +384,7 @@
       @click="placeholderKaTeX"
     ></button>
   </div>
+</div>
 </template>
 
 <script setup lang="ts">

@@ -72,7 +72,7 @@ export const useThemeStore = defineStore('theme', {
 
       // Standard buttons
       buttonBackgroundColor: 'transparent',
-      buttonBorderColor: 'lightgray',
+      buttonBorderColor: 'gray',
       buttonHoverColor: '#aaaaaa',
       buttonBorderHoverColor: 'black',
       buttonTransparentOffColor: 'transparent',
@@ -187,7 +187,7 @@ export const useThemeStore = defineStore('theme', {
 
       // Standard buttons
       buttonBackgroundColor: 'transparent',
-      buttonBorderColor: '#555555',
+      buttonBorderColor: '#787878',
       buttonHoverColor: 'gray',
       buttonBorderHoverColor: 'whitesmoke',
       buttonTransparentOffColor: 'transparent',

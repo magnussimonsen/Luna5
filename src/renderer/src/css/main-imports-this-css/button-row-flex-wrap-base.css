@@ -25,6 +25,8 @@ No padding, gap, or margin defined here; these should be set in design.css
   height: fit-content; /* Height adjusts based on content */
   box-sizing: border-box; /* Include padding and border in element's total width and height */
   /*background-color: var(--button-row-background-color, transparent);  Default to transparent if not set */
+  gap: 0.2em 0em;
+  padding: 2px 0em; /* Vertical padding only */
 }
 
 /* Child of row-flex-wrap-base to apply padding and border not width 100% */
@@ -34,7 +36,9 @@ No padding, gap, or margin defined here; these should be set in design.css
   align-items: center;
   height: fit-content;
   box-sizing: border-box;
-  padding: 2px 0px;
+  gap: 0.2em 0em;
+  padding: 0em 0em;
+  margin: 0em 0em;
 }
 .util-transparent-border {
   border: solid 2px transparent;
