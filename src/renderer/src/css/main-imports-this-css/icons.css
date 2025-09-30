@@ -49,8 +49,8 @@
     --icon-LaTeX: 'Insert KaTeX'; /* LaTeX icon */
     --icon-math-live-block: 'Insert Math Live';
     --icon-math-live-inline: 'Insert Math Live Inline';
-    --icon-math-katex-block: 'Insert KaTeX';
-    --icon-math-katex-inline: 'Insert Katex Inline';
+    --icon-katex-block: 'Insert KaTeX Block';
+    --icon-katex-inline: 'Insert KaTeX Inline';
 
 /* Placeholder icon */
 .icon-empty-toolbar::before { content: var(--icon-empty-toolbar); }
@@ -103,8 +103,8 @@
 .icon-LaTeX::before { content: var(--icon-LaTeX); }
 .icon-math-live-block::before { content: var(--icon-math-live-block); }
 .icon-math-live-inline::before { content: var(--icon-math-live-inline); }
-.icon-math-katex-block::before { content: var(--icon-math-katex-block); }
-.icon-math-katex-inline::before { content: var(--icon-math-katex-inline); }
+.icon-katex-block::before { content: var(--icon-katex-block); }
+.icon-katex-inline::before { content: var(--icon-katex-inline); }
 
 }
 

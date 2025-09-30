@@ -357,7 +357,8 @@
       @click="() => {}"
     ></button>
 
-    <!-- Math (placeholder) -->
+    <!-- 
+    Math (placeholder)
     <button
       class="top-toolbar__button top-toolbar__button--icon icon-math top-toolbar__button--transparent-when-disabled"
       type="button"
@@ -366,14 +367,22 @@
       :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
       @click="placeholderMathLive"
     ></button>
-
+    -->
     <button
-      class="top-toolbar__button top-toolbar__button--icon icon-LaTeX top-toolbar__button--transparent-when-disabled"
+      class="top-toolbar__button top-toolbar__button--icon icon-katex-inline top-toolbar__button--transparent-when-disabled"
       type="button"
-      title="Insert LaTeX input field with KaTeX (coming soon)"
-      aria-label="Insert LaTeX input field with KaTeX (coming soon)"
+      title="Insert inline math (LaTeX / KaTeX)"
+      aria-label="Insert inline math (LaTeX / KaTeX)"
       :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-      @click="placeholderKaTeX"
+      @click="insertKatexInline"
+    ></button>
+    <button
+      class="top-toolbar__button top-toolbar__button--icon icon-katex-block top-toolbar__button--transparent-when-disabled"
+      type="button"
+      title="Insert block math (LaTeX / KaTeX)"
+      aria-label="Insert block math (LaTeX / KaTeX)"
+      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+      @click="insertKatexBlock"
     ></button>
   </div>
 </template>
@@ -571,14 +580,10 @@ function deleteTable(): void {
   })
 }
 
-function placeholderMathLive(): void {
+/*function placeholderMathLive(): void {
   // Intentionally left blank; future MathLive support will hook in here.
   console.log('MathLive button in toolbar clicked.  Feature coming soon!')
-}
-function placeholderKaTeX(): void {
-  // Intentionally left blank; future KaTeX support will hook in here.
-  console.log('KaTeX button in toolbar clicked.  Feature coming soon!')
-}
+}*/
 
 // Active state helpers (reactive via selectionVersion)
 function isActive(markOrNode: string, attrs?: Record<string, unknown>): boolean {
@@ -699,6 +704,39 @@ function removeLinkViaUI(): void {
 
 function cancelLinkUI(): void {
   linkInputVisible.value = false
+}
+
+/* Insert KaTeX via the tiptap katex extension */
+
+function insertKatexInline(): void {
+  const ed: any = activeTextEditor.value
+  if (!ed) return
+  try {
+    const hasSelection = !ed.state.selection.empty
+    if (hasSelection) {
+      ed.chain().focus().setInlineMath().run()
+    } else {
+      // Default placeholder expression; user can edit via onClick handler later
+      ed.chain().focus().insertInlineMath({ latex: 'a^2 + b^2 = c^2' }).run()
+    }
+  } catch (e) {
+    console.warn('[insertKatexInline] Failed – mathematics extension missing?', e)
+  }
+}
+
+function insertKatexBlock(): void {
+  const ed: any = activeTextEditor.value
+  if (!ed) return
+  try {
+    const hasSelection = !ed.state.selection.empty
+    if (hasSelection) {
+      ed.chain().focus().setBlockMath().run()
+    } else {
+      ed.chain().focus().insertBlockMath({ latex: 'E = mc^2' }).run()
+    }
+  } catch (e) {
+    console.warn('[insertKatexBlock] Failed – mathematics extension missing?', e)
+  }
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,15 @@
+/* The rendered math node */
+.tiptap-mathematics-render {
+}
+
+/* This selector only selects editable math nodes */
+.tiptap-mathematics-render--editable {
+}
+
+/** This selector only selects block math nodes */
+.tiptap-mathematics-render[data-type="block-math"] {
+}
+
+/** This selector only selects inline math nodes */
+.tiptap-mathematics-render[data-type="inline-math"] {
+}
