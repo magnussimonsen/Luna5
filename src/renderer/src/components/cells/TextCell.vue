@@ -98,6 +98,7 @@ const editor = tiptapEditor
   background: var(--cell-background, #fff);
   border-radius: 2px;
   width: 100%;
+  padding: 0;
 }
 .tiptap-editor.is-locked {
   opacity: 0.75;
@@ -111,10 +112,19 @@ const editor = tiptapEditor
   /* Prefer --text-font, fall back to legacy --content-font, then inherit */
   font-family: var(--text-font, var(--content-font, inherit));
   color: var(--text-color, #222);
-  padding: 0.25em 0.4em;
+  padding: 0em 0.4em;  /* Added horizontal padding for better text spacing */
 }
 .tiptap-editor :deep(.ProseMirror p) {
   margin: 0 0 0.5em;
+}
+
+.tiptap-editor :deep(.ProseMirror h1),
+.tiptap-editor :deep(.ProseMirror h2),
+.tiptap-editor :deep(.ProseMirror h3),
+.tiptap-editor :deep(.ProseMirror h4),
+.tiptap-editor :deep(.ProseMirror h5),
+.tiptap-editor :deep(.ProseMirror h6){
+  margin: 0em;
 }
 .tiptap-editor :deep(.ProseMirror p:last-child) {
   margin-bottom: 0;

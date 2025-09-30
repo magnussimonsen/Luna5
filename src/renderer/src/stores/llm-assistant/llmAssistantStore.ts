@@ -1,6 +1,7 @@
 // Path : src/renderer/src/stores/llm-assistant/llmAssistantStore.ts
 
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 
 // All path to ollama and latest used run command lives in the main workspace store.
@@ -9,11 +10,14 @@ import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 export const useLlmAssistantStore = defineStore('llmAssistant', () => {
   const workspace = useWorkspaceStore()
 
+  // Local reactive state
+  const availableModels = ref<string[]>([])
+  const connectionFlag = ref<boolean>(false)
+
   return {
-    // state
-    availableModels: [], // List of available models fetched from the server
-    // Do we need to add type in type folder?
-    connectionFlag: false, // Flag to indicate if we are connected to the server
+    // state (expose the refs)
+    availableModels,
+    connectionFlag,
 
     // actions
     getAvailableModels: async () => {
@@ -30,13 +34,13 @@ export const useLlmAssistantStore = defineStore('llmAssistant', () => {
     // setters
     setAvailableModels: (models: string[]) => {
       // sets the list of available models
-      this.availableModels = models
-    }, // ERROR: Object is possibly 'undefined'.
+      availableModels.value = models
+    },
 
     setConnectionFlag: (flag: boolean) => {
       // sets the connection flag
-      this.connectionFlag = flag
-    }, // ERROR: Object is possibly 'undefined'.
+      connectionFlag.value = flag
+    },
 
     // getters and setters to call workspace store such that we can only import this store in components
     // that need to interact with the LLM assistant.
