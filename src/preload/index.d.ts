@@ -35,6 +35,15 @@ declare global {
       // Compression and decompression
       compressData: (opts: { data: string }) => Promise<string>
       decompressData: (opts: { data: string }) => Promise<string>
+      // Image picking
+      pickImageFile: () => Promise<{
+        canceled: boolean
+        dataUri?: string
+        size?: number
+        mime?: string
+        alt?: string
+        error?: string
+      }>
     }
   }
 }

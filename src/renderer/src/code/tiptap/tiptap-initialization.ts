@@ -12,9 +12,11 @@ import TableCell from '@tiptap/extension-table-cell'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
 import Highlight from '@tiptap/extension-highlight'
+
 import Link from '@tiptap/extension-link'
+// import Image from '@tiptap/extension-image'
+import { ResizableImage } from '@renderer/code/tiptap/extensions/ResizableImage'
 import { Mathematics } from '@tiptap/extension-mathematics'
-// Subscript/superscript are optional
 // Math (custom) - dynamically imported or added when dependency installed
 import type { Transaction } from 'prosemirror-state'
 import 'katex/dist/katex.min.css'
@@ -22,14 +24,16 @@ import 'katex/dist/katex.min.css'
 // capture the actual runtime instance type exported by @tiptap/vue-3.
 export type VueTiptapEditor = InstanceType<typeof import('@tiptap/vue-3').Editor>
 
-/**
- * Creates a configured TipTap editor instance for a text cell.
- * @param {Object} options - Editor options
- * @param {boolean} options.editable - Whether the editor is editable
- * @param {string} options.content - Initial HTML content
- * @param {Function} options.onUpdate - Callback for editor updates
- * @returns {Editor} TipTap editor instance
- */
+// --------------------------------------------------------------------------------------
+// createTiptapEditor
+// Central factory for constructing a Luna text-cell TipTap editor instance.
+// Responsibilities:
+//   1. Assemble and deduplicate extensions (avoids duplicate name warnings & bugs).
+//   2. Provide safe onUpdate callback plumbing (shielding user callback from throws).
+//   3. Inject custom editing affordances (math editing + resizable images).
+// No business logic (saving, persistence) lives here: caller wires that via onUpdate.
+// --------------------------------------------------------------------------------------
+/** Creates a configured TipTap editor instance for a text cell. */
 export function createTiptapEditor(options: {
   editable: boolean
   content: string
@@ -40,81 +44,104 @@ export function createTiptapEditor(options: {
   }) => void
 }): VueTiptapEditor {
   const { editable, content, onUpdate } = options
-  const editorInstance = new Editor({
+
+  // Ensure no two extensions with the same internal name sneak in.
+  const ensureUniqueExtensions = (extensions: Extension[]): Extension[] => {
+    const seenNames = new Set<string>()
+    const duplicates: string[] = []
+    const getName = (ext: Extension): string | undefined => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const anyExt = ext as any
+      return anyExt?.name || anyExt?.config?.name
+    }
+    const filtered = extensions.filter((extension) => {
+      const name = getName(extension)
+      if (!name) return true
+      if (seenNames.has(name)) {
+        duplicates.push(name)
+        return false
+      }
+      seenNames.add(name)
+      return true
+    })
+    if (duplicates.length) {
+      // Dev-only console aid; harmless if it fires. Helps trace hidden duplicates (e.g. multiple Link instances).
+      // Use consolidated message to avoid noisy logs.
+      console.warn(
+        '[createTiptapEditor] Removed duplicate extension(s):',
+        Array.from(new Set(duplicates))
+      )
+    }
+    return filtered
+  }
+
+  // ----------------------------------------------------------------------------------
+  // Math editing click handler factory (both inline and block variants share logic)
+  // ----------------------------------------------------------------------------------
+  interface MathChainAPI {
+    setNodeSelection: (pos: number) => MathChainAPI
+    updateInlineMath?: (opts: { latex: string }) => MathChainAPI
+    updateBlockMath?: (opts: { latex: string }) => MathChainAPI
+    focus: () => MathChainAPI
+    run: () => boolean
+  }
+  interface ChainCapableEditor {
+    chain: () => MathChainAPI
+  }
+
+  const createMathClickHandler = (kind: 'inline' | 'block') => {
+    return (node: unknown, pos: number) => {
+      const latex = (node as { attrs?: { latex?: string } })?.attrs?.latex || ''
+      const promptTitle = kind === 'inline' ? 'Inline math (LaTeX):' : 'Block math (LaTeX):'
+      const updatedLatex = window.prompt(promptTitle, latex)
+      if (updatedLatex == null || updatedLatex === latex) return
+      try {
+        const chain = (editor as unknown as ChainCapableEditor).chain().setNodeSelection(pos)
+        if (kind === 'inline') chain.updateInlineMath?.({ latex: updatedLatex })
+        else chain.updateBlockMath?.({ latex: updatedLatex })
+        chain.focus().run()
+      } catch (error) {
+        console.warn(`[${kind === 'inline' ? 'InlineMath' : 'BlockMath'} edit] failed`, error)
+      }
+    }
+  }
+
+  const assembledExtensions = [
+    StarterKit.configure({
+      // @ts-expect-error TipTap types do not allow document config, but it works at runtime
+      document: { content: 'block*' } as TiptapDocumentConfig,
+      trailingNode: { node: 'paragraph', notAfter: ['heading'] },
+      // Disable built-in link so we can supply our own configured Link extension below.
+      link: false
+    }),
+    Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' }),
+    Highlight.configure({ multicolor: true }),
+    Link.configure({
+      openOnClick: false,
+      autolink: true,
+      linkOnPaste: true,
+      HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' }
+    }),
+    Table.configure({ resizable: true }),
+    TableRow,
+    TableHeader,
+    TableCell,
+    Subscript,
+    Superscript,
+    ResizableImage,
+    Mathematics.configure({
+      inlineOptions: { onClick: createMathClickHandler('inline') },
+      blockOptions: { onClick: createMathClickHandler('block') },
+      katexOptions: { throwOnError: false }
+    })
+  ] as Extension[]
+  const extensions = ensureUniqueExtensions(assembledExtensions)
+
+  // NOTE: The Vue wrapper returns an Editor subclass instance. Cast kept isolated here.
+  const editor = new Editor({
     editable,
     content,
-    extensions: [
-      StarterKit.configure({
-        // @ts-expect-error TipTap types do not allow document config, but it works at runtime
-        document: { content: 'block*' } as TiptapDocumentConfig,
-        trailingNode: { node: 'paragraph', notAfter: ['heading'] }
-      }) as unknown as Extension,
-      Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' }),
-      Highlight.configure({ multicolor: true }),
-      Link.configure({
-        openOnClick: false,
-        autolink: true,
-        linkOnPaste: true,
-        HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' }
-      }),
-      Table.configure({ resizable: true }),
-      TableRow,
-      TableHeader,
-      TableCell,
-      Subscript,
-      Superscript,
-      Mathematics.configure({
-        inlineOptions: {
-          onClick: (node, pos) => {
-            const latex = (node as { attrs?: { latex?: string } })?.attrs?.latex || ''
-            const updated = window.prompt('Inline math (LaTeX):', latex)
-            if (updated != null && updated !== latex) {
-              try {
-                interface MathChain {
-                  setNodeSelection: (p: number) => MathChain
-                  updateInlineMath?: (o: { latex: string }) => MathChain
-                  updateBlockMath?: (o: { latex: string }) => MathChain
-                  focus: () => MathChain
-                  run: () => boolean
-                }
-                interface ChainCapableEditor {
-                  chain: () => MathChain
-                }
-                const chain = (editorInstance as unknown as ChainCapableEditor).chain()
-                chain.setNodeSelection(pos).updateInlineMath?.({ latex: updated }).focus().run()
-              } catch (e) {
-                console.warn('[InlineMath edit] failed', e)
-              }
-            }
-          }
-        },
-        blockOptions: {
-          onClick: (node, pos) => {
-            const latex = (node as { attrs?: { latex?: string } })?.attrs?.latex || ''
-            const updated = window.prompt('Block math (LaTeX):', latex)
-            if (updated != null && updated !== latex) {
-              try {
-                interface MathChain {
-                  setNodeSelection: (p: number) => MathChain
-                  updateInlineMath?: (o: { latex: string }) => MathChain
-                  updateBlockMath?: (o: { latex: string }) => MathChain
-                  focus: () => MathChain
-                  run: () => boolean
-                }
-                interface ChainCapableEditor {
-                  chain: () => MathChain
-                }
-                const chain = (editorInstance as unknown as ChainCapableEditor).chain()
-                chain.setNodeSelection(pos).updateBlockMath?.({ latex: updated }).focus().run()
-              } catch (e) {
-                console.warn('[BlockMath edit] failed', e)
-              }
-            }
-          }
-        },
-        katexOptions: { throwOnError: false }
-      })
-    ],
+    extensions,
     onUpdate: (props: {
       editor: CoreEditor
       transaction: Transaction
@@ -133,7 +160,7 @@ export function createTiptapEditor(options: {
       }
     }
   }) as unknown as VueTiptapEditor
-  return editorInstance as VueTiptapEditor
+  return editor as VueTiptapEditor
 }
 
-// (Math editing helpers inlined in onClick handlers above)
+// (Math editing helpers extracted above via createMathClickHandler)

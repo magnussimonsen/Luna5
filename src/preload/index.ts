@@ -17,7 +17,8 @@ const rendererApi = {
 
   // Compression and decompression handlers
   compressData: (opts: { data: string }) => ipcRenderer.invoke('compress-data', opts),
-  decompressData: (opts: { data: string }) => ipcRenderer.invoke('decompress-data', opts)
+  decompressData: (opts: { data: string }) => ipcRenderer.invoke('decompress-data', opts),
+  pickImageFile: () => ipcRenderer.invoke('pick-image-file')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

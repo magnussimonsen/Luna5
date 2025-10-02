@@ -360,10 +360,10 @@
       <button
         class="top-toolbar__button top-toolbar__button--icon icon-image top-toolbar__button--transparent-when-disabled"
         type="button"
-        title="Insert image (coming soon)"
-        aria-label="Insert image (coming soon)"
+        title="Insert image"
+        aria-label="Insert image"
         :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-        @click="() => {}"
+        @click="insertImage"
       ></button>
 
       <!-- 
@@ -746,6 +746,36 @@ function insertKatexBlock(): void {
     }
   } catch (e) {
     console.warn('[insertKatexBlock] Failed – mathematics extension missing?', e)
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Image insertion flow (data URI based for first iteration)
+async function insertImage(): Promise<void> {
+  if (!activeTextEditor.value) return
+  if (isCellLockedComputed.value || isCellHiddenComputed.value) return
+  try {
+    // Cast to any to use newly added preload API before local ambient types refresh everywhere.
+    const res = await (window as any).api.pickImageFile()
+    if (!res || res.canceled || !res.dataUri) return
+    const ed: any = activeTextEditor.value
+    // Use TipTap image extension if present
+    try {
+      ed.chain()
+        .focus()
+        .setImage({ src: res.dataUri, alt: res.alt || '' })
+        .run()
+    } catch {
+      // Fallback: raw HTML insertion
+      ed.chain()
+        .focus()
+        .insertContent(
+          `<img src="${res.dataUri}" alt="${(res.alt || '').replace(/"/g, '&quot;')}" />`
+        )
+        .run()
+    }
+  } catch (e) {
+    console.warn('[insertImage] failed', e)
   }
 }
 

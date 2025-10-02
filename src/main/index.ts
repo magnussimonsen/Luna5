@@ -14,6 +14,7 @@ import { registerConfirmEmptyBinHandler } from '../renderer/src/code/ipc-main-ha
 import { registerConfirmYesNoHandler } from '../renderer/src/code/ipc-main-handle-functions/show-confirm-yes-no-dialog'
 import { registerCompressDataHandler } from '../renderer/src/code/ipc-main-handle-functions/compress-data'
 import { registerDecompressDataHandler } from '../renderer/src/code/ipc-main-handle-functions/decompress-data'
+import { registerPickImageFileHandler } from '../renderer/src/code/ipc-main-handle-functions/pickImageFileHandler'
 import fs from 'fs'
 
 // Enable a custom protocol so the renderer and workers can fetch static assets in packaged builds.
@@ -122,6 +123,9 @@ app.whenReady().then(() => {
   registerConfirmYesNoHandler()
   registerCompressDataHandler()
   registerDecompressDataHandler()
+
+  // Image picker (delegated to its own registration function)
+  registerPickImageFileHandler()
 
   // Show Save dialog (default: Desktop, .luna)
   // Used by renderer via window.api.showSaveDialog().
