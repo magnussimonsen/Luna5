@@ -15,7 +15,7 @@
     min-width: var(--top-toolbar-button-min-width, 1em);
     cursor: pointer;
 
-    margin: 0em var(--top-toolbar-button-gap, 0.4em);
+    margin: 0em 2px;
     padding: var(--top-toolbar-button-padding, 0.3em 0.6em 0.3em 0.6em);
     line-height: var(--toolbar-button-height, 1.3em);
 
@@ -34,9 +34,11 @@
 
 
 .top-toolbar__button:active{
-  /* Pushed in effect */
+  /* Pushed in effect 
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
+    */
+    transform: scale(1.1);
 }
 
 /* Persistent active state (formatting toggled on). Previously missing so
@@ -47,9 +49,12 @@
   font-size: var(--top-toolbar-font-size);
   font-family: var(--ui-font);
   border: 2px solid var(--button-on-color, var(--debug-color));
-  /* Pushed in effect */
+  /* Pushed in effect 
   box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
   transform: translateY(1px);
+  */
+  border-color: black; /* add a selected border color to themestore*/
+ 
 }
 
 /* Shared disabled look (no background change) */
@@ -82,9 +87,10 @@
 .top-toolbar__button--runcode-active {
     background: var(--runcode-background-color, var(--debug-color, lightgray));
     color: var(--ui-text-color, var(--debug-color));
-    /* Pushed in effect */
+    /* Pushed in effect
       box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
       transform: translateY(1px);
+    */
 
 }
 
@@ -94,9 +100,11 @@
     color: var(--ui-text-color, var(--debug-color));
     cursor: not-allowed;
     border: 2px solid var(--button-on-color, var(--debug-color));
-    /* Pushed in effect */
+    /* Pushed in effect 
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
+    */
+    transform: scale(1.1);
 }
 
 .top-toolbar__button--runcode:disabled, 
@@ -129,9 +137,11 @@
 
 /* “Reset/danger” variant */
 .top-toolbar__button--reset:active {
-  /* Pushed in effect */
+  /* Pushed in effect 
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
+    */
+    transform: scale(1.1);
 }
 
 
@@ -155,9 +165,11 @@
   font-size: var(--top-toolbar-font-size);
   font-family: var(--ui-font);
   border: 2px solid var(--button-on-color, var(--debug-color));
-  /* Pushed in effect */
+  /* Pushed in effect 
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
+    */
+  transform: scale(1.1);
 }
 
 /* Visible indicator for icon-only highlight buttons when active.

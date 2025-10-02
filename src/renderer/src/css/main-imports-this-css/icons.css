@@ -10,7 +10,11 @@
     --icon-help: '?';
     --icon-python: '🐍';
     --icon-cancel: '❌';
+    --icon-delete: '🗑';
     --icon-check: '✓';
+    --icon-add: '+';
+    --icon-remove: '−';
+    --icon-update: '⟳';
     /* Text / formatting */
     --icon-bold: '𝐁';
     --icon-italic: '𝙄';
@@ -40,7 +44,7 @@
     /* Deletion icons refined for clarity (row = backspace, column = forward delete) */
     --icon-delete-table-row: '┅';
     --icon-delete-table-column: '┇';
-    --icon-delete-table: '✕';
+    --icon-delete-table: '🗑';
     /* History */
     --icon-undo: '↺';
     --icon-redo: '↻';
@@ -64,7 +68,12 @@
 .icon-python::before { content: var(--icon-python); }
 .icon-local-llm-client::before { content: var(--icon-local-llm-client); }
 .icon-cancel::before { content: var(--icon-cancel); }
+.icon-delete::before { content: var(--icon-delete); }
 .icon-check::before { content: var(--icon-check); }
+.icon-add::before { content: var(--icon-add); }
+.icon-remove::before { content: var(--icon-remove); }
+.icon-update::before { content: var(--icon-update); }
+
 
 /* Text editor icons (use CSS variables so we can override easily) */
 .icon-bold::before { content: var(--icon-bold); }
@@ -88,7 +97,7 @@
 .icon-numbered-list::before { content: var(--icon-numbered-list); }
 .icon-subscript::before { content: var(--icon-subscript); }
 .icon-superscript::before { content: var(--icon-superscript); }
-.icon-table::before { content: var(--icon-table); }
+.icon-table::before { transform: translateY(-0.05em) scale(1); content: var(--icon-table); }
 .icon-insert-table-column-left::before { content: var(--icon-insert-table-column-left); }
 .icon-insert-table-column-right::before { content: var(--icon-insert-table-column-right); }
 .icon-insert-table-row-above::before { content: var(--icon-insert-table-row-above); }

@@ -303,9 +303,17 @@
     >
       <button
         ref="linkButtonEl"
-        class="top-toolbar__button top-toolbar__button--icon icon-link top-toolbar__button--transparent-when-disabled"
+        :class="[
+          'top-toolbar__button',
+          'top-toolbar__button--icon',
+          'icon-link',
+          'top-toolbar__button--transparent-when-disabled',
+          {
+            'top-toolbar__button--active': linkInputVisible,
+            'link-caret-flash': isCaretInsideLink && !linkInputVisible
+          }
+        ]"
         type="button"
-        :class="{ 'top-toolbar__button--active': isLinkActive || linkInputVisible }"
         :title="
           linkInputVisible
             ? 'Close link editor'
@@ -337,21 +345,27 @@
         />
         <button
           type="button"
-          class="top-toolbar__button top-toolbar__button--transparent-when-disabled"
-          title="Apply link"
+          :class="[
+            'top-toolbar__button',
+            'top-toolbar__button--icon',
+            'top-toolbar__button--transparent-when-disabled',
+            isLinkActive ? 'icon-update' : 'icon-add'
+          ]"
+          :title="isLinkActive ? 'Update link' : 'Apply link'"
+          :aria-label="isLinkActive ? 'Update link' : 'Apply link'"
           @click="applyLinkFromInput"
-        >
-          {{ isLinkActive ? 'Update link' : 'Add link' }}
-        </button>
+        ></button>
         <button
           v-if="isLinkActive"
           type="button"
-          class="top-toolbar__button top-toolbar__button--transparent-when-disabled"
+          :class="[
+            'top-toolbar__button',
+            'top-toolbar__button--transparent-when-disabled',
+            'icon-delete'
+          ]"
           title="Cancel link editing"
           @click="removeLinkViaUI"
-        >
-          Remove link
-        </button>
+        ></button>
       </div>
     </div>
 
@@ -611,6 +625,19 @@ const isLinkActive = computed(() => {
   void selectionVersion.value
   return !!activeTextEditor.value?.isActive('link')
 })
+// True only when caret (collapsed selection) is inside a link mark; used for flash indicator
+const isCaretInsideLink = computed(() => {
+  void selectionVersion.value
+  const editor = activeTextEditor.value as any
+  if (!editor) return false
+  const { from, to } = editor.state.selection
+  if (from !== to) return false // only flash on pure caret, not range selections
+  try {
+    return !!editor.isActive('link')
+  } catch {
+    return false
+  }
+})
 const linkInputVisible = ref(false)
 const linkUrlInput = ref('')
 const linkInputEl = ref<HTMLInputElement | null>(null)
@@ -830,6 +857,23 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.link-caret-flash {
+  animation: linkCaretPulse 1.1s ease-in-out infinite;
+  /* subtle emphasis without altering existing active styling */
+  box-shadow: 0 0 0 0 rgba(var(--accent-rgb, 61, 130, 246), 0.55);
+  position: relative;
+}
+@keyframes linkCaretPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--accent-rgb, 61, 130, 246), 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(var(--accent-rgb, 61, 130, 246), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--accent-rgb, 61, 130, 246), 0);
+  }
+}
 .inline-link-editor {
   display: inline-flex;
   gap: 4px;
