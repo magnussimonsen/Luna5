@@ -1,6 +1,9 @@
-
-
-<!-- EXTRA BACKUP-->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
+<!-- ONGOING MAJOR CSS DEBUGGING AND REFACTORING -->
 
 <script setup lang="ts">
 // Example of how to use the IPC mechanism if needed
@@ -30,8 +33,6 @@ import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-wa
 
 const menubarStore = useMenubarStore()
 const toolbarStore = useToolbarStore()
-
-
 const sidepanelStore = useSidepanelStore()
 const modalStore = useModalStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
@@ -90,8 +91,6 @@ onMounted(async () => {
     statusObserver.observe(statusbarRef.value)
   }
 })
-
-
 
 onBeforeUnmount(() => {
   menubarObserver?.disconnect()

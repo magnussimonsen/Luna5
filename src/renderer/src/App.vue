@@ -15,7 +15,7 @@ import CellList from '@renderer/components/conteiners/CellList.vue'
 import Statusbar from '@renderer/components/navigation-bars/Statusbar.vue'
 import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
-import MathLivePlayground from '@renderer/mathlive-test-folder/MathLivePlayground.vue'
+// import MathLivePlayground from '@renderer/mathlive-test-folder/MathLivePlayground.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 // Modals and sidepanel are currently not referenced directly in this file.
 // They are imported where needed by child components.
@@ -38,7 +38,7 @@ const modalStore = useModalStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
-const showMathLivePlayground = import.meta.env.DEV
+//const showMathLivePlayground = import.meta.env.DEV
 
 //------------------------------------------------------------------------------//
 // Autosave section
@@ -99,41 +99,34 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div id="app-layout">
-    <template v-if="showMathLivePlayground">
-      <div class="mathlive-playground-wrapper">
-        <MathLivePlayground />
+    <div class="scroll-container">
+      <div ref="menubarRef">
+        <Menubar />
       </div>
-    </template>
-    <template v-else>
-      <div class="scroll-container">
-        <div ref="menubarRef">
-          <Menubar />
-        </div>
 
-        <div ref="toolbarRef">
-          <Toolbar />
-        </div>
-
-        <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
-          <CellList />
-        </div>
-        <div
-          v-else-if="layoutMode === 'a4Preview'"
-          class="workspace-a4-preview-layout-container"
-          :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }"
-        >
-          A4 preview layout mode (coming soon)
-        </div>
+      <div ref="toolbarRef">
+        <Toolbar />
       </div>
-      <Sidepanel />
 
-      <!-- Global modals (kept at root so they can render overlays) -->
-      <AboutLunaModal v-if="modalStore.isAboutLunaModalOpen" />
-
-      <div ref="statusbarRef" class="statusbar-container">
-        <Statusbar />
+      <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
+        <CellList />
       </div>
-    </template>
+      <div
+        v-else-if="layoutMode === 'a4Preview'"
+        class="workspace-a4-preview-layout-container"
+        :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }"
+      >
+        A4 preview layout mode (coming soon)
+      </div>
+    </div>
+    <Sidepanel />
+
+    <!-- Global modals (kept at root so they can render overlays) -->
+    <AboutLunaModal v-if="modalStore.isAboutLunaModalOpen" />
+
+    <div ref="statusbarRef" class="statusbar-container">
+      <Statusbar />
+    </div>
   </div>
 </template>
 
