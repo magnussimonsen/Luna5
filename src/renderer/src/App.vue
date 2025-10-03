@@ -94,15 +94,14 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div id="app-layout">
+    <div ref="menubarRef">
+      <Menubar />
+    </div>
+
+    <div ref="toolbarRef">
+      <Toolbar />
+    </div>
     <div class="scroll-container">
-      <div ref="menubarRef">
-        <Menubar />
-      </div>
-
-      <div ref="toolbarRef">
-        <Toolbar />
-      </div>
-
       <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
         <CellList />
       </div>
@@ -146,12 +145,5 @@ onBeforeUnmount(() => {
   flex: 0 0 auto;
   width: 100%;
   /* Prevent it from growing */
-}
-
-.mathlive-playground-wrapper {
-  padding: 16px;
-  display: flex;
-  justify-content: center;
-  z-index: 10000;
 }
 </style>
