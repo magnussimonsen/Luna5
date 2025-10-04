@@ -38,7 +38,7 @@
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
     */
-    transform: scale(1.1);
+    transform-origin: skewX(1deg);
 }
 
 /* Persistent active state (formatting toggled on). Previously missing so
@@ -104,7 +104,6 @@
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
     */
-    transform: scale(1.1);
 }
 
 .top-toolbar__button--runcode:disabled, 
@@ -124,7 +123,7 @@
   font-size: var(--top-toolbar-font-size);
   font-family: var(--ui-font);
   color: var(--ui-text-color, var(--debug-color));
-  padding: var(--top-toolbar-button--icon-padding, 0.3em);
+  padding: var(--top-toolbar-button--icon-padding, 0.6em 0.4em);
 }
 
 /* “Reset/danger” variant */
@@ -141,7 +140,7 @@
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
     */
-    transform: scale(1.1);
+    transform: skewX(1deg);
 }
 
 
@@ -169,7 +168,6 @@
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
     */
-  transform: scale(1.1);
 }
 
 /* Visible indicator for icon-only highlight buttons when active.

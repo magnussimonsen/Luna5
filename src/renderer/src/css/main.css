@@ -15,11 +15,12 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/fonts.css';
 
 /* Miscellaneous */
-@import './main-imports-this-css/button-row-flex-wrap-base.css';
+@import './main-imports-this-css/row-flex-wrap-base.css';
 
 @import './main-imports-this-css/miscellaneous/implemented-not-implemented.css';
 @import './main-imports-this-css/miscellaneous/ascii-spinner.css';
 @import './main-imports-this-css/miscellaneous/hidden-cell-linear-gradient-style.css';
+@import './main-imports-this-css/miscellaneous/link-caret-flash.css';
 
 /* Menubar */
 @import './main-imports-this-css/menubar/menubar-colors.css';

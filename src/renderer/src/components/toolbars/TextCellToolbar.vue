@@ -346,7 +346,7 @@
         <button
           type="button"
           :class="[
-            'top-toolbar__button',
+             'top-toolbar__button',
             'top-toolbar__button--icon',
             'top-toolbar__button--transparent-when-disabled',
             isLinkActive ? 'icon-update' : 'icon-add'
@@ -360,7 +360,8 @@
           type="button"
           :class="[
             'top-toolbar__button',
-            'top-toolbar__button--transparent-when-disabled',
+            'top-toolbar__button--icon',
+            'top-toolbar__button--transparent-when-disabled', 
             'icon-delete'
           ]"
           title="Cancel link editing"
@@ -876,15 +877,16 @@ onBeforeUnmount(() => {
 }
 .inline-link-editor {
   display: inline-flex;
-  gap: 4px;
+  gap: 0px;
   align-items: center;
-  padding: 0px 4px;
+  padding: 0px 0px;
 }
 .inline-link-editor__input {
   font: inherit;
-  padding: 0px 4px;
+  padding: 0px 0.5em;
+  margin: 0px 2px;
   min-width: 180px;
-  border: 1px solid var(--border-color, #ccc);
+  border: 0px solid var(--button-border-color, #ccc);
   border-radius: var(--border-radius, 4px);
   background: transparent;
   color: var(--text-color, #222);

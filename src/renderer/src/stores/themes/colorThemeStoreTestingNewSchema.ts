@@ -77,6 +77,7 @@ type Palette = {
 const basePalette: Palette = {
   PrimaryBg: { light: '#ffffff', dark: '#222222' },
   SecondaryBg: { light: '#f5f5f5', dark: '#2c2c2c' },
+  TertiaryBg: { light: '#f0f0f0', dark: '#2f2f2f' },
   GutterBg: { light: '#eaeaea', dark: '#333333' },
   SurfaceBg: { light: '#ffffff', dark: '#202020' },
   PaperBg: { light: '#ffffff', dark: '#2b2b2b' },
@@ -85,8 +86,9 @@ const basePalette: Palette = {
   SidepanelBg: { light: '#eeeeee', dark: '#2a2a2a' },
   StatusbarBg: { light: '#f7f7f7', dark: '#111111' },
 
-  PrimaryAccent: { light: '#2fc97f', dark: '#26b07c' },
-  SecondaryAccent: { light: '#3b82f6', dark: '#60a5fa' },
+  PrimaryAccent: { light: '#2fc97f', dark: '#26b07c' }, // Selected button border
+  SecondaryAccent: { light: '#3b82f6', dark: '#60a5fa' }, // Not selectexd button border
+  TertiaryAccent: { light: '#f59e0b', dark: '#f59e0b' }, // UI panel border
 
   PrimarySuccess: { light: '#22c55e', dark: '#22c55e' },
   SecondarySuccess: { light: '#16a34a', dark: '#16a34a' },
@@ -99,7 +101,6 @@ const basePalette: Palette = {
   TextPrimary: { light: '#222222', dark: '#cccccc' },
   TextMuted: { light: '#6b7280', dark: '#9ca3af' },
   TextLink: { light: '#3b82f6', dark: '#60a5fa' },
-  Border: { light: '#dddddd', dark: '#111111' },
   Divider: { light: 'gainsboro', dark: '#444444' },
 
   Hover: { light: '#e5e7eb', dark: '#3a3a3a' },
