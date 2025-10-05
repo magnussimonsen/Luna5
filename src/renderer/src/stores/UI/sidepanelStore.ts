@@ -1,84 +1,112 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { PanelName } from '@renderer/types/side-panel-types'
+import { computed, ref } from 'vue'
+import { PanelName } from '@renderer/types/sidepanel-types'
+
+// ---------------------------------------------------------------------------
+// Configuration
+// ---------------------------------------------------------------------------
+const allowedPanels: PanelName[] = [
+  'flashcards',
+  'notebooks',
+  'toc',
+  'variables',
+  'help',
+  'settings',
+  'localLlmClient'
+]
+
+const DEFAULT_FALLBACK_WIDTH_PX = 400
+const DEFAULT_WIDTH_RATIO = 0.5
 
 export const useSidepanelStore = defineStore('sidepanel', () => {
-  // Heights used to position the sidepanel between top and bottom chrome
-  const menubarHeight = ref<number>(0)
-  const toolbarHeight = ref<number>(0)
-  const statusbarHeight = ref<number>(0)
+  // -------------------------------------------------------------------------
+  // Layout chrome heights (used to anchor the sidepanel vertically)
+  // -------------------------------------------------------------------------
+  const menubarHeight = ref(0)
+  const toolbarHeight = ref(0)
+  const statusbarHeight = ref(0)
 
-  // Existing sidepanel state
-  const allowedPanels = [
-    'flashcards',
-    'notebooks',
-    'toc',
-    'variables',
-    'help',
-    'settings',
-    'localLlmClient'
-  ]
+  // -------------------------------------------------------------------------
+  // Panel selection state
+  // -------------------------------------------------------------------------
   const activePanel = ref<PanelName | null>(null)
 
-  function getAppWidthInPx(): number {
+  // Compute a sensible starting width based on the current viewport.
+  function computeInitialPanelWidth(): number {
     const appWidth =
       window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-    return typeof appWidth === 'number' && !isNaN(appWidth) ? appWidth * 0.5 : 400
+
+    if (typeof appWidth !== 'number' || Number.isNaN(appWidth)) {
+      return DEFAULT_FALLBACK_WIDTH_PX
+    }
+
+    return appWidth * DEFAULT_WIDTH_RATIO
   }
 
-  const lastPanelWidth = ref<number>(getAppWidthInPx())
-  const lastPanelScrollY = ref<number>(0)
+  const lastPanelWidth = ref<number>(computeInitialPanelWidth())
+  const lastPanelScrollY = ref(0)
 
-  function showPanel(name: string): void {
-    if (allowedPanels.includes(name as PanelName)) {
-      activePanel.value = name as PanelName
-    }
+  // -------------------------------------------------------------------------
+  // Panel visibility helpers
+  // -------------------------------------------------------------------------
+  function showPanel(panel: PanelName): void {
+    if (!allowedPanels.includes(panel)) return
+    activePanel.value = panel
   }
 
   function hidePanel(): void {
     activePanel.value = null
   }
 
-  function togglePanel(name: string): void {
-    if (allowedPanels.includes(name as PanelName)) {
-      activePanel.value = activePanel.value === name ? null : (name as PanelName)
-    }
+  function togglePanel(panel: PanelName): void {
+    if (!allowedPanels.includes(panel)) return
+
+    const isSamePanelActive = activePanel.value === panel
+    activePanel.value = isSamePanelActive ? null : panel
   }
 
+  // -------------------------------------------------------------------------
+  // Persisted panel UI state
+  // -------------------------------------------------------------------------
   function setLastPanelWidth(width: number): void {
     lastPanelWidth.value = width
   }
 
-  function setLastPanelScrollY(y: number): void {
-    lastPanelScrollY.value = y
+  function setLastPanelScrollY(scrollPosition: number): void {
+    lastPanelScrollY.value = scrollPosition
   }
 
-  // Height setters for top/bottom chrome
-  function setMenubarHeight(h: number): void {
-    menubarHeight.value = h
+  // -------------------------------------------------------------------------
+  // Chrome height setters (forwarded from layout observers)
+  // -------------------------------------------------------------------------
+  function setMenubarHeight(height: number): void {
+    menubarHeight.value = height
   }
-  function setToolbarHeight(h: number): void {
-    toolbarHeight.value = h
+
+  function setToolbarHeight(height: number): void {
+    toolbarHeight.value = height
   }
-  function setStatusbarHeight(h: number): void {
-    statusbarHeight.value = h
+
+  function setStatusbarHeight(height: number): void {
+    statusbarHeight.value = height
   }
 
   const topChromeHeight = computed(() => menubarHeight.value + toolbarHeight.value)
   const bottomChromeHeight = computed(() => statusbarHeight.value)
 
   return {
-    // panel state
-    activePanel,
+    // panel availability
     allowedPanels,
+    activePanel,
     showPanel,
     hidePanel,
     togglePanel,
+    // persisted UI state
     lastPanelWidth,
     setLastPanelWidth,
     lastPanelScrollY,
     setLastPanelScrollY,
-    // chrome heights
+    // chrome measurements
     menubarHeight,
     toolbarHeight,
     statusbarHeight,

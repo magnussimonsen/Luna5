@@ -34,13 +34,29 @@ type Palette = {
   PrimaryBg: DualColor
   SecondaryBg: DualColor
   TertiaryBg: DualColor
-  GutterBg: DualColor
-  SurfaceBg: DualColor
-  PaperBg: DualColor
+
+  WebLayoutBg: DualColor
+  A4LayoutBg: DualColor
+
   MenubarBg: DualColor
-  ToolbarBg: DualColor
-  SidebarBg: DualColor
+  MenubarBorder: DualColor
+
+  TopToolbarBg: DualColor
+  TopToolbarBorder: DualColor
+
+  SidepanelBorder: DualColor
+  SidepanelBg: DualColor
+
+  BottomPanelBg: DualColor
+  BottomPanelBorder: DualColor
+
   StatusbarBg: DualColor
+  StatusbarBorder: DualColor
+
+  CellGutterBg: DualColor
+  CellBorder: DualColor
+  CellSelectedBorder: DualColor
+  CellNotSelectedBorder: DualColor
 
   PrimaryAccent: DualColor
   SecondaryAccent: DualColor
@@ -64,6 +80,7 @@ type Palette = {
   Divider: DualColor
 
   Hover: DualColor
+  KatexHoverBg: DualColor
 
   ScrollbarThumb: DualColor
   ScrollbarTrack: DualColor
@@ -84,17 +101,28 @@ const basePalette: Palette = {
   SecondaryBg: { light: '#f5f5f5', dark: '#2c2c2c' },
   TertiaryBg: { light: '#f0f0f0', dark: '#2f2f2f' },
 
-  GutterBg: { light: '#eaeaea', dark: '#333333' },
-
-  SurfaceBg: { light: '#ffffff', dark: '#202020' },
-  PaperBg: { light: '#ffffff', dark: '#2b2b2b' },
+  WebLayoutBg: { light: '#ffffff', dark: '#202020' },
+  A4LayoutBg: { light: '#ffffff', dark: '#2b2b2b' },
 
   MenubarBg: { light: '#f7f7f7', dark: '#111111' },
-  ToolbarBg: { light: '#f7f7f7', dark: '#111111' },
+  MenubarBorder: { light: 'gainsboro', dark: '#333333' },
 
-  SidebarBg: { light: '#eeeeee', dark: '#2a2a2a' },
+  TopToolbarBg: { light: '#f7f7f7', dark: '#111111' },
+  TopToolbarBorder: { light: 'gainsboro', dark: '#333333' },
+
+  SidepanelBorder: { light: '#e0e0e0', dark: '#444444' },
+  SidepanelBg: { light: '#eeeeee', dark: '#2a2a2a' },
+
+  BottomPanelBg: { light: '#f9fafb', dark: '#1f1f1f' },
+  BottomPanelBorder: { light: '#d1d5db', dark: '#3a3a3a' },
 
   StatusbarBg: { light: '#f7f7f7', dark: '#111111' },
+  StatusbarBorder: { light: 'gainsboro', dark: '#333333' },
+
+  CellGutterBg: { light: '#eaeaea', dark: '#333333' },
+  CellBorder: { light: '#d1d5db', dark: '#3f3f46' },
+  CellSelectedBorder: { light: '#2fc97f', dark: '#26b07c' },
+  CellNotSelectedBorder: { light: '#d1d5db', dark: '#3f3f46' },
 
   PrimaryAccent: { light: '#2fc97f', dark: '#26b07c' },
   SecondaryAccent: { light: '#3b82f6', dark: '#60a5fa' },
@@ -118,6 +146,7 @@ const basePalette: Palette = {
   Divider: { light: 'gainsboro', dark: '#444444' },
 
   Hover: { light: '#e5e7eb', dark: '#3a3a3a' },
+  KatexHoverBg: { light: '#f0f9ff', dark: '#1e293b' },
 
   ScrollbarThumb: { light: 'gray', dark: '#555555' },
   ScrollbarTrack: { light: 'lightgray', dark: '#111111' },

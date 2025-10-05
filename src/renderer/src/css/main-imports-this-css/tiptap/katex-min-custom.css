@@ -13,3 +13,4 @@
 /** This selector only selects inline math nodes */
 .tiptap-mathematics-render[data-type="inline-math"] {
 }
+

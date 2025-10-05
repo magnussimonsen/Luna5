@@ -152,7 +152,11 @@ onBeforeUnmount(() => {
         aria-label="Bottom panel"
         @click.self="closePanel"
       >
-        <section ref="panelRef" class="bottom-panel" :style="{ height: panelHeight }">
+        <section
+          ref="panelRef"
+          class="bottom-panel-container-for-resize-rail-and-toolbars-and-content"
+          :style="{ height: panelHeight }"
+        >
           <div
             class="bottom-panel__resize-rail"
             role="separator"
@@ -162,22 +166,9 @@ onBeforeUnmount(() => {
           >
             <span class="bottom-panel__rail-line"></span>
           </div>
-          <header class="bottom-panel__header">
-            <div class="bottom-panel__title">Bottom panel (prototype)</div>
-            <button
-              class="bottom-panel__close"
-              type="button"
-              aria-label="Close bottom panel"
-              @click="closePanel"
-            >
-              Close
-            </button>
-          </header>
-          <div class="bottom-panel__content">
-            <slot>
-              <p class="bottom-panel__placeholder">Bottom panel content placeholder.</p>
-            </slot>
-          </div>
+          <!--  Top toolbar component-->
+          <!-- Main content area  with dynamic content-->
+          <!-- Bottom toolbar component-->
         </section>
       </div>
     </transition>
@@ -189,118 +180,4 @@ onBeforeUnmount(() => {
 Styles live in
 src/renderer/src/css/main-imports-this-css/bottompanel/bottompanel-base.css
 */
-.bottom-panel-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(13, 17, 23, 0.45);
-  backdrop-filter: blur(0px);
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  z-index: var(--bottompanel-overlay-z-index, 4500);
-}
-
-.bottom-panel {
-  position: relative;
-  width: 100%;
-  background: var(--sidepanel-background, var(--debug-color), white);
-  color: var(--text-color, #f5f5f5);
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.28);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  max-height: calc(95vh - var(--bottom-chrome-height, 0px));
-  min-height: calc(5vh - var(--bottom-chrome-height, 0px));
-}
-
-.bottom-panel__resize-rail {
-  flex: 0 0 auto;
-  height: var(--resize-rail-width, 16px);
-  cursor: row-resize;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-block: 2px;
-  background: var(--resize-rail-color, var(--debug-color, red));
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-}
-
-.bottom-panel__resize-rail:active,
-.bottom-panel__resize-rail.bottom-panel__resize-rail--dragging {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12));
-}
-
-.bottom-panel__rail-line {
-  width: var(--bottompanel__rail-line-width, 4px);
-  height: var(--bottompanel__rail-line-height, 72px);
-  border-radius: var(--resize-rail-border-radius, 999px);
-  background: var(--resize-rail-line-color, var(--debug-color, red));
-}
-
-.bottom-panel__header {
-  /* Replace with row-flex-wrap-base.css */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.35rem 1rem 0.9rem;
-  gap: 0.75rem;
-}
-
-.bottom-panel__title {
-  /* Remove? */
-  flex: 4;
-  font-weight: 600;
-  text-align: center;
-  color: var(--text-color, #f5f5f5);
-}
-
-.bottom-panel__close {
-  /* Replace with cancel button on bottom row */
-  flex: 1;
-  border: none;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.bottom-panel__close:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.bottom-panel__content {
-  padding: 1rem 1.25rem 1.5rem;
-  overflow-y: auto;
-  flex: 1 1 auto;
-}
-
-.bottom-panel__placeholder {
-  margin: 0;
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.bottom-panel-fade-enter-active,
-.bottom-panel-fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.bottom-panel-fade-enter-from,
-.bottom-panel-fade-leave-to {
-  opacity: 0;
-}
-
-@media (max-width: 768px) {
-  .bottom-panel {
-    width: 96vw;
-  }
-}
-
-:global(body.bottom-panel-resizing) {
-  cursor: ns-resize !important;
-  user-select: none;
-}
 </style>

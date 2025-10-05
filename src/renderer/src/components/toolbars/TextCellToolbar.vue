@@ -414,7 +414,7 @@
         title="Test open and close bottom panel"
         aria-label="Test open and close bottom panel"
         :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-        @click="toggleBottomPanel"
+        @click="openBottomPanel"
       >
         Bottompanel test button
       </button>
@@ -808,10 +808,11 @@ function insertKatexBlock(): void {
   }
 }
 
-function toggleBottomPanel(): void {
+function openBottomPanel(): void {
   if (!activeTextEditor.value) return
   if (isCellLockedComputed.value || isCellHiddenComputed.value) return
-  bottomPanelStore.toggleBottomPanel()
+  bottomPanelStore.setActivePanel('insertKatexMath')
+  bottomPanelStore.openBottomPanel()
 }
 
 // ---------------------------------------------------------------------------
@@ -895,23 +896,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.link-caret-flash {
-  animation: linkCaretPulse 1.1s ease-in-out infinite;
-  /* subtle emphasis without altering existing active styling */
-  box-shadow: 0 0 0 0 rgba(var(--accent-rgb, 61, 130, 246), 0.55);
-  position: relative;
-}
-@keyframes linkCaretPulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(var(--accent-rgb, 61, 130, 246), 0.55);
-  }
-  70% {
-    box-shadow: 0 0 0 6px rgba(var(--accent-rgb, 61, 130, 246), 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(var(--accent-rgb, 61, 130, 246), 0);
-  }
-}
 .inline-link-editor {
   display: inline-flex;
   gap: 0px;

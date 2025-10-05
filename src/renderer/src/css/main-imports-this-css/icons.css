@@ -21,6 +21,12 @@
     --icon-underline: '_'; 
     --icon-subscript: 'X₂';
     --icon-superscript: 'X²';
+
+    /* Text alignment */
+    --icon-align-left: '◀';
+    --icon-align-center: 'center';
+    --icon-align-right: '▶';
+    
     /* Insert link and image */
     --icon-link: '🔗';
     --icon-image: '🖼';

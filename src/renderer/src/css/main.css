@@ -52,6 +52,10 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/bottompanel/bottompanel-katex-input-bottomtoolbar.css';
 @import './main-imports-this-css/bottompanel/bottompanel-katex-input-toptoolbar.css';
 
+/* Tiptap editor */
+@import './main-imports-this-css/tiptap/tiptap-custom.css';
+@import './main-imports-this-css/tiptap/katex-min-custom.css';
+
 
 #app {
   /* App root layout */
