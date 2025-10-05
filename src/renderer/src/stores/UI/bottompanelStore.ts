@@ -5,7 +5,7 @@ import { PanelName } from '@renderer/types/sidepanel-types' // Reuse PanelName t
 const allowedPanels: PanelName[] = ['insertKatexMath']
 
 const DEFAULT_PANEL_HEIGHT = 320
-const DEFAULT_MIN_HEIGHT = 10
+const DEFAULT_MIN_HEIGHT = 100
 const DEFAULT_MAX_HEIGHT = 800
 const MIN_MAX_HEIGHT_GAP = 50
 

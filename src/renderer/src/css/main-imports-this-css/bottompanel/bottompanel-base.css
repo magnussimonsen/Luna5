@@ -19,14 +19,15 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  max-height: calc(95vh - var(--bottom-chrome-height, 0px));
+  max-height: calc(80vh - var(--bottom-chrome-height, 0px));
+  min-height: 120px;
   border: min(0.3em, 5px) solid var(--button-on-color, lightgreen);
   border-top: 0px solid transparent;
   margin-bottom: min(0.5em, 8px);
   margin-right: min(0.5em, 8px);
   margin-left: min(0.5em, 8px);
   box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
 
 
 }
