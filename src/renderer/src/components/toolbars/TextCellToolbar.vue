@@ -346,7 +346,7 @@
         <button
           type="button"
           :class="[
-             'top-toolbar__button',
+            'top-toolbar__button',
             'top-toolbar__button--icon',
             'top-toolbar__button--transparent-when-disabled',
             isLinkActive ? 'icon-update' : 'icon-add'
@@ -361,7 +361,7 @@
           :class="[
             'top-toolbar__button',
             'top-toolbar__button--icon',
-            'top-toolbar__button--transparent-when-disabled', 
+            'top-toolbar__button--transparent-when-disabled',
             'icon-delete'
           ]"
           title="Cancel link editing"
@@ -408,6 +408,16 @@
         :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
         @click="insertKatexBlock"
       ></button>
+      <button
+        class="top-toolbar__button top-toolbar__button--icon top-toolbar__button--transparent-when-disabled"
+        type="button"
+        title="Test open and close bottom panel"
+        aria-label="Test open and close bottom panel"
+        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        @click="toggleBottomPanel"
+      >
+        Bottompanel test button
+      </button>
     </div>
   </div>
 </template>
@@ -423,6 +433,8 @@
 import { computed, unref, ref, nextTick, watch, onBeforeUnmount } from 'vue'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
+import { useModalStore } from '@renderer/stores/UI/modalStore'
+import { useBottomPanelStore } from '@renderer/stores/UI/bottompanelStore'
 import type { Editor } from '@tiptap/vue-3'
 import type { HeadingLevel } from '@renderer/types/heading-level-type'
 import type { HighlightColor } from '../../types/highlight-colors-types'
@@ -432,6 +444,8 @@ import { resolveHighlightColor } from '../../code/highlight/highlight-colors'
 // Stores
 const themeStore = useThemeStore()
 const textEditorsStore = useTextEditorsStore()
+const modalStore = useModalStore()
+const bottomPanelStore = useBottomPanelStore()
 
 // Props passed from ToolbarContainer.vue
 const props = defineProps<{
@@ -750,15 +764,23 @@ function insertKatexInline(): void {
   const ed: any = activeTextEditor.value
   if (!ed) return
   try {
-    const hasSelection = !ed.state.selection.empty
-    if (hasSelection) {
-      ed.chain().focus().setInlineMath().run()
-    } else {
-      // Default placeholder expression; user can edit via onClick handler later
-      ed.chain().focus().insertInlineMath({ latex: 'a^2 + b^2 = c^2' }).run()
+    const { from, to } = ed.state.selection
+    let initialLatex = ''
+    if (!ed.state.selection.empty) {
+      initialLatex = ed.state.doc.textBetween(from, to, ' ').trim()
     }
+    if (!initialLatex) {
+      initialLatex = 'x = \\dfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}'
+    }
+    modalStore.openKatexInputModal({
+      mode: 'inline',
+      initialLatex,
+      targetCellId: props.cellId ?? null,
+      selectionFrom: from,
+      selectionTo: to
+    })
   } catch (e) {
-    console.warn('[insertKatexInline] Failed – mathematics extension missing?', e)
+    console.warn('[insertKatexInline] Failed to open KaTeX modal.', e)
   }
 }
 
@@ -766,15 +788,30 @@ function insertKatexBlock(): void {
   const ed: any = activeTextEditor.value
   if (!ed) return
   try {
-    const hasSelection = !ed.state.selection.empty
-    if (hasSelection) {
-      ed.chain().focus().setBlockMath().run()
-    } else {
-      ed.chain().focus().insertBlockMath({ latex: 'E = mc^2' }).run()
+    const { from, to } = ed.state.selection
+    let initialLatex = ''
+    if (!ed.state.selection.empty) {
+      initialLatex = ed.state.doc.textBetween(from, to, '\n').trim()
     }
+    if (!initialLatex) {
+      initialLatex = '\\begin{aligned} \n2x + 3y &= 6 \\\\\n4x - y  &= 5 \\\\\n\\end{aligned}'
+    }
+    modalStore.openKatexInputModal({
+      mode: 'block',
+      initialLatex,
+      targetCellId: props.cellId ?? null,
+      selectionFrom: from,
+      selectionTo: to
+    })
   } catch (e) {
-    console.warn('[insertKatexBlock] Failed – mathematics extension missing?', e)
+    console.warn('[insertKatexBlock] Failed to open KaTeX modal.', e)
   }
+}
+
+function toggleBottomPanel(): void {
+  if (!activeTextEditor.value) return
+  if (isCellLockedComputed.value || isCellHiddenComputed.value) return
+  bottomPanelStore.toggleBottomPanel()
 }
 
 // ---------------------------------------------------------------------------

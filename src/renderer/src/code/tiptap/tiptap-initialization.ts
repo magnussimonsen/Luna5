@@ -15,8 +15,10 @@ import Highlight from '@tiptap/extension-highlight'
 
 import Link from '@tiptap/extension-link'
 // import Image from '@tiptap/extension-image'
-import { ResizableImage } from '@renderer/code/tiptap/extensions/ResizableImage'
-import { Mathematics } from '@tiptap/extension-mathematics'
+import { ResizableImage } from '@renderer/code/tiptap/extensions/resizableImage'
+import { Mathematics } from '@tiptap/extension-mathematics' // Should we import this instead: src/renderer/src/code/tiptap/extensions/tiptap-mathematics-extension-config.ts
+import { useModalStore } from '@renderer/stores/UI/modalStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 // Math (custom) - dynamically imported or added when dependency installed
 import type { Transaction } from 'prosemirror-state'
 import 'katex/dist/katex.min.css'
@@ -37,13 +39,14 @@ export type VueTiptapEditor = InstanceType<typeof import('@tiptap/vue-3').Editor
 export function createTiptapEditor(options: {
   editable: boolean
   content: string
+  cellId?: string
   onUpdate?: (props: {
     editor: VueTiptapEditor
     transaction: Transaction
     appendedTransactions?: Transaction[]
   }) => void
 }): VueTiptapEditor {
-  const { editable, content, onUpdate } = options
+  const { editable, content, onUpdate, cellId } = options
 
   // Ensure no two extensions with the same internal name sneak in.
   const ensureUniqueExtensions = (extensions: Extension[]): Extension[] => {
@@ -90,19 +93,36 @@ export function createTiptapEditor(options: {
   }
 
   const createMathClickHandler = (kind: 'inline' | 'block') => {
-    return (node: unknown, pos: number) => {
-      const latex = (node as { attrs?: { latex?: string } })?.attrs?.latex || ''
-      const promptTitle = kind === 'inline' ? 'Inline math (LaTeX):' : 'Block math (LaTeX):'
-      const updatedLatex = window.prompt(promptTitle, latex)
-      if (updatedLatex == null || updatedLatex === latex) return
+    return (node: { attrs?: { latex?: string }; nodeSize?: number } | undefined, pos: number) => {
+      const modalStore = useModalStore()
+      const cellSelectionStore = useCellSelectionStore()
+
+      if (!editor?.isEditable) return
+
+      const latex = node?.attrs?.latex ?? ''
+      const nodeSize = node?.nodeSize ?? 0
+
       try {
-        const chain = (editor as unknown as ChainCapableEditor).chain().setNodeSelection(pos)
-        if (kind === 'inline') chain.updateInlineMath?.({ latex: updatedLatex })
-        else chain.updateBlockMath?.({ latex: updatedLatex })
-        chain.focus().run()
+        const chain = (editor as unknown as ChainCapableEditor).chain()
+        chain.focus()
+        chain.setNodeSelection(pos)
+        chain.run()
       } catch (error) {
-        console.warn(`[${kind === 'inline' ? 'InlineMath' : 'BlockMath'} edit] failed`, error)
+        console.warn('[Math node click] Failed to select math node.', error)
       }
+
+      const selectionFrom = pos
+      const selectionTo = pos + Math.max(nodeSize, 1)
+
+      modalStore.openKatexInputModal({
+        mode: kind,
+        initialLatex: latex,
+        targetCellId: cellId ?? cellSelectionStore.selectedCellId ?? null,
+        selectionFrom,
+        selectionTo,
+        intent: 'edit',
+        nodePos: pos
+      })
     }
   }
 

@@ -7,6 +7,7 @@ import pkg from '../../../../../package.json'
 
 type PackageJsonMinimal = {
   name?: string
+  officialName?: string
   version?: string
   author?: string
   license?: string
@@ -18,9 +19,9 @@ import LunaSmallIcon from '@renderer/assets/icons/Luna05-logo-169.png'
 
 // Get Electron/Chromium/Node versions from the preload API
 const versions = reactive({ ...window.electron.process.versions })
-const LunaVersion: string = _pkg.version || '0.0.0'
+const LunaVersion: string = _pkg.version || '0.5.0'
 const licenseType: string = _pkg.license || 'MIT'
-const appName: string = _pkg.name || 'luna'
+const appName: string = _pkg.officialName || 'Luna Stem Notebook'
 const appAuthor: string = _pkg.author || ''
 // const licenseText: string = 'placeholder for now'
 // Example: You can later fill this array with your actual dependencies

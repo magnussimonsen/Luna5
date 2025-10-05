@@ -33,16 +33,22 @@ export type ThemeColorTypesV2 = Record<string, string>
 type Palette = {
   PrimaryBg: DualColor
   SecondaryBg: DualColor
+  TertiaryBg: DualColor
   GutterBg: DualColor
   SurfaceBg: DualColor
   PaperBg: DualColor
   MenubarBg: DualColor
   ToolbarBg: DualColor
-  SidepanelBg: DualColor
+  SidebarBg: DualColor
   StatusbarBg: DualColor
 
   PrimaryAccent: DualColor
   SecondaryAccent: DualColor
+  TertiaryAccent: DualColor
+
+  SelectedButtonBorder: DualColor
+  NotSelectedButtonBorder: DualColor
+  PanelBorder: DualColor
 
   PrimarySuccess: DualColor
   SecondarySuccess: DualColor
@@ -55,7 +61,6 @@ type Palette = {
   TextPrimary: DualColor
   TextMuted: DualColor
   TextLink: DualColor
-  Border: DualColor
   Divider: DualColor
 
   Hover: DualColor
@@ -78,24 +83,33 @@ const basePalette: Palette = {
   PrimaryBg: { light: '#ffffff', dark: '#222222' },
   SecondaryBg: { light: '#f5f5f5', dark: '#2c2c2c' },
   TertiaryBg: { light: '#f0f0f0', dark: '#2f2f2f' },
+
   GutterBg: { light: '#eaeaea', dark: '#333333' },
+
   SurfaceBg: { light: '#ffffff', dark: '#202020' },
   PaperBg: { light: '#ffffff', dark: '#2b2b2b' },
+
   MenubarBg: { light: '#f7f7f7', dark: '#111111' },
   ToolbarBg: { light: '#f7f7f7', dark: '#111111' },
-  SidepanelBg: { light: '#eeeeee', dark: '#2a2a2a' },
+
+  SidebarBg: { light: '#eeeeee', dark: '#2a2a2a' },
+
   StatusbarBg: { light: '#f7f7f7', dark: '#111111' },
 
-  PrimaryAccent: { light: '#2fc97f', dark: '#26b07c' }, // Selected button border
-  SecondaryAccent: { light: '#3b82f6', dark: '#60a5fa' }, // Not selectexd button border
-  TertiaryAccent: { light: '#f59e0b', dark: '#f59e0b' }, // UI panel border
+  PrimaryAccent: { light: '#2fc97f', dark: '#26b07c' },
+  SecondaryAccent: { light: '#3b82f6', dark: '#60a5fa' },
+  TertiaryAccent: { light: '#f59e0b', dark: '#f59e0b' },
+
+  SelectedButtonBorder: { light: '#2fc97f', dark: '#26b07c' },
+  NotSelectedButtonBorder: { light: '#3b82f6', dark: '#60a5fa' },
+  PanelBorder: { light: '#f59e0b', dark: '#f59e0b' },
 
   PrimarySuccess: { light: '#22c55e', dark: '#22c55e' },
   SecondarySuccess: { light: '#16a34a', dark: '#16a34a' },
   Warning: { light: '#f59e0b', dark: '#f59e0b' },
   Danger: { light: '#ef4444', dark: '#ef4444' },
   Info: { light: '#3b82f6', dark: '#60a5fa' },
-  Selected: { light: '#bbf7d0', dark: '#14532d' },
+  Selected: { light: '#bbf7d0', dark: '#14532d' }, // Selected cell border, selected button bg
   Disabled: { light: '#bdbdbd', dark: '#555555' },
 
   TextPrimary: { light: '#222222', dark: '#cccccc' },

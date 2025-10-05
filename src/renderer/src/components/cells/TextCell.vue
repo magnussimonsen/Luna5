@@ -50,6 +50,7 @@ const isCellLocked = computed<boolean>(function computeIsLocked() {
 const tiptapEditor = createTiptapEditor({
   editable: !isCellLocked.value,
   content: cell.cellInputContent || '',
+  cellId: cell.id,
   onUpdate: ({ editor }) => {
     if (isCellLocked.value) return
     const htmlContent = (editor as VueTiptapEditor).getHTML()
@@ -135,6 +136,46 @@ const editor = tiptapEditor
   display: block;
   width: 100%;
   max-width: 100%;
+}
+.tiptap-editor :deep(.tiptap-mathematics-render[data-type='inline-math']) {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1em 0.35em;
+  border-radius: 6px;
+  transition:
+    background-color 0.12s ease-in-out,
+    box-shadow 0.12s ease-in-out;
+  cursor: pointer;
+  background-color: transparent;
+}
+.tiptap-editor :deep(.tiptap-mathematics-render[data-type='inline-math']:hover),
+.tiptap-editor :deep(.ProseMirror-selectednode.tiptap-mathematics-render[data-type='inline-math']) {
+  background-color: var(--math-inline-hover, rgba(91, 141, 239, 0.18));
+  box-shadow: inset 0 0 0 1px rgba(91, 141, 239, 0.25);
+}
+.tiptap-editor :deep(.tiptap-mathematics-render[data-type='block-math']) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0.85em auto;
+  padding: 0.65em 1em;
+  border-radius: 10px;
+  max-width: 90%;
+  transition:
+    background-color 0.12s ease-in-out,
+    box-shadow 0.12s ease-in-out;
+  cursor: pointer;
+  background-color: transparent;
+}
+.tiptap-editor :deep(.tiptap-mathematics-render[data-type='block-math'] .block-math-inner) {
+  width: 100%;
+  text-align: center;
+}
+.tiptap-editor :deep(.tiptap-mathematics-render[data-type='block-math']:hover),
+.tiptap-editor :deep(.ProseMirror-selectednode.tiptap-mathematics-render[data-type='block-math']) {
+  background-color: var(--math-block-hover, rgba(91, 141, 239, 0.14));
+  box-shadow: inset 0 0 0 1px rgba(91, 141, 239, 0.2);
 }
 /* Table styling */
 .tiptap-editor :deep(table) {

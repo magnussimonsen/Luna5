@@ -10,6 +10,7 @@ import CellList from '@renderer/components/conteiners/CellList.vue'
 import Statusbar from '@renderer/components/navigation-bars/Statusbar.vue'
 import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
+import KatexInputModal from '@renderer/components/modals/katex-input/KatexInputModal.vue'
 // import MathLivePlayground from '@renderer/mathlive-test-folder/MathLivePlayground.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 // Modals and sidepanel are currently not referenced directly in this file.
@@ -25,11 +26,17 @@ import { useSidepanelStore } from '@renderer/stores/UI/sidepanelStore'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { storeToRefs } from 'pinia'
 import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-watch-function'
+import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
+import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
+import type { Editor } from '@tiptap/vue-3'
+import BottomPanel from './components/bottompanel/BottomPanel.vue'
 
 const menubarStore = useMenubarStore()
 const toolbarStore = useToolbarStore()
 const sidepanelStore = useSidepanelStore()
 const modalStore = useModalStore()
+const textEditorsStore = useTextEditorsStore()
+const cellSelectionStore = useCellSelectionStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
@@ -91,6 +98,47 @@ onBeforeUnmount(() => {
   menubarObserver?.disconnect()
   toolbarObserver?.disconnect()
 })
+
+function handleKatexInsert(payload: { latex: string; mode: 'inline' | 'block' }): void {
+  const latex = payload.latex.trim()
+  if (!latex) return
+  const targetCellId = modalStore.katexTargetCellId ?? cellSelectionStore.selectedCellId
+  const editor = textEditorsStore.getEditorByCellId(targetCellId)
+  if (!editor) {
+    console.warn('[KaTeX modal] No active editor found for insertion.')
+    return
+  }
+
+  try {
+    const selection = modalStore.katexSelectionRange
+    const mathEditor = editor as Editor
+
+    const chain = mathEditor.chain().focus()
+    const isEdit = modalStore.katexInteractionKind === 'edit'
+    const targetNodePos = modalStore.katexTargetNodePos
+
+    if (isEdit && targetNodePos != null) {
+      chain.setNodeSelection(targetNodePos)
+      if (payload.mode === 'inline') {
+        chain.updateInlineMath?.({ latex })
+      } else {
+        chain.updateBlockMath?.({ latex })
+      }
+    } else {
+      if (selection) {
+        chain.setTextSelection({ from: selection.from, to: selection.to })
+      }
+      if (payload.mode === 'inline') {
+        chain.insertInlineMath({ latex })
+      } else {
+        chain.insertBlockMath({ latex })
+      }
+    }
+    chain.run()
+  } catch (error) {
+    console.warn('[KaTeX modal] Failed to insert math expression.', error)
+  }
+}
 </script>
 <template>
   <div id="app-layout">
@@ -115,8 +163,14 @@ onBeforeUnmount(() => {
     </div>
     <Sidepanel />
 
+    <BottomPanel />
     <!-- Global modals (kept at root so they can render overlays) -->
     <AboutLunaModal v-if="modalStore.isAboutLunaModalOpen" />
+    <KatexInputModal
+      v-if="modalStore.isKatexInputModalOpen"
+      @insert="handleKatexInsert"
+      @close="modalStore.closeKatexInputModal"
+    />
 
     <div ref="statusbarRef" class="statusbar-container">
       <Statusbar />

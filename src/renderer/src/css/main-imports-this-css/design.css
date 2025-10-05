@@ -9,6 +9,7 @@ Design tokens (layout/spacing/metrics)
     /* ================================
      Z-INDEX (stacking order)
      ================================ */
+    --modal-overlay-z-index: 5000;
     --menubar-z-index: 4000;
     --sidepanel-main-z-index: 4000;
     --toolbar-z-index: 3000;

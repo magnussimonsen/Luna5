@@ -1,3 +1,9 @@
+<!--
+  IS THIS MODAL USED?
+  SaveAsModal.vue
+  A modal dialog component for saving the current workspace with a specified filename and location.
+-->
+
 <template>
   <teleport to="body">
     <div v-if="isOpen" class="modal-overlay" role="dialog" aria-modal="true">
