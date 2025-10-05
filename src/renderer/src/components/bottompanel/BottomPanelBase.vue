@@ -163,9 +163,6 @@ onBeforeUnmount(() => {
             <span class="bottom-panel__rail-line"></span>
           </div>
           <header class="bottom-panel__header">
-            <div class="bottom-panel__grab-handle">
-              <span class="grab-bar"></span>
-            </div>
             <div class="bottom-panel__title">Bottom panel (prototype)</div>
             <button
               class="bottom-panel__close"
@@ -188,44 +185,45 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/*
+Styles live in
+src/renderer/src/css/main-imports-this-css/bottompanel/bottompanel-base.css
+*/
 .bottom-panel-overlay {
   position: fixed;
   inset: 0;
   background: rgba(13, 17, 23, 0.45);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(0px);
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  z-index: var(--modal-overlay-z-index, 5000);
+  z-index: var(--bottompanel-overlay-z-index, 4500);
 }
 
 .bottom-panel {
   position: relative;
-  width: min(560px, 95vw);
-  background: var(--menu-background, #1e2228);
+  width: 100%;
+  background: var(--sidepanel-background, var(--debug-color), white);
   color: var(--text-color, #f5f5f5);
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.28);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  max-height: calc(80vh - var(--bottom-chrome-height, 0px));
-  min-height: 200px;
-  width: clamp(420px, 60vw, 720px);
+  max-height: calc(95vh - var(--bottom-chrome-height, 0px));
+  min-height: calc(5vh - var(--bottom-chrome-height, 0px));
 }
 
 .bottom-panel__resize-rail {
   flex: 0 0 auto;
-  height: 14px;
+  height: var(--resize-rail-width, 16px);
   cursor: row-resize;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-block: 2px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
-  border-radius: 16px 16px 0 0;
-  touch-action: none;
-  user-select: none;
+  background: var(--resize-rail-color, var(--debug-color, red));
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .bottom-panel__resize-rail:active,
@@ -234,13 +232,14 @@ onBeforeUnmount(() => {
 }
 
 .bottom-panel__rail-line {
-  width: 72px;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.45);
+  width: var(--bottompanel__rail-line-width, 4px);
+  height: var(--bottompanel__rail-line-height, 72px);
+  border-radius: var(--resize-rail-border-radius, 999px);
+  background: var(--resize-rail-line-color, var(--debug-color, red));
 }
 
 .bottom-panel__header {
+  /* Replace with row-flex-wrap-base.css */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -248,22 +247,8 @@ onBeforeUnmount(() => {
   gap: 0.75rem;
 }
 
-.bottom-panel__grab-handle {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: 0.25rem 0 0.15rem;
-}
-
-.grab-bar {
-  display: inline-block;
-  width: 56px;
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.35);
-}
-
 .bottom-panel__title {
+  /* Remove? */
   flex: 4;
   font-weight: 600;
   text-align: center;
@@ -271,6 +256,7 @@ onBeforeUnmount(() => {
 }
 
 .bottom-panel__close {
+  /* Replace with cancel button on bottom row */
   flex: 1;
   border: none;
   background: transparent;

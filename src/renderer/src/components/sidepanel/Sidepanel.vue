@@ -11,11 +11,14 @@
     :style="{ width: panelWidth + 'px' }"
   >
     <div
-      class="resize-handle left"
+      class="sidepanel__resize-rail"
       role="separator"
       aria-label="Resize side panel"
-      @mousedown="startResize"
-    ></div>
+      @mousedown="handleResizeStart"
+      @touchstart="handleResizeStart"
+    >
+      <span class="sidepanel__rail-line"></span>
+    </div>
     <div ref="panelContentRef" class="sidepanel-content-container" @scroll="onScrollPanelContent">
       <component :is="currentPanelComponent" v-if="currentPanelComponent" />
     </div>
@@ -59,22 +62,32 @@ const currentPanelComponent = computed(() => {
   return panelComponents[sidepanelStore.activePanel] || null
 })
 
-// Handle resizing of the side panel
-function startResize(e: MouseEvent): void {
+function beginResize(clientX: number): void {
+  if (resizing) return
   resizing = true
-  startX = e.clientX
+  startX = clientX
   startWidth = panelWidth.value
-  document.addEventListener('mousemove', onResize)
-  document.addEventListener('mouseup', stopResize)
+  document.addEventListener('mousemove', onPointerMove, { passive: false })
+  document.addEventListener('touchmove', onPointerMove, { passive: false })
+  document.addEventListener('mouseup', stopResize, { passive: true })
+  document.addEventListener('touchend', stopResize, { passive: true })
   document.body.classList.add('sidepanel-resizing')
-  e.preventDefault() // Prevent text selection during resize
 }
 
-function onResize(e: MouseEvent): void {
+function handleResizeStart(event: MouseEvent | TouchEvent): void {
+  event.preventDefault()
+  const clientX = 'touches' in event ? event.touches[0]?.clientX : event.clientX
+  if (typeof clientX !== 'number') return
+  beginResize(clientX)
+}
+
+function onPointerMove(event: MouseEvent | TouchEvent): void {
   if (!resizing) return
+  const currentX = 'touches' in event ? event.touches[0]?.clientX : event.clientX
+  if (typeof currentX !== 'number') return
   // Right edge is fixed; dragging handle (left edge) left increases width.
-  // So delta = startX - e.clientX (positive when moving left)
-  const delta = startX - e.clientX
+  // So delta = startX - currentX (positive when moving left)
+  const delta = startX - currentX
   const minWidth: number = window.innerWidth * minWidthScalingFactor
   const maxWidth: number = window.innerWidth * maxWidthScalingFactor
   const next = Math.max(minWidth, Math.min(maxWidth, startWidth + delta))
@@ -85,8 +98,10 @@ function onResize(e: MouseEvent): void {
 function stopResize(): void {
   if (!resizing) return
   resizing = false
-  document.removeEventListener('mousemove', onResize)
+  document.removeEventListener('mousemove', onPointerMove)
+  document.removeEventListener('touchmove', onPointerMove)
   document.removeEventListener('mouseup', stopResize)
+  document.removeEventListener('touchend', stopResize)
   document.body.classList.remove('sidepanel-resizing')
   sidepanelStore.setLastPanelWidth(panelWidth.value)
 }
@@ -112,8 +127,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  document.removeEventListener('mousemove', onResize)
+  document.removeEventListener('mousemove', onPointerMove)
+  document.removeEventListener('touchmove', onPointerMove)
   document.removeEventListener('mouseup', stopResize)
+  document.removeEventListener('touchend', stopResize)
 })
 </script>
 

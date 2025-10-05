@@ -29,7 +29,7 @@ import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-wa
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import type { Editor } from '@tiptap/vue-3'
-import BottomPanel from './components/bottompanel/BottomPanel.vue'
+import BottomPanel from './components/bottompanel/BottomPanelBase.vue'
 
 const menubarStore = useMenubarStore()
 const toolbarStore = useToolbarStore()

@@ -34,9 +34,11 @@ export const useThemeStore = defineStore('theme', {
       a4WorkspaceBackground: '#e0e0e0',
       a4WorkspaceBorderColor: 'gainsboro',
 
-      // Sidepanel
+      // Sidepanels
       sidepanelBackground: 'gainsboro',
       sidepanelBorderColor: 'whitesmoke',
+      resizeRailColor: 'lightgreen',
+      resizeRailLineColor: 'rgba(255, 255, 255, 0.45)',
 
       // Paper preview
       paperColor: '#ffffff',
@@ -149,9 +151,11 @@ export const useThemeStore = defineStore('theme', {
       a4WorkspaceBackground: '#222222',
       a4WorkspaceBorderColor: '#444444',
 
-      // Sidepanel
+      // Sidepanels
       sidepanelBackground: '#444444',
       sidepanelBorderColor: '#111111',
+      resizeRailColor: 'darkgreen',
+      resizeRailLineColor: 'rgba(255, 255, 255, 0.45)',
 
       // Paper preview
       paperColor: '#333333',
@@ -290,6 +294,8 @@ export const useThemeStore = defineStore('theme', {
       // Sidepanel
       root.style.setProperty('--sidepanel-background', colors.sidepanelBackground)
       root.style.setProperty('--sidepanel-border-color', colors.sidepanelBorderColor)
+      root.style.setProperty('--resize-rail-color', colors.resizeRailColor)
+      root.style.setProperty('--resize-rail-line-color', colors.resizeRailLineColor)
 
       // Accessibility / contrast
       root.style.setProperty('--high-contrast-color', colors.highContrastColor)

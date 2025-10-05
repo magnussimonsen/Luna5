@@ -36,7 +36,9 @@ export type ThemeColorTypes = {
   // Sidepanel
   sidepanelBackground: string
   sidepanelBorderColor: string
-
+  resizeRailColor: string
+  resizeRailLineColor: string
+  
   // Paper preview
   paperColor: string
   paperBorderColor: string

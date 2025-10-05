@@ -13,39 +13,45 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  border-left: min(0.3em, 5px) solid var(--button-on-color, lightgreen);
-  border-right: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
+  border: min(0.3em, 5px) solid var(--button-on-color, lightgreen);
+  border-left: 0px solid transparent;
   margin-right: min(0.5em, 8px);
-  border-top: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
-  border-bottom: min(0.1em, 2px) solid var(--button-on-color, lightgreen);
   border-radius: var(--border-radius);
   box-sizing: border-box;
   z-index: var(--sidepanel-main-z-index, 4000);
   background: var(--sidepanel-background, var(--debug-color), white);
 }
+
 /* While resizing: prevent text selection & show consistent cursor */
 body.sidepanel-resizing {
   cursor: ew-resize !important;
   user-select: none;
 }
 
-/* Left-edge resize handle (panel anchored to the right) */
-.resize-handle.left {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: min(10px,1em);
-  /* Thin handle for resizing */
+.sidepanel__resize-rail {
+  flex: 0 0 auto;
+  width: var(--resize-rail-width, 16px);
   cursor: ew-resize;
-  background: var(--button-on-color, lightgreen);
-  height: 100%;
-  flex-shrink: 0;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 2px;
+  background: var(--resize-rail-color, blue);
+  touch-action: none;
+  user-select: none;
 }
 
-.resize-handle.left:hover,
-.resize-handle.left:active {
-  background: var(--active-border-color-hover, green);
+.sidepanel__resize-rail:active,
+.sidepanel__resize-rail.sidepanel__resize-rail--dragging {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12));
+}
+
+.sidepanel__rail-line {
+  width: var(--sidepanel__rail-line-width, 4px);
+  height: var(--sidepanel__rail-line-height, 72px);
+  border-radius: var(--resize-rail-border-radius, 999px);
+  background: var(--resize-rail-line-color, var(--debug-color, red));
 }
 
 .util-sidepanel-z-index {

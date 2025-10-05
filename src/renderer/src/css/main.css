@@ -29,7 +29,6 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/menubar/menubar-dropdown-item.css';
 
 /* Top toolbar */
-
 @import './main-imports-this-css/top-toolbar/top-toolbar-container.css';
 @import './main-imports-this-css/top-toolbar/top-toolbar-buttons.css';
 
@@ -44,6 +43,15 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/sidepanel/sidepanel-main-with-resize.css';
 @import './main-imports-this-css/sidepanel/sidepanel-content-container.css';
 @import './main-imports-this-css/sidepanel/sidepanel-ui.css';
+
+/* Bottom panel base */
+@import './main-imports-this-css/bottompanel/bottompanel-base.css';
+
+/* Bottom panel KaTeX input*/
+@import './main-imports-this-css/bottompanel/bottompanel-katex-input-and-preview.css';
+@import './main-imports-this-css/bottompanel/bottompanel-katex-input-bottomtoolbar.css';
+@import './main-imports-this-css/bottompanel/bottompanel-katex-input-toptoolbar.css';
+
 
 #app {
   /* App root layout */

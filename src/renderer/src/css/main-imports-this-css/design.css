@@ -10,6 +10,7 @@ Design tokens (layout/spacing/metrics)
      Z-INDEX (stacking order)
      ================================ */
     --modal-overlay-z-index: 5000;
+    --bottompanel-overlay-z-index: 4500;
     --menubar-z-index: 4000;
     --sidepanel-main-z-index: 4000;
     --toolbar-z-index: 3000;
@@ -28,6 +29,17 @@ Design tokens (layout/spacing/metrics)
      ================================ */
     --border-radius: min(10px, 1em);
     --transition-duration: 0.11s;
+
+
+    /* ================================
+     Resize rail 
+     ================================ */
+    --resize-rail-width: min(16px, 0.5em);
+    --resize-rail-border-radius: 999px;
+    --sidepanel__rail-line-width: 4px;
+    --sidepanel__rail-line-height: 72px;
+    --bottompanel__rail-line-width: 72px;
+    --bottompanel__rail-line-height: 4px;
 
     /* ================================
      BUTTON (generic)
