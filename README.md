@@ -1,5 +1,5 @@
 
-## Downlad of first build soon availavle
+## Downlad of first build soon available
 The first build will soon be available for download at the project's SourceForge page.  
 
 [![Download Luna STEM Notebook](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/luna-stem-notebook/files/latest/download)
