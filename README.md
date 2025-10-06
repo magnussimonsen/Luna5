@@ -1,6 +1,6 @@
 
-## Downlad of first build soon available
-The first build will soon be available for download at the project's SourceForge page.  
+## Downlad
+The first prototype build, featuring both a text editor and Python editor, will soon be available for download on the project's SourceForge page. 
 
 [![Download Luna STEM Notebook](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/luna-stem-notebook/files/latest/download)
 
