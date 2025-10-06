@@ -1,4 +1,6 @@
 
+[![Download Luna STEM Notebook](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/luna-stem-notebook/files/latest/download)
+
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-09-28.png" alt="" width="900" /> 
 </p>
