@@ -16,7 +16,10 @@ const fonts = {
     firaCode: "'Fira Code', monospace",
 
     // Arimo
-    arimo: "'Arimo', Arial, sans-serif"
+    arimo: "'Arimo', Arial, sans-serif",
+
+    // Inter
+    inter: "'Inter', Arial, sans-serif"
 
     // Add more font families here as needed
   }

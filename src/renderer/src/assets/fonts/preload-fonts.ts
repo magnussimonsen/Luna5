@@ -128,6 +128,31 @@ const preloadFonts = [
     as: 'font',
     type: 'font/woff2',
     crossorigin: 'anonymous'
+  },
+  // Inter Font Variants
+  {
+    href: './src/assets/fonts/Inter/Inter-Regular.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossorigin: 'anonymous'
+  },
+  {
+    href: './src/assets/fonts/Inter/Inter-Italic.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossorigin: 'anonymous'
+  },
+  {
+    href: './src/assets/fonts/Inter/Inter-Bold.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossorigin: 'anonymous'
+  },
+  {
+    href: './src/assets/fonts/Inter/Inter-BoldItalic.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossorigin: 'anonymous'
   }
   // Add more font objects as needed
 ]

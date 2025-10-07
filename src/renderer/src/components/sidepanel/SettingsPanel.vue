@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, type Ref, watch } from 'vue'
 import SettingsPanelSelectorRow from './settings-components/SettingsPanelSelectorRow.vue'
 import GeneralSettingsPanel from './settings-components/GeneralSettingsPanel.vue'
 import CodeSettingsPanel from './settings-components/CodeSettingsPanel.vue'
@@ -28,23 +28,36 @@ import SpreadsheetsSettingsPanel from './settings-components/SpreadsheetsSetting
 import ProbabilitySettingsPanel from './settings-components/ProbabilitySettingsPanel.vue'
 import TextEditorPanel from './settings-components/TextEditorPanel.vue'
 import LlmAssistantSettingsPanel from './settings-components/LlmAssistantSettingsPanel.vue'
+import { useLastSelectedSettingPanelStore } from '@renderer/stores/settings/lastSelectedSettingPanelStore'
+import { DEFAULT_SETTINGS_PANEL, type SettingsPanelKey } from '@renderer/types/settingspanel-types'
 //import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 
-type SettingsPage =
-  | 'general'
-  | 'code'
-  | 'cas'
-  | 'geometry'
-  | 'graphical-calculator'
-  | 'spreadsheets'
-  | 'probability'
-  | 'text-editor'
-  | 'code' // THIS IS PYTHON CODE EDITOR; DO NOT CVHANGE TO 'python'
-  | 'llm-assistant'
+const lastSelectedPanelStore = useLastSelectedSettingPanelStore()
 
-const currentPage: Ref<SettingsPage> = ref('general')
+const currentPage: Ref<SettingsPanelKey> = ref(
+  lastSelectedPanelStore.currentPanel ?? DEFAULT_SETTINGS_PANEL
+)
 
-function onUpdatePage(page: SettingsPage): void {
+watch(
+  () => lastSelectedPanelStore.currentPanel,
+  (panel) => {
+    if (panel !== currentPage.value) {
+      currentPage.value = panel
+    }
+  },
+  { immediate: true }
+)
+
+watch(
+  () => currentPage.value,
+  (panel) => {
+    if (panel !== lastSelectedPanelStore.currentPanel) {
+      lastSelectedPanelStore.setLastSelectedPanel(panel)
+    }
+  }
+)
+
+function onUpdatePage(page: SettingsPanelKey): void {
   currentPage.value = page
 }
 </script>

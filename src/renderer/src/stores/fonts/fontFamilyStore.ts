@@ -3,30 +3,31 @@ import { defineStore } from 'pinia'
 import type { FontTypes } from '@renderer/types/font-family-types'
 
 const availableFonts = [
-  { label: 'Inter', value: 'Inter, sans-serif' },
-  { label: 'Roboto', value: 'Roboto, Arial, sans-serif' },
-  { label: 'OpenDyslexic', value: 'OpenDyslexic, Arial, sans-serif' },
+  { label: 'Arimo', value: 'Arimo, Arial, sans-serif' },
+  { label: 'Arial', value: 'Arial, sans-serif' },
   { label: 'Comic Neue', value: 'Comic Neue, Arial, sans-serif' },
-  { label: 'Fira Mono', value: 'Fira Mono, monospace' },
   { label: 'Fira Code', value: 'Fira Code, monospace' },
-  { label: 'Arimo', value: 'Arimo, Arial, sans-serif' }
+  { label: 'Fira Mono', value: 'Fira Mono, monospace' },
+  { label: 'Inter', value: 'Inter, Arial, sans-serif' },
+  { label: 'OpenDyslexic', value: 'OpenDyslexic, Arial, sans-serif' },
+  { label: 'Roboto', value: 'Roboto, Arial, sans-serif' }
 ]
 
 const availableCodingFonts = [
-  { label: 'Roboto', value: 'Roboto, Arial, sans-serif' },
-  { label: 'OpenDyslexic', value: 'OpenDyslexic, Arial, sans-serif' },
   { label: 'Comic Neue', value: 'Comic Neue, Arial, sans-serif' },
+  { label: 'Fira Code', value: 'Fira Code, monospace' },
   { label: 'Fira Mono', value: 'Fira Mono, monospace' },
-  { label: 'Fira Code', value: 'Fira Code, monospace' }
+  { label: 'OpenDyslexic', value: 'OpenDyslexic, Arial, sans-serif' },
+  { label: 'Roboto', value: 'Roboto, Arial, sans-serif' }
 ]
 
 export const useFontStore = defineStore('fonts', {
   state: () => ({
     fonts: {
-      uiFont: 'Arimo, Arial, sans-serif',
-      defaultCellFont: 'Arimo, Arial, sans-serif',
+      uiFont: 'Inter, Arial, sans-serif',
+      defaultCellFont: 'Inter, Arial, sans-serif',
       codingFont: 'Fira Code, monospace',
-      textFont: 'Arimo, Arial, sans-serif'
+      textFont: 'Inter, Arial, sans-serif'
     } as FontTypes,
     availableFonts,
     availableCodingFonts

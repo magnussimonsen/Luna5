@@ -2,86 +2,15 @@
   <div :class="['sidepanel-row-flex-wrap', 'sidepanel-color-font-styling']">
     <div>
       <button
+        v-for="button in panelButtons"
+        :key="button.key"
         :class="[
           'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'general' }
+          { 'sidepanel__button--active': currentPage === button.key }
         ]"
-        @click="emitUpdate('general')"
+        @click="emitUpdate(button.key)"
       >
-        General
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'text-editor' }
-        ]"
-        @click="emitUpdate('text-editor')"
-      >
-        Text
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'graphical-calculator' }
-        ]"
-        @click="emitUpdate('graphical-calculator')"
-      >
-        Graphical calculator
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'cas' }
-        ]"
-        @click="emitUpdate('cas')"
-      >
-        CAS
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'geometry' }
-        ]"
-        @click="emitUpdate('geometry')"
-      >
-        Geometry
-      </button>
-
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'spreadsheets' }
-        ]"
-        @click="emitUpdate('spreadsheets')"
-      >
-        Spreadsheets
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'probability' }
-        ]"
-        @click="emitUpdate('probability')"
-      >
-        Probability
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'code' }
-        ]"
-        @click="emitUpdate('code')"
-      >
-        Code editor (Python)
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'llm-assistant' }
-        ]"
-        @click="emitUpdate('llm-assistant')"
-      >
-        LLM assistant
+        {{ button.label }}
       </button>
     </div>
   </div>
@@ -91,30 +20,30 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Divider from '@renderer/components/UI/Divider.vue'
+import type { SettingsPanelKey } from '@renderer/types/settingspanel-types'
 
-type SettingsPage =
-  | 'general'
-  | 'code'
-  | 'cas'
-  | 'geometry'
-  | 'graphical-calculator'
-  | 'spreadsheets'
-  | 'probability'
-  | 'text-editor'
-  | 'code'
-  | 'llm-assistant'
-
-// const props = defineProps<{ currentPage: SettingsPage; fontSize?: string }>()
-const props = defineProps<{ currentPage: SettingsPage }>()
+// const props = defineProps<{ currentPage: SettingsPanelKey; fontSize?: string }>()
+const props = defineProps<{ currentPage: SettingsPanelKey }>()
+const panelButtons: Array<{ key: SettingsPanelKey; label: string }> = [
+  { key: 'general', label: 'General' },
+  { key: 'text-editor', label: 'Text' },
+  { key: 'graphical-calculator', label: 'Graphical calculator' },
+  { key: 'cas', label: 'CAS' },
+  { key: 'geometry', label: 'Geometry' },
+  { key: 'spreadsheets', label: 'Spreadsheets' },
+  { key: 'probability', label: 'Probability' },
+  { key: 'code', label: 'Python editor' },
+  { key: 'llm-assistant', label: 'LLM assistant' }
+]
 /* TO DO: Store the current page in a ref and update the settings store
 with the state of which page is currently active. State might have to be added to
 the settings store */
-const emit = defineEmits<{ (e: 'update:current-page', value: SettingsPage): void }>()
+const emit = defineEmits<{ (e: 'update:current-page', value: SettingsPanelKey): void }>()
 
 // const fontSize = computed(() => props.fontSize ?? '12px')
 const currentPage = computed(() => props.currentPage)
 
-function emitUpdate(page: SettingsPage): void {
+function emitUpdate(page: SettingsPanelKey): void {
   emit('update:current-page', page)
 }
 </script>

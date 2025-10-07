@@ -1,29 +1,26 @@
 <template>
-    <div class="sidepanel-container-inside-resize-border-padding">
-    <!-- Menu bar selection row (component) -->
+  <div class="sidepanel-container-inside-resize-border-padding">
     <HelpPanelSelectionRow
-      :current-page="currentPage"
+      :current-page="currentHelpPanel"
       :font-size="fontSizeStore.fontSizes.sidepanelMenubarFontSize"
-      @update:current-page="onUpdatePage"
+      @update:current-page="handlePanelChange"
     />
 
-    <!-- Content area -->
     <div :class="['sidepanel-flex-column-overflow-y', 'sidepanel-color-font-styling']">
-
-      <GeneralHelpPanel v-if="currentPage === 'general'" />
-      <CodeHelpPanel v-else-if="currentPage === 'code'" />
-      <CasHelpPanel v-else-if="currentPage === 'cas'" />
-      <GeometryHelpPanel v-else-if="currentPage === 'geometry'" />
-      <GraphicalCalculatorHelpPanel v-else-if="currentPage === 'graphical-calculator'" />
-      <SpreadsheetsHelpPanel v-else-if="currentPage === 'spreadsheets'" />
-      <ProbabilityHelpPanel v-else-if="currentPage === 'probability'" />
-      <TextEditorHelpPanel v-else-if="currentPage === 'text-editor'" />
+      <GeneralHelpPanel v-if="currentHelpPanel === 'general'" />
+      <CodeHelpPanel v-else-if="currentHelpPanel === 'code'" />
+      <CasHelpPanel v-else-if="currentHelpPanel === 'cas'" />
+      <GeometryHelpPanel v-else-if="currentHelpPanel === 'geometry'" />
+      <GraphicalCalculatorHelpPanel v-else-if="currentHelpPanel === 'graphical-calculator'" />
+      <SpreadsheetsHelpPanel v-else-if="currentHelpPanel === 'spreadsheets'" />
+      <ProbabilityHelpPanel v-else-if="currentHelpPanel === 'probability'" />
+      <TextEditorHelpPanel v-else-if="currentHelpPanel === 'text-editor'" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, type Ref, watch } from 'vue'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import HelpPanelSelectionRow from './help-components/HelpPanelSelectionRow.vue'
 import GeneralHelpPanel from './help-components/GeneralHelpPanel.vue'
@@ -34,23 +31,39 @@ import GraphicalCalculatorHelpPanel from './help-components/GraphicalCalculatorH
 import SpreadsheetsHelpPanel from './help-components/SpreadsheetsHelpPanel.vue'
 import ProbabilityHelpPanel from './help-components/ProbabilityHelpPanel.vue'
 import TextEditorHelpPanel from './help-components/TextEditorHelpPanel.vue'
+import { useLastSelectedHelpPanelStore } from '@renderer/stores/help/lastSelectedHelpPanelStore'
+import { DEFAULT_HELP_PANEL, type HelpPanelKey } from '@renderer/types/helppanel-types'
 
-type HelpPage =
-  | 'general'
-  | 'code'
-  | 'cas'
-  | 'geometry'
-  | 'graphical-calculator'
-  | 'spreadsheets'
-  | 'probability'
-  | 'text-editor'
-
-const currentPage: Ref<HelpPage> = ref('general')
+const lastSelectedHelpPanelStore = useLastSelectedHelpPanelStore()
 const fontSizeStore = useFontSizeStore()
 
+const currentHelpPanel: Ref<HelpPanelKey> = ref(
+  lastSelectedHelpPanelStore.currentPanel ?? DEFAULT_HELP_PANEL
+)
 
-function onUpdatePage(page: HelpPage): void {
-  currentPage.value = page
+// Keep the local selection aligned with persisted state and vice versa so the
+// panel stays in sync across reloads and other components.
+watch(
+  () => lastSelectedHelpPanelStore.currentPanel,
+  (selectedPanel) => {
+    if (selectedPanel !== currentHelpPanel.value) {
+      currentHelpPanel.value = selectedPanel
+    }
+  },
+  { immediate: true }
+)
+
+watch(
+  () => currentHelpPanel.value,
+  (selectedPanel) => {
+    if (selectedPanel !== lastSelectedHelpPanelStore.currentPanel) {
+      lastSelectedHelpPanelStore.setLastSelectedPanel(selectedPanel)
+    }
+  }
+)
+
+function handlePanelChange(selectedPanel: HelpPanelKey): void {
+  currentHelpPanel.value = selectedPanel
 }
 </script>
 

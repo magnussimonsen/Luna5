@@ -9,22 +9,25 @@
 //
 // If you add a new theme JSON file, import it at the top and add it to the 'themes' array.
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import Eiffel from '@renderer/code/monaco/monaco-curated-light-themes/Eiffel.json'
-import IDLE from '@renderer/code/monaco/monaco-curated-light-themes/IDLE.json'
-import TextmateMacClassic from '@renderer/code/monaco/monaco-curated-light-themes/Textmate (Mac Classic).json'
-import XcodeDefault from '@renderer/code/monaco/monaco-curated-light-themes/Xcode_default.json'
+import Active4D from '@renderer/code/monaco/monaco-curated-light-themes/Active4D.json'
 import Blackboard from '@renderer/code/monaco/monaco-curated-dark-themes/Blackboard.json'
+import Clouds from '@renderer/code/monaco/monaco-curated-light-themes/Clouds.json'
+import IDLE from '@renderer/code/monaco/monaco-curated-light-themes/IDLE.json'
+import Katzenmilch from '@renderer/code/monaco/monaco-curated-light-themes/Katzenmilch.json'
 import Sunburst from '@renderer/code/monaco/monaco-curated-dark-themes/Sunburst.json'
 import VibrantInk from '@renderer/code/monaco/monaco-curated-dark-themes/Vibrant Ink.json'
+import XcodeDefault from '@renderer/code/monaco/monaco-curated-light-themes/Xcode_default.json'
+
 // Monaco's built-in themes (always available)
 export const builtinMonacoThemes: string[] = ['vs', 'vs-dark', 'hc-black']
 
 // Curated Luna themes. Add new themes here as needed.
 const themes = [
   // Light themes
+  { id: 'active4d', data: Active4D },
+  { id: 'clouds', data: Clouds },
   { id: 'idle', data: IDLE },
-  { id: 'eiffel', data: Eiffel },
-  { id: 'textmate-mac-classic', data: TextmateMacClassic },
+  { id: 'katzenmilch', data: Katzenmilch },
   { id: 'xcode-default', data: XcodeDefault },
   // Dark themes
   { id: 'blackboard', data: Blackboard },
@@ -47,13 +50,13 @@ function toSafeThemeId(themeId: string): string {
 export function getCuratedLightMonacoThemeIds(): string[] {
   // Only expose these curated light themes in the settings dropdown;
   // the builtin 'vs' is already prepended by the settings component.
-  return ['idle', 'eiffel', 'textmate-mac-classic', 'xcode-default']
+  return ['active4d', 'clouds', 'idle', 'katzenmilch', 'xcode-default']
 }
 
 // Returns IDs of available dark themes
 export function getCuratedDarkMonacoThemeIds(): string[] {
   // Only expose these curated dark themes in the settings dropdown.
-  return ['vibrant-ink', 'sunburst', 'blackboard']
+  return ['blackboard', 'sunburst', 'vibrant-ink']
 }
 
 // Registers all curated themes with Monaco (safe to call multiple times)

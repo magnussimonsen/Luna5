@@ -38,6 +38,7 @@ const openSourceModules = [
 
 const openSourceFonts = [
   { name: 'Comic Neue', version: '2.3', license: 'SIL Open Font License 1.1' },
+  { name: 'Inter', version: '4.1', license: 'SIL Open Font License 1.1' },
   { name: 'Roboto', version: '2.138', license: 'Apache License 2.0' },
   { name: 'OpenDyslexic', version: '2023.05', license: 'SIL Open Font License 1.1' },
   { name: 'Fira Code', version: '6.2', license: 'SIL Open Font License 1.1' },

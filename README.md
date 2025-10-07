@@ -146,7 +146,7 @@ Luna notebooks use the `.luna5` extension and are registered with the OS for dou
 ## 🅰️ Fonts Used
 
 * **Comic Neue** (SIL Open Font License 1.1)
-* **Inter** (SIL Open Font License 1.1)
+* **Inter** (v4.1, SIL Open Font License 1.1, bundled locally)
 * **Roboto** (Apache License 2.0)
 * **OpenDyslexic** (SIL Open Font License 1.1)
 * **Fira Code** (SIL Open Font License 1.1)

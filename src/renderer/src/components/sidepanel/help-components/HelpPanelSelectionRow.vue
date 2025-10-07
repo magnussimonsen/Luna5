@@ -1,105 +1,55 @@
 <template>
-  <div :class="['sidepanel-row-flex-wrap', 'sidepanel-color-font-styling']">
-    <div>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'general' }
-        ]"
-        @click="emitUpdate('general')"
-      >
-        General
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'text-editor' }
-        ]"
-        @click="emitUpdate('text-editor')"
-      >
-        Text
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'graphical-calculator' }
-        ]"
-        @click="emitUpdate('graphical-calculator')"
-      >
-        Graphical calculator
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'cas' }
-        ]"
-        @click="emitUpdate('cas')"
-      >
-        CAS
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'geometry' }
-        ]"
-        @click="emitUpdate('geometry')"
-      >
-        Geometry
-      </button>
-
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'spreadsheets' }
-        ]"
-        @click="emitUpdate('spreadsheets')"
-      >
-        Spreadsheets
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'probability' }
-        ]"
-        @click="emitUpdate('probability')"
-      >
-        Probability
-      </button>
-      <button
-        :class="[
-          'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
-          { 'sidepanel__button--active': currentPage === 'code' }
-        ]"
-        @click="emitUpdate('code')"
-      >
-        Python
-      </button>
+  <div :style="{ fontSize: helpPanelFontSize }">
+    <div :class="['sidepanel-row-flex-wrap', 'sidepanel-color-font-styling']">
+      <div>
+        <button
+          v-for="button in helpPanelButtons"
+          :key="button.key"
+          :class="[
+            'sidepanel__button sidepanel-bottom-row-margin sidepanel-color-font-styling',
+            { 'sidepanel__button--active': currentHelpPanel === button.key }
+          ]"
+          @click="emitPanelSelection(button.key)"
+        >
+          {{ button.label }}
+        </button>
+      </div>
     </div>
+    <Divider />
   </div>
-  <Divider />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import Divider from '@renderer/components/UI/Divider.vue'
+import type { HelpPanelKey } from '@renderer/types/helppanel-types'
 
+const props = defineProps<{
+  currentPage: HelpPanelKey
+  fontSize?: string
+}>()
+const emit = defineEmits<{ (e: 'update:current-page', value: HelpPanelKey): void }>()
 
-export type HelpPage =
-  | 'general'
-  | 'code'
-  | 'cas'
-  | 'geometry'
-  | 'graphical-calculator'
-  | 'spreadsheets'
-  | 'probability'
-  | 'text-editor'
+type HelpPanelButtonConfig = { key: HelpPanelKey; label: string }
 
-const props = defineProps<{ currentPage: HelpPage }>()
-const emit = defineEmits<{ (e: 'update:current-page', value: HelpPage): void }>()
+// The order of this configuration controls how buttons appear in the UI.
+const helpPanelButtons: HelpPanelButtonConfig[] = [
+  { key: 'general', label: 'General' },
+  { key: 'text-editor', label: 'Text' },
+  { key: 'graphical-calculator', label: 'Graphical calculator' },
+  { key: 'cas', label: 'CAS' },
+  { key: 'geometry', label: 'Geometry' },
+  { key: 'spreadsheets', label: 'Spreadsheets' },
+  { key: 'probability', label: 'Probability' },
+  { key: 'code', label: 'Python' }
+]
 
-const currentPage = computed(() => props.currentPage)
+const currentHelpPanel = computed(() => props.currentPage)
+const helpPanelFontSize = computed(() => props.fontSize ?? '12px')
 
-function emitUpdate(page: HelpPage): void {
-  emit('update:current-page', page)
+function emitPanelSelection(selectedPanel: HelpPanelKey): void {
+  if (selectedPanel === props.currentPage) return
+
+  emit('update:current-page', selectedPanel)
 }
 </script>
