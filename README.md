@@ -23,6 +23,14 @@ The first prototype build, featuring both a text editor and Python editor, will 
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-10-07-4.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
 </p>
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-10-07-6.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
+</p>
+
+<p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-10-07-7.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
+</p>
+
 
 
 
