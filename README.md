@@ -5,11 +5,17 @@ The first prototype build, featuring both a text editor and Python editor, will 
 [![Download Luna STEM Notebook](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/luna-stem-notebook/files/latest/download)
 
 <p align="center">
+  <img src="./src/development-screenshots/Luna5-2025-10-07-5.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
+</p>
+
+<p align="center">
   <img src="./src/development-screenshots/Luna5-2025-10-07-1.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
 </p>
+
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-10-07-2.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
 </p>
+
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-10-07-3.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
 </p>
@@ -17,9 +23,8 @@ The first prototype build, featuring both a text editor and Python editor, will 
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-10-07-4.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
 </p>
-<p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-10-07-5.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
-</p>
+
+
 
 
 
