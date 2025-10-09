@@ -16,7 +16,7 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
 	{
 		id: 'fraction',
 		label: 'Fraction',
-		latex: '\\frac{a}{b}',
+		latex: '\\dfrac{a}{b}',
 		symbol: 'a⁄b',
 		selection: {
 			startOffset: 6,
@@ -29,8 +29,8 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
 		latex: '\\sqrt{x}',
 		symbol: '√',
 		selection: {
-			startOffset: 6,
-			endOffset: 7
+			startOffset: 4,
+			endOffset: 5
 		}
 	},
 	{
@@ -39,8 +39,8 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
 		latex: 'a_{x}',
 		symbol: 'aₓ',
 		selection: {
-			startOffset: 4,
-			endOffset: 5
+			startOffset: 3,
+			endOffset: 4
         }
 	}, 
     {
@@ -49,8 +49,8 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
         latex: 'a^{x}',
         symbol: 'aˣ',
         selection: {
-            startOffset: 4,
-            endOffset: 5
+            startOffset: 3,
+            endOffset: 4
         }
 	},
 	{
@@ -59,8 +59,8 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
 		latex: '\\sum_{n=1}^{\\infty} a_{n}',
 		symbol: 'Σ',
 		selection: {
-			startOffset: 5,
-			endOffset: 16
+			startOffset: 6,
+			endOffset: 7
 		}
 	},
 	{
