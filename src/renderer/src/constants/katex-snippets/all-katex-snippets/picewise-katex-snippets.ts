@@ -1,4 +1,4 @@
-import { KatexSnippetDefinition } from '@renderer/constants/katex-snippets/katex-snippets-definition'
+import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 /* eslint-disable prettier/prettier */
 
 export const piecewiseSnippets: KatexSnippetDefinition[] = [

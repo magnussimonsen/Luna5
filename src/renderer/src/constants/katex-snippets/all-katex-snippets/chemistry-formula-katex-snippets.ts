@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { KatexSnippetDefinition } from '@renderer/constants/katex-snippets/katex-snippets-definition'
+import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const chemistryFormulaSnippets: KatexSnippetDefinition[] = [
   { id: 'water', label: 'Water', title: 'Water', latex: 'H_{2}O', symbol: 'H₂O' },

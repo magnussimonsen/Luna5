@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { KatexSnippetDefinition } from '@renderer/constants/katex-snippets/katex-snippets-definition'
+import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const numberSetSnippets: KatexSnippetDefinition[] = [
 	{ id: 'real', label: 'Real numbers', title: 'Set of real numbers', latex: '\\mathbb{R}', symbol: 'ℝ' },

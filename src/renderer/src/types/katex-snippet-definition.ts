@@ -5,6 +5,7 @@ export interface KatexSnippetDefinition {
   latex: string
   iconClass?: string
   symbol?: string
+  inline?: boolean
   selection?: {
     startOffset: number
     endOffset: number

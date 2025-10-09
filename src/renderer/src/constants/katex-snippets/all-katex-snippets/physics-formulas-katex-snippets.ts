@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { KatexSnippetDefinition } from '@renderer/constants/katex-snippets/katex-snippets-definition'
+import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const physicsFormulaSnippets: KatexSnippetDefinition[] = [
   { id: 'ohms-law', label: "Ohm's law", title: "Ohm's law", latex: 'V = I R', symbol: 'V=IR' },

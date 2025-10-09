@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { KatexSnippetDefinition } from '@renderer/constants/katex-snippets/katex-snippets-definition'
+import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
-export const tableOfNuclidesSnippets: KatexSnippetDefinition[] = [
+export const nuclidesSnippets: KatexSnippetDefinition[] = [
     { id: 'hydrogen', label: 'Hydrogen', title: 'Hydrogen', latex: '^{1}_{1}H', symbol: '₁H' },
     { id: 'helium', label: 'Helium', title: 'Helium', latex: '^{4}_{2}He', symbol: '₂He' },
     { id: 'lithium', label: 'Lithium', title: 'Lithium', latex: '^{7}_{3}Li', symbol: '₃Li' },

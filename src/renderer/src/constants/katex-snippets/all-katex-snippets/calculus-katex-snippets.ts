@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { KatexSnippetDefinition } from '@renderer/constants/katex-snippets/katex-snippets-definition'
+import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const calculusSnippets: KatexSnippetDefinition[] = [
 	{ id: 'derivative', label: 'Derivative', title: 'First derivative', latex: '\\frac{d}{dx} f(x)', symbol: 'd/dx' },

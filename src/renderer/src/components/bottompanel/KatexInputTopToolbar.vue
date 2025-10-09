@@ -47,14 +47,32 @@ interaction patterns and CSS styling.
       </button>
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
-          v-model="greekSelectValue"
+          v-model="greekLowercaseSelectValue"
           class="top-toolbar__button--select"
           aria-label="Insert Greek letter"
           :disabled="isToolbarDisabled"
-          @change="handleGreekSelect"
+          @change="handleGreekLowercaseSelect"
         >
           <option
-            v-for="snippet in greekSnippets"
+            v-for="snippet in greekLowercaseSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="greekCapitalSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert Greek letter"
+          :disabled="isToolbarDisabled"
+          @change="handleGreekCapitalSelect"
+        >
+          <option
+            v-for="snippet in greekCapitalSnippets"
             :key="snippet.id"
             :value="snippet.id"
             :title="snippet.label"
@@ -321,29 +339,37 @@ interaction patterns and CSS styling.
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import type { Ref } from 'vue'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useBottomPanelStore } from '@renderer/stores/UI/bottompanelStore'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import type { Editor } from '@tiptap/vue-3'
-import type { KatexSnippetDefinition } from '@renderer/constants/katex-snippets'
+import type { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 import {
-  greekLetterSnippets,
-  comparisonSnippets as comparisonSnippetDefinitions,
   accentSnippets as accentSnippetDefinitions,
-  parenthesesSnippets as parenthesesSnippetDefinitions,
-  trigonometrySnippets as trigonometrySnippetDefinitions,
+  alignedSnippets as alignedSnippetDefinitions,
   calculusSnippets as calculusSnippetDefinitions,
-  probabilitySnippets as probabilitySnippetDefinitions,
-  geometrySnippets as geometrySnippetDefinitions,
-  scienceFormulaSnippets as scienceSnippetDefinitions,
+  chemistryFormulaSnippets as chemistryFormulaSnippetDefinitions,
+  comparisonSnippets as comparisonSnippetDefinitions,
   fundamentalConstantSnippets as fundamentalConstantSnippetDefinitions,
+  geometrySnippets as geometrySnippetDefinitions,
+  greekCapitalSnippets as greekCapitalSnippetDefinitions,
+  greekLowercaseSnippets as greekLowercaseSnippetDefinitions,
+  matrixBracketSnippets as matrixBracketSnippetDefinitions,
+  matrixDeterminantSnippets as matrixDeterminantSnippetDefinitions,
+  matrixParenthesisSnippets as matrixParenthesisSnippetDefinitions,
+  nuclidesSnippets as nuclidesSnippetDefinitions,
   numberSetSnippets as numberSetSnippetDefinitions,
+  operatorQuantorSnippets as operatorQuantorSnippetDefinitions,
+  parenthesesSnippets as parenthesesSnippetDefinitions,
+  physicsFormulaSnippets as physicsFormulaSnippetDefinitions,
+  piecewiseSnippets as piecewiseSnippetDefinitions,
+  probabilitySnippets as probabilitySnippetDefinitions,
+  quickActionMathSnippets as quickActionMathSnippetDefinitions,
   seriesSnippets as seriesSnippetDefinitions,
-  matrixBracketSnippets,
-  matrixParenthesisSnippets,
-  matrixDeterminantSnippets
-} from '@renderer/constants/katex-snippets'
+  trigonometrySnippets as trigonometrySnippetDefinitions
+} from '@renderer/constants/katex-snippets/import-export-all-katex-snippets'
 
 type MathCommandChain = ReturnType<Editor['chain']> & {
   insertInlineMath: (opts: { latex: string }) => MathCommandChain
@@ -376,41 +402,129 @@ const isInsertDisabled = computed(() => {
   if (bottomPanelStore.katexPanelLatex.trim().length === 0) return true
   return !!bottomPanelStore.katexPanelError
 })
-
-const greekSnippets = greekLetterSnippets
-const comparisonSnippets = comparisonSnippetDefinitions
-const quickActionSnippets = quickActionMathSnippets.filter(
-  (snippet) => snippet.id !== 'inline-math' && snippet.id !== 'block-math'
-)
+/*------------------------------ */
+/* const for snippet definitions */
+/*------------------------------ */
 const accentSnippets = accentSnippetDefinitions
-const parenthesesSnippets = parenthesesSnippetDefinitions
-const trigonometrySnippets = trigonometrySnippetDefinitions
+const alignedSnippets = alignedSnippetDefinitions
 const calculusSnippets = calculusSnippetDefinitions
-const probabilitySnippets = probabilitySnippetDefinitions
-const geometrySnippets = geometrySnippetDefinitions
-const scienceSnippets = scienceSnippetDefinitions
+const chemistryFormulaSnippets = chemistryFormulaSnippetDefinitions
+const comparisonSnippets = comparisonSnippetDefinitions
 const fundamentalConstantSnippets = fundamentalConstantSnippetDefinitions
-const seriesSnippets = seriesSnippetDefinitions
+const geometrySnippets = geometrySnippetDefinitions
+const greekCapitalSnippets = greekCapitalSnippetDefinitions
+const greekLowercaseSnippets = greekLowercaseSnippetDefinitions
+const matrixBracketOptions = matrixBracketSnippetDefinitions
+const matrixDeterminantOptions = matrixDeterminantSnippetDefinitions
+const matrixParenthesisOptions = matrixParenthesisSnippetDefinitions
+const nuclidesSnippets = nuclidesSnippetDefinitions
 const numberSetSnippets = numberSetSnippetDefinitions
-const matrixBracketOptions = matrixBracketSnippets
-const matrixParenthesisOptions = matrixParenthesisSnippets
-const matrixDeterminantOptions = matrixDeterminantSnippets
-
-const greekSelectValue = ref(greekSnippets[0]?.id ?? '')
-const comparisonSelectValue = ref(comparisonSnippets[0]?.id ?? '')
+const operatorQuantorSnippets = operatorQuantorSnippetDefinitions
+const parenthesesSnippets = parenthesesSnippetDefinitions
+const physicsFormulaSnippets = physicsFormulaSnippetDefinitions
+const piecewiseSnippets = piecewiseSnippetDefinitions
+const probabilitySnippets = probabilitySnippetDefinitions
+const quickActionSnippets = quickActionMathSnippetDefinitions
+const seriesSnippets = seriesSnippetDefinitions
+const trigonometrySnippets = trigonometrySnippetDefinitions
+/*----------------------- */
+/* refs for select values */
+/*----------------------- */
 const accentSelectValue = ref(accentSnippets[0]?.id ?? '')
-const parenthesesSelectValue = ref(parenthesesSnippets[0]?.id ?? '')
-const trigonometrySelectValue = ref(trigonometrySnippets[0]?.id ?? '')
 const calculusSelectValue = ref(calculusSnippets[0]?.id ?? '')
-const probabilitySelectValue = ref(probabilitySnippets[0]?.id ?? '')
+const chemistryFormulaSelectValue = ref(chemistryFormulaSnippets[0]?.id ?? '')
+const comparisonSelectValue = ref(comparisonSnippets[0]?.id ?? '')
+const fundamentalConstantSelectValue = ref(fundamentalConstantSnippets[0]?.id ?? '')
 const geometrySelectValue = ref(geometrySnippets[0]?.id ?? '')
-const scienceSelectValue = ref(scienceSnippets[0]?.id ?? '')
-const constantsSelectValue = ref(fundamentalConstantSnippets[0]?.id ?? '')
-const seriesSelectValue = ref(seriesSnippets[0]?.id ?? '')
-const numberSetSelectValue = ref(numberSetSnippets[0]?.id ?? '')
+const greekCapitalSelectValue = ref(greekCapitalSnippets[0]?.id ?? '')
+const greekLowercaseSelectValue = ref(greekLowercaseSnippets[0]?.id ?? '')
 const matrixBracketSelectValue = ref(matrixBracketOptions[0]?.id ?? '')
-const matrixParenthesisSelectValue = ref(matrixParenthesisOptions[0]?.id ?? '')
 const matrixDeterminantSelectValue = ref(matrixDeterminantOptions[0]?.id ?? '')
+const matrixParenthesisSelectValue = ref(matrixParenthesisOptions[0]?.id ?? '')
+const nulidesSelectValue = ref(nuclidesSnippets[0]?.id ?? '')
+const numberSetSelectValue = ref(numberSetSnippets[0]?.id ?? '')
+const operatorQuantorSelectValue = ref(operatorQuantorSnippets[0]?.id ?? '')
+const parenthesesSelectValue = ref(parenthesesSnippets[0]?.id ?? '')
+const physicsFormulaSelectValue = ref(physicsFormulaSnippets[0]?.id ?? '')
+const piecewiseSelectValue = ref(piecewiseSnippets[0]?.id ?? '')
+const probabilitySelectValue = ref(probabilitySnippets[0]?.id ?? '')
+const quickActionSelectValue = ref(quickActionSnippets[0]?.id ?? '')
+const seriesSelectValue = ref(seriesSnippets[0]?.id ?? '')
+const trigonometrySelectValue = ref(trigonometrySnippets[0]?.id ?? '')
+
+function createSnippetSelectHandler(
+  selectValue: Ref<string>,
+  snippetList: KatexSnippetDefinition[]
+): () => void {
+  return (): void => {
+    const snippetId = selectValue.value
+    if (!snippetId) return
+    const snippet = snippetList.find((item) => item.id === snippetId)
+    queueSnippet(snippet)
+    selectValue.value = snippetId
+  }
+}
+
+const handleAccentSelect = createSnippetSelectHandler(accentSelectValue, accentSnippets)
+const handleCalculusSelect = createSnippetSelectHandler(calculusSelectValue, calculusSnippets)
+const handleChemistryFormulaSelect = createSnippetSelectHandler(
+  chemistryFormulaSelectValue,
+  chemistryFormulaSnippets
+)
+const handleComparisonSelect = createSnippetSelectHandler(comparisonSelectValue, comparisonSnippets)
+const handleFundamentalConstantSelect = createSnippetSelectHandler(
+  fundamentalConstantSelectValue,
+  fundamentalConstantSnippets
+)
+const handleGeometrySelect = createSnippetSelectHandler(geometrySelectValue, geometrySnippets)
+const handleGreekCapitalSelect = createSnippetSelectHandler(
+  greekCapitalSelectValue,
+  greekCapitalSnippets
+)
+const handleGreekLowercaseSelect = createSnippetSelectHandler(
+  greekLowercaseSelectValue,
+  greekLowercaseSnippets
+)
+const handleMatrixBracketSelect = createSnippetSelectHandler(
+  matrixBracketSelectValue,
+  matrixBracketOptions
+)
+const handleMatrixDeterminantSelect = createSnippetSelectHandler(
+  matrixDeterminantSelectValue,
+  matrixDeterminantOptions
+)
+const handleMatrixParenthesisSelect = createSnippetSelectHandler(
+  matrixParenthesisSelectValue,
+  matrixParenthesisOptions
+)
+const handleNulidesSelect = createSnippetSelectHandler(nulidesSelectValue, nuclidesSnippets)
+const handleNumberSetSelect = createSnippetSelectHandler(numberSetSelectValue, numberSetSnippets)
+const handleOperatorQuantorSelect = createSnippetSelectHandler(
+  operatorQuantorSelectValue,
+  operatorQuantorSnippets
+)
+const handleParenthesesSelect = createSnippetSelectHandler(
+  parenthesesSelectValue,
+  parenthesesSnippets
+)
+const handlePhysicsFormulaSelect = createSnippetSelectHandler(
+  physicsFormulaSelectValue,
+  physicsFormulaSnippets
+)
+const handlePiecewiseSelect = createSnippetSelectHandler(piecewiseSelectValue, piecewiseSnippets)
+const handleProbabilitySelect = createSnippetSelectHandler(
+  probabilitySelectValue,
+  probabilitySnippets
+)
+const handleQuickActionSelect = createSnippetSelectHandler(
+  quickActionSelectValue,
+  quickActionSnippets
+)
+const handleSeriesSelect = createSnippetSelectHandler(seriesSelectValue, seriesSnippets)
+const handleTrigonometrySelect = createSnippetSelectHandler(
+  trigonometrySelectValue,
+  trigonometrySnippets
+)
 
 function queueSnippet(snippet: KatexSnippetDefinition | undefined): void {
   if (!snippet) return
@@ -420,126 +534,6 @@ function queueSnippet(snippet: KatexSnippetDefinition | undefined): void {
     selectionStartOffset: snippet.selection?.startOffset,
     selectionEndOffset: snippet.selection?.endOffset
   })
-}
-
-function handleGreekSelect(): void {
-  const snippetId = greekSelectValue.value
-  if (!snippetId) return
-  const snippet = greekSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  greekSelectValue.value = snippetId
-}
-
-function handleComparisonSelect(): void {
-  const snippetId = comparisonSelectValue.value
-  if (!snippetId) return
-  const snippet = comparisonSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  comparisonSelectValue.value = snippetId
-}
-
-function handleAccentSelect(): void {
-  const snippetId = accentSelectValue.value
-  if (!snippetId) return
-  const snippet = accentSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  accentSelectValue.value = snippetId
-}
-
-function handleParenthesesSelect(): void {
-  const snippetId = parenthesesSelectValue.value
-  if (!snippetId) return
-  const snippet = parenthesesSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  parenthesesSelectValue.value = snippetId
-}
-
-function handleTrigonometrySelect(): void {
-  const snippetId = trigonometrySelectValue.value
-  if (!snippetId) return
-  const snippet = trigonometrySnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  trigonometrySelectValue.value = snippetId
-}
-
-function handleCalculusSelect(): void {
-  const snippetId = calculusSelectValue.value
-  if (!snippetId) return
-  const snippet = calculusSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  calculusSelectValue.value = snippetId
-}
-
-function handleProbabilitySelect(): void {
-  const snippetId = probabilitySelectValue.value
-  if (!snippetId) return
-  const snippet = probabilitySnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  probabilitySelectValue.value = snippetId
-}
-
-function handleGeometrySelect(): void {
-  const snippetId = geometrySelectValue.value
-  if (!snippetId) return
-  const snippet = geometrySnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  geometrySelectValue.value = snippetId
-}
-
-function handleScienceSelect(): void {
-  const snippetId = scienceSelectValue.value
-  if (!snippetId) return
-  const snippet = scienceSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  scienceSelectValue.value = snippetId
-}
-
-function handleConstantsSelect(): void {
-  const snippetId = constantsSelectValue.value
-  if (!snippetId) return
-  const snippet = fundamentalConstantSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  constantsSelectValue.value = snippetId
-}
-
-function handleSeriesSelect(): void {
-  const snippetId = seriesSelectValue.value
-  if (!snippetId) return
-  const snippet = seriesSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  seriesSelectValue.value = snippetId
-}
-
-function handleNumberSetSelect(): void {
-  const snippetId = numberSetSelectValue.value
-  if (!snippetId) return
-  const snippet = numberSetSnippets.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  numberSetSelectValue.value = snippetId
-}
-
-function handleMatrixBracketSelect(): void {
-  const snippetId = matrixBracketSelectValue.value
-  if (!snippetId) return
-  const snippet = matrixBracketOptions.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  matrixBracketSelectValue.value = snippetId
-}
-
-function handleMatrixParenthesisSelect(): void {
-  const snippetId = matrixParenthesisSelectValue.value
-  if (!snippetId) return
-  const snippet = matrixParenthesisOptions.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  matrixParenthesisSelectValue.value = snippetId
-}
-
-function handleMatrixDeterminantSelect(): void {
-  const snippetId = matrixDeterminantSelectValue.value
-  if (!snippetId) return
-  const snippet = matrixDeterminantOptions.find((item) => item.id === snippetId)
-  queueSnippet(snippet)
-  matrixDeterminantSelectValue.value = snippetId
 }
 
 function handleSnippetButton(snippet: KatexSnippetDefinition): void {

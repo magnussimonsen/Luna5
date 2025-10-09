@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { KatexSnippetDefinition } from '@renderer/constants/katex-snippets/katex-snippets-definition'
+import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const probabilitySnippets: KatexSnippetDefinition[] = [
 	{ id: 'probability', label: 'Probability of event', title: 'Probability of event', latex: 'P(A)', symbol: 'P(A)' },

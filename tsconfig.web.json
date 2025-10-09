@@ -6,8 +6,10 @@
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.vue",
     "src/preload/*.d.ts",
-    "src/renderer/src/types/language-types.d.ts"
-, "src/trash/WorkspaceContainer.vue"  ],
+    "src/renderer/src/types/language-types.d.ts",
+    "src/trash/WorkspaceContainer.vue",
+    "src/renderer/src/constants/katex-snippets.ts"
+  ],
   "exclude": [
     "src/renderer/ignore/**"
   ],

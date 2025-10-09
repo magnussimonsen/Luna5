@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { KatexSnippetDefinition } from '@renderer/constants/katex-snippets/katex-snippets-definition'
+import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const operatorQuantorSnippets: KatexSnippetDefinition[] = [
 	{ id: 'plus-minus', label: 'Plus-minus', title: 'Plus-minus operator', latex: '\\pm', symbol: '±' },
