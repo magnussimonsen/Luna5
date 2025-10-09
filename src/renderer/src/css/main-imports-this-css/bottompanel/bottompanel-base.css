@@ -89,7 +89,7 @@
 }
 
 .bottom-panel__content {
-  padding: 1rem 1.25rem 1.5rem;
+  padding: 0.3em min(10px, 1em) min(10px, 1em) min(10px, 1em);
   overflow-y: auto;
   flex: 1 1 auto;
 }
@@ -102,7 +102,7 @@
 
 .bottom-panel-fade-enter-active,
 .bottom-panel-fade-leave-active {
-  transition: opacity 0.1s ease;
+  transition: opacity 0.0s ease;
 }
 
 .bottom-panel-fade-enter-from,

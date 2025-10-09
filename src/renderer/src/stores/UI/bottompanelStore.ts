@@ -9,6 +9,13 @@ const DEFAULT_MIN_HEIGHT = 100
 const DEFAULT_MAX_HEIGHT = 800
 const MIN_MAX_HEIGHT_GAP = 50
 
+type KatexSelectionRange = { from: number; to: number }
+type KatexPanelInsertion = {
+  latex: string
+  selectionStartOffset?: number
+  selectionEndOffset?: number
+}
+
 const clamp = (value: number, min: number, max: number): number => {
   if (Number.isNaN(value)) return min
   if (min > max) return min
@@ -30,6 +37,18 @@ export const useBottomPanelStore = defineStore('bottompanel', () => {
   const minHeight = ref(DEFAULT_MIN_HEIGHT)
   const maxHeight = ref(DEFAULT_MAX_HEIGHT)
 
+  // -----------------------------------------------------------------------
+  // KaTeX bottom panel state
+  // -----------------------------------------------------------------------
+  const katexPanelLatex = ref('')
+  const katexPanelError = ref('')
+  const katexPanelMode = ref<'inline' | 'block'>('inline')
+  const katexPanelInteractionKind = ref<'insert' | 'edit'>('insert')
+  const katexPanelTargetCellId = ref<string | null>(null)
+  const katexPanelSelectionRange = ref<KatexSelectionRange | null>(null)
+  const katexPanelTargetNodePos = ref<number | null>(null)
+  const katexPanelPendingInsertion = ref<KatexPanelInsertion | null>(null)
+
   const defaultPanel = computed<PanelName | null>(() => allowedPanels[0] ?? null)
 
   function setActivePanel(panel: PanelName | null): void {
@@ -46,6 +65,7 @@ export const useBottomPanelStore = defineStore('bottompanel', () => {
   function closeBottomPanel(): void {
     isOpen.value = false
     activePanel.value = null
+    resetKatexPanel()
   }
 
   function toggleBottomPanel(): void {
@@ -98,6 +118,64 @@ export const useBottomPanelStore = defineStore('bottompanel', () => {
     }
   }
 
+  function resetKatexPanel(): void {
+    katexPanelLatex.value = ''
+    katexPanelError.value = ''
+    katexPanelMode.value = 'inline'
+    katexPanelInteractionKind.value = 'insert'
+    katexPanelTargetCellId.value = null
+    katexPanelSelectionRange.value = null
+    katexPanelTargetNodePos.value = null
+    katexPanelPendingInsertion.value = null
+  }
+
+  function configureKatexPanel(options: {
+    mode: 'inline' | 'block'
+    initialLatex?: string
+    interactionKind?: 'insert' | 'edit'
+    targetCellId?: string | null
+    selectionFrom?: number | null
+    selectionTo?: number | null
+    targetNodePos?: number | null
+  }): void {
+    katexPanelMode.value = options.mode
+    katexPanelLatex.value = options.initialLatex ?? ''
+    katexPanelInteractionKind.value = options.interactionKind ?? 'insert'
+    katexPanelTargetCellId.value = options.targetCellId ?? null
+    katexPanelTargetNodePos.value =
+      typeof options.targetNodePos === 'number' ? options.targetNodePos : null
+
+    const hasSelection =
+      options.selectionFrom != null &&
+      options.selectionTo != null &&
+      options.selectionFrom <= options.selectionTo
+
+    katexPanelSelectionRange.value = hasSelection
+      ? { from: options.selectionFrom as number, to: options.selectionTo as number }
+      : null
+    katexPanelError.value = ''
+  }
+
+  function updateKatexPanelLatex(latex: string): void {
+    katexPanelLatex.value = latex
+  }
+
+  function setKatexPanelError(message: string): void {
+    katexPanelError.value = message
+  }
+
+  function clearKatexPanelError(): void {
+    katexPanelError.value = ''
+  }
+
+  function queueKatexPanelInsertion(payload: KatexPanelInsertion): void {
+    katexPanelPendingInsertion.value = { ...payload }
+  }
+
+  function clearKatexPanelPendingInsertion(): void {
+    katexPanelPendingInsertion.value = null
+  }
+
   return {
     isOpen,
     isResizing,
@@ -116,6 +194,22 @@ export const useBottomPanelStore = defineStore('bottompanel', () => {
     showPanel,
     hidePanel,
     togglePanel,
-    setActivePanel
+    setActivePanel,
+    // KaTeX panel API
+    katexPanelLatex,
+    katexPanelError,
+    katexPanelMode,
+    katexPanelInteractionKind,
+    katexPanelTargetCellId,
+    katexPanelSelectionRange,
+    katexPanelTargetNodePos,
+    katexPanelPendingInsertion,
+    configureKatexPanel,
+    updateKatexPanelLatex,
+    setKatexPanelError,
+    clearKatexPanelError,
+    queueKatexPanelInsertion,
+    clearKatexPanelPendingInsertion,
+    resetKatexPanel
   }
 })

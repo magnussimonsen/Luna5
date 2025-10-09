@@ -56,6 +56,7 @@ export const useThemeStore = defineStore('theme', {
       // Text & UI text
       textColor: '#222222',
       UITextColor: '#222222',
+      UITextHoverColor: 'black',
 
       // Borders & dividers
       borderColor: '#dddddd',
@@ -70,7 +71,7 @@ export const useThemeStore = defineStore('theme', {
 
       // Run / action buttons
       runcodeBackgroundColor: 'lightgreen',
-      runcodeHoverBackgroundColor: '#aaaaaa',
+      runcodeHoverBackgroundColor: 'limegreen',
 
       // Standard buttons
       buttonBackgroundColor: 'transparent',
@@ -80,7 +81,7 @@ export const useThemeStore = defineStore('theme', {
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'lightgreen',
       buttonBorderOnColor: 'lightgreen',
-      buttonHardOffColor: 'salmon',
+      buttonHardOffColor: 'darksalmon',
 
       // Disabled button styles
       buttonDisabledColor: 'transparent',
@@ -90,7 +91,7 @@ export const useThemeStore = defineStore('theme', {
 
       // Reset / destructive buttons
       buttonResetColor: 'darksalmon',
-      buttonResetHoverColor: '#aaaaaa',
+      buttonResetHoverColor: 'salmon',
       deleteButtonHoverColor: 'firebrick',
 
       // Soft lock / locked UI
@@ -173,6 +174,7 @@ export const useThemeStore = defineStore('theme', {
       // Text & UI text
       textColor: '#cccccc',
       UITextColor: '#cccccc',
+      UITextHoverColor: 'white',
 
       // Borders & dividers
       borderColor: '#111111',
@@ -206,8 +208,8 @@ export const useThemeStore = defineStore('theme', {
       buttonDisabledHoverColor: 'gray',
 
       // Reset / destructive buttons
-      buttonResetColor: 'firebrick',
-      buttonResetHoverColor: 'red',
+      buttonResetColor: 'darkred',
+      buttonResetHoverColor: 'firebrick',
       deleteButtonHoverColor: 'lightgray',
 
       // Soft lock / locked UI
@@ -317,6 +319,7 @@ export const useThemeStore = defineStore('theme', {
       // Text
       root.style.setProperty('--text-color', colors.textColor)
       root.style.setProperty('--ui-text-color', colors.UITextColor)
+      root.style.setProperty('--ui-text-hover-color', colors.UITextHoverColor)
 
       // Borders
       root.style.setProperty('--border-color', colors.borderColor)

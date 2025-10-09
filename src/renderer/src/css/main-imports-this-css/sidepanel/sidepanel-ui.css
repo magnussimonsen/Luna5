@@ -102,6 +102,11 @@
 .sidepanel__button--border {
   border: var(--sidepanel-button-border, 20px solid blue);
 }
+
+.sidepanel__button--transparent-border {
+  border: var(--sidepanel-button-border, 20px solid blue);
+  border-color: transparent
+}
 .sidepanel__button--box-shadow {
   box-shadow: var(--sidepanel-button-box-shadow, 4px 4px 8px rgba(0, 0, 0, 0.25));
 }
@@ -177,7 +182,7 @@
   align-items: center;
   cursor: pointer;
   padding: var(--sidepanel-notebook-item-padding);
-  border: var(--sidepanel-notebook-item-border-width, 2px) solid var(--button-border-color, #ccc);
+  border: var(--sidepanel-notebook-item-border-width, 2px) solid transparent;
   border-radius: var(--button-border-radius, 0.35em);
 }
 

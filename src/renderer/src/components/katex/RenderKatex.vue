@@ -68,16 +68,11 @@ defineExpose({ rerender: renderKatex })
 <style scoped>
 .katex-preview {
   position: relative;
-  min-height: 3rem;
-  padding: 1rem;
-  border-radius: 10px;
-  border: 1px solid var(--border-color, #d0d7de);
-  background: var(--modal-preview-background, #fafafa);
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.5rem;
-  overflow-x: auto;
+  overflow: auto;
 }
 
 .katex-preview--empty {
@@ -85,7 +80,7 @@ defineExpose({ rerender: renderKatex })
 }
 
 .katex-preview__render {
-  font-size: 1.05rem;
+  font-size: 1em;
   text-align: center;
   color: var(--text-color, #1f1f1f);
 }
@@ -96,7 +91,7 @@ defineExpose({ rerender: renderKatex })
 
 .katex-preview__placeholder {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 1em;
   color: var(--muted-text-color, #666);
 }
 

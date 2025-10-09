@@ -61,6 +61,55 @@
     --icon-math-live-inline: 'Insert Math Live Inline';
     --icon-katex-block: 'Insert KaTeX Block';
     --icon-katex-inline: 'Insert KaTeX Inline';
+    /* Math symbols */
+    --icon-fraction: '⁄'; 
+    --icon-square-root: '√';
+    --icon-super-script: 'aˣ';
+    --icon-sub-script: 'aₓ';
+    --icon-plus-minus: '±';
+    --icon-limit: 'lim';
+    --icon-sum: '∑';
+    --icon-integral: '∫';
+    --icon-infinity: '∞';
+    --icon-pi: 'π';
+    --icon-exp: 'e';
+    --icon-log: 'log';
+    --icon-ln: 'ln';
+    --icon-vector: '𝑣⃗';
+    --icon-tilde: 'x̃';
+    --icon-hat: 'x̂';
+    --icon-bar: 'x̄';
+    --icon-overline: 'x̅';
+    --icon-underline: 'x̲';
+    --icon-sin: 'sin';
+    --icon-cos: 'cos';
+    --icon-tan: 'tan';
+    --icon-cot: 'cot';
+    --icon-sec: 'sec';
+    --icon-csc: 'csc';
+    --icon-sin-inverse: 'sin⁻¹';
+    --icon-cos-inverse: 'cos⁻¹';
+    --icon-tan-inverse: 'tan⁻¹';
+    --icon-greek-alpha: 'α';
+    --icon-greek-beta: 'β';
+    --icon-greek-gamma: 'γ';
+    --icon-greek-delta: 'δ';
+    --icon-set-real: 'ℝ';
+    --icon-set-complex: 'ℂ';
+    --icon-set-rational: 'ℚ';
+    --icon-set-integers: 'ℤ';
+    --icon-set-natural: 'ℕ';
+    --icon-set-primes: 'ℙ';
+    --icon-greek-sigma: 'σ';
+    --icon-greek-omega: 'ω';
+    
+    --icon-not-equal: '≠';
+    --icon-approximately-equal: '≈';
+    --icon-less-than-or-equal: '≤';
+    --icon-greater-than-or-equal: '≥';
+    
+
+
 
 /* Placeholder icon */
 .icon-empty-toolbar::before { content: var(--icon-empty-toolbar); }
@@ -120,6 +169,37 @@
 .icon-math-live-inline::before { content: var(--icon-math-live-inline); }
 .icon-katex-block::before { content: var(--icon-katex-block); }
 .icon-katex-inline::before { content: var(--icon-katex-inline); }
+
+/* Math symbols */
+
+.icon-greek-alpha::before { content: var(--icon-greek-alpha); }
+.icon-greek-beta::before { content: var(--icon-greek-beta); }
+.icon-greek-gamma::before { content: var(--icon-greek-gamma); }
+.icon-greek-delta::before { content: var(--icon-greek-delta); }
+.icon-greek-sigma::before { content: var(--icon-greek-sigma); }
+.icon-greek-omega::before { content: var(--icon-greek-omega); }
+.icon-set-real::before { content: var(--icon-set-real); }
+.icon-set-complex::before { content: var(--icon-set-complex); }
+.icon-set-rational::before { content: var(--icon-set-rational); }
+.icon-set-integers::before { content: var(--icon-set-integers); }
+.icon-set-natural::before { content: var(--icon-set-natural); }
+.icon-set-primes::before { content: var(--icon-set-primes); }
+
+.icon-vector::before { content: var(--icon-vector); }
+.icon-tilde::before { content: var(--icon-tilde); }
+.icon-hat::before { content: var(--icon-hat); }
+.icon-bar::before { content: var(--icon-bar); }
+.icon-overline::before { content: var(--icon-overline); }
+.icon-underline::before { content: var(--icon-underline); }
+.icon-sin::before { content: var(--icon-sin); }
+.icon-cos::before { content: var(--icon-cos); }
+.icon-tan::before { content: var(--icon-tan); }
+.icon-cot::before { content: var(--icon-cot); }
+.icon-sec::before { content: var(--icon-sec); }
+.icon-csc::before { content: var(--icon-csc); }
+.icon-sin-inverse::before { content: var(--icon-sin-inverse); }
+.icon-cos-inverse::before { content: var(--icon-cos-inverse); }
+.icon-tan-inverse::before { content: var(--icon-tan-inverse); }
 
 }
 

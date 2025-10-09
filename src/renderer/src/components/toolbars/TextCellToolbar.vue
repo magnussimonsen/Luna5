@@ -408,16 +408,6 @@
         :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
         @click="insertKatexBlock"
       ></button>
-      <button
-        class="top-toolbar__button top-toolbar__button--icon top-toolbar__button--transparent-when-disabled"
-        type="button"
-        title="Test open and close bottom panel"
-        aria-label="Test open and close bottom panel"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
-        @click="openBottomPanel"
-      >
-        Bottompanel test button
-      </button>
     </div>
   </div>
 </template>
@@ -433,18 +423,15 @@
 import { computed, unref, ref, nextTick, watch, onBeforeUnmount } from 'vue'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
-import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useBottomPanelStore } from '@renderer/stores/UI/bottompanelStore'
 import type { Editor } from '@tiptap/vue-3'
 import type { HeadingLevel } from '@renderer/types/heading-level-type'
 import type { HighlightColor } from '../../types/highlight-colors-types'
 import { resolveHighlightColor } from '../../code/highlight/highlight-colors'
-//import { link } from 'fs'
 
 // Stores
 const themeStore = useThemeStore()
 const textEditorsStore = useTextEditorsStore()
-const modalStore = useModalStore()
 const bottomPanelStore = useBottomPanelStore()
 
 // Props passed from ToolbarContainer.vue
@@ -535,56 +522,151 @@ function canRunCommand(commandName: string): boolean {
   }
 }
 
-// Formatting action functions
 function toggleBold(): void {
-  runCommand((editor) => editor.chain().focus().toggleBold().run())
-}
-function toggleItalic(): void {
-  runCommand((editor) => editor.chain().focus().toggleItalic().run())
-}
-function toggleUnderline(): void {
-  runCommand((editor) => editor.chain().focus().toggleUnderline().run())
-}
-function toggleHighlight(color?: HighlightColor): void {
   runCommand((editor) => {
-    // TipTap highlight expects attribute { color } when multicolor: true
-    const resolved = color ? resolveHighlightColor(color, isDarkMode.value) : undefined
-    ;(editor as any)
-      .chain()
-      .focus()
-      .toggleHighlight(resolved ? { color: resolved } : undefined)
-      .run()
+    editor.chain().focus().toggleBold().run()
   })
 }
+
+function toggleItalic(): void {
+  runCommand((editor) => {
+    editor.chain().focus().toggleItalic().run()
+  })
+}
+
+function toggleUnderline(): void {
+  runCommand((editor) => {
+    const chain = (editor as any).chain().focus()
+    if (typeof chain.toggleUnderline === 'function') {
+      chain.toggleUnderline().run()
+    }
+  })
+}
+
 function toggleSubscript(): void {
   runCommand((editor) => {
-    ;(editor as any).chain().focus().toggleSubscript().run()
+    const chain = (editor as any).chain().focus()
+    if (typeof chain.toggleSubscript === 'function') {
+      chain.toggleSubscript().run()
+    }
   })
 }
+
 function toggleSuperscript(): void {
   runCommand((editor) => {
-    ;(editor as any).chain().focus().toggleSuperscript().run()
+    const chain = (editor as any).chain().focus()
+    if (typeof chain.toggleSuperscript === 'function') {
+      chain.toggleSuperscript().run()
+    }
   })
 }
+
 function toggleBulletList(): void {
-  runCommand((editor) => editor.chain().focus().toggleBulletList().run())
+  runCommand((editor) => {
+    editor.chain().focus().toggleBulletList().run()
+  })
 }
+
 function toggleOrderedList(): void {
-  runCommand((editor) => editor.chain().focus().toggleOrderedList().run())
+  runCommand((editor) => {
+    editor.chain().focus().toggleOrderedList().run()
+  })
 }
 
 function toggleHeading(level: HeadingLevel): void {
-  runCommand((ed) => ed.chain().focus().toggleHeading({ level }).run())
+  runCommand((editor) => {
+    editor.chain().focus().toggleHeading({ level }).run()
+  })
 }
 
-/* History: Use electron ctrl+z and ctrl+y for undo/redo
-function undo(): void {
-  runCommand((ed) => ed.chain().focus().undo().run())
+function toggleHighlight(color: HighlightColor): void {
+  const resolved = resolveHighlightColor(color, isDarkMode.value)
+  runCommand((editor) => {
+    const chain = (editor as any).chain().focus()
+    if (typeof chain.toggleHighlight === 'function') {
+      chain.toggleHighlight({ color: resolved }).run()
+    }
+  })
 }
-function redo(): void {
-  runCommand((ed) => ed.chain().focus().redo().run())
+
+// Formatting action functions
+type KatexMode = 'inline' | 'block'
+
+function collectKatexContext(mode: KatexMode): {
+  initialLatex: string
+  selectionFrom: number
+  selectionTo: number
+} | null {
+  const editor: any = activeTextEditor.value
+  if (!editor) return null
+
+  try {
+    const { from, to } = editor.state.selection
+    const delimiter = mode === 'inline' ? ' ' : '\n'
+    let initialLatex = ''
+
+    if (!editor.state.selection.empty) {
+      initialLatex = editor.state.doc.textBetween(from, to, delimiter).trim()
+    }
+
+    if (!initialLatex) {
+      initialLatex =
+        mode === 'inline'
+          ? 'x = \\dfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}'
+          : ['\\begin{aligned}', '2x + 3y &= 6 \\\\', '4x - y  &= 5 \\\\', '\\end{aligned}'].join(
+              '\n'
+            )
+    }
+
+    return {
+      initialLatex,
+      selectionFrom: from,
+      selectionTo: to
+    }
+  } catch (error) {
+    console.warn('[collectKatexContext] Failed to derive KaTeX context.', error)
+    return null
+  }
 }
-*/
+
+function openKatexBottomPanel(config: {
+  mode: KatexMode
+  initialLatex: string
+  selectionFrom: number
+  selectionTo: number
+}): void {
+  bottomPanelStore.configureKatexPanel({
+    mode: config.mode,
+    initialLatex: config.initialLatex,
+    interactionKind: 'insert',
+    targetCellId: props.cellId ?? null,
+    selectionFrom: config.selectionFrom,
+    selectionTo: config.selectionTo
+  })
+  bottomPanelStore.showPanel('insertKatexMath')
+}
+
+function insertKatexInline(): void {
+  const context = collectKatexContext('inline')
+  if (!context) return
+  openKatexBottomPanel({
+    mode: 'inline',
+    initialLatex: context.initialLatex,
+    selectionFrom: context.selectionFrom,
+    selectionTo: context.selectionTo
+  })
+}
+
+function insertKatexBlock(): void {
+  const context = collectKatexContext('block')
+  if (!context) return
+  openKatexBottomPanel({
+    mode: 'block',
+    initialLatex: context.initialLatex,
+    selectionFrom: context.selectionFrom,
+    selectionTo: context.selectionTo
+  })
+}
 
 // Table helpers
 const isTableActive = computed(() => isActive('table'))
@@ -756,63 +838,6 @@ function removeLinkViaUI(): void {
 
 function cancelLinkUI(): void {
   linkInputVisible.value = false
-}
-
-/* Insert KaTeX via the tiptap katex extension */
-
-function insertKatexInline(): void {
-  const ed: any = activeTextEditor.value
-  if (!ed) return
-  try {
-    const { from, to } = ed.state.selection
-    let initialLatex = ''
-    if (!ed.state.selection.empty) {
-      initialLatex = ed.state.doc.textBetween(from, to, ' ').trim()
-    }
-    if (!initialLatex) {
-      initialLatex = 'x = \\dfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}'
-    }
-    modalStore.openKatexInputModal({
-      mode: 'inline',
-      initialLatex,
-      targetCellId: props.cellId ?? null,
-      selectionFrom: from,
-      selectionTo: to
-    })
-  } catch (e) {
-    console.warn('[insertKatexInline] Failed to open KaTeX modal.', e)
-  }
-}
-
-function insertKatexBlock(): void {
-  const ed: any = activeTextEditor.value
-  if (!ed) return
-  try {
-    const { from, to } = ed.state.selection
-    let initialLatex = ''
-    if (!ed.state.selection.empty) {
-      initialLatex = ed.state.doc.textBetween(from, to, '\n').trim()
-    }
-    if (!initialLatex) {
-      initialLatex = '\\begin{aligned} \n2x + 3y &= 6 \\\\\n4x - y  &= 5 \\\\\n\\end{aligned}'
-    }
-    modalStore.openKatexInputModal({
-      mode: 'block',
-      initialLatex,
-      targetCellId: props.cellId ?? null,
-      selectionFrom: from,
-      selectionTo: to
-    })
-  } catch (e) {
-    console.warn('[insertKatexBlock] Failed to open KaTeX modal.', e)
-  }
-}
-
-function openBottomPanel(): void {
-  if (!activeTextEditor.value) return
-  if (isCellLockedComputed.value || isCellHiddenComputed.value) return
-  bottomPanelStore.setActivePanel('insertKatexMath')
-  bottomPanelStore.openBottomPanel()
 }
 
 // ---------------------------------------------------------------------------

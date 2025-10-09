@@ -10,7 +10,7 @@
     background: transparent;
 
     border: var(--top-toolbar-button-border); /* e.g. "2px solid transparent" */
-    border-radius: var(--button-border-radius, min(4px, 0.5em));
+    border-radius: var(--top-toolbar-button-border-radius, min(4px, 0.5em));
     height: var(--top-toolbar-button-height, 1em);
     min-width: var(--top-toolbar-button-min-width, 1em);
     cursor: pointer;
@@ -114,6 +114,43 @@
     cursor: not-allowed;
 }
 
+/* Selectors extend top-toolbar__button */
+.top-toolbar__button--select-label {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ui-text-color, #1f1f1f);
+  border-radius: var(--top-toolbar-button-border-radius, 0.50em);
+  padding: 0;
+  border: none;
+}
+
+.top-toolbar__button--select-label:hover {
+  background: var(--button-hover-color, var(--debug-color));
+  color: var(--ui-text-color, var(--debug-color));
+  font-size: var(--top-toolbar-font-size);
+  font-family: var(--ui-font);
+}
+
+.top-toolbar__button--select {
+  min-width: 1em;
+  border-radius: var(--top-toolbar-button-border-radius, 0.50em);
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  border: none;
+}
+
+.top-toolbar__button--select:hover,
+.top-toolbar__button--select:focus-visible {
+  background: var(--button-hover-color, var(--debug-color));
+  color: var(--ui-text-hover-color, var(--debug-color));
+}
+
+.top-toolbar__button--select-label:hover .top-toolbar__button--select {
+  background: var(--button-hover-color, var(--debug-color));
+  color: var(--ui-text-hover-color, var(--debug-color));
+}
 
 
 /* ------------  Modifiers ----------------- */

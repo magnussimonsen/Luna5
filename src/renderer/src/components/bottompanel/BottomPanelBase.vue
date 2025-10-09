@@ -1,12 +1,35 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch, type Component } from 'vue'
 import { useBottomPanelStore } from '@renderer/stores/UI/bottompanelStore'
+import type { PanelName } from '@renderer/types/sidepanel-types'
+import KatexInputTopToolbar from './KatexInputTopToolbar.vue'
+import KatexInputAndPreviewPanel from './KatexInputAndPreviewPanel.vue'
 
 const bottomPanelStore = useBottomPanelStore()
 
 const isOpen = computed(() => bottomPanelStore.isOpen)
 const panelHeight = computed(() => `${bottomPanelStore.panelHeight}px`)
 const panelRef = ref<HTMLElement | null>(null)
+
+const topToolbarByPanel: Partial<Record<PanelName, Component>> = {
+  insertKatexMath: KatexInputTopToolbar
+}
+
+const contentByPanel: Partial<Record<PanelName, Component>> = {
+  insertKatexMath: KatexInputAndPreviewPanel
+}
+
+const activeTopToolbarComponent = computed<Component | null>(() => {
+  const panel = bottomPanelStore.activePanel
+  if (!panel) return null
+  return topToolbarByPanel[panel] ?? null
+})
+
+const activeContentComponent = computed<Component | null>(() => {
+  const panel = bottomPanelStore.activePanel
+  if (!panel) return null
+  return contentByPanel[panel] ?? null
+})
 
 let startY = 0
 let startHeight = 0
@@ -167,7 +190,9 @@ onBeforeUnmount(() => {
             <span class="bottom-panel__rail-line"></span>
           </div>
           <!--  Top toolbar component-->
+          <component :is="activeTopToolbarComponent" v-if="activeTopToolbarComponent" />
           <!-- Main content area  with dynamic content-->
+          <component :is="activeContentComponent" v-if="activeContentComponent" />
           <!-- Bottom toolbar component-->
         </section>
       </div>

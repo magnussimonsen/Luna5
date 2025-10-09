@@ -1,0 +1,28 @@
+/* KaTeX bottom panel toolbar customizations */
+
+.toolbar__select-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-color, #1f1f1f);
+  padding: 0;
+  border: 0;
+}
+
+.katex-toolbar__select-label-text {
+  font-weight: 500;
+}
+
+.toolbar__select {
+  min-width: 1em;
+  border-radius: 6px;
+  background: var(--cell-background, #fff);
+  color: inherit;
+  font: inherit;
+}
+
+.katex-toolbar__select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

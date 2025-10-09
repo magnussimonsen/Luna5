@@ -17,7 +17,7 @@ import Link from '@tiptap/extension-link'
 // import Image from '@tiptap/extension-image'
 import { ResizableImage } from '@renderer/code/tiptap/extensions/resizableImage'
 import { Mathematics } from '@tiptap/extension-mathematics' // Should we import this instead: src/renderer/src/code/tiptap/extensions/tiptap-mathematics-extension-config.ts
-import { useModalStore } from '@renderer/stores/UI/modalStore'
+import { useBottomPanelStore } from '@renderer/stores/UI/bottompanelStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 // Math (custom) - dynamically imported or added when dependency installed
 import type { Transaction } from 'prosemirror-state'
@@ -94,7 +94,7 @@ export function createTiptapEditor(options: {
 
   const createMathClickHandler = (kind: 'inline' | 'block') => {
     return (node: { attrs?: { latex?: string }; nodeSize?: number } | undefined, pos: number) => {
-      const modalStore = useModalStore()
+      const bottomPanelStore = useBottomPanelStore()
       const cellSelectionStore = useCellSelectionStore()
 
       if (!editor?.isEditable) return
@@ -114,15 +114,16 @@ export function createTiptapEditor(options: {
       const selectionFrom = pos
       const selectionTo = pos + Math.max(nodeSize, 1)
 
-      modalStore.openKatexInputModal({
+      bottomPanelStore.configureKatexPanel({
         mode: kind,
         initialLatex: latex,
+        interactionKind: 'edit',
         targetCellId: cellId ?? cellSelectionStore.selectedCellId ?? null,
         selectionFrom,
         selectionTo,
-        intent: 'edit',
-        nodePos: pos
+        targetNodePos: pos
       })
+      bottomPanelStore.showPanel('insertKatexMath')
     }
   }
 

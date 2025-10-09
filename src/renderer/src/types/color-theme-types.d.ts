@@ -55,6 +55,7 @@ export type ThemeColorTypes = {
   // Text / UI
   textColor: string
   UITextColor: string
+  UITextHoverColor: string
 
   // Borders & dividers
   borderColor: string
