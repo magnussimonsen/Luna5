@@ -330,7 +330,6 @@ import type { KatexSnippetDefinition } from '@renderer/constants/katex-snippets'
 import {
   greekLetterSnippets,
   comparisonSnippets as comparisonSnippetDefinitions,
-  quickActionMathSnippets,
   accentSnippets as accentSnippetDefinitions,
   parenthesesSnippets as parenthesesSnippetDefinitions,
   trigonometrySnippets as trigonometrySnippetDefinitions,

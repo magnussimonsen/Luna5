@@ -12,68 +12,6 @@ export interface KatexSnippetDefinition {
 	}
 }
 
-export const quickActionMathSnippets: KatexSnippetDefinition[] = [
-	{
-		id: 'fraction',
-		label: 'Fraction',
-		latex: '\\dfrac{a}{b}',
-		symbol: 'a⁄b',
-		selection: {
-			startOffset: 6,
-			endOffset: 7
-		}
-	},
-	{
-		id: 'sqrt',
-		label: 'Square root',
-		latex: '\\sqrt{x}',
-		symbol: '√',
-		selection: {
-			startOffset: 4,
-			endOffset: 5
-		}
-	},
-	{
-		id: 'subscript',
-		label: 'Subscript',
-		latex: 'a_{x}',
-		symbol: 'aₓ',
-		selection: {
-			startOffset: 3,
-			endOffset: 4
-        }
-	}, 
-    {
-        id: 'superscript',
-        label: 'Superscript',
-        latex: 'a^{x}',
-        symbol: 'aˣ',
-        selection: {
-            startOffset: 3,
-            endOffset: 4
-        }
-	},
-	{
-		id: 'summation',
-		label: 'Summation',
-		latex: '\\sum_{n=1}^{\\infty} a_{n}',
-		symbol: 'Σ',
-		selection: {
-			startOffset: 6,
-			endOffset: 7
-		}
-	},
-	{
-		id: 'product',
-		label: 'Product',
-		latex: '\\prod_{k=1}^{N} a_{k}',
-		symbol: '∏',
-		selection: {
-			startOffset: 6,
-			endOffset: 15
-		}
-	}
-]
 
 export const greekLetterSnippets: KatexSnippetDefinition[] = [
 	{ id: 'alpha', label: 'Alpha', latex: '\\alpha', symbol: 'α' },
