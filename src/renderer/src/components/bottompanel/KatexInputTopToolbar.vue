@@ -33,6 +33,29 @@ interaction patterns and CSS styling.
         Cancel
       </button>
 
+      <!-- insert button for alignedSnippetDefinitions -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon"
+        type="button"
+        title="Insert aligned equation"
+        aria-label="Insert aligned equation"
+        :disabled="isToolbarDisabled"
+        @click="handleInsertAlignedEquation"
+      >
+        <span class="top-toolbar__button-icon">Aligned</span>
+      </button>
+      <!-- insert button for piecewiseSnippetDefinitions -->
+      <button
+        class="top-toolbar__button top-toolbar__button--icon"
+        type="button"
+        title="Insert piecewise function"
+        aria-label="Insert piecewise function"
+        :disabled="isToolbarDisabled"
+        @click="handleInsertPiecewiseFunction"
+      >
+        <span class="top-toolbar__button-icon">Piecewise</span>
+      </button>
+
       <button
         v-for="snippet in quickActionSnippets"
         :key="snippet.id"
@@ -47,68 +70,14 @@ interaction patterns and CSS styling.
       </button>
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
-          v-model="greekLowercaseSelectValue"
+          v-model="trigonometrySelectValue"
           class="top-toolbar__button--select"
-          aria-label="Insert Greek letter"
+          aria-label="Insert trigonometry function"
           :disabled="isToolbarDisabled"
-          @change="handleGreekLowercaseSelect"
+          @change="handleTrigonometrySelect"
         >
           <option
-            v-for="snippet in greekLowercaseSnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="greekCapitalSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert Greek letter"
-          :disabled="isToolbarDisabled"
-          @change="handleGreekCapitalSelect"
-        >
-          <option
-            v-for="snippet in greekCapitalSnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="comparisonSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert comparison symbol"
-          :disabled="isToolbarDisabled"
-          @change="handleComparisonSelect"
-        >
-          <option
-            v-for="snippet in comparisonSnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="accentSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert accent"
-          :disabled="isToolbarDisabled"
-          @change="handleAccentSelect"
-        >
-          <option
-            v-for="snippet in accentSnippets"
+            v-for="snippet in trigonometrySnippets"
             :key="snippet.id"
             :value="snippet.id"
             :title="snippet.label"
@@ -137,14 +106,14 @@ interaction patterns and CSS styling.
       </label>
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
-          v-model="trigonometrySelectValue"
+          v-model="comparisonSelectValue"
           class="top-toolbar__button--select"
-          aria-label="Insert trigonometry function"
+          aria-label="Insert comparison symbol"
           :disabled="isToolbarDisabled"
-          @change="handleTrigonometrySelect"
+          @change="handleComparisonSelect"
         >
           <option
-            v-for="snippet in trigonometrySnippets"
+            v-for="snippet in comparisonSnippets"
             :key="snippet.id"
             :value="snippet.id"
             :title="snippet.label"
@@ -155,6 +124,81 @@ interaction patterns and CSS styling.
       </label>
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
+          v-model="arrowsSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert arrows symbol"
+          :disabled="isToolbarDisabled"
+          @change="handleArrowsSelect"
+        >
+          <option
+            v-for="snippet in arrowsSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="greekLowercaseSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert Greek letter"
+          :disabled="isToolbarDisabled"
+          @change="handleGreekLowercaseSelect"
+        >
+          <option
+            v-for="snippet in greekLowercaseSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="greekCapitalSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert Greek letter"
+          :disabled="isToolbarDisabled"
+          @change="handleGreekCapitalSelect"
+        >
+          <option
+            v-for="snippet in greekCapitalSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="accentSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert accent"
+          :disabled="isToolbarDisabled"
+          @change="handleAccentSelect"
+        >
+          <option
+            v-for="snippet in accentSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
           v-model="calculusSelectValue"
           class="top-toolbar__button--select"
           aria-label="Insert calculus formula"
@@ -163,6 +207,25 @@ interaction patterns and CSS styling.
         >
           <option
             v-for="snippet in calculusSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="geometrySelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert geometry formula"
+          :disabled="isToolbarDisabled"
+          @change="handleGeometrySelect"
+        >
+          <option
+            v-for="snippet in geometrySnippets"
             :key="snippet.id"
             :value="snippet.id"
             :title="snippet.label"
@@ -191,14 +254,14 @@ interaction patterns and CSS styling.
       </label>
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
-          v-model="geometrySelectValue"
+          v-model="chemistryFormulaSelectValue"
           class="top-toolbar__button--select"
-          aria-label="Insert geometry formula"
+          aria-label="Insert chemistry formula"
           :disabled="isToolbarDisabled"
-          @change="handleGeometrySelect"
+          @change="handleChemistryFormulaSelect"
         >
           <option
-            v-for="snippet in geometrySnippets"
+            v-for="snippet in chemistryFormulaSnippetDefinitions"
             :key="snippet.id"
             :value="snippet.id"
             :title="snippet.label"
@@ -209,122 +272,14 @@ interaction patterns and CSS styling.
       </label>
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
-          v-model="scienceSelectValue"
+          v-model="nulidesSelectValue"
           class="top-toolbar__button--select"
-          aria-label="Insert famous formula"
+          aria-label="Insert nuclides formula"
           :disabled="isToolbarDisabled"
-          @change="handleScienceSelect"
+          @change="handleNuclidesSelect"
         >
           <option
-            v-for="snippet in scienceSnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="constantsSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert scientific constant"
-          :disabled="isToolbarDisabled"
-          @change="handleConstantsSelect"
-        >
-          <option
-            v-for="snippet in fundamentalConstantSnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="seriesSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert series expression or sum"
-          :disabled="isToolbarDisabled"
-          @change="handleSeriesSelect"
-        >
-          <option
-            v-for="snippet in seriesSnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="numberSetSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert number set"
-          :disabled="isToolbarDisabled"
-          @change="handleNumberSetSelect"
-        >
-          <option
-            v-for="snippet in numberSetSnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="matrixBracketSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert matrix with brackets"
-          :disabled="isToolbarDisabled"
-          @change="handleMatrixBracketSelect"
-        >
-          <option
-            v-for="snippet in matrixBracketOptions"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="matrixParenthesisSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert matrix with parentheses"
-          :disabled="isToolbarDisabled"
-          @change="handleMatrixParenthesisSelect"
-        >
-          <option
-            v-for="snippet in matrixParenthesisOptions"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="matrixDeterminantSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert matrix with determinant bars"
-          :disabled="isToolbarDisabled"
-          @change="handleMatrixDeterminantSelect"
-        >
-          <option
-            v-for="snippet in matrixDeterminantOptions"
+            v-for="snippet in nuclidesSnippetDefinitions"
             :key="snippet.id"
             :value="snippet.id"
             :title="snippet.label"
@@ -349,8 +304,11 @@ import type { KatexSnippetDefinition } from '@renderer/types/katex-snippet-defin
 import {
   accentSnippets as accentSnippetDefinitions,
   alignedSnippets as alignedSnippetDefinitions,
+  areasAndVolumesSnippets as areasAndVolumesSnippetDefinitions,
+  arrowsSnippets as arrowsSnippetDefinitions,
   calculusSnippets as calculusSnippetDefinitions,
   chemistryFormulaSnippets as chemistryFormulaSnippetDefinitions,
+  //combinatoricsFormulaSnippets as combinatoricsFormulaSnippetDefinitions,
   comparisonSnippets as comparisonSnippetDefinitions,
   fundamentalConstantSnippets as fundamentalConstantSnippetDefinitions,
   geometrySnippets as geometrySnippetDefinitions,
@@ -365,9 +323,12 @@ import {
   parenthesesSnippets as parenthesesSnippetDefinitions,
   physicsFormulaSnippets as physicsFormulaSnippetDefinitions,
   piecewiseSnippets as piecewiseSnippetDefinitions,
+  //probabilityDistributionsSnippets as probabilityDistributionsSnippetDefinitions,
   probabilitySnippets as probabilitySnippetDefinitions,
   quickActionMathSnippets as quickActionMathSnippetDefinitions,
   seriesSnippets as seriesSnippetDefinitions,
+  setSnippets as setSnippetDefinitions,
+  trigonometricIdentitiesSnippets as trigonometricIdentitiesSnippetDefinitions,
   trigonometrySnippets as trigonometrySnippetDefinitions
 } from '@renderer/constants/katex-snippets/import-export-all-katex-snippets'
 
@@ -407,8 +368,11 @@ const isInsertDisabled = computed(() => {
 /*------------------------------ */
 const accentSnippets = accentSnippetDefinitions
 const alignedSnippets = alignedSnippetDefinitions
+const areasAndVolumesSnippets = areasAndVolumesSnippetDefinitions
+const arrowsSnippets = arrowsSnippetDefinitions
 const calculusSnippets = calculusSnippetDefinitions
 const chemistryFormulaSnippets = chemistryFormulaSnippetDefinitions
+//const combinatoricsFormulaSnippets = combinatoricsFormulaSnippetDefinitions
 const comparisonSnippets = comparisonSnippetDefinitions
 const fundamentalConstantSnippets = fundamentalConstantSnippetDefinitions
 const geometrySnippets = geometrySnippetDefinitions
@@ -423,16 +387,23 @@ const operatorQuantorSnippets = operatorQuantorSnippetDefinitions
 const parenthesesSnippets = parenthesesSnippetDefinitions
 const physicsFormulaSnippets = physicsFormulaSnippetDefinitions
 const piecewiseSnippets = piecewiseSnippetDefinitions
+//const probabilityDistributionsSnippets = probabilityDistributionsSnippetDefinitions
 const probabilitySnippets = probabilitySnippetDefinitions
 const quickActionSnippets = quickActionMathSnippetDefinitions
 const seriesSnippets = seriesSnippetDefinitions
+const setSnippets = setSnippetDefinitions
+const trigonometricIdentitiesSnippets = trigonometricIdentitiesSnippetDefinitions
 const trigonometrySnippets = trigonometrySnippetDefinitions
 /*----------------------- */
 /* refs for select values */
 /*----------------------- */
 const accentSelectValue = ref(accentSnippets[0]?.id ?? '')
+// const alignedSelectValue = ref(alignedSnippets[0]?.id ?? '') BUTTON not select
+// const areasAndVolumesSelectValue = ref(areasAndVolumesSnippets[0]?.id ?? '')
+const arrowsSelectValue = ref(arrowsSnippets[0]?.id ?? '')
 const calculusSelectValue = ref(calculusSnippets[0]?.id ?? '')
 const chemistryFormulaSelectValue = ref(chemistryFormulaSnippets[0]?.id ?? '')
+// const combinatoricsFormulaSelectValue = ref(combinatoricsFormulaSnippets[0]?.id ?? '')
 const comparisonSelectValue = ref(comparisonSnippets[0]?.id ?? '')
 const fundamentalConstantSelectValue = ref(fundamentalConstantSnippets[0]?.id ?? '')
 const geometrySelectValue = ref(geometrySnippets[0]?.id ?? '')
@@ -446,10 +417,13 @@ const numberSetSelectValue = ref(numberSetSnippets[0]?.id ?? '')
 const operatorQuantorSelectValue = ref(operatorQuantorSnippets[0]?.id ?? '')
 const parenthesesSelectValue = ref(parenthesesSnippets[0]?.id ?? '')
 const physicsFormulaSelectValue = ref(physicsFormulaSnippets[0]?.id ?? '')
-const piecewiseSelectValue = ref(piecewiseSnippets[0]?.id ?? '')
+// const piecewiseSelectValue = ref(piecewiseSnippets[0]?.id ?? '') BUTTON not select
+// const probabilityDistributionsSelectValue = ref(probabilityDistributionsSnippets[0]?.id ?? '')
 const probabilitySelectValue = ref(probabilitySnippets[0]?.id ?? '')
 const quickActionSelectValue = ref(quickActionSnippets[0]?.id ?? '')
 const seriesSelectValue = ref(seriesSnippets[0]?.id ?? '')
+const setSelectValue = ref(setSnippets[0]?.id ?? '')
+const trigonometricIdentitiesSelectValue = ref(trigonometricIdentitiesSnippets[0]?.id ?? '')
 const trigonometrySelectValue = ref(trigonometrySnippets[0]?.id ?? '')
 
 function createSnippetSelectHandler(
@@ -466,11 +440,21 @@ function createSnippetSelectHandler(
 }
 
 const handleAccentSelect = createSnippetSelectHandler(accentSelectValue, accentSnippets)
+const handleArrowsSelect = createSnippetSelectHandler(arrowsSelectValue, arrowsSnippets)
+const handleInsertAlignedEquation = (): void => {
+  const snippet = alignedSnippets[0]
+  queueSnippet(snippet)
+}
+
 const handleCalculusSelect = createSnippetSelectHandler(calculusSelectValue, calculusSnippets)
 const handleChemistryFormulaSelect = createSnippetSelectHandler(
   chemistryFormulaSelectValue,
   chemistryFormulaSnippets
 )
+//const handleCombinatoricsFormulaSelect = createSnippetSelectHandler(
+//  combinatoricsFormulaSelectValue,
+//  combinatoricsFormulaSnippets
+//)
 const handleComparisonSelect = createSnippetSelectHandler(comparisonSelectValue, comparisonSnippets)
 const handleFundamentalConstantSelect = createSnippetSelectHandler(
   fundamentalConstantSelectValue,
@@ -497,7 +481,7 @@ const handleMatrixParenthesisSelect = createSnippetSelectHandler(
   matrixParenthesisSelectValue,
   matrixParenthesisOptions
 )
-const handleNulidesSelect = createSnippetSelectHandler(nulidesSelectValue, nuclidesSnippets)
+const handleNuclidesSelect = createSnippetSelectHandler(nulidesSelectValue, nuclidesSnippets)
 const handleNumberSetSelect = createSnippetSelectHandler(numberSetSelectValue, numberSetSnippets)
 const handleOperatorQuantorSelect = createSnippetSelectHandler(
   operatorQuantorSelectValue,
@@ -511,7 +495,14 @@ const handlePhysicsFormulaSelect = createSnippetSelectHandler(
   physicsFormulaSelectValue,
   physicsFormulaSnippets
 )
-const handlePiecewiseSelect = createSnippetSelectHandler(piecewiseSelectValue, piecewiseSnippets)
+const handleInsertPiecewiseFunction = (): void => {
+  const snippet = piecewiseSnippets[0]
+  queueSnippet(snippet)
+}
+//const handleProbabilityDistributionsSelect = createSnippetSelectHandler(
+//  probabilityDistributionsSelectValue,
+//  probabilityDistributionsSnippets
+//)
 const handleProbabilitySelect = createSnippetSelectHandler(
   probabilitySelectValue,
   probabilitySnippets
@@ -521,6 +512,10 @@ const handleQuickActionSelect = createSnippetSelectHandler(
   quickActionSnippets
 )
 const handleSeriesSelect = createSnippetSelectHandler(seriesSelectValue, seriesSnippets)
+const handleTrigonometricIdentitiesSelect = createSnippetSelectHandler(
+  trigonometricIdentitiesSelectValue,
+  trigonometricIdentitiesSnippets
+)
 const handleTrigonometrySelect = createSnippetSelectHandler(
   trigonometrySelectValue,
   trigonometrySnippets

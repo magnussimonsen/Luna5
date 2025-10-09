@@ -2,8 +2,6 @@
 import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const comparisonSnippets: KatexSnippetDefinition[] = [
-	{ id: 'equal', label: 'Equals', title: 'Equality symbol', latex: '=', symbol: '=' },
-	{ id: 'not-equal', label: 'Not equal', title: 'Not equal symbol', latex: '\\ne', symbol: '≠' },
 	{
 		id: 'approximately-equal',
 		label: 'Approximately equal',
@@ -11,6 +9,7 @@ export const comparisonSnippets: KatexSnippetDefinition[] = [
 		latex: '\\approx',
 		symbol: '≈'
 	},
+	{ id: 'not-equal', label: 'Not equal', title: 'Not equal symbol', latex: '\\ne', symbol: '≠' },
 	{
 		id: 'less-or-equal',
 		label: 'Less than or equal',
@@ -25,6 +24,9 @@ export const comparisonSnippets: KatexSnippetDefinition[] = [
 		latex: '\\ge',
 		symbol: '≥'
 	},
+	
+	{ id: 'much-less-than', label: 'Much less than', title: 'Much less than symbol', latex: '\\ll', symbol: '≪' },
+	{ id: 'much-greater-than', label: 'Much greater than', title: 'Much greater than symbol', latex: '\\gg', symbol: '≫' },
 	{
 		id: 'proportional-to',
 		label: 'Proportional to',

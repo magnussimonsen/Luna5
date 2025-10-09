@@ -93,6 +93,11 @@ const closePanel = (): void => {
   bottomPanelStore.closeBottomPanel()
 }
 
+const closePanelNOT = (): void => {
+  /* For consistency */
+  return
+}
+
 const handleKeydown = (event: KeyboardEvent): void => {
   if (!isOpen.value) return
   if (event.key === 'Escape') {
@@ -173,7 +178,7 @@ onBeforeUnmount(() => {
         role="dialog"
         aria-modal="true"
         aria-label="Bottom panel"
-        @click.self="closePanel"
+        @click.self="closePanelNOT"
       >
         <section
           ref="panelRef"

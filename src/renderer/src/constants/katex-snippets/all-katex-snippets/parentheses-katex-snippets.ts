@@ -7,7 +7,7 @@ export const parenthesesSnippets: KatexSnippetDefinition[] = [
 		label: 'Parentheses ( )',
 		title: 'Wrap expression in round parentheses',
 		latex: '\\left(  \\right)',
-		symbol: '()',
+		symbol: '( )',
 		selection: { startOffset: 7, endOffset: 8 }
 	},
 	{
@@ -15,7 +15,7 @@ export const parenthesesSnippets: KatexSnippetDefinition[] = [
 		label: 'Brackets [ ]',
 		title: 'Wrap expression in square brackets',
 		latex: '\\left[  \\right]',
-		symbol: '[]',
+		symbol: '[ ]',
 		selection: { startOffset: 7, endOffset: 8 }
 	},
 	{
@@ -23,7 +23,7 @@ export const parenthesesSnippets: KatexSnippetDefinition[] = [
 		label: 'Braces { }',
 		title: 'Wrap expression in curly braces',
 		latex: '\\left\\{  \\right\\}',
-		symbol: '{}',
+		symbol: '{ }',
 		selection: { startOffset: 8, endOffset: 9 }
 	},
 	{
@@ -31,7 +31,7 @@ export const parenthesesSnippets: KatexSnippetDefinition[] = [
 		label: 'Angles ⟨ ⟩',
 		title: 'Wrap expression in angle brackets',
 		latex: '\\left\\langle  \\right\\rangle',
-		symbol: '⟨⟩',
+		symbol: '⟨ ⟩',
 		selection: { startOffset: 13, endOffset: 14 }
 	},
     {   id: 'open-closed-interval',

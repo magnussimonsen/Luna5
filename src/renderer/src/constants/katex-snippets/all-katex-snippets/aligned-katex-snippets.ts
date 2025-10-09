@@ -7,9 +7,9 @@ export const alignedSnippets: KatexSnippetDefinition[] = [
     label: 'Aligned environment',
     title: 'Aligned equations environment',
     latex: `\\begin{aligned}
-      a & = b + c \\
-      d & = e + f
-    \\end{aligned}`,
+       x&=4-y  \\\\
+       y&=x+2  \\\\
+\\end{aligned}`,
     symbol: 'aligned'
   }
 ]

@@ -2,6 +2,98 @@
 import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const nuclidesSnippets: KatexSnippetDefinition[] = [
+  // --- Hydrogen (Z = 1) ---
+  { id: 'hydrogen-1', label: 'Hydrogen-1 (Protium, stable)', title: 'Hydrogen-1', latex: '^{1}_{1}H', symbol: 'H-1' },
+  { id: 'hydrogen-2', label: 'Hydrogen-2 (Deuterium, stable / deuteron projectile)', title: 'Hydrogen-2', latex: '^{2}_{1}H', symbol: 'H-2' },
+  { id: 'hydrogen-3', label: 'Hydrogen-3 (Tritium, t₁⁄₂ ≈ 12.3 y / triton projectile)', title: 'Hydrogen-3', latex: '^{3}_{1}H', symbol: 'H-3' },
+
+  // --- Helium (Z = 2) ---
+  { id: 'helium-3', label: 'Helium-3 (stable)', title: 'Helium-3', latex: '^{3}_{2}He', symbol: 'He-3' },
+  { id: 'helium-4', label: 'Helium-4 (Alpha particle, stable)', title: 'Helium-4', latex: '^{4}_{2}He', symbol: 'He-4' },
+
+  // --- Carbon (Z = 6) ---
+  { id: 'carbon-12', label: 'Carbon-12 (stable)', title: 'Carbon-12', latex: '^{12}_{6}C', symbol: 'C-12' },
+  { id: 'carbon-14', label: 'Carbon-14 (t₁⁄₂ ≈ 5730 y)', title: 'Carbon-14', latex: '^{14}_{6}C', symbol: 'C-14' },
+
+  // --- Nitrogen (Z = 7) ---
+  { id: 'nitrogen-14', label: 'Nitrogen-14 (stable)', title: 'Nitrogen-14', latex: '^{14}_{7}N', symbol: 'N-14' },
+
+  // --- Oxygen (Z = 8) ---
+  { id: 'oxygen-16', label: 'Oxygen-16 (stable)', title: 'Oxygen-16', latex: '^{16}_{8}O', symbol: 'O-16' },
+
+  // --- Fluorine (Z = 9) ---
+  { id: 'fluorine-18', label: 'Fluorine-18 (t₁⁄₂ ≈ 110 min, PET isotope)', title: 'Fluorine-18', latex: '^{18}_{9}F', symbol: 'F-18' },
+
+  // --- Sodium (Z = 11) ---
+  { id: 'sodium-22', label: 'Sodium-22 (t₁⁄₂ ≈ 2.6 y)', title: 'Sodium-22', latex: '^{22}_{11}Na', symbol: 'Na-22' },
+  { id: 'sodium-23', label: 'Sodium-23 (stable)', title: 'Sodium-23', latex: '^{23}_{11}Na', symbol: 'Na-23' },
+
+  // --- Phosphorus (Z = 15) ---
+  { id: 'phosphorus-31', label: 'Phosphorus-31 (stable)', title: 'Phosphorus-31', latex: '^{31}_{15}P', symbol: 'P-31' },
+  { id: 'phosphorus-32', label: 'Phosphorus-32 (t₁⁄₂ ≈ 14.3 d)', title: 'Phosphorus-32', latex: '^{32}_{15}P', symbol: 'P-32' },
+
+  // --- Sulfur (Z = 16) ---
+  { id: 'sulfur-32', label: 'Sulfur-32 (stable)', title: 'Sulfur-32', latex: '^{32}_{16}S', symbol: 'S-32' },
+
+  // --- Chlorine (Z = 17) ---
+  { id: 'chlorine-35', label: 'Chlorine-35 (stable)', title: 'Chlorine-35', latex: '^{35}_{17}Cl', symbol: 'Cl-35' },
+  { id: 'chlorine-37', label: 'Chlorine-37 (stable)', title: 'Chlorine-37', latex: '^{37}_{17}Cl', symbol: 'Cl-37' },
+
+  // --- Potassium (Z = 19) ---
+  { id: 'potassium-40', label: 'Potassium-40 (t₁⁄₂ ≈ 1.25 × 10⁹ y)', title: 'Potassium-40', latex: '^{40}_{19}K', symbol: 'K-40' },
+
+  // --- Calcium (Z = 20) ---
+  { id: 'calcium-40', label: 'Calcium-40 (stable)', title: 'Calcium-40', latex: '^{40}_{20}Ca', symbol: 'Ca-40' },
+
+  // --- Iron (Z = 26) ---
+  { id: 'iron-56', label: 'Iron-56 (stable)', title: 'Iron-56', latex: '^{56}_{26}Fe', symbol: 'Fe-56' },
+
+  // --- Cobalt (Z = 27) ---
+  { id: 'cobalt-60', label: 'Cobalt-60 (t₁⁄₂ ≈ 5.27 y)', title: 'Cobalt-60', latex: '^{60}_{27}Co', symbol: 'Co-60' },
+
+  // --- Copper (Z = 29) ---
+  { id: 'copper-63', label: 'Copper-63 (stable)', title: 'Copper-63', latex: '^{63}_{29}Cu', symbol: 'Cu-63' },
+
+  // --- Zinc (Z = 30) ---
+  { id: 'zinc-65', label: 'Zinc-65 (t₁⁄₂ ≈ 244 d)', title: 'Zinc-65', latex: '^{65}_{30}Zn', symbol: 'Zn-65' },
+
+  // --- Strontium (Z = 38) ---
+  { id: 'strontium-90', label: 'Strontium-90 (t₁⁄₂ ≈ 28.8 y)', title: 'Strontium-90', latex: '^{90}_{38}Sr', symbol: 'Sr-90' },
+
+  // --- Technetium (Z = 43) ---
+  { id: 'technetium-99m', label: 'Technetium-99m (t₁⁄₂ ≈ 6 h, metastable, medical)', title: 'Technetium-99m', latex: '^{99m}_{43}Tc', symbol: 'Tc-99m' },
+
+  // --- Iodine (Z = 53) ---
+  { id: 'iodine-127', label: 'Iodine-127 (stable)', title: 'Iodine-127', latex: '^{127}_{53}I', symbol: 'I-127' },
+  { id: 'iodine-131', label: 'Iodine-131 (t₁⁄₂ ≈ 8.0 d)', title: 'Iodine-131', latex: '^{131}_{53}I', symbol: 'I-131' },
+
+  // --- Cesium (Z = 55) ---
+  { id: 'cesium-133', label: 'Cesium-133 (stable)', title: 'Cesium-133', latex: '^{133}_{55}Cs', symbol: 'Cs-133' },
+  { id: 'cesium-137', label: 'Cesium-137 (t₁⁄₂ ≈ 30.1 y)', title: 'Cesium-137', latex: '^{137}_{55}Cs', symbol: 'Cs-137' },
+
+  // --- Radon (Z = 86) ---
+  { id: 'radon-222', label: 'Radon-222 (t₁⁄₂ ≈ 3.8 d)', title: 'Radon-222', latex: '^{222}_{86}Rn', symbol: 'Rn-222' },
+
+  // --- Uranium (Z = 92) ---
+  { id: 'uranium-235', label: 'Uranium-235 (t₁⁄₂ ≈ 7.0 × 10⁸ y)', title: 'Uranium-235', latex: '^{235}_{92}U', symbol: 'U-235' },
+  { id: 'uranium-238', label: 'Uranium-238 (t₁⁄₂ ≈ 4.47 × 10⁹ y)', title: 'Uranium-238', latex: '^{238}_{92}U', symbol: 'U-238' },
+
+  // --- Plutonium (Z = 94) ---
+  { id: 'plutonium-239', label: 'Plutonium-239 (t₁⁄₂ ≈ 24,100 y)', title: 'Plutonium-239', latex: '^{239}_{94}Pu', symbol: 'Pu-239' },
+
+  // --- Fundamental particles for nuclear equations ---
+  { id: 'proton', label: 'Proton (¹₁p)', title: 'Proton', latex: '^{1}_{1}p', symbol: 'p' },
+  { id: 'neutron', label: 'Neutron (¹₀n)', title: 'Neutron', latex: '^{1}_{0}n', symbol: 'n' },
+  { id: 'alpha', label: 'Alpha particle (⁴₂He)', title: 'Alpha particle', latex: '^{4}_{2}He', symbol: 'α' },
+  { id: 'beta-minus', label: 'Beta⁻ (⁰₋₁e)', title: 'Beta minus particle', latex: '^{0}_{-1}e', symbol: 'β⁻' },
+  { id: 'positron', label: 'Positron (⁰₊₁e, β⁺)', title: 'Positron', latex: '^{0}_{+1}e', symbol: 'β⁺' },
+  { id: 'gamma', label: 'Gamma photon (⁰₀γ)', title: 'Gamma photon', latex: '^{0}_{0}\\gamma', symbol: 'γ' },
+  { id: 'electron-neutrino', label: 'Electron neutrino (νₑ)', title: 'Electron neutrino', latex: '^{0}_{0}\\nu_{e}', symbol: 'νₑ' },
+  { id: 'electron-antineutrino', label: 'Electron antineutrino (ν̄ₑ)', title: 'Electron antineutrino', latex: '^{0}_{0}\\bar{\\nu}_{e}', symbol: 'ν̄ₑ' }
+]
+
+
+    /*
     { id: 'hydrogen', label: 'Hydrogen', title: 'Hydrogen', latex: '^{1}_{1}H', symbol: '₁H' },
     { id: 'helium', label: 'Helium', title: 'Helium', latex: '^{4}_{2}He', symbol: '₂He' },
     { id: 'lithium', label: 'Lithium', title: 'Lithium', latex: '^{7}_{3}Li', symbol: '₃Li' },
@@ -120,4 +212,4 @@ export const nuclidesSnippets: KatexSnippetDefinition[] = [
     { id: 'livermorium', label: 'Livermorium', title: 'Livermorium', latex: '^{293}_{116}Lv', symbol: '₁₁₆Lv' },
     { id: 'tennessine', label: 'Tennessine', title: 'Tennessine', latex: '^{294}_{117}Ts', symbol: '₁₁₇Ts' },
     { id: 'oganesson', label: 'Oganesson', title: 'Oganesson', latex: '^{294}_{118}Og', symbol: '₁₁₈Og' }
-]
+]*/

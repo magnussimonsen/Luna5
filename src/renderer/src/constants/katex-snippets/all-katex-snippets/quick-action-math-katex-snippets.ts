@@ -13,6 +13,17 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
     }
   },
   {
+    id: 'multiplication',
+    label: 'Multiplication',
+    title: 'Inserts a multiplication symbol',
+    latex: '\\cdot',
+    symbol: '·',
+    selection: {
+      startOffset: 6,
+      endOffset: 7
+    }
+  },
+  {
     id: 'fraction',
     label: 'Fraction',
     title: 'Inserts a fraction',
@@ -114,11 +125,27 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
     }
   },
   {
-    id: 'integral',
-    label: 'Integral',
-    title: 'Inserts an integral',
-    latex: '\\int_{a}^{b} f(x) \\, dx',
+    id: 'derivative',
+    label: 'Derivative',
+    title: 'Inserts a derivative',
+    latex: "f'(x)",
+    symbol: "f'(x)",
+    selection: { startOffset: 6, endOffset: 7 }
+  },
+  {
+    id: 'indefinite-integral',
+    label: 'Indefinite Integral',
+    title: 'Inserts an indefinite integral',
+    latex: '\\int f(x) \\, dx',
     symbol: '∫',
+    selection: { startOffset: 6, endOffset: 7 }
+  },
+  {
+    id: 'definite-integral',
+    label: 'Definite Integral',
+    title: 'Inserts a definite integral',
+    latex: '\\int_{a}^{b} f(x) \\, dx',
+    symbol: '∫ₐᵇ',
     selection: { startOffset: 6, endOffset: 7 }
   }
 ]

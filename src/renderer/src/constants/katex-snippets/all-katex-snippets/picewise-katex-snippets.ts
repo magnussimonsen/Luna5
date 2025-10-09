@@ -9,7 +9,7 @@ export const piecewiseSnippets: KatexSnippetDefinition[] = [
         latex: `f(x) = \\begin{cases}
             a & \\text{if } x < 0 \\\\
             b & \\text{if } x \\geq 0
-        \\end{cases}`,
+\\end{cases}`,
         symbol: 'f(x) = { a, if x < 0; b, if x ≥ 0 }'
     }
 ]
