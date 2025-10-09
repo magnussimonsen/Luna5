@@ -4,7 +4,6 @@ export interface KatexSnippetDefinition {
 	id: string
 	label: string
 	latex: string
-	title?: string
 	iconClass?: string
 	symbol?: string
 	selection?: {
@@ -35,24 +34,24 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
 		}
 	},
 	{
-		id: 'inline-math',
-		label: 'Inline math',
-		latex: '\\(  \\)',
-		symbol: '…',
+		id: 'subscript',
+		label: 'Subscript',
+		latex: 'a_{x}',
+		symbol: 'aₓ',
 		selection: {
 			startOffset: 4,
 			endOffset: 5
-		}
-	},
-	{
-		id: 'block-math',
-		label: 'Block math',
-		latex: '\\[  \\]',
-		symbol: '▭',
-		selection: {
-			startOffset: 4,
-			endOffset: 5
-		}
+        }
+	}, 
+    {
+        id: 'superscript',
+        label: 'Superscript',
+        latex: 'a^{x}',
+        symbol: 'aˣ',
+        selection: {
+            startOffset: 4,
+            endOffset: 5
+        }
 	},
 	{
 		id: 'summation',
