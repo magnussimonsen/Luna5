@@ -20,12 +20,7 @@ export const fundamentalConstantSnippets: KatexSnippetDefinition[] = [
   // ================================
   // Electromagnetism & related
   // ================================
-  { id: 'vacuum-permittivity', label: 'Vacuum permittivity', title: 'Vacuum permittivity (derived)', latex: '\\varepsilon_{0} \\approx 8.8541878 \\times 10^{-12} \\; \\mathrm{F\\,m^{-1}}', symbol: 'ε₀' },
-  { id: 'vacuum-permeability', label: 'Vacuum permeability', title: 'Vacuum permeability (derived)', latex: '\\mu_{0} \\approx 1.25663706 \\times 10^{-6} \\; \\mathrm{N\\,A^{-2}}', symbol: 'μ₀' },
   { id: 'gas-constant', label: 'Universal gas constant', title: 'Universal gas constant', latex: 'R = 8.3145 \\; \\mathrm{J\\,mol^{-1}\\,K^{-1}}', symbol: 'R' },
-  { id: 'faraday-constant', label: 'Faraday constant', title: 'Faraday constant', latex: 'F \\approx 9.6485 \\times 10^{4} \\; \\mathrm{C\\,mol^{-1}}', symbol: 'F' },
-  { id: 'rydberg-constant', label: 'Rydberg constant', title: 'Rydberg constant', latex: 'R_{\\infty} \\approx 1.09737 \\times 10^{7} \\; \\mathrm{m^{-1}}', symbol: 'R_∞' },
-  { id: 'fine-structure-constant', label: 'Fine-structure constant', title: 'Fine-structure constant', latex: '\\alpha \\approx \\tfrac{1}{137}', symbol: 'α' },
 
   // Radiation/thermal
   { id: 'stefan-boltzmann-constant', label: 'Stefan–Boltzmann constant', title: 'Stefan–Boltzmann constant', latex: '\\sigma \\approx 5.6704 \\times 10^{-8} \\; \\mathrm{W\\,m^{-2}\\,K^{-4}}', symbol: 'σ' },
@@ -34,8 +29,6 @@ export const fundamentalConstantSnippets: KatexSnippetDefinition[] = [
   // ================================
   // Atomic/quantum
   // ================================
-  { id: 'reduced-planck', label: 'Reduced Planck constant', title: 'Reduced Planck constant', latex: '\\hbar = \\tfrac{h}{2\\pi}', symbol: 'ħ' },
-  { id: 'bohr-radius', label: 'Bohr radius', title: 'Bohr radius', latex: 'a_{0} \\approx 5.2918 \\times 10^{-11} \\; \\mathrm{m}', symbol: 'a₀' },
   { id: 'classical-electron-radius', label: 'Classical electron radius', title: 'Classical electron radius', latex: 'r_{e} \\approx 2.8179 \\times 10^{-15} \\; \\mathrm{m}', symbol: 'rₑ' },
   { id: 'atomic-mass-unit', label: 'Atomic mass unit', title: 'Atomic mass unit (dalton)', latex: 'u \\approx 1.66054 \\times 10^{-27} \\; \\mathrm{kg}', symbol: 'u' },
   { id: 'electron-volt', label: 'Electron volt', title: 'Electron volt (exact conversion)', latex: '1\\,\\mathrm{eV} = 1.602176634 \\times 10^{-19} \\; \\mathrm{J}', symbol: 'eV' },
@@ -50,13 +43,11 @@ export const fundamentalConstantSnippets: KatexSnippetDefinition[] = [
   { id: 'tau-mass', label: 'Tau mass', title: 'Tau (τ⁻) rest mass', latex: 'm_{\\tau} \\approx 3.1675 \\times 10^{-27} \\; \\mathrm{kg}', symbol: 'm_τ' },
   { id: 'alpha-mass', label: 'Alpha particle mass', title: 'He-4 nucleus (α) mass', latex: 'm_{\\alpha} \\approx 6.6447 \\times 10^{-27} \\; \\mathrm{kg}', symbol: 'm_α' },
   { id: 'deuteron-mass', label: 'Deuteron mass', title: '²H nucleus (deuteron) mass', latex: 'm_{d} \\approx 3.3436 \\times 10^{-27} \\; \\mathrm{kg}', symbol: 'm_d' },
-  { id: 'triton-mass', label: 'Triton mass', title: '³H nucleus (triton) mass', latex: 'm_{t} \\approx 5.0074 \\times 10^{-27} \\; \\mathrm{kg}', symbol: 'm_t' },
 
   // ================================
   // Gravitation / Earth & astro basics
   // ================================
   { id: 'gravitational-constant', label: 'Gravitational constant', title: 'Newtonian gravitational constant', latex: 'G \\approx 6.6743 \\times 10^{-11} \\; \\mathrm{m^{3}\\,kg^{-1}\\,s^{-2}}', symbol: 'G' },
-  { id: 'standard-gravity', label: 'Standard gravity', title: 'Standard gravity at Earth (exact by convention)', latex: 'g_{\\mathrm{n}} = 9.80665 \\; \\mathrm{m\\,s^{-2}}', symbol: 'g' },
   { id: 'earth-radius', label: 'Earth mean radius', title: 'Earth mean radius', latex: 'R_{\\oplus} \\approx 6.371 \\times 10^{6} \\; \\mathrm{m}', symbol: 'R⊕' },
   { id: 'astronomical-unit', label: 'Astronomical unit', title: '1 au (exact)', latex: '1\\,\\mathrm{au} = 149\\,597\\,870\\,700 \\; \\mathrm{m}', symbol: 'au' },
 
