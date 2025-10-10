@@ -53,7 +53,7 @@ const latexInput = computed({
   }
 })
 
-const katexMode = computed(() => bottomPanelStore.katexPanelMode)
+const katexMode = computed(() => bottomPanelStore.katexPanelMode)// 'inline' | 'display'
 
 const focusTextarea = (): void => {
   void nextTick(() => {
