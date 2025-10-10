@@ -16,7 +16,7 @@ export const trigonometrySnippets: KatexSnippetDefinition[] = [
   { id: 'arccosine', label: 'arccos (inverse cosine)', title: 'Arccosine function', latex: '\\cos^{-1}\\left( x \\right)', symbol: 'cos⁻¹', selection: { startOffset: 15, endOffset: 16 } },
   { id: 'arctangent',label: 'arctan (inverse tangent)',title: 'Arctangent function',latex: '\\tan^{-1}\\left( x \\right)', symbol: 'tan⁻¹', selection: { startOffset: 15, endOffset: 16 } },
 
-  // Optional: principal ranges (useful in solving)
+  /* Optional: principal ranges (useful in solving)
   { id: 'arcsin-range', label: 'Range arcsin', title: 'Principal range of arcsin', latex: '\\arcsin x\\in\\left[-\\tfrac{\\pi}{2},\\tfrac{\\pi}{2}\\right]', symbol: 'rng sin⁻¹' },
   { id: 'arccos-range', label: 'Range arccos', title: 'Principal range of arccos', latex: '\\arccos x\\in\\left[0,\\pi\\right]', symbol: 'rng cos⁻¹' },
   { id: 'arctan-range', label: 'Range arctan', title: 'Principal range of arctan', latex: '\\arctan x\\in\\left(-\\tfrac{\\pi}{2},\\tfrac{\\pi}{2}\\right)', symbol: 'rng tan⁻¹' },
@@ -64,13 +64,13 @@ export const trigonometrySnippets: KatexSnippetDefinition[] = [
   // 6) Product-to-sum & sum-to-product
   // ===============================
   { id: 'prod-sin-cos', label: 'sinA cosB', title: 'Product-to-sum identity', latex: '\\sin A\\cos B=\\tfrac{1}{2}[\\sin(A+B)+\\sin(A-B)]', symbol: 'sin·cos→∑' },
-  { id: 'sum-to-prod-sin', label: 'sinA ± sinB', title: 'Sum-to-product for sine', latex: '\\sin A\\pm\\sin B=2\\sin\\tfrac{A\\pm B}{2}\\cos\\tfrac{A\\mp B}{2}', symbol: '∑→prod (sin)' },
-  { id: 'sum-to-prod-cos', label: 'cosA + cosB', title: 'Sum-to-product for cosine', latex: '\\cos A+\\cos B=2\\cos\\tfrac{A+B}{2}\\cos\\tfrac{A-B}{2}', symbol: '∑→prod (cos+)' },
+  { id: 'sum-to-prod-sin', label: 'sinA ± sinB', title: 'Sum-to-product for sine', latex: '\\sin A\\pm\\sin B=2\\sin\\tfrac{A\\pm B}{2}\\cos\\tfrac{A\\mp B}{2}', symbol: '∑→prod sin' },
+  { id: 'sum-to-prod-cos', label: 'cosA + cosB', title: 'Sum-to-product for cosine', latex: '\\cos A+\\cos B=2\\cos\\tfrac{A+B}{2}\\cos\\tfrac{A-B}{2}', symbol: '∑→prod cos' },
 
   // ===============================
   // 7) Triangle formulas
   // ===============================
   { id: 'law-of-sines', label: 'Law of sines', title: 'Law of sines', latex: '\\frac{a}{\\sin A}=\\frac{b}{\\sin B}=\\frac{c}{\\sin C}', symbol: 'a/sinA=…' },
   { id: 'law-of-cosines', label: 'Law of cosines', title: 'Law of cosines', latex: 'a^{2}=b^{2}+c^{2}-2bc\\cos A', symbol: 'a²=…' },
-  { id: 'triangle-area', label: 'Area = ½ab sin C', title: 'Triangle area (SAS form)', latex: '\\text{Area}=\\tfrac{1}{2}ab\\sin C', symbol: '½ab sinC' }
+  { id: 'triangle-area', label: 'Area = ½ab sin C', title: 'Triangle area (SAS form)', latex: '\\text{Area}=\\tfrac{1}{2}ab\\sin C', symbol: '½ab sinC' }*/
 ]

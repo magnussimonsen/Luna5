@@ -54,27 +54,27 @@ export const geometrySnippets: KatexSnippetDefinition[] = [
     label: 'Equation of a circle',
     title: 'Circle centered at (h, k) with radius r',
     latex: '(x - h)^{2} + (y - k)^{2} = r^{2}',
-    symbol: 'Circle eq'
+    symbol: 'Circle'
   },
   {
     id: 'ellipse-equation',
     label: 'Equation of an ellipse',
     title: 'Ellipse centered at (h, k)',
     latex: '\\dfrac{(x - h)^{2}}{a^{2}} + \\dfrac{(y - k)^{2}}{b^{2}} = 1',
-    symbol: 'Ellipse eq'
+    symbol: 'Ellipse'
   },
   {
     id: 'parabola-equation',
     label: 'Equation of a parabola',
     title: 'Parabola with vertex at (h, k)',
     latex: '(y - k)^{2} = 4a(x - h)',
-    symbol: 'Parabola eq'
+    symbol: 'Parabola'
   },
   {
     id: 'hyperbola-equation',
     label: 'Equation of a hyperbola',
     title: 'Hyperbola centered at (h, k)',
     latex: '\\dfrac{(x - h)^{2}}{a^{2}} - \\dfrac{(y - k)^{2}}{b^{2}} = 1',
-    symbol: 'Hyperbola eq'
+    symbol: 'Hyperbola'
   }
 ]

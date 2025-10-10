@@ -32,6 +32,15 @@ interaction patterns and CSS styling.
       >
         Cancel
       </button>
+      <button
+        class="top-toolbar__button top-toolbar__button--runcode"
+        type="button"
+        title="Open formula modal"
+        aria-label="Open formula modal"
+        :disabled="isInsertDisabled"
+      >
+        Open formula book 📖
+      </button>
 
       <!-- insert button for alignedSnippetDefinitions -->
       <button
@@ -196,44 +205,6 @@ interaction patterns and CSS styling.
           </option>
         </select>
       </label>
-
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="calculusSelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert calculus formula"
-          :disabled="isToolbarDisabled"
-          @change="handleCalculusSelect"
-        >
-          <option
-            v-for="snippet in calculusSnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
-
-      <label class="top-toolbar__button top-toolbar__button--select-label">
-        <select
-          v-model="geometrySelectValue"
-          class="top-toolbar__button--select"
-          aria-label="Insert geometry formula"
-          :disabled="isToolbarDisabled"
-          @change="handleGeometrySelect"
-        >
-          <option
-            v-for="snippet in geometrySnippets"
-            :key="snippet.id"
-            :value="snippet.id"
-            :title="snippet.label"
-          >
-            {{ snippet.symbol ?? snippet.label }}
-          </option>
-        </select>
-      </label>
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
           v-model="probabilitySelectValue"
@@ -280,6 +251,24 @@ interaction patterns and CSS styling.
         >
           <option
             v-for="snippet in nuclidesSnippetDefinitions"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="handleFundamentalConstantSelect"
+          class="top-toolbar__button--select"
+          aria-label="Insert fundamental constant"
+          :disabled="isToolbarDisabled"
+          @change="handleFundamentalConstantSelect"
+        >
+          <option
+            v-for="snippet in fundamentalConstantSnippetDefinitions"
             :key="snippet.id"
             :value="snippet.id"
             :title="snippet.label"

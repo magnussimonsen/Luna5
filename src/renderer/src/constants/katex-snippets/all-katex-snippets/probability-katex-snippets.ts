@@ -7,22 +7,21 @@ export const probabilitySnippets: KatexSnippetDefinition[] = [
   // ===============================
   { id: 'probability', label: 'Probability of event', title: 'Probability of event', latex: 'P(A)', symbol: 'P(A)' },
   { id: 'complement', label: 'Complement rule', title: 'Complement rule', latex: 'P(A^{c}) = 1 - P(A)', symbol: 'P(Aᶜ)' },
-  { id: 'intersection', label: 'Intersection of events', title: 'Intersection of events', latex: 'P(A \\cap B)', symbol: 'P(A ∩ B)' },
-  { id: 'union', label: 'Union (inclusion–exclusion)', title: 'Union of two events', latex: 'P(A \\cup B) = P(A) + P(B) - P(A \\cap B)', symbol: 'P(A ∪ B)' },
-  { id: 'conditional', label: 'Conditional probability', title: 'Conditional probability', latex: 'P(A \\mid B) = \\dfrac{P(A \\cap B)}{P(B)}', symbol: 'P(A|B)' },
-  { id: 'multiplication-rule', label: 'Multiplication rule', title: 'Multiplication rule', latex: 'P(A \\cap B) = P(A \\mid B)\\,P(B)', symbol: 'P(A∩B)' },
-  { id: 'independence', label: 'Independence', title: 'Independence of A and B', latex: 'A \\perp B \\iff P(A \\cap B) = P(A)P(B)', symbol: 'indep.' },
-  { id: 'total-probability', label: 'Total probability', title: 'Law of total probability', latex: 'P(B) = \\sum_{i} P(B \\mid A_i)\\,P(A_i)', symbol: 'Total prob.' },
-  { id: 'bayes', label: "Bayes' theorem", title: "Bayes' theorem", latex: 'P(A \\mid B) = \\dfrac{P(B \\mid A)\\,P(A)}{P(B)}', symbol: 'Bayes' },
+  { id: 'intersection', label: 'Intersection of events', title: 'Intersection of events', latex: 'P(A \\cap B)', symbol: 'P(A∩B)' },
+  { id: 'union', label: 'Union (inclusion–exclusion)', title: 'Union of two events', latex: 'P(A \\cup B) = P(A) + P(B) - P(A \\cap B)', symbol: 'P(A∪B)' },
+ // { id: 'conditional', label: 'Conditional probability', title: 'Conditional probability', latex: 'P(A \\mid B) = \\dfrac{P(A \\cap B)}{P(B)}', symbol: 'P(A|B)' },
+ // { id: 'multiplication-rule', label: 'Multiplication rule', title: 'Multiplication rule', latex: 'P(A \\cap B) = P(A \\mid B)\\,P(B)', symbol: 'P(A∩B)' },
+ // { id: 'independence', label: 'Independence', title: 'Independence of A and B', latex: 'A \\perp B \\iff P(A \\cap B) = P(A)P(B)', symbol: 'indep.' },
 
   // ===============================
   // 2) Counting & binomial theorem
   // ===============================
-  { id: 'factorial', label: 'Factorial', title: 'Factorial', latex: 'n! = n\\,(n-1)\\cdots 2\\cdot 1', symbol: 'n!' },
-  { id: 'nCr', label: 'Combinations nCr', title: 'Combination', latex: '\\binom{n}{r} = \\dfrac{n!}{r!(n-r)!}', symbol: 'nCr' },
-  { id: 'nPr', label: 'Permutations nPr', title: 'Permutation', latex: 'P(n,r) = \\dfrac{n!}{(n-r)!}', symbol: 'nPr' },
-  { id: 'binomial-theorem', label: 'Binomial theorem', title: 'Binomial theorem', latex: '(a+b)^{n} = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k} b^{k}', symbol: '(a+b)ⁿ' },
-
+  { id: 'factorial', label: 'Factorial', title: 'Factorial', latex: 'n!', symbol: 'n!' },
+  { id: 'nCr', label: 'Combinations nCr', title: 'Combination', latex: '\\dbinom{n}{r}', symbol: 'nCr' },
+  { id: 'nPr', label: 'Permutations nPr', title: 'Permutation', latex: 'nPr', symbol: 'nPr' },
+ // { id: 'bayes', label: "Bayes' theorem", title: "Bayes' theorem", latex: 'P(A \\mid B) = \\dfrac{P(B \\mid A)\\,P(A)}{P(B)}', symbol: 'Bayes' },
+ //{ id: 'binomial-theorem', label: 'Binomial theorem', title: 'Binomial theorem', latex: '(a+b)^{n} = \\sum_{k=0}^{n} \\binom{n}{k} a^{n-k} b^{k}', symbol: '(a+b)ⁿ' },
+/*
   // ===============================
   // 3) Random variables: E, Var (discrete & continuous)
   // ===============================
@@ -36,7 +35,7 @@ export const probabilitySnippets: KatexSnippetDefinition[] = [
   // 4) Common distributions (PMFs/PDFs & key parameters)
   // ===============================
   // Bernoulli
-  { id: 'bernoulli-pmf', label: 'Bernoulli pmf', title: 'Bernoulli distribution', latex: 'P(X=x) = p^{x}(1-p)^{1-x},\\quad x\\in\\{0,1\\}', symbol: 'Bern(p)' },
+  { id: 'bernoulli-pmf', label: 'Bernoulli pmf', title: 'Bernoulli distribution', latex: 'P(X=x) = p^{x}(1-p)^{1-x},\\quad x\\in\\{0,1\\}', symbol: 'Bernu(p)' },
   { id: 'bernoulli-mean-var', label: 'Bernoulli mean/var', title: 'Bernoulli mean & variance', latex: '\\mathbb{E}[X]=p,\\quad \\operatorname{Var}(X)=p(1-p)', symbol: 'E,Var' },
 
   // Binomial
@@ -48,7 +47,7 @@ export const probabilitySnippets: KatexSnippetDefinition[] = [
   { id: 'geometric-mean-var', label: 'Geometric mean/var', title: 'Geometric mean & variance', latex: '\\mathbb{E}[X]=\\tfrac{1}{p},\\quad \\operatorname{Var}(X)=\\tfrac{1-p}{p^{2}}', symbol: 'E,Var' },
 
   // Hypergeometric
-  { id: 'hypergeo-pmf', label: 'Hypergeometric pmf', title: 'Hypergeometric distribution', latex: 'P(X = k) = \\dfrac{\\binom{K}{k} \\binom{N-K}{n-k}}{\\binom{N}{n}}', symbol: 'HypG(N,K,n)' },
+  { id: 'hypergeo-pmf', label: 'Hypergeometric pmf', title: 'Hypergeometric distribution', latex: 'P(X = k) = \\dfrac{\\binom{K}{k} \\binom{N-K}{n-k}}{\\binom{N}{n}}', symbol: 'HypG' },
   { id: 'hypergeo-mean-var', label: 'Hypergeometric mean/var', title: 'Hypergeometric mean & variance', latex: '\\mathbb{E}[X]=n\\tfrac{K}{N},\\ \\operatorname{Var}(X)=n\\tfrac{K}{N}\\Big(1-\\tfrac{K}{N}\\Big)\\tfrac{N-n}{N-1}', symbol: 'E,Var' },
 
   // Poisson
@@ -63,7 +62,7 @@ export const probabilitySnippets: KatexSnippetDefinition[] = [
   { id: 'exponential-pdf', label: 'Exponential pdf', title: 'Exponential distribution', latex: 'f(x) = \\lambda e^{-\\lambda x},\\quad x\\ge 0', symbol: 'Exp(λ)' },
   { id: 'exponential-cdf', label: 'Exponential CDF', title: 'Exponential CDF', latex: 'F(x) = 1 - e^{-\\lambda x},\\quad x\\ge 0', symbol: 'F(x)' },
   { id: 'exponential-mean-var', label: 'Exponential mean/var', title: 'Exponential mean & variance', latex: '\\mathbb{E}[X]=\\tfrac{1}{\\lambda},\\quad \\operatorname{Var}(X)=\\tfrac{1}{\\lambda^{2}}', symbol: 'E,Var' },
-  { id: 'memoryless-exp', label: 'Memoryless property', title: 'Exponential memoryless', latex: 'P(X>s+t\\mid X>s)=P(X>t)', symbol: 'memoryless' },
+  //{ id: 'memoryless-exp', label: 'Memoryless property', title: 'Exponential memoryless', latex: 'P(X>s+t\\mid X>s)=P(X>t)', symbol: '' },
 
   // Normal
   { id: 'normal-pdf', label: 'Normal pdf', title: 'Normal (μ,σ²) pdf', latex: 'f(x) = \\dfrac{1}{\\sigma \\sqrt{2\\pi}} \\exp\\!\\left(-\\dfrac{(x-\\mu)^{2}}{2\\sigma^{2}}\\right)', symbol: 'N(μ,σ²)' },
@@ -76,5 +75,5 @@ export const probabilitySnippets: KatexSnippetDefinition[] = [
   { id: 'poisson-cdf', label: 'Poisson CDF', title: 'Poisson CDF', latex: 'P(X \\le k) = e^{-\\lambda} \\sum_{i=0}^{k} \\dfrac{\\lambda^{i}}{i!}', symbol: 'CDF Pois' },
   { id: 'std-normal-cdf', label: 'Φ(z) (std normal CDF)', title: 'Standard normal CDF', latex: '\\Phi(z) = \\dfrac{1}{\\sqrt{2\\pi}} \\int_{-\\infty}^{z} e^{-t^{2}/2} \\, dt', symbol: 'Φ(z)' },
   { id: 'normal-cdf', label: 'Normal CDF via erf', title: 'Normal (μ,σ²) CDF via erf', latex: 'F(x) = \\tfrac{1}{2}\\Big[1+\\operatorname{erf}\\Big(\\dfrac{x-\\mu}{\\sigma\\sqrt{2}}\\Big)\\Big]', symbol: 'F(x)' },
-  { id: 'error-function', label: 'Error function', title: 'Error function', latex: '\\operatorname{erf}(x) = \\dfrac{2}{\\sqrt{\\pi}} \\int_{0}^{x} e^{-t^{2}} \\, dt', symbol: 'erf' }
+  { id: 'error-function', label: 'Error function', title: 'Error function', latex: '\\operatorname{erf}(x) = \\dfrac{2}{\\sqrt{\\pi}} \\int_{0}^{x} e^{-t^{2}} \\, dt', symbol: 'erf' }*/
 ]
