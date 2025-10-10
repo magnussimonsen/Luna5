@@ -34,7 +34,6 @@ const activeContentComponent = computed<Component | null>(() => {
 let startY = 0
 let startHeight = 0
 let previousBodyOverflow = ''
-let previousAppPointerEvents = ''
 
 const clampHeight = (height: number): number => {
   const min = bottomPanelStore.minHeight
@@ -61,32 +60,53 @@ const refreshHeightBounds = (): void => {
   }
 }
 
-const appRoot = (): HTMLElement | null => document.getElementById('app')
-
 const lockBackground = (): void => {
   previousBodyOverflow = document.body.style.overflow
   document.body.style.overflow = 'hidden'
-  const root = appRoot()
-  if (root) {
-    previousAppPointerEvents = root.style.pointerEvents
-    root.style.pointerEvents = 'none'
-    root.setAttribute('aria-hidden', 'true')
-    try {
-      root.setAttribute('inert', '')
-    } catch {
-      /* inert may be unsupported */
+
+  // Instead of locking the entire app root, lock specific sections excluding statusbar
+  const menubar = document.querySelector('.menubar, [data-component="menubar"], #menubar')
+  const toolbar = document.querySelector('.toolbar, [data-component="toolbar"], #toolbar')
+  const cellList = document.querySelector(
+    '.cell-list, [data-component="cell-list"], .scroll-container'
+  )
+  const sidepanel = document.querySelector('.sidepanel, [data-component="sidepanel"]')
+
+  const elementsToLock = [menubar, toolbar, cellList, sidepanel].filter(Boolean)
+
+  elementsToLock.forEach((element) => {
+    if (element) {
+      ;(element as HTMLElement).style.pointerEvents = 'none'
+      element.setAttribute('aria-hidden', 'true')
+      try {
+        element.setAttribute('inert', '')
+      } catch {
+        /* inert may be unsupported */
+      }
     }
-  }
+  })
 }
 
 const unlockBackground = (): void => {
   document.body.style.overflow = previousBodyOverflow
-  const root = appRoot()
-  if (root) {
-    root.style.pointerEvents = previousAppPointerEvents
-    root.removeAttribute('aria-hidden')
-    root.removeAttribute('inert')
-  }
+
+  // Unlock the specific sections that were locked
+  const menubar = document.querySelector('.menubar, [data-component="menubar"], #menubar')
+  const toolbar = document.querySelector('.toolbar, [data-component="toolbar"], #toolbar')
+  const cellList = document.querySelector(
+    '.cell-list, [data-component="cell-list"], .scroll-container'
+  )
+  const sidepanel = document.querySelector('.sidepanel, [data-component="sidepanel"]')
+
+  const elementsToUnlock = [menubar, toolbar, cellList, sidepanel].filter(Boolean)
+
+  elementsToUnlock.forEach((element) => {
+    if (element) {
+      ;(element as HTMLElement).style.pointerEvents = ''
+      element.removeAttribute('aria-hidden')
+      element.removeAttribute('inert')
+    }
+  })
 }
 
 const closePanel = (): void => {

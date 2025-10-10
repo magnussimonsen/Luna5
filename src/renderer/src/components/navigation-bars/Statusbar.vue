@@ -12,6 +12,7 @@ For now only placeholders for the buttons and sliders are implemented.
 <template>
   <div class="status-bar-wrapper">
     <footer
+      id="statusbar"
       class="status-bar"
       :style="{
         fontFamily: fontStore.fonts.uiFont,

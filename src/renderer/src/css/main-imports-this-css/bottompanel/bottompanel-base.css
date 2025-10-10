@@ -1,6 +1,7 @@
 .bottom-panel-overlay {
   position: fixed;
   inset: 0;
+  bottom: var(--bottom-chrome-height, 2.5em);
   background: rgba(0, 0, 0, 0.50);
   backdrop-filter: blur(0px);
   display: flex;

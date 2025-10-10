@@ -14,7 +14,7 @@ Design tokens (layout/spacing/metrics)
     --menubar-z-index: 4000;
     --sidepanel-main-z-index: 4000;
     --toolbar-z-index: 3000;
-    --statusbar-z-index: 3000;
+    --statusbar-z-index: 6000;
     --workspace-web-layout-container-z-index: 2000;
     --workspace-a4-preview-layout-container-z-index: 2000;
 

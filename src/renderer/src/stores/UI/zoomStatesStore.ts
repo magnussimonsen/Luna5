@@ -36,6 +36,10 @@ export const useZoomStatesStore = defineStore('zoom', {
     resetZoom(): void {
       this.zoomPercent = 100
       this.applyCssVar()
+    },
+    resetPythonImageZoom(): number {
+      // Returns the default zoom value for Python images
+      return 50
     }
   }
 })

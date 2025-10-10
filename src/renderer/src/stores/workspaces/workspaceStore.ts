@@ -74,6 +74,7 @@ import {
 import { deleteCellSoft as operationsDeleteCellSoft } from '@renderer/code/notebook-core/operations'
 import { restoreCellFromBin as operationsRestoreCellFromBin } from '@renderer/code/notebook-core/operations'
 import { setCellContent as operationsSetCellBaseInputContent } from '@renderer/code/notebook-core/operations/cells/set-cell-content'
+import { newPythonCellExampleCode } from '@renderer/constants/python-snippets/new-python-cell-example-code'
 
 /**
  * Pinia store state for the Luna workspace.
@@ -707,10 +708,12 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.markAsUnsaved()
       return newCell
     },
-    addPythonCell(source = `# Python demo\nfor i in range(5):\n    print(f"Item {i}")`): Cell {
+    addPythonCell(source?: string): Cell {
       this.getWorkspace()
       this.ensureDefaultNotebook()
-      const newCell = operationsCreatePythonCell(source)
+      // Use provided source, or default to example code, or fallback to empty string
+      const cellSource = source ?? newPythonCellExampleCode ?? ''
+      const newCell = operationsCreatePythonCell(cellSource)
       operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
       this.insertCellGeneric(newCell)
       this.markAsUnsaved()

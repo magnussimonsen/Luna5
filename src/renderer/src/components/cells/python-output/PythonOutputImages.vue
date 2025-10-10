@@ -2,7 +2,13 @@
   <div v-if="images && images.length" class="py-out-images">
     <div class="section-title">
       <div class="zoom">
-        <label :for="sliderId">Figure zoom</label>
+        <label
+          :for="sliderId"
+          title="Click to reset zoom to default"
+          :style="resetZoomBtnStyle"
+          @click="resetZoom"
+          >Figure zoom <span class="zoom-percent-fixed">{{ zoomPercentFixed }}</span></label
+        >
         <input
           :id="sliderId"
           v-model.number="zoom"
@@ -15,7 +21,6 @@
           :aria-valuenow="zoom"
           aria-label="Zoom figures"
         />
-        <span class="zoom-value">{{ zoom }}%</span>
       </div>
     </div>
     <div class="img-list">
@@ -30,6 +35,9 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
+import { useZoomStatesStore } from '@renderer/stores/UI/zoomStatesStore'
+import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
+import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 
 const props = defineProps<{ images: string[]; cellId?: string }>()
 
@@ -38,6 +46,31 @@ const zoom = ref<number>(50)
 const sliderId = `py-fig-zoom-${Math.random().toString(36).slice(2, 8)}`
 
 const workspaceStore = useWorkspaceStore()
+const zoomStatesStore = useZoomStatesStore()
+const fontSizeStore = useFontSizeStore()
+const fontStore = useFontStore()
+
+// Reset zoom to default value
+const resetZoom = (): void => {
+  zoom.value = zoomStatesStore.resetPythonImageZoom()
+}
+
+// Check if zoom is at default value (for styling)
+const isZoomAtDefault = computed(() => zoom.value === zoomStatesStore.resetPythonImageZoom())
+
+// Style for reset button based on whether zoom is at default
+const resetZoomBtnStyle = computed(() => ({
+  '--py-zoom-btn-bg': isZoomAtDefault.value
+    ? 'var(--reset-zoom-button-color-Center, var(--debug-color, lightgreen))'
+    : 'var(--reset-zoom-button-color-OffCenter, var(--debug-color, lightcoral))',
+  fontSize: fontSizeStore.fontSizes.statusbarFontSize,
+  fontFamily: fontStore.fonts.uiFont
+}))
+
+// Fixed-width zoom percentage to prevent wobbling
+const zoomPercentFixed = computed(() => {
+  return `${zoom.value}`.padStart(4, ' ') + ' %' // Pad the percentage, then add space after
+})
 
 // Load stored zoom for this cell (if present) when component mounts
 onMounted(() => {
@@ -103,6 +136,18 @@ const imgWidthStyle = computed(() => ({ width: `${zoom.value}%` }))
   margin-left: 0.5rem;
   font-weight: normal;
 }
+.zoom label {
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s ease;
+  background: var(--py-zoom-btn-bg, transparent);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+.zoom label:hover {
+  opacity: 0.8;
+}
 .zoom input[type='range'] {
   width: 110px;
   height: 0.3rem;
@@ -111,6 +156,24 @@ const imgWidthStyle = computed(() => ({ width: `${zoom.value}%` }))
   opacity: 0.6;
   font-variant-numeric: tabular-nums;
   font-size: 0.8em;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s ease;
+  background: var(--py-zoom-btn-bg, transparent);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+.zoom-value:hover {
+  opacity: 1;
+}
+/* Fixed-width zoom percentage to prevent wobbling */
+.zoom-percent-fixed {
+  display: inline-block;
+  width: 5ch; /* Reserve space for up to 5 characters (e.g., "100% ") */
+  text-align: right; /* Align shorter values to the right for consistency */
+  font-variant-numeric: tabular-nums; /* Use tabular numbers for consistent digit width */
+  white-space: nowrap; /* Prevent wrapping */
 }
 .img-list {
   display: block;

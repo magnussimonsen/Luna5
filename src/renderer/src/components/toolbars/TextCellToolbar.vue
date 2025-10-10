@@ -16,7 +16,12 @@
         :class="{ 'top-toolbar__button--active': isActive('bold') }"
         title="Bold (Ctrl+B)"
         aria-label="Bold"
-        :disabled="!canRunCommand('toggleBold') || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !canRunCommand('toggleBold') ||
+          isCellLockedComputed ||
+          isCellHiddenComputed ||
+          isMathNodeSelected
+        "
         @click="toggleBold"
       ></button>
 
@@ -27,7 +32,12 @@
         :class="{ 'top-toolbar__button--active': isActive('italic') }"
         title="Italic (Ctrl+I)"
         aria-label="Italic"
-        :disabled="!canRunCommand('toggleItalic') || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !canRunCommand('toggleItalic') ||
+          isCellLockedComputed ||
+          isCellHiddenComputed ||
+          isMathNodeSelected
+        "
         @click="toggleItalic"
       ></button>
 
@@ -39,7 +49,10 @@
         title="Underline"
         aria-label="Underline"
         :disabled="
-          !canRunCommand('toggleUnderline') || isCellLockedComputed || isCellHiddenComputed
+          !canRunCommand('toggleUnderline') ||
+          isCellLockedComputed ||
+          isCellHiddenComputed ||
+          isMathNodeSelected
         "
         @click="toggleUnderline"
       ></button>
@@ -52,7 +65,10 @@
         title="Subscript"
         aria-label="Subscript"
         :disabled="
-          !canRunCommand('toggleSubscript') || isCellLockedComputed || isCellHiddenComputed
+          !canRunCommand('toggleSubscript') ||
+          isCellLockedComputed ||
+          isCellHiddenComputed ||
+          isMathNodeSelected
         "
         @click="toggleSubscript"
       ></button>
@@ -65,7 +81,10 @@
         title="Superscript"
         aria-label="Superscript"
         :disabled="
-          !canRunCommand('toggleSuperscript') || isCellLockedComputed || isCellHiddenComputed
+          !canRunCommand('toggleSuperscript') ||
+          isCellLockedComputed ||
+          isCellHiddenComputed ||
+          isMathNodeSelected
         "
         @click="toggleSuperscript"
       ></button>
@@ -77,7 +96,9 @@
         :class="{ 'top-toolbar__button--active': isActive('bulletList') }"
         title="Bullet list"
         aria-label="Bullet list"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleBulletList"
       ></button>
 
@@ -88,7 +109,9 @@
         :class="{ active: isActive('orderedList') }"
         title="Numbered list"
         aria-label="Numbered list"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleOrderedList"
       ></button>
 
@@ -99,7 +122,9 @@
         :class="{ 'top-toolbar__button--active': isActiveHeading(1) }"
         title="Heading 1"
         aria-label="Heading 1"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleHeading(1)"
       ></button>
       <button
@@ -108,7 +133,9 @@
         :class="{ 'top-toolbar__button--active': isActiveHeading(2) }"
         title="Heading 2"
         aria-label="Heading 2"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleHeading(2)"
       ></button>
       <button
@@ -117,7 +144,9 @@
         :class="{ 'top-toolbar__button--active': isActiveHeading(3) }"
         title="Heading 3"
         aria-label="Heading 3"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleHeading(3)"
       ></button>
       <button
@@ -126,7 +155,9 @@
         :class="{ 'top-toolbar__button--active': isActiveHeading(4) }"
         title="Heading 4"
         aria-label="Heading 4"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleHeading(4)"
       ></button>
 
@@ -155,7 +186,9 @@
         ]"
         title="Highlight Red"
         aria-label="Highlight Red"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleHighlight('red-highlighting')"
       ></button>
 
@@ -172,7 +205,9 @@
         :style="{ backgroundColor: resolveHighlightColor('green-highlighting', isDarkMode) }"
         title="Highlight Blue"
         aria-label="Highlight Blue"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleHighlight('green-highlighting')"
       ></button>
 
@@ -189,7 +224,9 @@
         :style="{ backgroundColor: resolveHighlightColor('blue-highlighting', isDarkMode) }"
         title="Highlight Green"
         aria-label="Highlight Green"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="toggleHighlight('blue-highlighting')"
       ></button>
     </div>
@@ -221,7 +258,9 @@
         title="Insert 3x3 table"
         aria-label="Insert table"
         :aria-pressed="isTableActive ? 'true' : 'false'"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="insertTable"
       ></button>
       <template v-if="isTableActive">
@@ -235,7 +274,9 @@
           type="button"
           title="Add row after"
           aria-label="Add row"
-          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          :disabled="
+            !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+          "
           @click="addRow"
         ></button>
         <button
@@ -248,7 +289,9 @@
           type="button"
           title="Add column after"
           aria-label="Add column"
-          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          :disabled="
+            !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+          "
           @click="addColumn"
         ></button>
         <button
@@ -261,7 +304,9 @@
           type="button"
           title="Delete row"
           aria-label="Delete row"
-          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          :disabled="
+            !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+          "
           @click="deleteRow"
         ></button>
         <button
@@ -274,7 +319,9 @@
           type="button"
           title="Delete column"
           aria-label="Delete column"
-          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          :disabled="
+            !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+          "
           @click="deleteColumn"
         ></button>
         <button
@@ -287,7 +334,9 @@
           type="button"
           title="Delete table"
           aria-label="Delete table"
-          :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+          :disabled="
+            !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+          "
           @click="deleteTable"
         ></button>
       </template>
@@ -330,7 +379,9 @@
         "
         :aria-pressed="isLinkActive || linkInputVisible ? 'true' : 'false'"
         :aria-expanded="linkInputVisible ? 'true' : 'false'"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="onClickLinkButton"
       ></button>
       <div v-if="linkInputVisible" class="inline-link-editor">
@@ -377,7 +428,9 @@
         type="button"
         title="Insert image"
         aria-label="Insert image"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="insertImage"
       ></button>
 
@@ -388,7 +441,7 @@
       type="button"
       title="Insert Math Live Input Field with virtual keyboard (coming soon)"
       aria-label="Insert Math Live Input Field with virtual keyboard (coming soon)"
-      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+      :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected"
       @click="placeholderMathLive"
     ></button>
     -->
@@ -397,7 +450,9 @@
         type="button"
         title="Insert inline math (LaTeX / KaTeX)"
         aria-label="Insert inline math (LaTeX / KaTeX)"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="insertKatexInline"
       ></button>
       <button
@@ -405,7 +460,9 @@
         type="button"
         title="Insert block math (LaTeX / KaTeX)"
         aria-label="Insert block math (LaTeX / KaTeX)"
-        :disabled="!activeTextEditor || isCellLockedComputed || isCellHiddenComputed"
+        :disabled="
+          !activeTextEditor || isCellLockedComputed || isCellHiddenComputed || isMathNodeSelected
+        "
         @click="insertKatexBlock"
       ></button>
     </div>
@@ -458,6 +515,19 @@ const isCellLockedComputed = computed(
   () => !!unref(props.isSoftLocked) || !!unref(props.isHardLocked)
 )
 const isCellHiddenComputed = computed(() => !!unref(props.isCellHidden))
+
+// Check if current selection is within a mathematics node (inline or block)
+const isMathNodeSelected = computed(() => {
+  void selectionVersion.value // Make reactive to selection changes
+  const editor = activeTextEditor.value
+  if (!editor) return false
+
+  try {
+    return editor.isActive('inlineMath') || editor.isActive('blockMath')
+  } catch {
+    return false
+  }
+})
 
 // A shared ref that increments on editor selection / transaction changes so
 // isActive-style helpers become reactive.
