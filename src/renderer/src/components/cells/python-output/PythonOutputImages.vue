@@ -125,14 +125,12 @@ const imgWidthStyle = computed(() => ({ width: `${zoom.value}%` }))
   background: var(--cell-background);
 }
 .section-title {
-  font-size: 0.8rem;
-  opacity: 0.7;
+  opacity: 0.8;
   margin-bottom: 0.25rem;
 }
 .zoom {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
   margin-left: 0.5rem;
   font-weight: normal;
 }
@@ -151,21 +149,6 @@ const imgWidthStyle = computed(() => ({ width: `${zoom.value}%` }))
 .zoom input[type='range'] {
   width: 110px;
   height: 0.3rem;
-}
-.zoom-value {
-  opacity: 0.6;
-  font-variant-numeric: tabular-nums;
-  font-size: 0.8em;
-  cursor: pointer;
-  user-select: none;
-  transition: opacity 0.2s ease;
-  background: var(--py-zoom-btn-bg, transparent);
-  padding: 0.1em 0.3em;
-  border-radius: 3px;
-  border: 1px solid transparent;
-}
-.zoom-value:hover {
-  opacity: 1;
 }
 /* Fixed-width zoom percentage to prevent wobbling */
 .zoom-percent-fixed {

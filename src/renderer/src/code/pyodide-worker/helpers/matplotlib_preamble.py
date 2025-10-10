@@ -25,6 +25,10 @@ def _luna_apply_theme(is_dark: bool):
         if plt is not None:
             if is_dark:
                 plt.style.use('dark_background')
+                # Optionally customize the background color further:
+                plt.rcParams['figure.facecolor'] = '#222222'
+                plt.rcParams['axes.facecolor'] = '#222222'
+                plt.rcParams['savefig.facecolor'] = '#222222'
             else:
                 # default style; could use 'default' explicitly
                 plt.style.use('default')

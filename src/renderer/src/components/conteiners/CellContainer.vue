@@ -2,6 +2,7 @@
   <div
     ref="rootEl"
     class="cell"
+    :data-cell-id="cellId"
     :data-kind="kind"
     :data-selected="selected || null"
     :data-in-bin="inBin || null"

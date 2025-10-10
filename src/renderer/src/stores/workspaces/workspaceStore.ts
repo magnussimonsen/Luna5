@@ -73,7 +73,7 @@ import {
 } from '@renderer/code/notebook-core/operations'
 import { deleteCellSoft as operationsDeleteCellSoft } from '@renderer/code/notebook-core/operations'
 import { restoreCellFromBin as operationsRestoreCellFromBin } from '@renderer/code/notebook-core/operations'
-import { setCellContent as operationsSetCellBaseInputContent } from '@renderer/code/notebook-core/operations/cells/set-cell-content'
+//import { setCellContent as operationsSetCellBaseInputContent } from '@renderer/code/notebook-core/operations/cells/set-cell-content'
 import { newPythonCellExampleCode } from '@renderer/constants/python-snippets/new-python-cell-example-code'
 
 /**
@@ -411,7 +411,6 @@ export const useWorkspaceStore = defineStore('workspace', {
         this.initialized = true
         // Clear current notebook selection; a caller can ensure/create one as needed.
         this.currentNotebookId = null
-
         // Reset save state for a new workspace
         this.resetSaveState()
       }
@@ -451,6 +450,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       const newNotebook = operationsCreateNotebook(workspace, title)
       this.currentNotebookId = newNotebook.id
       this.markAsUnsaved()
+      this.addTextCell() // Add a text cell by default
       return newNotebook.id
     },
     // --- Delete Notebook ---
@@ -506,6 +506,10 @@ export const useWorkspaceStore = defineStore('workspace', {
       if (!workspace.notebooks[id]) return
       this.currentNotebookId = id
       this.setLastSelectedNotebookIdNotebooks(id)
+
+      // Initialize all Python editors in the newly selected notebook
+      void this.initializeAllPythonEditorsInNotebook(id)
+
       try {
         const cellSelectionStore = useCellSelectionStore()
         const rememberedCellId = workspace.notebooks[id]?.lastSelectedCellId || null
@@ -523,6 +527,15 @@ export const useWorkspaceStore = defineStore('workspace', {
       } catch {
         /* ignore */
       }
+    },
+    // --- Select First Cell in Notebook ---
+    selectFirstCellInNotebook(notebookId?: string): boolean {
+      const workspace = this.getWorkspace()
+      const targetNotebookId = notebookId || this.currentNotebookId || this.ensureDefaultNotebook()
+      const firstCellId = this._getFirstActiveCellId(workspace, targetNotebookId)
+      if (!firstCellId) return false
+      this._selectIfPossible(firstCellId)
+      return true
     },
     // --- Soft-delete selected cell ---
     softDeleteSelectedCell(): boolean {
@@ -698,12 +711,82 @@ export const useWorkspaceStore = defineStore('workspace', {
         }, 1000)
       }
     },
-    //--- Cell Creation ---
+    /*
+    --- Cell Creation ---
+    */
+    /**
+     * Initialize Monaco editors for all Python cells in the specified notebook.
+     * This ensures all Python cells have editors ready when the notebook is selected.
+     * @param notebookId - The ID of the notebook (defaults to current notebook)
+     */
+    async initializeAllPythonEditorsInNotebook(notebookId?: string): Promise<void> {
+      const workspace = this.getWorkspace()
+      const targetNotebookId = notebookId || this.currentNotebookId
+      if (!targetNotebookId) return
+
+      const notebook = workspace.notebooks[targetNotebookId]
+      if (!notebook) return
+
+      // Get all Python cells in the notebook (non-deleted)
+      const pythonCellIds = notebook.cellOrder.filter((cellId) => {
+        const cell = workspace.cells[cellId]
+        return cell && cell.kind === 'python-cell' && !cell.softDeleted
+      })
+
+      // Import nextTick to wait for DOM updates
+      const { nextTick } = await import('vue')
+
+      // Wait for Vue to render the components
+      await nextTick()
+
+      // Add a small delay to ensure components are fully mounted
+      await new Promise((resolve) => setTimeout(resolve, 50))
+
+      // Trigger initialization for each Python cell by dispatching a custom event
+      // The PythonCell components will listen for this and initialize their editors
+      console.log('[workspaceStore] Dispatching init events for Python cells', {
+        notebookId: targetNotebookId,
+        cellIds: pythonCellIds
+      })
+      for (const cellId of pythonCellIds) {
+        // Dispatch a custom event that PythonCell components can listen to
+        const event = new CustomEvent('luna:init-python-editor', {
+          detail: { cellId, notebookId: targetNotebookId }
+        })
+        window.dispatchEvent(event)
+        console.log('[workspaceStore] Dispatched init event for cell', { cellId })
+      }
+    },
+    /**
+     * Wait for a cell's editor to be mounted in the DOM.
+     * Polls for the editor element with a timeout.
+     * @param cellId - The ID of the cell to wait for
+     * @param maxAttempts - Maximum number of polling attempts (default: 20)
+     * @param delayMs - Delay between attempts in milliseconds (default: 50)
+     * @returns Promise<boolean> - true if editor was found, false if timeout
+     */
+    async waitForCellEditor(cellId: string, maxAttempts = 20, delayMs = 50): Promise<boolean> {
+      const { nextTick } = await import('vue')
+      for (let i = 0; i < maxAttempts; i++) {
+        await nextTick()
+        const cellElement = document.querySelector(`[data-cell-id="${cellId}"]`)
+        if (cellElement) {
+          // Check for Monaco editor container or TipTap editor
+          const hasMonaco = cellElement.querySelector('.monaco-editor') !== null
+          const hasTipTap = cellElement.querySelector('.ProseMirror') !== null
+          if (hasMonaco || hasTipTap) {
+            return true
+          }
+        }
+        await new Promise((resolve) => setTimeout(resolve, delayMs))
+      }
+      return false
+    },
     addTextCell(content = 'function: addTextCell in workspaceStore.ts'): TextCell {
       this.getWorkspace() // ensure initialized
       this.ensureDefaultNotebook()
       const newCell = operationsCreateTextCell(content)
-      operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
+      //operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
       this.insertCellGeneric(newCell)
       this.markAsUnsaved()
       return newCell
@@ -714,7 +797,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       // Use provided source, or default to example code, or fallback to empty string
       const cellSource = source ?? newPythonCellExampleCode ?? ''
       const newCell = operationsCreatePythonCell(cellSource)
-      operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
+      //operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
       this.insertCellGeneric(newCell)
       this.markAsUnsaved()
       return newCell
@@ -743,10 +826,32 @@ export const useWorkspaceStore = defineStore('workspace', {
       if (!cellId) return false
       const cell = workspace.cells[cellId]
       if (!cell) return false
+
+      const wasHidden = cell.hidden
       cell.hidden = !cell.hidden
       cell.updatedAt = new Date().toISOString()
       this.markAsUnsaved()
       console.log('Toggled hidden on cell', cellId, 'now', cell.hidden)
+
+      // Optimize memory: dispose/initialize Monaco editors for Python cells when hiding/showing
+      if (cell.kind === 'python-cell') {
+        if (cell.hidden) {
+          // Cell is now hidden - dispose its Monaco editor to free memory
+          const disposeEvent = new CustomEvent('luna:dispose-python-editor', {
+            detail: { cellId }
+          })
+          window.dispatchEvent(disposeEvent)
+          console.log('[workspaceStore] Dispatched dispose event for hidden cell', { cellId })
+        } else if (wasHidden) {
+          // Cell was hidden and is now visible - reinitialize its Monaco editor
+          const initEvent = new CustomEvent('luna:init-python-editor', {
+            detail: { cellId, notebookId: this.currentNotebookId || '' }
+          })
+          window.dispatchEvent(initEvent)
+          console.log('[workspaceStore] Dispatched init event for unhidden cell', { cellId })
+        }
+      }
+
       return true
     },
     // --- Toogle flaged on selected cell ---

@@ -168,8 +168,9 @@ export const useThemeStore = defineStore('theme', {
       cellMarginBackgroundColor: '#333333',
 
       // Python-cell specific
+      // See src\renderer\src\code\pyodide-worker\helpers\matplotlib_preamble.py for matplotlib bg color
       pythonStdOutBackground: '#222222',
-      pythonImageBackground: 'black',
+      pythonImageBackground: '#222222',
 
       // Text & UI text
       textColor: '#cccccc',

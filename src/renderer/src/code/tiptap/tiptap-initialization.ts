@@ -3,8 +3,7 @@ import { Editor } from '@tiptap/vue-3'
 import type { Editor as CoreEditor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import type { TiptapDocumentConfig } from '@renderer/types/tiptap-types'
-import type { Extension } from '@tiptap/core'
-import Placeholder from '@tiptap/extension-placeholder'
+import { Extension, InputRule } from '@tiptap/core'
 import { Table } from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableHeader from '@tiptap/extension-table-header'
@@ -16,7 +15,9 @@ import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
 // import Image from '@tiptap/extension-image'
 import { ResizableImage } from '@renderer/code/tiptap/extensions/resizableImage'
-import { Mathematics } from '@tiptap/extension-mathematics' // Should we import this instead: src/renderer/src/code/tiptap/extensions/tiptap-mathematics-extension-config.ts
+import { Mathematics } from '@tiptap/extension-mathematics'
+import { Placeholder } from '@tiptap/extension-placeholder'
+import { NEW_TEXT_CELL_PLACEHOLDER } from '@renderer/constants/textcell-snippets/new-text-cell-placeholder'
 import { useBottomPanelStore } from '@renderer/stores/UI/bottompanelStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 // Math (custom) - dynamically imported or added when dependency installed
@@ -27,6 +28,37 @@ import 'katex/dist/katex.min.css'
 export type VueTiptapEditor = InstanceType<typeof import('@tiptap/vue-3').Editor>
 
 // --------------------------------------------------------------------------------------
+// Custom Math Input Rules Extension
+// Enables automatic conversion of $...$ → inline math and $$...$$ → block math
+// --------------------------------------------------------------------------------------
+const MathInputRules = Extension.create({
+  name: 'mathInputRules',
+
+  addInputRules() {
+    return [
+      // Inline math: $...$ followed by space
+      new InputRule({
+        find: /\$([^$]+)\$\s$/,
+        handler: ({ state, range, match }) => {
+          const latex = match[1]
+          const { tr } = state
+          tr.replaceWith(range.from, range.to, state.schema.nodes['inlineMath'].create({ latex }))
+          tr.insertText(' ')
+        }
+      }),
+      // Block math: $$...$$ followed by enter/newline
+      new InputRule({
+        find: /^\$\$([^$]+)\$\$$/,
+        handler: ({ state, range, match }) => {
+          const latex = match[1]
+          const { tr } = state
+          tr.replaceWith(range.from, range.to, state.schema.nodes['blockMath'].create({ latex }))
+        }
+      })
+    ]
+  }
+})
+
 // createTiptapEditor
 // Central factory for constructing a Luna text-cell TipTap editor instance.
 // Responsibilities:
@@ -135,7 +167,7 @@ export function createTiptapEditor(options: {
       // Disable built-in link so we can supply our own configured Link extension below.
       link: false
     }),
-    Placeholder.configure({ placeholder: 'Rich text (Markdown-like) — start typing…' }),
+    Placeholder.configure({ placeholder: NEW_TEXT_CELL_PLACEHOLDER }),
     Highlight.configure({ multicolor: true }),
     Link.configure({
       openOnClick: false,
@@ -154,7 +186,8 @@ export function createTiptapEditor(options: {
       inlineOptions: { onClick: createMathClickHandler('inline') },
       blockOptions: { onClick: createMathClickHandler('block') },
       katexOptions: { throwOnError: false }
-    })
+    }),
+    MathInputRules
   ] as Extension[]
   const extensions = ensureUniqueExtensions(assembledExtensions)
 

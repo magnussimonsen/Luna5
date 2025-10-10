@@ -220,7 +220,12 @@
     <div
       class="menubar-button"
       :class="{ 'a4-preview-active': isA4Preview }"
-      :title="isA4Preview ? 'Switch to fluid layout' : 'Switch to A4 preview layout'"
+      disabled="true"
+      :title="
+        isA4Preview
+          ? 'Switch to fluid layout (not implemented yet)'
+          : 'Switch to A4 preview layout (not implemented yet)'
+      "
       @click="handleToggleWorkspaceLayout"
     >
       {{ isA4Preview ? 'A4 Preview' : 'A4 Preview' }}
@@ -274,9 +279,9 @@
       </div>
       <div
         class="menubar-button"
-        :class="{ active: false }"
+        :class="{ active: sidepanelStore.activePanel === 'formulabook' }"
         title="Open formula book (not implemented yet)"
-        @click="console.log('Formula book clicked')"
+        @click="handleTogglePanel('formulabook')"
       >
         <span class="icon-book" aria-hidden="true"></span>
         <!-- <span class="sr-only">Settings</span> -->
@@ -325,7 +330,7 @@ import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
-import { computed, ref } from 'vue'
+import { computed, ref, nextTick } from 'vue'
 import { saveAsCurrentWorkspace } from '@renderer/code/files/save-as'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { openWorkspaceFromDisk } from '@renderer/code/files/open-file'
@@ -368,7 +373,7 @@ const isSelectedCellLocked = computed(() => {
 })
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
-  menubarStore.toggleA4Preview()
+  // menubarStore.toggleA4Preview()
   console.log('Toggle button pressed, new layout mode:', menubarStore.workspaceLayoutMode)
 }
 
@@ -435,14 +440,48 @@ const handleQuitLuna = async (): Promise<void> => {
   }
 }
 
+/**
+ * Scrolls the selected cell into view in the viewport.
+ * Uses the data-cell-id attribute to find the cell element.
+ */
+function scrollSelectedCellIntoView(): void {
+  const cellId = cellSelectionStore.selectedCellId
+  if (!cellId) return
+
+  try {
+    const cellElement = document.querySelector(`[data-cell-id="${cellId}"]`)
+    if (cellElement) {
+      cellElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  } catch (error) {
+    // Ignore DOM errors – this is a non-critical UI enhancement
+    console.debug('Could not scroll cell into view:', error)
+  }
+}
+
 // Edit handlers
 const handleMoveCellUp = (): void => {
   const ok = workspaceStore.moveSelectedCellUp()
-  if (!ok) console.warn('Cannot move cell up: no selection or at top')
+  if (ok) {
+    // Keep the moved cell visible in the viewport
+    nextTick(() => {
+      scrollSelectedCellIntoView()
+    })
+  } else {
+    console.warn('Cannot move cell up: no selection or at top')
+  }
 }
+
 const handleMoveCellDown = (): void => {
   const ok = workspaceStore.moveSelectedCellDown()
-  if (!ok) console.warn('Cannot move cell down: no selection or at bottom')
+  if (ok) {
+    // Keep the moved cell visible in the viewport
+    nextTick(() => {
+      scrollSelectedCellIntoView()
+    })
+  } else {
+    console.warn('Cannot move cell down: no selection or at bottom')
+  }
 }
 
 const handleFlagCell = (): void => {

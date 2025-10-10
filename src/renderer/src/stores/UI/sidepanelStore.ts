@@ -12,7 +12,8 @@ const allowedPanels: PanelName[] = [
   'variables',
   'help',
   'settings',
-  'localLlmClient'
+  'localLlmClient',
+  'formulabook'
 ]
 
 const DEFAULT_FALLBACK_WIDTH_PX = 400

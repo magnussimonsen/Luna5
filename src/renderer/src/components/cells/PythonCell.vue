@@ -306,6 +306,37 @@ onMounted(() => {
     void scheduleInitializeMonacoEditor()
   }
 
+  // Listen for the custom event to initialize editors for all Python cells in a notebook
+  const handleInitEvent = (event: Event): void => {
+    const customEvent = event as CustomEvent<{ cellId: string; notebookId: string }>
+    console.log('[PythonCell] Received init event', {
+      thisCellId: props.cell.id,
+      eventCellId: customEvent.detail.cellId,
+      match: customEvent.detail.cellId === props.cell.id
+    })
+    if (customEvent.detail.cellId === props.cell.id) {
+      console.log('[PythonCell] Initializing editor from event', { cellId: props.cell.id })
+      void scheduleInitializeMonacoEditor()
+    }
+  }
+  window.addEventListener('luna:init-python-editor', handleInitEvent)
+
+  // Listen for dispose event (when cell is hidden)
+  const handleDisposeEvent = (event: Event): void => {
+    const customEvent = event as CustomEvent<{ cellId: string }>
+    if (customEvent.detail.cellId === props.cell.id) {
+      console.log('[PythonCell] Disposing editor from hide event', { cellId: props.cell.id })
+      disposeEditorInstance()
+    }
+  }
+  window.addEventListener('luna:dispose-python-editor', handleDisposeEvent)
+
+  // Store cleanup function for onBeforeUnmount
+  eventListenerCleanup = (): void => {
+    window.removeEventListener('luna:init-python-editor', handleInitEvent)
+    window.removeEventListener('luna:dispose-python-editor', handleDisposeEvent)
+  }
+
   // Adjust the visibility observer logic to prevent unnecessary disposal
   // No IntersectionObserver-based disposal: keep editors mounted unless
   // the notebook changes or the component unmounts. This simplifies lifecycle
@@ -321,9 +352,8 @@ watch(
       const currentNb = workspaceStore.currentNotebookId
       // If the notebook owning this cell is now the active notebook, ensure an editor exists.
       if (parentNbId && parentNbId === currentNb && !editor && !isUnmounting) {
-        // Initialize the editor for this python cell even if it's not currently
-        // fully visible.
-        initializeMonacoEditor()
+        // Initialize the editor for ALL python cells when the notebook becomes active
+        scheduleInitializeMonacoEditor()
       }
       if (parentNbId && parentNbId !== currentNb && !isUnmounting) {
         try {
@@ -524,11 +554,19 @@ watch(isCellLocked, (locked) => {
 })
 
 let isUnmounting = false
+// Store cleanup function for event listener
+let eventListenerCleanup: (() => void) | null = null
 
 onBeforeUnmount(() => {
   isUnmounting = true
   disposeEditorInstance()
   disconnectVisibilityObserver()
+
+  // Clean up custom event listener
+  if (eventListenerCleanup) {
+    eventListenerCleanup()
+    eventListenerCleanup = null
+  }
 })
 
 // React to selection changes: initialize when this cell becomes selected,

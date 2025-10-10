@@ -377,9 +377,11 @@ const resetFontSizeBtnStyle = computed(() => ({
 }
 
 .btn-status-bar:hover {
+  opacity: 0.6;
+  /*
   background: var(--button-hover-color, var(--debug-color, #e6f0ff));
-  /* Keep border width constant (avoid visual shrink) */
   border-color: var(--button-border-hover-color, var(--debug-color, #2563eb));
+  */
 }
 .btn-status-bar:active {
   transform: scale(1);

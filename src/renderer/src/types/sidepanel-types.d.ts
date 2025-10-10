@@ -7,6 +7,7 @@ const allowedPanels = [
   'help',
   'settings',
   'localLLMclient',
-  'insertKatexMath'
+  'insertKatexMath',
+  'formulabook'
 ]
 export type PanelName = (typeof allowedPanels)[number]

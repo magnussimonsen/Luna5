@@ -16,7 +16,9 @@
         'sidepanel-color-font-styling'
       ]"
     >
-      This panel will host the Flashcards feature. List of planed features:
+      🚧 Work in progress.🚧
+
+      <p>List of planned features:</p>
       <ul>
         <li>
           Instead of a list of notebooks, this side panel will display a list of flashcard decks.

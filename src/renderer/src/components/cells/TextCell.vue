@@ -130,6 +130,18 @@ const editor = tiptapEditor
 .tiptap-editor :deep(.ProseMirror p:last-child) {
   margin-bottom: 0;
 }
+
+/* Placeholder text styling */
+.tiptap-editor :deep(.ProseMirror p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--text-color, #adb5bd);
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
+  opacity: 0.6;
+}
+
 /* Ensure math block occupies full row width */
 .tiptap-editor :deep(.ProseMirror > div[data-math-block]),
 .tiptap-editor :deep(.ProseMirror > [data-node-view-wrapper][data-math-block]) {

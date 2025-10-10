@@ -15,8 +15,8 @@
         'sidepanel-color-font-styling'
       ]"
     >
-      This is the Variables panel. List of variables and functions used in this notebook will be
-      shown here.
+      🚧 Work in progress.🚧
+      <p>List of variables and functions used in this notebook will be shown here.</p>
     </div>
   </div>
 </template>
