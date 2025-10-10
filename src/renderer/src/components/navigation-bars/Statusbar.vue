@@ -67,7 +67,7 @@ For now only placeholders for the buttons and sliders are implemented.
           type="range"
           min="25"
           max="200"
-          step="5"
+          step="1"
         />
         <button class="reset-zoom-btn btn-status-bar" :style="resetZoomBtnStyle" @click="resetZoom">
           <span class="zoom-percent-fixed">{{ zoomPercent }} %</span>

@@ -159,10 +159,6 @@
         Insert Python Cell <span class="menubar-shortcut-not-implemented">Ctrl + 7</span>
         <ImplementedMark :implemented="true" />
       </div>
-      <div class="menubar-dropdown-item">
-        Insert Markdown Cell <span class="shortcut-not-implemented">Ctrl + 8</span>
-        <ImplementedMark :implemented="false" />
-      </div>
     </DropdownMenu>
     <!--------------------------------------------------------------------->
     <!-- Cell Movement Controls Toggle buttons (no dropdown menues here) -->
