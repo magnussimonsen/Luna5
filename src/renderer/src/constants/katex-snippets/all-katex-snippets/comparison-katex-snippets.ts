@@ -9,7 +9,7 @@ export const comparisonSnippets: KatexSnippetDefinition[] = [
 		latex: '\\approx',
 		symbol: '≈'
 	},
-	{ id: 'not-equal', label: 'Not equal', title: 'Not equal symbol', latex: '\\ne', symbol: '≠' },
+	{ id: 'not-equal', label: 'Not equal', title: 'Not equal symbol', latex: String.raw`\neq`, symbol: '≠' },
 	{
 		id: 'less-or-equal',
 		label: 'Less than or equal',
