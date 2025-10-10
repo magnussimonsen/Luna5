@@ -43,8 +43,8 @@ const textCellFontSize = computed(() => fontSizeStore.fontSizes.textEditorCellFo
 
 const latexTextareaRef = ref<HTMLTextAreaElement | null>(null)
 
-const normalizeLatexForTextarea = (value: string): string => value.replaceAll('\\n', '\n')
-const normalizeLatexForStore = (value: string): string => value.replaceAll('\r\n', '\n')
+const normalizeLatexForTextarea = (value: string): string => value.replaceAll('/\\\\n/g', '\n')
+const normalizeLatexForStore = (value: string): string => value.replaceAll('/\r\n/g', '\n')
 
 const latexInput = computed({
   get: () => normalizeLatexForTextarea(bottomPanelStore.katexPanelLatex),
