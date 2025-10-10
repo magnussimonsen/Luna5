@@ -132,7 +132,6 @@ interaction patterns and CSS styling.
         </select>
       </label>
 
-      
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
           v-model="arrowsSelectValue"
@@ -209,21 +208,6 @@ interaction patterns and CSS styling.
         </select>
       </label>
 
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
           v-model="greekLowercaseSelectValue"
@@ -280,6 +264,64 @@ interaction patterns and CSS styling.
           </option>
         </select>
       </label>
+
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="matrixBracketSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert matrix bracket"
+          :disabled="isToolbarDisabled"
+          @change="handleMatrixBracketSelect"
+        >
+          <option
+            v-for="snippet in matrixBracketSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="matrixParenthesisSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert matrix parenthesis"
+          :disabled="isToolbarDisabled"
+          @change="handleMatrixParenthesisSelect"
+        >
+          <option
+            v-for="snippet in matrixParenthesisSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="matrixDeterminantSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert matrix determinant"
+          :disabled="isToolbarDisabled"
+          @change="handleMatrixDeterminantSelect"
+        >
+          <option
+            v-for="snippet in matrixDeterminantSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
           v-model="probabilitySelectValue"
@@ -354,7 +396,7 @@ import {
   //probabilityDistributionsSnippets as probabilityDistributionsSnippetDefinitions,
   probabilitySnippets as probabilitySnippetDefinitions,
   quickActionMathSnippets as quickActionMathSnippetDefinitions,
-  seriesSnippets as seriesSnippetDefinitions,
+  // seriesSnippets as seriesSnippetDefinitions,
   setSnippets as setSnippetDefinitions,
   //trigonometricIdentitiesSnippets as trigonometricIdentitiesSnippetDefinitions,
   trigonometrySnippets as trigonometrySnippetDefinitions
@@ -406,9 +448,9 @@ const fundamentalConstantSnippets = fundamentalConstantSnippetDefinitions
 //const geometrySnippets = geometrySnippetDefinitions
 const greekCapitalSnippets = greekCapitalSnippetDefinitions
 const greekLowercaseSnippets = greekLowercaseSnippetDefinitions
-const matrixBracketOptions = matrixBracketSnippetDefinitions
-const matrixDeterminantOptions = matrixDeterminantSnippetDefinitions
-const matrixParenthesisOptions = matrixParenthesisSnippetDefinitions
+const matrixBracketSnippets = matrixBracketSnippetDefinitions
+const matrixDeterminantSnippets = matrixDeterminantSnippetDefinitions
+const matrixParenthesisSnippets = matrixParenthesisSnippetDefinitions
 //const nuclidesSnippets = nuclidesSnippetDefinitions
 const numberSetSnippets = numberSetSnippetDefinitions
 const operatorQuantorSnippets = operatorQuantorSnippetDefinitions
@@ -418,7 +460,7 @@ const piecewiseSnippets = piecewiseSnippetDefinitions
 //const probabilityDistributionsSnippets = probabilityDistributionsSnippetDefinitions
 const probabilitySnippets = probabilitySnippetDefinitions
 const quickActionSnippets = quickActionMathSnippetDefinitions
-const seriesSnippets = seriesSnippetDefinitions
+// const seriesSnippets = seriesSnippetDefinitions
 const setSnippets = setSnippetDefinitions
 //const trigonometricIdentitiesSnippets = trigonometricIdentitiesSnippetDefinitions
 const trigonometrySnippets = trigonometrySnippetDefinitions
@@ -437,9 +479,9 @@ const fundamentalConstantSelectValue = ref(fundamentalConstantSnippets[0]?.id ??
 //const geometrySelectValue = ref(geometrySnippets[0]?.id ?? '')
 const greekCapitalSelectValue = ref(greekCapitalSnippets[0]?.id ?? '')
 const greekLowercaseSelectValue = ref(greekLowercaseSnippets[0]?.id ?? '')
-const matrixBracketSelectValue = ref(matrixBracketOptions[0]?.id ?? '')
-const matrixDeterminantSelectValue = ref(matrixDeterminantOptions[0]?.id ?? '')
-const matrixParenthesisSelectValue = ref(matrixParenthesisOptions[0]?.id ?? '')
+const matrixBracketSelectValue = ref(matrixBracketSnippets[0]?.id ?? '')
+const matrixDeterminantSelectValue = ref(matrixDeterminantSnippets[0]?.id ?? '')
+const matrixParenthesisSelectValue = ref(matrixParenthesisSnippets[0]?.id ?? '')
 //const nulidesSelectValue = ref(nuclidesSnippets[0]?.id ?? '')
 const numberSetSelectValue = ref(numberSetSnippets[0]?.id ?? '')
 const operatorQuantorSelectValue = ref(operatorQuantorSnippets[0]?.id ?? '')
@@ -448,8 +490,8 @@ const parenthesesSelectValue = ref(parenthesesSnippets[0]?.id ?? '')
 // const piecewiseSelectValue = ref(piecewiseSnippets[0]?.id ?? '') BUTTON not select
 // const probabilityDistributionsSelectValue = ref(probabilityDistributionsSnippets[0]?.id ?? '')
 const probabilitySelectValue = ref(probabilitySnippets[0]?.id ?? '')
-const quickActionSelectValue = ref(quickActionSnippets[0]?.id ?? '')
-const seriesSelectValue = ref(seriesSnippets[0]?.id ?? '')
+//const quickActionSelectValue = ref(quickActionSnippets[0]?.id ?? '')
+//const seriesSelectValue = ref(seriesSnippets[0]?.id ?? '')
 const setSelectValue = ref(setSnippets[0]?.id ?? '')
 //const trigonometricIdentitiesSelectValue = ref(trigonometricIdentitiesSnippets[0]?.id ?? '')
 const trigonometrySelectValue = ref(trigonometrySnippets[0]?.id ?? '')
@@ -463,7 +505,8 @@ function createSnippetSelectHandler(
     if (!snippetId) return
     const snippet = snippetList.find((item) => item.id === snippetId)
     queueSnippet(snippet)
-    selectValue.value = snippetId
+    // Reset to first option so the same option can be selected again
+    selectValue.value = snippetList[0]?.id ?? ''
   }
 }
 
@@ -499,15 +542,15 @@ const handleGreekLowercaseSelect = createSnippetSelectHandler(
 )
 const handleMatrixBracketSelect = createSnippetSelectHandler(
   matrixBracketSelectValue,
-  matrixBracketOptions
+  matrixBracketSnippets
 )
 const handleMatrixDeterminantSelect = createSnippetSelectHandler(
   matrixDeterminantSelectValue,
-  matrixDeterminantOptions
+  matrixDeterminantSnippets
 )
 const handleMatrixParenthesisSelect = createSnippetSelectHandler(
   matrixParenthesisSelectValue,
-  matrixParenthesisOptions
+  matrixParenthesisSnippets
 )
 //const handleNuclidesSelect = createSnippetSelectHandler(nulidesSelectValue, nuclidesSnippets)
 const handleNumberSetSelect = createSnippetSelectHandler(numberSetSelectValue, numberSetSnippets)
@@ -535,11 +578,11 @@ const handleProbabilitySelect = createSnippetSelectHandler(
   probabilitySelectValue,
   probabilitySnippets
 )
-const handleQuickActionSelect = createSnippetSelectHandler(
+/*const handleQuickActionSelect = createSnippetSelectHandler(
   quickActionSelectValue,
   quickActionSnippets
-)
-const handleSeriesSelect = createSnippetSelectHandler(seriesSelectValue, seriesSnippets)
+)*/
+// const handleSeriesSelect = createSnippetSelectHandler(seriesSelectValue, seriesSnippets)
 /*const handleTrigonometricIdentitiesSelect = createSnippetSelectHandler(
   trigonometricIdentitiesSelectValue,
   trigonometricIdentitiesSnippets
