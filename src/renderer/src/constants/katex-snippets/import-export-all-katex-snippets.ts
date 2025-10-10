@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-
 // Central barrel that re-exports all KaTeX snippet modules located in
 // the `all-katex-snippets` subfolder so other modules can import a
 // single aggregated source.
@@ -8,7 +6,7 @@ export type { KatexSnippetDefinition } from '@renderer/types/katex-snippet-defin
 
 export * from './all-katex-snippets/accents-katex-snippets'
 export * from './all-katex-snippets/aligned-katex-snippets'
-export * from './all-katex-snippets/areas-and-volumes-katex-snippets'
+//export * from './all-katex-snippets/areas-and-volumes-katex-snippets'
 export * from './all-katex-snippets/arrows-katex-snippets'
 //export * from './all-katex-snippets/calculus-katex-snippets'
 //export * from './all-katex-snippets/chemistry-formula-katex-snippets'
@@ -16,8 +14,10 @@ export * from './all-katex-snippets/arrows-katex-snippets'
 export * from './all-katex-snippets/comparison-katex-snippets'
 export * from './all-katex-snippets/fundamental-constants-katex-snippets'
 export * from './all-katex-snippets/geometry-katex-snippets'
-export * from './all-katex-snippets/greek-capital-katex-snippets'
-export * from './all-katex-snippets/greek-lowercases-katex-snippets'
+export * from './all-katex-snippets/geometry-symbols-katex-snippets'
+export * from './all-katex-snippets/greek-all-letters-katex-snippets'
+//export * from './all-katex-snippets/greek-capital-katex-snippets'
+//export * from './all-katex-snippets/greek-lowercases-katex-snippets'
 export * from './all-katex-snippets/matrix-brackets-katex-snippets'
 export * from './all-katex-snippets/matrix-determinant-katex-snippets'
 export * from './all-katex-snippets/matrix-parenthesis-katex-snippets'

@@ -274,6 +274,16 @@
       </div>
       <div
         class="menubar-button"
+        :class="{ active: false }"
+        title="Open formula book (not implemented yet)"
+        @click="console.log('Formula book clicked')"
+      >
+        <span class="icon-book" aria-hidden="true"></span>
+        <!-- <span class="sr-only">Settings</span> -->
+      </div>
+      <div
+        class="menubar-button"
+        title="Open local AI assistant"
         :class="{ active: sidepanelStore.activePanel === 'localLlmClient' }"
         @click="handleTogglePanel('localLlmClient')"
       >
@@ -283,6 +293,7 @@
       <div
         class="menubar-button"
         :class="{ active: sidepanelStore.activePanel === 'settings' }"
+        title="Open settings"
         @click="handleTogglePanel('settings')"
       >
         <span class="icon-settings" aria-hidden="true"></span>
@@ -291,6 +302,7 @@
       <div
         class="menubar-button"
         :class="{ active: sidepanelStore.activePanel === 'help' }"
+        title="Get help"
         @click="handleTogglePanel('help')"
       >
         <span class="icon-help" aria-hidden="true"></span>

@@ -15,6 +15,7 @@
     --icon-add: '+';
     --icon-remove: '−';
     --icon-update: '⟳';
+    --icon-book: '📖';
     /* Text / formatting */
     --icon-bold: '𝐁';
     --icon-italic: '𝙄';
@@ -128,6 +129,7 @@
 .icon-add::before { content: var(--icon-add); }
 .icon-remove::before { content: var(--icon-remove); }
 .icon-update::before { content: var(--icon-update); }
+.icon-book::before { content: var(--icon-book); }
 
 
 /* Text editor icons (use CSS variables so we can override easily) */

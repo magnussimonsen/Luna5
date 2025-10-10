@@ -15,7 +15,7 @@ interaction patterns and CSS styling.
       <button
         class="top-toolbar__button top-toolbar__button--runcode"
         type="button"
-        title="Insert math"
+        title="Insert math (Ctrl+Enter)"
         aria-label="Insert math"
         :disabled="isInsertDisabled"
         @click="handleInsertClick"
@@ -25,21 +25,12 @@ interaction patterns and CSS styling.
       <button
         class="top-toolbar__button top-toolbar__button--reset"
         type="button"
-        title="Cancel"
+        title="Cancel (Esc)"
         aria-label="Cancel"
         :disabled="isToolbarDisabled"
         @click="handleCancelClick"
       >
         Cancel
-      </button>
-      <button
-        class="top-toolbar__button top-toolbar__button--runcode"
-        type="button"
-        title="Open formula modal"
-        aria-label="Open formula modal"
-        :disabled="isInsertDisabled"
-      >
-        Formula book 📖
       </button>
 
       <!-- insert button for alignedSnippetDefinitions -->
@@ -85,6 +76,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleTrigonometrySelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(trigonometrySnippets[0], 'Select trig function...') }}
+          </option>
           <option
             v-for="snippet in trigonometrySnippets"
             :key="snippet.id"
@@ -103,6 +97,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleParenthesesSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(parenthesesSnippets[0], 'Select parentheses...') }}
+          </option>
           <option
             v-for="snippet in parenthesesSnippets"
             :key="snippet.id"
@@ -121,6 +118,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleComparisonSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(comparisonSnippets[0], 'Select comparison...') }}
+          </option>
           <option
             v-for="snippet in comparisonSnippets"
             :key="snippet.id"
@@ -140,6 +140,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleArrowsSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(arrowsSnippets[0], 'Select arrow...') }}
+          </option>
           <option
             v-for="snippet in arrowsSnippets"
             :key="snippet.id"
@@ -159,6 +162,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleOperatorQuantorSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(operatorQuantorSnippets[0], 'Select operator...') }}
+          </option>
           <option
             v-for="snippet in operatorQuantorSnippets"
             :key="snippet.id"
@@ -178,6 +184,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleSetSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(setSnippets[0], 'Select set...') }}
+          </option>
           <option
             v-for="snippet in setSnippets"
             :key="snippet.id"
@@ -197,6 +206,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleNumberSetSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(numberSetSnippets[0], 'Select number set...') }}
+          </option>
           <option
             v-for="snippet in numberSetSnippets"
             :key="snippet.id"
@@ -210,12 +222,38 @@ interaction patterns and CSS styling.
 
       <label class="top-toolbar__button top-toolbar__button--select-label">
         <select
+          v-model="greekAllLettersSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert Greek letter"
+          :disabled="isToolbarDisabled"
+          @change="handleGreekAllLettersSelect"
+        >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(greekAllLettersSnippets[0], 'Select Greek letter...') }}
+          </option>
+          <option
+            v-for="snippet in greekAllLettersSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+
+      <!--
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
           v-model="greekLowercaseSelectValue"
           class="top-toolbar__button--select"
           aria-label="Insert Greek letter"
           :disabled="isToolbarDisabled"
           @change="handleGreekLowercaseSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(greekLowercaseSnippets[0], 'Select Greek letter...') }}
+          </option>
           <option
             v-for="snippet in greekLowercaseSnippets"
             :key="snippet.id"
@@ -235,8 +273,34 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleGreekCapitalSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(greekCapitalSnippets[0], 'Select Greek capital...') }}
+          </option>
           <option
             v-for="snippet in greekCapitalSnippets"
+            :key="snippet.id"
+            :value="snippet.id"
+            :title="snippet.label"
+          >
+            {{ snippet.symbol ?? snippet.label }}
+          </option>
+        </select>
+      </label>
+      -->
+
+      <label class="top-toolbar__button top-toolbar__button--select-label">
+        <select
+          v-model="geometrySymbolsSelectValue"
+          class="top-toolbar__button--select"
+          aria-label="Insert geometry symbol"
+          :disabled="isToolbarDisabled"
+          @change="handleGeometrySymbolsSelect"
+        >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(geometrySymbolsSnippets[0], 'Select geometry...') }}
+          </option>
+          <option
+            v-for="snippet in geometrySymbolsSnippets"
             :key="snippet.id"
             :value="snippet.id"
             :title="snippet.label"
@@ -254,6 +318,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleAccentSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(accentSnippets[0], 'Select accent...') }}
+          </option>
           <option
             v-for="snippet in accentSnippets"
             :key="snippet.id"
@@ -273,6 +340,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleMatrixBracketSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(matrixBracketSnippets[0], 'Select matrix [...]') }}
+          </option>
           <option
             v-for="snippet in matrixBracketSnippets"
             :key="snippet.id"
@@ -292,6 +362,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleMatrixParenthesisSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(matrixParenthesisSnippets[0], 'Select matrix (...)') }}
+          </option>
           <option
             v-for="snippet in matrixParenthesisSnippets"
             :key="snippet.id"
@@ -311,6 +384,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleMatrixDeterminantSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(matrixDeterminantSnippets[0], 'Select determinant |...|') }}
+          </option>
           <option
             v-for="snippet in matrixDeterminantSnippets"
             :key="snippet.id"
@@ -330,6 +406,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleProbabilitySelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(probabilitySnippets[0], 'Select probability...') }}
+          </option>
           <option
             v-for="snippet in probabilitySnippets"
             :key="snippet.id"
@@ -348,6 +427,9 @@ interaction patterns and CSS styling.
           :disabled="isToolbarDisabled"
           @change="handleFundamentalConstantSelect"
         >
+          <option value="" disabled>
+            {{ katexSnippetsPlaceholder(fundamentalConstantSnippets[0], 'Select constant...') }}
+          </option>
           <option
             v-for="snippet in fundamentalConstantSnippets"
             :key="snippet.id"
@@ -363,7 +445,7 @@ interaction patterns and CSS styling.
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useBottomPanelStore } from '@renderer/stores/UI/bottompanelStore'
@@ -371,6 +453,7 @@ import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import type { Editor } from '@tiptap/vue-3'
 import type { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
+import { ensureDisplayStyle } from '@renderer/code/tiptap/extensions/tiptap-mathematics-extension-config'
 import {
   accentSnippets as accentSnippetDefinitions,
   alignedSnippets as alignedSnippetDefinitions,
@@ -382,8 +465,10 @@ import {
   comparisonSnippets as comparisonSnippetDefinitions,
   fundamentalConstantSnippets as fundamentalConstantSnippetDefinitions,
   //geometrySnippets as geometrySnippetDefinitions,
-  greekCapitalSnippets as greekCapitalSnippetDefinitions,
-  greekLowercaseSnippets as greekLowercaseSnippetDefinitions,
+  geometrySymbolsSnippets as geometrySymbolsSnippetDefinitions,
+  greekAllLettersSnippets as greekAllLettersSnippetDefinitions,
+  //greekCapitalSnippets as greekCapitalSnippetDefinitions,
+  //greekLowercaseSnippets as greekLowercaseSnippetDefinitions,
   matrixBracketSnippets as matrixBracketSnippetDefinitions,
   matrixDeterminantSnippets as matrixDeterminantSnippetDefinitions,
   matrixParenthesisSnippets as matrixParenthesisSnippetDefinitions,
@@ -433,6 +518,22 @@ const isInsertDisabled = computed(() => {
   if (bottomPanelStore.katexPanelLatex.trim().length === 0) return true
   return !!bottomPanelStore.katexPanelError
 })
+
+/**
+ * Creates a placeholder text for select dropdowns using the first snippet's symbol/label
+ * @param firstSnippet - The first snippet in the array
+ * @param fallback - Fallback text if no snippet is available
+ * @returns Placeholder text for the select dropdown
+ */
+function katexSnippetsPlaceholder(
+  firstSnippet: KatexSnippetDefinition | undefined,
+  fallback: string
+): string {
+  if (!firstSnippet) return fallback
+  const symbol = firstSnippet.symbol ?? firstSnippet.label
+  return `${symbol}..` /* use .. instead of ... to save space on toolbar */
+}
+
 /*------------------------------ */
 /* const for snippet definitions */
 /*------------------------------ */
@@ -446,8 +547,10 @@ const arrowsSnippets = arrowsSnippetDefinitions
 const comparisonSnippets = comparisonSnippetDefinitions
 const fundamentalConstantSnippets = fundamentalConstantSnippetDefinitions
 //const geometrySnippets = geometrySnippetDefinitions
-const greekCapitalSnippets = greekCapitalSnippetDefinitions
-const greekLowercaseSnippets = greekLowercaseSnippetDefinitions
+const geometrySymbolsSnippets = geometrySymbolsSnippetDefinitions
+const greekAllLettersSnippets = greekAllLettersSnippetDefinitions
+//const greekCapitalSnippets = greekCapitalSnippetDefinitions
+//const greekLowercaseSnippets = greekLowercaseSnippetDefinitions
 const matrixBracketSnippets = matrixBracketSnippetDefinitions
 const matrixDeterminantSnippets = matrixDeterminantSnippetDefinitions
 const matrixParenthesisSnippets = matrixParenthesisSnippetDefinitions
@@ -467,34 +570,36 @@ const trigonometrySnippets = trigonometrySnippetDefinitions
 /*----------------------- */
 /* refs for select values */
 /*----------------------- */
-const accentSelectValue = ref(accentSnippets[0]?.id ?? '')
+const accentSelectValue = ref('')
 // const alignedSelectValue = ref(alignedSnippets[0]?.id ?? '') BUTTON not select
 // const areasAndVolumesSelectValue = ref(areasAndVolumesSnippets[0]?.id ?? '')
-const arrowsSelectValue = ref(arrowsSnippets[0]?.id ?? '')
+const arrowsSelectValue = ref('')
 //const calculusSelectValue = ref(calculusSnippets[0]?.id ?? '')
 //const chemistryFormulaSelectValue = ref(chemistryFormulaSnippets[0]?.id ?? '')
 // const combinatoricsFormulaSelectValue = ref(combinatoricsFormulaSnippets[0]?.id ?? '')
-const comparisonSelectValue = ref(comparisonSnippets[0]?.id ?? '')
-const fundamentalConstantSelectValue = ref(fundamentalConstantSnippets[0]?.id ?? '')
+const comparisonSelectValue = ref('')
+const fundamentalConstantSelectValue = ref('')
 //const geometrySelectValue = ref(geometrySnippets[0]?.id ?? '')
-const greekCapitalSelectValue = ref(greekCapitalSnippets[0]?.id ?? '')
-const greekLowercaseSelectValue = ref(greekLowercaseSnippets[0]?.id ?? '')
-const matrixBracketSelectValue = ref(matrixBracketSnippets[0]?.id ?? '')
-const matrixDeterminantSelectValue = ref(matrixDeterminantSnippets[0]?.id ?? '')
-const matrixParenthesisSelectValue = ref(matrixParenthesisSnippets[0]?.id ?? '')
+const geometrySymbolsSelectValue = ref('')
+const greekAllLettersSelectValue = ref('')
+//const greekCapitalSelectValue = ref('')
+//const greekLowercaseSelectValue = ref('')
+const matrixBracketSelectValue = ref('')
+const matrixDeterminantSelectValue = ref('')
+const matrixParenthesisSelectValue = ref('')
 //const nulidesSelectValue = ref(nuclidesSnippets[0]?.id ?? '')
-const numberSetSelectValue = ref(numberSetSnippets[0]?.id ?? '')
-const operatorQuantorSelectValue = ref(operatorQuantorSnippets[0]?.id ?? '')
-const parenthesesSelectValue = ref(parenthesesSnippets[0]?.id ?? '')
+const numberSetSelectValue = ref('')
+const operatorQuantorSelectValue = ref('')
+const parenthesesSelectValue = ref('')
 //const physicsFormulaSelectValue = ref(physicsFormulaSnippets[0]?.id ?? '')
 // const piecewiseSelectValue = ref(piecewiseSnippets[0]?.id ?? '') BUTTON not select
 // const probabilityDistributionsSelectValue = ref(probabilityDistributionsSnippets[0]?.id ?? '')
-const probabilitySelectValue = ref(probabilitySnippets[0]?.id ?? '')
+const probabilitySelectValue = ref('')
 //const quickActionSelectValue = ref(quickActionSnippets[0]?.id ?? '')
 //const seriesSelectValue = ref(seriesSnippets[0]?.id ?? '')
-const setSelectValue = ref(setSnippets[0]?.id ?? '')
+const setSelectValue = ref('')
 //const trigonometricIdentitiesSelectValue = ref(trigonometricIdentitiesSnippets[0]?.id ?? '')
-const trigonometrySelectValue = ref(trigonometrySnippets[0]?.id ?? '')
+const trigonometrySelectValue = ref('')
 
 function createSnippetSelectHandler(
   selectValue: Ref<string>,
@@ -505,8 +610,8 @@ function createSnippetSelectHandler(
     if (!snippetId) return
     const snippet = snippetList.find((item) => item.id === snippetId)
     queueSnippet(snippet)
-    // Reset to first option so the same option can be selected again
-    selectValue.value = snippetList[0]?.id ?? ''
+    // Reset to empty string so the same option can be selected again
+    selectValue.value = ''
   }
 }
 
@@ -532,14 +637,22 @@ const handleFundamentalConstantSelect = createSnippetSelectHandler(
   fundamentalConstantSnippets
 )
 //const handleGeometrySelect = createSnippetSelectHandler(geometrySelectValue, geometrySnippets)
-const handleGreekCapitalSelect = createSnippetSelectHandler(
-  greekCapitalSelectValue,
-  greekCapitalSnippets
+const handleGeometrySymbolsSelect = createSnippetSelectHandler(
+  geometrySymbolsSelectValue,
+  geometrySymbolsSnippets
 )
-const handleGreekLowercaseSelect = createSnippetSelectHandler(
-  greekLowercaseSelectValue,
-  greekLowercaseSnippets
+const handleGreekAllLettersSelect = createSnippetSelectHandler(
+  greekAllLettersSelectValue,
+  greekAllLettersSnippets
 )
+//const handleGreekCapitalSelect = createSnippetSelectHandler(
+//  greekCapitalSelectValue,
+//  greekCapitalSnippets
+//)
+//const handleGreekLowercaseSelect = createSnippetSelectHandler(
+//  greekLowercaseSelectValue,
+//  greekLowercaseSnippets
+//)
 const handleMatrixBracketSelect = createSnippetSelectHandler(
   matrixBracketSelectValue,
   matrixBracketSnippets
@@ -635,8 +748,13 @@ function handleInsertClick(): void {
         chain.setTextSelection({ from: selection.from, to: selection.to })
       }
 
+      // Process latex for display style if needed
+      const processedLatex = mode === 'block' ? ensureDisplayStyle(latex, true) : latex
+
       const updateResult =
-        mode === 'inline' ? chain.updateInlineMath?.({ latex }) : chain.updateBlockMath?.({ latex })
+        mode === 'inline'
+          ? chain.updateInlineMath?.({ latex: processedLatex })
+          : chain.updateBlockMath?.({ latex: processedLatex })
 
       if (!updateResult) {
         bottomPanelStore.setKatexPanelError('Updating math is unavailable in this editor.')
@@ -647,10 +765,13 @@ function handleInsertClick(): void {
         chain.setTextSelection({ from: selection.from, to: selection.to })
       }
 
+      // Process latex for display style if needed
+      const processedLatex = mode === 'block' ? ensureDisplayStyle(latex, true) : latex
+
       if (mode === 'inline') {
-        chain.insertInlineMath({ latex })
+        chain.insertInlineMath({ latex: processedLatex })
       } else {
-        chain.insertBlockMath({ latex })
+        chain.insertBlockMath({ latex: processedLatex })
       }
     }
 
@@ -665,6 +786,30 @@ function handleInsertClick(): void {
     bottomPanelStore.setKatexPanelError('Failed to insert math expression.')
   }
 }
+
+// Keyboard event handler for Ctrl+Enter and Esc shortcuts
+function handleKeyDown(event: KeyboardEvent): void {
+  if (event.ctrlKey && event.key === 'Enter') {
+    event.preventDefault()
+    if (!isInsertDisabled.value) {
+      handleInsertClick()
+    }
+  } else if (event.key === 'Escape') {
+    event.preventDefault()
+    if (!isToolbarDisabled.value) {
+      handleCancelClick()
+    }
+  }
+}
+
+// Setup keyboard event listeners
+onMounted(() => {
+  document.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeyDown)
+})
 
 function handleCancelClick(): void {
   bottomPanelStore.hidePanel()

@@ -13,6 +13,17 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
     }
   },
   {
+    id: 'percent',
+    label: 'Percent',
+    title: 'Inserts a percent sign',
+    latex: '\\%',
+    symbol: '%',
+    selection: {
+      startOffset: 2,
+      endOffset: 2
+    }
+  },
+  {
     id: 'multiplication',
     label: 'Multiplication',
     title: 'Inserts a multiplication symbol',
@@ -101,6 +112,14 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
     latex: '\\ln(x)',
     symbol: 'ln',
     selection: { startOffset: 4, endOffset: 5 }
+  },
+  {
+    id: 'limit',
+    label: 'Limit',
+    title: 'Inserts a limit',
+    latex: '\\lim_{x \\to a} f(x)',
+    symbol: 'lim',
+    selection: { startOffset: 6, endOffset: 7 }
   },
   {
     id: 'summation',

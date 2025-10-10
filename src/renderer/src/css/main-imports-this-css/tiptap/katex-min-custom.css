@@ -1,16 +1,49 @@
 /* The rendered math node */
 .tiptap-mathematics-render {
+  /* Ensure math content isn't clipped */
+  overflow: visible;
 }
 
 /* This selector only selects editable math nodes */
 .tiptap-mathematics-render--editable {
+  /* Placeholder for future editable-specific styling */
+  cursor: pointer;
 }
 
 /** This selector only selects block math nodes */
 .tiptap-mathematics-render[data-type="block-math"] {
+  /* Ensure block math displays properly */
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+  line-height: normal; /* Override any restrictive line-height */
+  /* Allow vertical space for integrals and other tall expressions */
+  min-height: 2em;
+  overflow: visible;
 }
 
 /** This selector only selects inline math nodes */
 .tiptap-mathematics-render[data-type="inline-math"] {
+  display: inline;
+  vertical-align: baseline;
+  line-height: normal;
+}
+
+/* Ensure KaTeX display style works properly in block math */
+.tiptap-mathematics-render[data-type="block-math"] .katex-display {
+  margin: 0.5em 0;
+  text-align: center;
+  line-height: normal;
+}
+
+/* Fix for integral symbols and other tall math elements */
+.tiptap-mathematics-render[data-type="block-math"] .katex {
+  font-size: 1.2em; /* Slightly larger for better visibility */
+  line-height: normal;
+}
+
+.tiptap-mathematics-render[data-type="block-math"] .katex .base {
+  display: inline-block;
+  min-height: normal; /* Ensure space for tall elements like integrals */
 }
 

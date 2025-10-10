@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { KatexSnippetDefinition } from '@renderer/types/katex-snippet-definition'
 
 export const geometrySnippets: KatexSnippetDefinition[] = [

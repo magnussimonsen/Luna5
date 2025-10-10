@@ -11,6 +11,25 @@ import Mathematics from '@tiptap/extension-mathematics'
 import type { Editor } from '@tiptap/core'
 import type { Node } from '@tiptap/pm/model'
 
+// Helper function to ensure block math has proper display style
+export const ensureDisplayStyle = (latex: string, isBlockMath: boolean = false): string => {
+  if (!isBlockMath) return latex
+
+  // Check if displaystyle is already present
+  if (latex.includes('\\displaystyle')) return latex
+
+  // Add displaystyle for expressions that need it (integrals, sums, etc.)
+  const needsDisplayStyle = /\\(int|sum|prod|lim|bigcap|bigcup|bigoplus|bigotimes)/.test(latex)
+
+  if (needsDisplayStyle) {
+    return `\\displaystyle
+
+${latex}`
+  }
+
+  return latex
+}
+
 // Configuration options for the Mathematics extension
 export const mathematicsConfig = {
   // Options for the inline math node
@@ -41,6 +60,7 @@ export const mathematicsConfig = {
   // Options for the KaTeX renderer. See here: https://katex.org/docs/options.html
   katexOptions: {
     throwOnError: false, // don't throw an error if the LaTeX code is invalid
+    displayMode: false, // Keep inline math compact (default)
     macros: {
       '\\R': '\\mathbb{R}', // add a macro for the real numbers
       '\\N': '\\mathbb{N}', // add a macro for the natural numbers
@@ -72,7 +92,9 @@ export const createMathClickHandlers = (
   blockOnClick: (node: Node, pos: number) => {
     const katex = prompt('Enter new calculation:', node.attrs.latex)
     if (katex) {
-      editor.chain().setNodeSelection(pos).updateBlockMath({ latex: katex }).focus().run()
+      // Automatically add displaystyle for block math if needed
+      const processedLatex = ensureDisplayStyle(katex, true)
+      editor.chain().setNodeSelection(pos).updateBlockMath({ latex: processedLatex }).focus().run()
     }
   }
 })
