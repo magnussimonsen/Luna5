@@ -41,8 +41,8 @@ export const quickActionMathSnippets: KatexSnippetDefinition[] = [
     latex: '\\dfrac{a}{b}',
     symbol: 'a⁄b',
     selection: {
-      startOffset: 6,
-      endOffset: 7
+      startOffset: 7,
+      endOffset: 8
     }
   },
   {
