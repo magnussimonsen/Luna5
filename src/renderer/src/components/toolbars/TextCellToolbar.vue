@@ -485,6 +485,8 @@ import type { Editor } from '@tiptap/vue-3'
 import type { HeadingLevel } from '@renderer/types/heading-level-type'
 import type { HighlightColor } from '../../types/highlight-colors-types'
 import { resolveHighlightColor } from '../../code/highlight/highlight-colors'
+import { newInlineKatexExampleCode } from '@renderer/constants/katex-snippets/example-katex/new-inline-katex-example-snipplets'
+import { newBlockKatexExampleCode } from '@renderer/constants/katex-snippets/example-katex/new-block-katex-example-snipplets'
 
 // Stores
 const themeStore = useThemeStore()
@@ -681,11 +683,7 @@ function collectKatexContext(mode: KatexMode): {
 
     if (!initialLatex) {
       initialLatex =
-        mode === 'inline'
-          ? 'x = \\dfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}'
-          : ['\\begin{aligned}', '2x + 3y &= 6 \\\\', '4x - y  &= 5 \\\\', '\\end{aligned}'].join(
-              '\n'
-            )
+        mode === 'inline' ? (newInlineKatexExampleCode ?? '') : (newBlockKatexExampleCode ?? '')
     }
 
     return {
