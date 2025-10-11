@@ -39,6 +39,66 @@
       <ImplementedMark :implemented="true" />
     </div>
 
+    <strong :class="['sidepanel__notebook-item-transparent-border', 'sidepanel-bottom-row-margin']"
+      >Owner Metadata (for A4 Preview)</strong
+    >
+
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
+      <label for="owner-first-name">First Name:</label>
+      <input
+        id="owner-first-name"
+        v-model="ownerFirstName"
+        type="text"
+        :class="{ 'sidepanel__setting-row--dark-mode': themeStore.isDarkMode }"
+        placeholder="Enter first name"
+      />
+      <ImplementedMark :implemented="true" />
+    </div>
+
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
+      <label for="owner-middle-name">Middle Name:</label>
+      <input
+        id="owner-middle-name"
+        v-model="ownerMiddleName"
+        type="text"
+        :class="{ 'sidepanel__setting-row--dark-mode': themeStore.isDarkMode }"
+        placeholder="Enter middle name (optional)"
+      />
+      <ImplementedMark :implemented="true" />
+    </div>
+
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
+      <label for="owner-last-name">Last Name:</label>
+      <input
+        id="owner-last-name"
+        v-model="ownerLastName"
+        type="text"
+        :class="{ 'sidepanel__setting-row--dark-mode': themeStore.isDarkMode }"
+        placeholder="Enter last name"
+      />
+      <ImplementedMark :implemented="true" />
+    </div>
+
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
+      <label for="owner-email">Email:</label>
+      <input
+        id="owner-email"
+        v-model="ownerEmail"
+        type="email"
+        :class="{ 'sidepanel__setting-row--dark-mode': themeStore.isDarkMode }"
+        placeholder="Enter email address"
+      />
+      <ImplementedMark :implemented="true" />
+    </div>
+
+    <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
+      <label>
+        <input v-model="generalSettingsStore.showUserMetadataInA4PreviewState" type="checkbox" />
+        Show user name and email in A4 preview
+      </label>
+      <ImplementedMark :implemented="true" />
+    </div>
+
     <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
       <label>
         <input v-model="generalSettingsStore.warnOnDeleteCellState" type="checkbox" />
@@ -173,7 +233,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
+import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useLanguageStore } from '@renderer/stores/language/languageStore'
 import ImplementedMark from '@renderer/components/UI/ImplementedMark.vue'
 import { AutosaveOption } from '@renderer/types/auto-save-options-types'
@@ -182,6 +244,7 @@ import { fontSizeOptions, useFontSizeStore } from '@renderer/stores/fonts/fontSi
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 
 const generalSettingsStore = useGeneralSettingsStore()
+const workspaceStore = useWorkspaceStore()
 const languageStore = useLanguageStore()
 const themeStore = useThemeStore()
 const fontSizeStore = useFontSizeStore()
@@ -197,6 +260,81 @@ const autosaveOptions: { label: string; value: AutosaveOption }[] = [
   { label: 'After 50 changes', value: 50 },
   { label: 'After 100 changes', value: 100 }
 ]
+
+// Owner metadata computed properties
+const ownerFirstName = computed({
+  get: () => workspaceStore.getPrimaryOwnerMetadata()?.firstName ?? '',
+  set: (value: string) => {
+    const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
+    workspaceStore.setOwnerMetadata('primary', {
+      ...currentMetadata,
+      id: currentMetadata?.id ?? 'primary',
+      firstName: value,
+      middleName: currentMetadata?.middleName ?? '',
+      lastName: currentMetadata?.lastName ?? '',
+      email: currentMetadata?.email ?? '',
+      phoneNumber: currentMetadata?.phoneNumber ?? '',
+      organization: currentMetadata?.organization ?? ''
+    })
+  }
+})
+
+const ownerMiddleName = computed({
+  get: () => workspaceStore.getPrimaryOwnerMetadata()?.middleName ?? '',
+  set: (value: string) => {
+    const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
+    workspaceStore.setOwnerMetadata('primary', {
+      ...currentMetadata,
+      id: currentMetadata?.id ?? 'primary',
+      firstName: currentMetadata?.firstName ?? '',
+      middleName: value,
+      lastName: currentMetadata?.lastName ?? '',
+      email: currentMetadata?.email ?? '',
+      phoneNumber: currentMetadata?.phoneNumber ?? '',
+      organization: currentMetadata?.organization ?? ''
+    })
+  }
+})
+
+const ownerLastName = computed({
+  get: () => workspaceStore.getPrimaryOwnerMetadata()?.lastName ?? '',
+  set: (value: string) => {
+    const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
+    workspaceStore.setOwnerMetadata('primary', {
+      ...currentMetadata,
+      id: currentMetadata?.id ?? 'primary',
+      firstName: currentMetadata?.firstName ?? '',
+      middleName: currentMetadata?.middleName ?? '',
+      lastName: value,
+      email: currentMetadata?.email ?? '',
+      phoneNumber: currentMetadata?.phoneNumber ?? '',
+      organization: currentMetadata?.organization ?? ''
+    })
+  }
+})
+
+const ownerEmail = computed({
+  get: () => workspaceStore.getPrimaryOwnerMetadata()?.email ?? '',
+  set: (value: string) => {
+    const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
+    workspaceStore.setOwnerMetadata('primary', {
+      ...currentMetadata,
+      id: currentMetadata?.id ?? 'primary',
+      firstName: currentMetadata?.firstName ?? '',
+      middleName: currentMetadata?.middleName ?? '',
+      lastName: currentMetadata?.lastName ?? '',
+      email: value,
+      phoneNumber: currentMetadata?.phoneNumber ?? '',
+      organization: currentMetadata?.organization ?? ''
+    })
+  }
+})
+
+// You do not need this computed property unless you want to use v-model with an object setter/getter.
+// In your template, you are directly using v-model="generalSettingsStore.showUserMetadataInA4PreviewState" on the checkbox.
+// This works fine because it's a ref in your store.
+// Only use a computed getter/setter if you need to intercept or transform the value, or call a setter method.
+// So, you can safely remove this unless you want to use v-model with the computed property instead.
 </script>
 
 <style scoped></style>

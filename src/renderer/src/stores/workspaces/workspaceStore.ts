@@ -54,6 +54,7 @@ import { defineStore } from 'pinia'
 import { createEmptyWorkspace } from '@renderer/code/notebook-core/model/workspace-initial'
 import type { Workspace, Notebook } from '@renderer/code/notebook-core/model/schema'
 import type { Cell, TextCell } from '@renderer/types/notebook-cell-types'
+import type { ownerMetadataRecord } from '@renderer/types/owner-metadata-type'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import {
   createNotebook as operationsCreateNotebook,
@@ -1095,6 +1096,50 @@ export const useWorkspaceStore = defineStore('workspace', {
         this.markAsUnsaved()
       } catch {
         /* ignore */
+      }
+    },
+
+    /* Owner Metadata Actions */
+    /**
+     * Get owner metadata by ID. Returns null if not found.
+     */
+    getOwnerMetadata(ownerId: string): ownerMetadataRecord | null {
+      try {
+        const workspace = this.getWorkspace()
+        if (!workspace.ownerMetadata) return null
+        return workspace.ownerMetadata[ownerId] || null
+      } catch {
+        return null
+      }
+    },
+
+    /**
+     * Set or update owner metadata for a specific owner ID.
+     */
+    setOwnerMetadata(ownerId: string, metadata: ownerMetadataRecord): void {
+      try {
+        const workspace = this.getWorkspace()
+        if (!workspace.ownerMetadata) {
+          workspace.ownerMetadata = {}
+        }
+        workspace.ownerMetadata[ownerId] = metadata
+        this.markAsUnsaved()
+      } catch {
+        /* ignore */
+      }
+    },
+
+    /**
+   * THERE CAN BE ONLY ONE SO WE DO NOT NEED THIS?
+     */
+    getPrimaryOwnerMetadata(): ownerMetadataRecord | null {
+      try {
+        const workspace = this.getWorkspace()
+        if (!workspace.ownerMetadata) return null
+        const firstKey = Object.keys(workspace.ownerMetadata)[0]
+        return firstKey ? workspace.ownerMetadata[firstKey] : null
+      } catch {
+        return null
       }
     }
   }

@@ -9,7 +9,8 @@ export const useGeneralSettingsStore = defineStore('generalSettings', {
   state: () => ({
     autosaveChangeIntervalState: 0 as AutosaveOption, // 0 = off, 1/5/10/15/25/50/100 = save after N changes
     warnOnDeleteCellState: true,
-    showCellIndexNumbersState: true
+    showCellIndexNumbersState: true,
+    showUserMetadataInA4PreviewState: false
   }),
   // Code editor specific toggles moved to codeSettingsStore.ts
   actions: {
@@ -21,6 +22,9 @@ export const useGeneralSettingsStore = defineStore('generalSettings', {
     },
     setShowCellIndexNumbers(value: boolean) {
       this.showCellIndexNumbersState = value
+    },
+    setShowUserMetadataInA4Preview(value: boolean) {
+      this.showUserMetadataInA4PreviewState = value
     }
   },
   getters: {
@@ -32,6 +36,9 @@ export const useGeneralSettingsStore = defineStore('generalSettings', {
     },
     showCellIndexNumbersGetter: (state) => {
       return state.showCellIndexNumbersState
+    },
+    showUserMetadataInA4PreviewGetter: (state) => {
+      return state.showUserMetadataInA4PreviewState
     }
   }
 })

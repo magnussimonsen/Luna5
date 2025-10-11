@@ -1,4 +1,5 @@
 import type { Cell } from '@renderer/types/notebook-cell-types'
+import type { ownerMetadataRecord } from '@renderer/types/owner-metadata-type'
 
 // A Notebook is an ordered list of cells.
 
@@ -42,6 +43,7 @@ export interface RecycleBin {
 }
 
 export interface Workspace {
+  ownerMetadata?: Record<string, ownerMetadataRecord>
   version: 1
   notebooks: Record<string, Notebook>
   cells: Record<string, Cell>

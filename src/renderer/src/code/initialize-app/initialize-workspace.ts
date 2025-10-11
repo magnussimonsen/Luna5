@@ -1,8 +1,9 @@
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import type { Workspace } from '@renderer/code/notebook-core/model/schema'
-
+import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
 export async function initializeWorkspace(force = false): Promise<Workspace> {
   const workspaceStore = useWorkspaceStore()
+  const generalSettingsStore = useGeneralSettingsStore()
   // Create a new empty workspace state. When force=true, resets even if one exists.
   const workspace = workspaceStore.initEmpty(force)
 
@@ -16,6 +17,7 @@ export async function initializeWorkspace(force = false): Promise<Workspace> {
 
   // Select the first cell now that editors are ready
   workspaceStore.selectFirstCellInNotebook()
+  generalSettingsStore.setShowUserMetadataInA4Preview(true)
 
   return workspace
 }

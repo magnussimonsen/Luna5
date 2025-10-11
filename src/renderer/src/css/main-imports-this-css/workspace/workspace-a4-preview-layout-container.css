@@ -1,20 +1,100 @@
 
- /* Work in progress */
+ /*
+A4 Preview Layout Container
+Displays the workspace in a paper-like preview with A4 dimensions and page break indicators.
+*/
 
- .workspace-a4-preview-layout-container {
-   display: flex;
-   justify-content: flex-start;
-   /*  Allows left button row and right button row to be spaced apart */
-
-   background: var(--red, var(--debug-color));
-   overflow: auto;
-   z-index: var(--workspace-a4-preview-layout-container-z-index, 1000);
-
-   width: 100%;
-   /* Full width of parent */
-
-   /* Grow to fill available space */
-   flex-grow: 0 0 auto;
-
-
+.workspace-a4-preview-layout-container {
+  /* Layout */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: auto; /* Enable horizontal scroll when needed */
+  
+  /* Background - simulates desk/table surface */
+  background: var(--a4-workspace-background, #808080);
+  
+  /* Padding around the "paper" */
+  padding: 2rem;
+  box-sizing: border-box;
 }
+
+/* Wrapper for paper + header that gets zoomed together */
+.workspace-a4-preview-layout-container .a4-paper-zoom-wrapper {
+  position: relative;
+  width: 794px; /* A4 width at 96 DPI */
+  min-height: auto;
+}
+
+/* The paper container that holds cells */
+.workspace-a4-preview-layout-container .cell-containers-list {
+  /* A4 dimensions at 96 DPI (CSS pixels) */
+  /* A4 = 210mm x 297mm = 793.7px x 1122.5px at 96dpi */
+  /* Using px units for consistency across different DPI screens */
+  width: 794px;
+  min-width: 794px;
+  min-height: auto; /* Allow content to determine height */
+  
+  /* Fixed position - no flex/centering, stays in place */
+  margin: 0; /* Remove auto margins */
+  
+  /* Paper styling */
+  background: var(--paper-color, white);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+              0 2px 6px rgba(0, 0, 0, 0.2);
+  
+  /* Padding inside the paper (margins) */
+  /* Using px instead of cm for DPI consistency: 2.5cm ≈ 94.5px, 2cm ≈ 75.6px @ 96 DPI */
+  padding: 95px 76px; /* typical A4 margins converted to pixels */
+  box-sizing: border-box;
+  
+  /* Page break visualization */
+  background-image: 
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(1123px - 1px), /* A4 height minus line width */
+      var(--page-break-divider-color, silver) calc(1123px - 1px),
+      var(--page-break-divider-color, silver) 1123px
+    );
+  background-size: 100% 1123px;
+  background-position: 0 0;
+  background-repeat: repeat-y;
+  
+  /* Position for page break borders and metadata header */
+  position: relative;
+}
+
+/* Position the metadata header absolutely at the top of the paper */
+.workspace-a4-preview-layout-container .a4-user-metadata-header {
+  position: absolute;
+  top: 38px; /* 1cm ≈ 37.8px @ 96 DPI - using px for DPI consistency */
+  left: 76px; /* 2cm ≈ 75.6px @ 96 DPI - aligned with paper left margin */
+  max-width: 642px; /* 170mm ≈ 641.7px @ 96 DPI - A4 width minus margins */
+  padding: 8px; /* 0.2cm ≈ 7.56px @ 96 DPI */
+  box-sizing: border-box;
+  background: var(--cell-margin-background-color, transparent);
+  z-index: 100;
+  pointer-events: none; /* Don't interfere with clicking cells */
+}
+
+/* Alternative: Page break dividers as pseudo-elements for more control */
+.workspace-a4-preview-layout-container .cell-containers-list::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 1123px; /* First page break */
+  height: var(--page-break-divider-width, 2px);
+  background: var(--page-break-divider-color, silver);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Additional page breaks can be added via JavaScript or additional pseudo-elements */
+/* For multiple pages, consider using a data attribute or generating dividers dynamically */

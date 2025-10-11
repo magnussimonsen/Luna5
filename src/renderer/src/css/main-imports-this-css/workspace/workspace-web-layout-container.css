@@ -1,5 +1,6 @@
 /*
 The workspace web layout container that holds both the cell list and the side panel.
+Continuous scrolling layout without page breaks.
 */
 
 .workspace-web-layout-container {
@@ -7,16 +8,21 @@ The workspace web layout container that holds both the cell list and the side pa
     display: flex;
     position: absolute;
     flex-direction: row;
-    width:100%;
-    height:100%;
-    min-height:0; /* allow inner flex child to shrink/scroll */
-    /*overflow-y: auto;*/
+    width: 100%;
+    height: 100%;
+    min-height: 0; /* allow inner flex child to shrink/scroll */
     overflow-y: scroll; /* always show scrollbar to prevent layout shift */
     overflow-x: hidden; /* prevent horizontal overflow from inner scrollers */
     background: var(--web-workspace-background, var(--debug-color));
     border: 0px solid olive; /* debug */
     box-sizing: border-box;
-    padding: 0.5em
+    padding: 0.5em;
+}
+
+/* Ensure cell list takes full width in web mode */
+.workspace-web-layout-container .cell-containers-list {
+    width: 100%;
+    max-width: 100%;
 }
 
 

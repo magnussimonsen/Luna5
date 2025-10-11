@@ -163,7 +163,7 @@ export function createTiptapEditor(options: {
     StarterKit.configure({
       // @ts-expect-error TipTap types do not allow document config, but it works at runtime
       document: { content: 'block*' } as TiptapDocumentConfig,
-      trailingNode: { node: 'paragraph', notAfter: ['heading'] },
+      trailingNode: { node: 'paragraph', notAfter: ['heading', 'blockMath'] },
       // Disable built-in link so we can supply our own configured Link extension below.
       link: false
     }),

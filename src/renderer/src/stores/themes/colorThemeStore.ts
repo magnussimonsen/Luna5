@@ -31,7 +31,7 @@ export const useThemeStore = defineStore('theme', {
       topToolbarBorderColor: 'whitesmoke',
 
       // A4 / paper workspace
-      a4WorkspaceBackground: '#e0e0e0',
+      a4WorkspaceBackground: '#808080',
       a4WorkspaceBorderColor: 'gainsboro',
 
       // Sidepanels
@@ -43,6 +43,7 @@ export const useThemeStore = defineStore('theme', {
       // Paper preview
       paperColor: '#ffffff',
       paperBorderColor: 'transparent',
+      pageBreakDividerColor: 'silver',
 
       // Cell (general)
       cellBackground: '#ffffff',
@@ -149,8 +150,10 @@ export const useThemeStore = defineStore('theme', {
       topToolbarBorderColor: '#111111',
 
       // A4 / paper workspace
-      a4WorkspaceBackground: '#222222',
-      a4WorkspaceBorderColor: '#444444',
+      a4WorkspaceBackground: '#111111',
+      a4WorkspaceBorderColor: '#00ff08ff',
+      a4MetadataNameColor: '#dddddd',
+      a4MetadataEmailColor: '#aaaaaa',
 
       // Sidepanels
       sidepanelBackground: '#444444',
@@ -159,8 +162,9 @@ export const useThemeStore = defineStore('theme', {
       resizeRailLineColor: 'rgba(255, 255, 255, 0.45)',
 
       // Paper preview
-      paperColor: '#333333',
+      paperColor: '#7f7f7f' /* I need something darker than darkgray*/,
       paperBorderColor: 'transparent',
+      pageBreakDividerColor: 'silver',
 
       // Cell (general)
       cellBackground: '#222222',
@@ -307,6 +311,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--divider-color', colors.dividerColor)
       root.style.setProperty('--paper-color', colors.paperColor)
       root.style.setProperty('--paper-border-color', colors.paperBorderColor)
+      root.style.setProperty('--page-break-divider-color', colors.pageBreakDividerColor)
 
       // Cell
       root.style.setProperty('--cell-background', colors.cellBackground)

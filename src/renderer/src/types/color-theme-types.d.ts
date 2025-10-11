@@ -32,13 +32,14 @@ export type ThemeColorTypes = {
   // A4 / paper workspace
   a4WorkspaceBackground: string
   a4WorkspaceBorderColor: string
+  pageBreakDividerColor: string
 
   // Sidepanel
   sidepanelBackground: string
   sidepanelBorderColor: string
   resizeRailColor: string
   resizeRailLineColor: string
-  
+
   // Paper preview
   paperColor: string
   paperBorderColor: string

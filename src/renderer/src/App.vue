@@ -11,7 +11,7 @@ import Statusbar from '@renderer/components/navigation-bars/Statusbar.vue'
 import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
 import KatexInputModal from '@renderer/components/modals/katex-input/KatexInputModal.vue'
-// import MathLivePlayground from '@renderer/mathlive-test-folder/MathLivePlayground.vue'
+import A4UserMetadataHeader from '@renderer/components/workspace/A4UserMetadataHeader.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
 // Modals and sidepanel are currently not referenced directly in this file.
 // They are imported where needed by child components.
@@ -28,18 +28,21 @@ import { storeToRefs } from 'pinia'
 import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-watch-function'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
+import { useZoomStatesStore } from '@renderer/stores/UI/zoomStatesStore'
 import type { Editor } from '@tiptap/vue-3'
 import BottomPanel from './components/bottompanel/BottomPanelBase.vue'
 
 const menubarStore = useMenubarStore()
 const toolbarStore = useToolbarStore()
 const sidepanelStore = useSidepanelStore()
+const zoomStatesStore = useZoomStatesStore()
 const modalStore = useModalStore()
 const textEditorsStore = useTextEditorsStore()
 const cellSelectionStore = useCellSelectionStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
+const zoomScale = computed(() => zoomStatesStore.zoomScale)
 //const showMathLivePlayground = import.meta.env.DEV
 
 //------------------------------------------------------------------------------//
@@ -150,15 +153,17 @@ function handleKatexInsert(payload: { latex: string; mode: 'inline' | 'block' })
       <Toolbar />
     </div>
     <div class="scroll-container">
-      <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
+      <div v-show="layoutMode === 'web'" class="workspace-web-layout-container">
         <CellList />
       </div>
-      <div
-        v-else-if="layoutMode === 'a4Preview'"
-        class="workspace-a4-preview-layout-container"
-        :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }"
-      >
-        A4 preview layout mode (coming soon)
+      <div v-show="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">
+        <div
+          class="a4-paper-zoom-wrapper"
+          :style="{ transform: 'scale(' + zoomScale + ')', transformOrigin: 'top left' }"
+        >
+          <A4UserMetadataHeader />
+          <CellList />
+        </div>
       </div>
     </div>
     <Sidepanel />
