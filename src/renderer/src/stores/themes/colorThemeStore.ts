@@ -194,8 +194,8 @@ export const useThemeStore = defineStore('theme', {
 
       // Standard buttons
       buttonBackgroundColor: 'transparent',
-      buttonBorderColor: '#787878',
-      buttonHoverColor: 'gray',
+      buttonBorderColor: '#4b4b4bff',
+      buttonHoverColor: '#444444',
       buttonBorderHoverColor: 'whitesmoke',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'darkgreen',
