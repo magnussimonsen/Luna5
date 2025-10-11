@@ -106,7 +106,7 @@
       <button
         class="top-toolbar__button top-toolbar__button--icon icon-numbered-list top-toolbar__button--transparent-when-disabled"
         type="button"
-        :class="{ active: isActive('orderedList') }"
+        :class="{ 'top-toolbar__button--active': isActive('orderedList') }"
         title="Numbered list"
         aria-label="Numbered list"
         :disabled="

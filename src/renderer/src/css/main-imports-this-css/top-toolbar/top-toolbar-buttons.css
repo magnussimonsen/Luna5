@@ -53,8 +53,7 @@
   box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
   transform: translateY(1px);
   */
-  border-color: black; /* add a selected border color to themestore*/
- 
+  border-color: var(--button-border-on-color, var(--debug-color));
 }
 
 /* Shared disabled look (no background change) */
