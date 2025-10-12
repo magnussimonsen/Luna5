@@ -126,7 +126,7 @@ Notes:
 
 ### Planned Libraries / Components
 
-* Include support for [Mathlive virtual keyboard](https://mathlive.io/mathfield/guides/virtual-keyboard/) MathLive in text-editor
+* Include support for [Mathlive virtual keyboard](https://mathlive.io/mathfield/guides/virtual-keyboard/) in text-editor
 * Numerical computation library (in-house or vetted JS/TS package)
 * Custom tokenizer/parser for Luna CAS syntax (considering Moo + Nearley; powered by SymPy)
 
