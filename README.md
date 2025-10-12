@@ -126,10 +126,7 @@ Notes:
 
 ### Planned Libraries / Components
 
-* Rich-text editor with future math input (KaTeX/MathLive; current button is a placeholder)
-* Markdown editor with KaTeX rendering
-* Code editor (Monaco Editor)
-* Pyodide integration (background worker)
+* Include support [Mathlive virtual keyboard](https://mathlive.io/mathfield/guides/virtual-keyboard/) MathLive in text-editor
 * Numerical computation library (in-house or vetted JS/TS package)
 * Custom tokenizer/parser for Luna CAS syntax (considering Moo + Nearley; powered by SymPy)
 
