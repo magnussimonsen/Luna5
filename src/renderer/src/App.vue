@@ -153,10 +153,10 @@ function handleKatexInsert(payload: { latex: string; mode: 'inline' | 'block' })
       <Toolbar />
     </div>
     <div class="scroll-container">
-      <div v-show="layoutMode === 'web'" class="workspace-web-layout-container">
+      <div v-if="layoutMode === 'web'" class="workspace-web-layout-container">
         <CellList />
       </div>
-      <div v-show="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">
+      <div v-if="layoutMode === 'a4Preview'" class="workspace-a4-preview-layout-container">
         <div
           class="a4-paper-zoom-wrapper"
           :style="{ transform: 'scale(' + zoomScale + ')', transformOrigin: 'top left' }"
