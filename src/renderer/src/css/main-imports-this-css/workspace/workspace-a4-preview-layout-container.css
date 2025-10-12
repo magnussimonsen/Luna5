@@ -72,7 +72,9 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
 
 /* Position the metadata header absolutely at the top of the paper */
 .workspace-a4-preview-layout-container .a4-user-metadata-header {
-  position: absolute;
+    display: flex;
+    position: absolute;
+    flex-direction: row;
   top: 38px; /* 1cm ≈ 37.8px @ 96 DPI - using px for DPI consistency */
   left: 76px; /* 2cm ≈ 75.6px @ 96 DPI - aligned with paper left margin */
   max-width: 642px; /* 170mm ≈ 641.7px @ 96 DPI - A4 width minus margins */

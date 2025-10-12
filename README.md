@@ -1,9 +1,6 @@
 
-## Download
-The first prototype build, featuring both a text editor and Python editor, will soon be available for download on the project's SourceForge page. 
-
-[![Download Luna STEM Notebook](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/luna-stem-notebook/files/latest/download)
-
+ 
+[**Download the latest release here**](https://github.com/magnussimonsen/Luna5/releases)
 
 <p align="center">
   <img src="./src/development-screenshots/Luna5-2025-10-12-1.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
@@ -21,28 +18,8 @@ The first prototype build, featuring both a text editor and Python editor, will 
 </p>
 
 <p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-10-10-3.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
-</p>
-
-<p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-10-07-2.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
-</p>
-
-<p align="center">
   <img src="./src/development-screenshots/Luna5-2025-10-07-3.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
 </p>
-
-<p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-10-07-4.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
-</p>
-<p align="center">
-  <img src="./src/development-screenshots/Luna5-2025-10-07-6.png" alt="Luna STEM Notebook Screenshot" width="900" /> 
-</p>
-
-
-
-
-
 
 # Luna 0.5
 
@@ -62,31 +39,29 @@ Thanks also to the [Pyodide](https://pyodide.org/) community for enabling Python
 
 Modern classrooms rely on various disconnected tools (Python editors, GeoGebra, Word, Excel), each with unique interfaces and file formats. This fragmentation slows learning and adds complexity. Luna 0.5 addresses this by providing a notebook-centric workflow, unlike tools such as GeoGebra.
 
-Luna 0.5 combines symbolic algebra, geometry, programming, and rich text editing in one intuitive application.
-
-Planned features include flashcard support for text, images, audio, and IPA (International Phonetic Alphabet) input.
+Luna 0.5 combines symbolic algebra, geometry, programming, flashcards with spaced repetition, a formula and facts book, and rich text editing with a KaTeX input panel into one intuitive application.
 
 ---
 
 ## ✨ Key Features
 
 * 📓 Notebook-style, cell-based interface
-* 📝 Rich Text and Markdown editing
+* 📝 Rich Text with KaTeX mathematics editor
 * 🐍 Live Python execution via Pyodide
-* ➗ CAS (Computer Algebra System) with custom, student-friendly syntax (powered by SymPy)
+* ➗ CAS (Computer Algebra System) with custom, student-friendly syntax (powered by SymPy, maybe... TBD)
 * 🔒 Hide or lock cells for creating tests with embedded solutions
-* 🧠 Sidebar with table of contents and contextual help
+* 🧠 Sidebar with list of notebooks, table of contents, formula book and flashcards 
 * 🖨️ Export notebooks to PDF, including student name and timestamp in the header
-* 🗂️ Flashcards with spaced repetition (for language learning), supporting text, images, and audio
+* 🗂️ Flashcards with spaced repetition (for language learning)
 
 ---
 
 ## 🥷 For Teachers
 
 * Create questions and solutions in the same file using **Hide Cell** and **Lock Cell**
-* Export test versions with locked questions and hidden answers; students can respond directly in the file
-* Reuse and adapt notebooks for lessons, homework, or presentations
-* Demonstrate math, code, and concepts interactively
+* Export test versions with locked questions and hidden answers
+* Reuse and adapt notebooks for lessons, homework, tests or presentations
+* Demonstrate math, code, and concepts interactively as in GeoGebra, but in a notebook format
 
 ---
 
@@ -105,8 +80,8 @@ Planned features include flashcard support for text, images, audio, and IPA (Int
 | Tool                         | Status        |
 | ---------------------------- | ------------- |
 | Notebook UI with reactive Table of Contents | ✅ Implemented |
-| Rich Text / Markdown Editor  | ✅ Core WYSIWYG (Tiptap) implemented; math input pending |
-| Python Environment (Pyodide) | ✅ Implemented; core features available, ongoing improvements |
+| Rich Text / Markdown Editor  | ✅ Core WYSIWYG (Tiptap) with Tiptap mathematics extension |
+| Python Environment (Pyodide) | ✅ Implemented |
 | CAS (Symbolic Math, Luna syntax + SymPy)   | 🚧 Planned     |
 | Graphical Calculator         | 🚧 Planned    |
 | Geometry Explorer            | 🚧 Planned    |

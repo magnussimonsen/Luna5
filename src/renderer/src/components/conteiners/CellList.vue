@@ -1,5 +1,6 @@
 <template>
   <div class="cell-containers-list" :style="cellListStyle">
+    <A4UserMetadataHeader v-if="layoutMode === 'a4Preview'" />
     <CellContainer
       v-for="(cellId, idx) in orderedCellIds"
       :key="cellId"
@@ -24,6 +25,8 @@
 </template>
 
 <script setup lang="ts">
+import A4UserMetadataHeader from '@renderer/components/workspace/A4UserMetadataHeader.vue'
+import { storeToRefs } from 'pinia'
 import { computed, type Component } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
@@ -38,14 +41,21 @@ const zoomStatesStore = useZoomStatesStore() // For zoom state management
 const workspaceStore = useWorkspaceStore()
 const selectionStore = useCellSelectionStore()
 const menubarStore = useMenubarStore()
+const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 
 const zoomScale = computed(() => zoomStatesStore.zoomScale)
 // Only apply zoom transform in web mode; A4 preview applies it at parent container level
 const cellListStyle = computed(() => {
   if (menubarStore.workspaceLayoutMode === 'a4Preview') {
-    return {} // No transform in A4 mode - parent already has it
+    return {
+      transform: `scale(${zoomScale.value})`,
+      transformOrigin: 'top left'
+    } // No transform in A4 mode - parent already has it
   }
-  return { transform: `scale(${zoomScale.value})`, transformOrigin: 'top left' }
+  return {
+    transform: `scale(${zoomScale.value})`,
+    transformOrigin: 'top left'
+  }
 })
 const workspace = computed(() => workspaceStore.getWorkspace())
 
