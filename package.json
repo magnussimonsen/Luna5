@@ -1,7 +1,7 @@
 {
   "name": "luna-stem-notebook",
   "officialName": "Luna Stem Notebook",
-  "version": "0.5.0",
+  "version": "0.5.4",
   "description": "An Electron application with Vue and TypeScript",
   "main": "./out/main/index.js",
   "author": "Magnus Simonsen",
