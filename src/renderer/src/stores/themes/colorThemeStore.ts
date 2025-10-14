@@ -162,7 +162,7 @@ export const useThemeStore = defineStore('theme', {
       resizeRailLineColor: 'rgba(255, 255, 255, 0.45)',
 
       // Paper preview
-      paperColor: '#7f7f7f' /* I need something darker than darkgray*/,
+      paperColor: '#3d3d3dff' /* I need something darker than darkgray*/,
       paperBorderColor: 'transparent',
       pageBreakDividerColor: 'silver',
 
