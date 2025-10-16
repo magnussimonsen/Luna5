@@ -3,7 +3,7 @@
  * (Moved from notebook-core/cell-types/* for unified type management.)
  */
 
-export type CellKind = 'text-cell' | 'markdown-cell' | 'python-cell'
+export type CellKind = 'text-cell' | 'python-cell' | 'pagebrake-cell'
 
 export interface BaseCell {
   cellIndex: number // Position in the notebook
@@ -17,11 +17,20 @@ export interface BaseCell {
   flagged?: boolean
   softDeleted?: boolean
   hardDeleted?: boolean // If true the cell is listed for permanent deletion
-  baseCellInputContent?: string // Mostly for development
-  baseCellOutputContent?: string // Mostly for development
+  //baseCellInputContent?: string // For development
+  //baseCellOutputContent?: string // For development
   isCellVisible?: boolean // UI hint, not persisted
   isCellFocused?: boolean // UI hint, not persisted
   metadata?: Record<string, unknown>
+}
+
+export interface PageBrakeCell extends BaseCell {
+  kind: 'pagebrake-cell'
+  cellInputContent?: string // Needed because of function
+  // setCellInputContent(cellId: string, content: string): boolean
+  // in workspaceStore.ts requires argument of type cell. But PageBrakeCell has no input content...
+  // Possible fix: Create a separate non union type for PageBrakeCell?
+
 }
 
 export interface TextCell extends BaseCell {
@@ -29,14 +38,6 @@ export interface TextCell extends BaseCell {
   source: string
   cellInputContent?: string
   cellOutputContent?: string // Intended for rendered output like markdown or katex (to be decided)
-  cellErrorContent?: string
-}
-
-export interface MarkdownCell extends BaseCell {
-  kind: 'markdown-cell'
-  source: string
-  cellInputContent?: string
-  cellOutputContent?: string
   cellErrorContent?: string
 }
 
@@ -101,4 +102,5 @@ export interface PythonCell extends BaseCell {
   exec?: PythonExecutionMeta
 }
 
-export type Cell = TextCell | MarkdownCell | PythonCell
+export type Cell = TextCell | PythonCell | PageBrakeCell
+export type PageBrakeCell = PageBrakeCell

@@ -159,6 +159,11 @@
         Insert Python Cell <span class="menubar-shortcut-not-implemented">Ctrl + 7</span>
         <ImplementedMark :implemented="true" />
       </div>
+      <div class="dropdown-menu-divider"></div>
+      <div class="menubar-dropdown-item" @click="handleInsertPageBreak">
+        Insert Page Break <span class="menubar-shortcut-not-implemented"></span>
+        <ImplementedMark :implemented="false" />
+      </div>
     </DropdownMenu>
     <!--------------------------------------------------------------------->
     <!-- Cell Movement Controls Toggle buttons (no dropdown menues here) -->
@@ -516,6 +521,16 @@ const handleInsertPythonCell = (): void => {
   }
 }
 
+/*Experimental page break feature*/
+const handleInsertPageBreak = (): void => {
+  workspaceStore.addPageBreakCell()
+  // Close Insert menu after action
+  try {
+    insertMenu.value?.closeDropdown()
+  } catch {
+    /* ignore */
+  }
+}
 const handleTogglePanel = (panel: string): void => {
   sidepanelStore.togglePanel(panel)
 }
