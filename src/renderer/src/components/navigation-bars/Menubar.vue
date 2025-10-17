@@ -117,9 +117,8 @@
         :aria-disabled="isSelectedCellLocked || isSelectedCellHidden ? 'true' : undefined"
         @click="handleMoveCellToBin"
       >
-        Move cell to Bin
+        {{ isSelectedCellPageBreak ? 'Delete Page Break' : 'Move cell to Bin' }}
         <span class="menubar-shortcut-not-implemented">Ctrl + 0</span>
-        <!-- Implement if cell kind in pagebrake-cell, change text to "Delete page brake"-->
         <ImplementedMark :implemented="true" />
       </div>
       <div class="menubar-dropdown-item" @click="handleMoveNotebookToBin">
@@ -372,6 +371,11 @@ const isSelectedCellLocked = computed(() => {
   if (!id) return false
   const c = ws.cells[id]
   return !!(c?.softLocked || c?.hardLocked)
+})
+const isSelectedCellPageBreak = computed(() => {
+  const ws = workspaceStore.getWorkspace()
+  const id = cellSelectionStore.selectedCellId
+  return id ? ws.cells[id]?.kind === 'page-break' : false
 })
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
