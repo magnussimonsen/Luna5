@@ -10,7 +10,7 @@ export function createPageBrakeCell(): PageBrakeCell {
   return {
     cellIndex: -1,
     id,
-    kind: 'pagebrake-cell',
+    kind: 'page-break',
     createdAt: now,
     updatedAt: now
   }

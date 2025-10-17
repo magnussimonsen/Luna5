@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import type { Workspace } from '../../model/schema'
 
 /**

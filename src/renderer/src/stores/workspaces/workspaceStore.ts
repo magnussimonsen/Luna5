@@ -74,6 +74,7 @@ import {
   emptyRecycleBin as operationsEmptyRecycleBin
 } from '@renderer/code/notebook-core/operations'
 import { deleteCellSoft as operationsDeleteCellSoft } from '@renderer/code/notebook-core/operations'
+import { deleteCellHard as operationsDeleteCellHard } from '@renderer/code/notebook-core/operations'
 import { restoreCellFromBin as operationsRestoreCellFromBin } from '@renderer/code/notebook-core/operations'
 //import { setCellContent as operationsSetCellBaseInputContent } from '@renderer/code/notebook-core/operations/cells/set-cell-content'
 import { newPythonCellExampleCode } from '@renderer/constants/python-snippets/new-python-cell-example-code'
@@ -600,6 +601,75 @@ export const useWorkspaceStore = defineStore('workspace', {
           }
         }
         return deleted
+      } catch {
+        return false
+      }
+    },
+
+    // --- Hard-delete selected cell (permanent, not moved to bin) ---
+    hardDeleteSelectedCell(): boolean {
+      const workspace = this.getWorkspace()
+      const notebookId = this.ensureDefaultNotebook()
+      try {
+        const cellSelectionStore = useCellSelectionStore()
+        const cellId = cellSelectionStore.selectedCellId
+        if (!cellId) return false
+
+        const notebook = workspace.notebooks[notebookId]
+        if (!notebook) return false
+
+        const cellIndex = notebook.cellOrder.indexOf(cellId)
+        if (cellIndex === -1) return false
+
+        // Hard delete the cell using the operation
+        const deleted = operationsDeleteCellHard(workspace, notebookId, cellId)
+        if (!deleted) return false
+
+        // Mark as unsaved
+        this.markAsUnsaved()
+
+        // Update selection to a nearby non-deleted cell (next, else previous), or clear if none
+        try {
+          const order = notebook.cellOrder
+          let nextSelectableId: string | null = null
+
+          // Look forward for the next cell
+          for (let i = cellIndex; i < order.length; i++) {
+            const candidateCellId = order[i]
+            if (workspace.cells[candidateCellId]) {
+              nextSelectableId = candidateCellId
+              break
+            }
+          }
+
+          if (!nextSelectableId) {
+            // Look backward if no next available
+            for (let i = cellIndex - 1; i >= 0; i--) {
+              const candidateCellId = order[i]
+              if (workspace.cells[candidateCellId]) {
+                nextSelectableId = candidateCellId
+                break
+              }
+            }
+          }
+
+          if (nextSelectableId && workspace.cells[nextSelectableId]?.kind) {
+            cellSelectionStore.setSelectCell(
+              nextSelectableId,
+              workspace.cells[nextSelectableId]!.kind
+            )
+            this.setNotebookLastSelectedCell(notebookId, nextSelectableId)
+            this.setLastSelectedNotebookIdNotebooks(notebookId)
+          } else {
+            cellSelectionStore.clearSelection()
+            this.setNotebookLastSelectedCell(notebookId, null)
+            this.setLastSelectedNotebookIdNotebooks(notebookId)
+          }
+        } catch {
+          /* ignore */
+        }
+
+        return true
       } catch {
         return false
       }

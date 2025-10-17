@@ -119,6 +119,7 @@
       >
         Move cell to Bin
         <span class="menubar-shortcut-not-implemented">Ctrl + 0</span>
+        <!-- Implement if cell kind in pagebrake-cell, change text to "Delete page brake"-->
         <ImplementedMark :implemented="true" />
       </div>
       <div class="menubar-dropdown-item" @click="handleMoveNotebookToBin">
@@ -557,6 +558,17 @@ const handleMoveCellToBin = (): void => {
     console.warn('Cannot move locked/hidden cell to Bin')
     return
   }
+  // Page-break cells are hard-deleted (never go to bin)
+  const selectedCellId = cellSelectionStore.selectedCellId
+  if (selectedCellId) {
+    const cell = workspaceStore.getWorkspace().cells[selectedCellId]
+    if (cell?.kind === 'page-break') {
+      const ok = workspaceStore.hardDeleteSelectedCell()
+      if (!ok) console.warn('Failed to delete page break')
+      return
+    }
+  }
+  // Regular cells go to bin via soft delete
   const ok = workspaceStore.softDeleteSelectedCell()
   if (!ok) console.warn('No cell selected or cannot move to Bin')
 }
