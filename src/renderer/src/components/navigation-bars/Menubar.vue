@@ -585,7 +585,12 @@ const handleSavePDFForSubmission = async (): Promise<void> => {
           margin-top: 25mm !important;
           page-break-before: always !important;
         }
-        
+
+        /* Allow tall cells (e.g. python figures) to span pages without clipping */
+        .cell {
+          overflow: visible !important;
+        }
+
         /* Ensure all content is visible */
         html, body {
           height: auto !important;
