@@ -586,9 +586,21 @@ const handleSavePDFForSubmission = async (): Promise<void> => {
           page-break-before: always !important;
         }
 
-        /* Allow tall cells (e.g. python figures) to span pages without clipping */
+        /* Reflow cells for print so tall content extends naturally */
         .cell {
+          display: block !important;
           overflow: visible !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+        }
+
+        .cell__gutter {
+          display: none !important;
+        }
+
+        .cell__content {
+          display: block !important;
+          width: 100% !important;
         }
 
         /* Ensure all content is visible */
