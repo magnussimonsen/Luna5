@@ -247,6 +247,54 @@ app.whenReady().then(() => {
     }
   })
 
+  // Save PDF to desktop using Electron's printToPDF
+  // Renderer calls window.api.savePDF({ fileName }) to save a PDF
+  ipcMain.handle('save-pdf', async (event, { fileName }: { fileName?: string }) => {
+    try {
+      const desktopPath = app.getPath('desktop')
+      const defaultFileName = fileName || 'Luna-Submission.pdf'
+
+      const result = await dialog.showSaveDialog({
+        title: 'Save PDF',
+        defaultPath: join(desktopPath, defaultFileName),
+        filters: [{ name: 'PDF Files', extensions: ['pdf'] }],
+        properties: ['createDirectory']
+      })
+
+      if (result.canceled || !result.filePath) {
+        return { success: false, canceled: true }
+      }
+
+      // Get the BrowserWindow that sent the event
+      const win = BrowserWindow.fromWebContents(event.sender)
+      if (!win) {
+        return { success: false, error: 'Could not find window' }
+      }
+
+      // Use Electron's printToPDF to generate PDF from the entire page
+      const pdfData = await win.webContents.printToPDF({
+        printBackground: true,
+        pageSize: 'A4',
+        landscape: false,
+        margins: {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0
+        },
+        // Enable CSS @page margins to be respected
+        preferCSSPageSize: true
+      })
+
+      await fs.promises.writeFile(result.filePath, pdfData)
+
+      return { success: true, filePath: result.filePath }
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error)
+      return { success: false, error: message }
+    }
+  })
+
   // Confirm before opening a new file when there are unsaved changes
   ipcMain.handle('confirm-unsaved-before-open', async () => {
     const result = await dialog.showMessageBox({

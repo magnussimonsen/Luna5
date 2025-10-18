@@ -15,6 +15,9 @@ const rendererApi = {
   fileExists: (opts: { filePath: string }) => ipcRenderer.invoke('file-exists', opts),
   confirmUnsavedBeforeOpen: () => ipcRenderer.invoke('confirm-unsaved-before-open'),
 
+  // PDF export
+  savePDF: (opts: { fileName?: string }) => ipcRenderer.invoke('save-pdf', opts),
+
   // Compression and decompression handlers
   compressData: (opts: { data: string }) => ipcRenderer.invoke('compress-data', opts),
   decompressData: (opts: { data: string }) => ipcRenderer.invoke('decompress-data', opts),

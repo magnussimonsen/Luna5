@@ -43,6 +43,8 @@
     "@tiptap/starter-kit": "^3.6.2",
     "@tiptap/vue-3": "^3.6.2",
     "electron-updater": "^6.3.9",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.3",
     "katex": "^0.16.23",
     "monaco-editor": "^0.52.0",
     "monaco-themes": "^0.4.7",

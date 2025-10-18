@@ -1,5 +1,13 @@
 <template>
-  <div v-if="shouldShow" class="a4-user-metadata-header">
+  <div
+    v-if="shouldRenderHeader"
+    class="a4-user-metadata-header"
+    :class="{
+      'metadata-disabled': !isHeaderEnabled,
+      'metadata-ui-hidden': !isA4PreviewMode
+    }"
+    data-component="a4-user-metadata-header"
+  >
     <div class="metadata-content">
       <div class="user-name">{{ fullName }}</div>
       <div class="user-email">{{ email }}</div>
@@ -18,13 +26,9 @@ const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
 const menubarStore = useMenubarStore()
 
-// Determine if metadata should be shown
-const shouldShow = computed(() => {
-  return (
-    generalSettingsStore.showUserMetadataInA4PreviewGetter &&
-    menubarStore.workspaceLayoutMode === 'a4Preview'
-  )
-})
+const isHeaderEnabled = computed(() => generalSettingsStore.showUserMetadataInA4PreviewGetter)
+const isA4PreviewMode = computed(() => menubarStore.workspaceLayoutMode === 'a4Preview')
+const shouldRenderHeader = computed(() => isHeaderEnabled.value)
 
 // Get owner metadata from workspace (fallback to placeholder)
 const ownerMetadata = computed(() => {
@@ -52,9 +56,45 @@ const email = computed(() => {
 
 <style scoped>
 .a4-user-metadata-header {
-  /* Using px instead of mm for DPI consistency: 170mm ≈ 641.7px @ 96 DPI */
-  width: 642px; /* A4 width minus 2cm margins on each side */
-  padding: 8px; /* 0.2cm ≈ 7.56px @ 96 DPI */
+  width: 170mm;
+  padding: 2mm;
+}
+
+.a4-user-metadata-header.metadata-ui-hidden {
+  display: none;
+}
+
+.a4-user-metadata-header.metadata-disabled {
+  border-bottom-color: transparent;
+}
+
+.a4-user-metadata-header.metadata-disabled .user-name,
+.a4-user-metadata-header.metadata-disabled .user-email {
+  color: transparent !important;
+}
+
+/* Print-specific styles for metadata header */
+@media print {
+  .a4-user-metadata-header {
+    /* Print once at the top of the first page (no running header) */
+    position: absolute !important;
+    top: 10mm !important;
+    left: 20mm !important;
+    width: 170mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding: 2mm !important;
+    margin: 0 !important;
+    background: var(--cell-margin-background-color) !important;
+    z-index: 999 !important;
+    box-sizing: border-box !important;
+    page-break-after: avoid !important;
+  }
+
+  .a4-user-metadata-header.metadata-ui-hidden {
+    display: none !important;
+  }
 }
 
 .metadata-content {
@@ -73,5 +113,16 @@ const email = computed(() => {
   font-size: 11px;
   color: var(--text-color, #666);
   font-style: italic;
+}
+
+/* Ensure readable colors in print */
+@media print {
+  .user-name {
+    color: #000 !important;
+  }
+
+  .user-email {
+    color: #333 !important;
+  }
 }
 </style>

@@ -9,8 +9,9 @@
 import { computed, ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 
-const A4_HEIGHT_PX = 1123 // A4 height at 96 DPI in pixels
-const A4_TOP_MARGIN_PX = 95 // Top padding of .cell-containers-list
+const MM_TO_PX = 96 / 25.4
+const A4_HEIGHT_PX = 297 * MM_TO_PX // A4 height expressed via conversion from millimetres
+const A4_TOP_MARGIN_PX = 25 * MM_TO_PX // Top padding (25 mm) converted to pixels
 
 const menubarStore = useMenubarStore()
 const pageBreakEl = ref<HTMLElement | null>(null)
@@ -109,6 +110,24 @@ const pageBreakStyle = computed(() => {
   position: relative;
   margin: 1em 0;
   user-select: none;
+}
+
+/* Print-specific styles: collapse the visual height, keep only the page-break directive */
+@media print {
+  .page-break {
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .page-break-label {
+    display: none !important;
+  }
 }
 
 .page-break-label {

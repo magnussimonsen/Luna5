@@ -40,6 +40,14 @@ interface AppAPI {
   fileExists: (opts: { filePath: string }) => Promise<{ exists: boolean }>
   confirmUnsavedBeforeOpen: () => Promise<'save' | 'dont-save' | 'cancel'>
 
+  // PDF export
+  savePDF: (opts: { fileName?: string }) => Promise<{
+    success: boolean
+    filePath?: string
+    error?: string
+    canceled?: boolean
+  }>
+
   // Compression and decompression
   compressData: (opts: { data: string }) => Promise<string>
   decompressData: (opts: { data: string }) => Promise<string>

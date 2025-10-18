@@ -25,19 +25,18 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
 }
 
 /* Wrapper for paper + header that gets zoomed together */
+
 .workspace-a4-preview-layout-container .a4-paper-zoom-wrapper {
   position: relative;
-  width: 794px; /* A4 width at 96 DPI */
+  width: 210mm;
   min-height: auto;
 }
 
 /* The paper container that holds cells */
 .workspace-a4-preview-layout-container .cell-containers-list {
-  /* A4 dimensions at 96 DPI (CSS pixels) */
-  /* A4 = 210mm x 297mm = 793.7px x 1122.5px at 96dpi */
-  /* Using px units for consistency across different DPI screens */
-  width: 794px;
-  min-width: 794px;
+  /* A4 dimensions expressed using physical units for consistent preview/print */
+  width: 210mm;
+  min-width: 210mm;
   min-height: auto; /* Allow content to determine height */
   
   /* Fixed position - no flex/centering, stays in place */
@@ -49,8 +48,7 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
               0 2px 6px rgba(0, 0, 0, 0.2);
   
   /* Padding inside the paper (margins) */
-  /* Using px instead of cm for DPI consistency: 2.5cm ≈ 94.5px, 2cm ≈ 75.6px @ 96 DPI */
-  padding: 95px 76px; /* typical A4 margins converted to pixels */
+  padding: 25mm 20mm;
   box-sizing: border-box;
   
   /* Page break visualization */
@@ -58,11 +56,11 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
     repeating-linear-gradient(
       to bottom,
       transparent,
-      transparent calc(1123px - 1px), /* A4 height minus line width */
-      var(--page-break-divider-color, silver) calc(1123px - 1px),
-      var(--page-break-divider-color, silver) 1123px
+      transparent calc(297mm - 0.5mm),
+      var(--page-break-divider-color, silver) calc(297mm - 0.5mm),
+      var(--page-break-divider-color, silver) 297mm
     );
-  background-size: 100% 1123px;
+  background-size: 100% 297mm;
   background-position: 0 0;
   background-repeat: repeat-y;
   
@@ -75,10 +73,10 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
     display: flex;
     position: absolute;
     flex-direction: row;
-  top: 38px; /* 1cm ≈ 37.8px @ 96 DPI - using px for DPI consistency */
-  left: 76px; /* 2cm ≈ 75.6px @ 96 DPI - aligned with paper left margin */
-  max-width: 642px; /* 170mm ≈ 641.7px @ 96 DPI - A4 width minus margins */
-  padding: 8px; /* 0.2cm ≈ 7.56px @ 96 DPI */
+  top: 10mm;
+  left: 20mm;
+  max-width: 170mm;
+  padding: 2mm;
   box-sizing: border-box;
   background: var(--cell-margin-background-color, transparent);
   z-index: 100;
@@ -91,7 +89,7 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
   position: absolute;
   left: 0;
   right: 0;
-  top: 1123px; /* First page break */
+  top: 297mm; /* First page break */
   height: var(--page-break-divider-width, 2px);
   background: var(--page-break-divider-color, silver);
   pointer-events: none;

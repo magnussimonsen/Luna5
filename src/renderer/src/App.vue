@@ -43,8 +43,6 @@ const cellSelectionStore = useCellSelectionStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 const workspaceStore = useWorkspaceStore()
 const generalSettingsStore = useGeneralSettingsStore()
-// const zoomScale = computed(() => zoomStatesStore.zoomScale)
-//const showMathLivePlayground = import.meta.env.DEV
 
 //------------------------------------------------------------------------------//
 // Autosave section
@@ -64,16 +62,6 @@ const toolbarRef = ref<HTMLElement | null>(null)
 const statusbarRef = ref<HTMLElement | null>(null)
 let menubarObserver: ResizeObserver | null = null
 let toolbarObserver: ResizeObserver | null = null
-
-/*const workspaceStyle = computed(() => {
-  if (layoutMode.value === 'a4Preview') {
-    return {
-      transform: `scale(${zoomScale.value})`,
-      transformOrigin: 'top left'
-    }
-  }
-  return {}
-})*/
 
 onMounted(async () => {
   await nextTick()
