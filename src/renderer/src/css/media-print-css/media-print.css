@@ -1,0 +1,141 @@
+@media print {
+	/* Hide chrome outside the workspace */
+	#app-layout > :not(.scroll-container) {
+		display: none !important;
+	}
+
+	html,
+	body {
+		margin: 0 !important;
+		padding: 0 !important;
+		background: white !important;
+	}
+
+	#app-layout {
+		display: block !important;
+		height: auto !important;
+		min-height: auto !important;
+		width: auto !important;
+	}
+
+	#app-layout .scroll-container {
+		display: block !important;
+		height: auto !important;
+		min-height: auto !important;
+		overflow: visible !important;
+		flex: none !important;
+	}
+
+	/* Position cell list for printing */
+	.cell-containers-list {
+		position: static !important;
+		width: 210mm !important;
+		min-width: 210mm !important;
+		margin: 0 !important;
+		box-shadow: none !important;
+		page-break-after: auto !important;
+		padding: 25mm 20mm !important;
+
+		/* Provide top padding to mirror in-app layout margins */
+		background-image: none !important;
+		transform: none !important;
+		box-sizing: border-box !important;
+	}
+
+	/* Apply consistent margins to all pages */
+	@page {
+		size: A4;
+		margin: 0;
+	}
+
+	/* Ensure parent containers don't constrain height */
+	.workspace-a4-preview-layout-container {
+		background: white !important;
+		padding: 0 !important;
+		overflow: visible !important;
+		height: auto !important;
+		position: static !important;
+	}
+
+	/* Ensure explicit page break cells force a new page when printing */
+	.cell[data-kind='page-break'] {
+		display: block !important;
+		border: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		height: 0 !important;
+		min-height: 0 !important;
+		page-break-after: always !important;
+		break-after: page !important;
+	}
+
+	.cell[data-kind='page-break'] .cell__gutter {
+		display: none !important;
+	}
+
+	.cell[data-kind='page-break'] .cell__content {
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+
+	.cell[data-kind='page-break'] .page-break {
+		display: block !important;
+		height: 0 !important;
+		min-height: 0 !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		border: none !important;
+		background: none !important;
+		page-break-after: always !important;
+		break-after: page !important;
+	}
+
+	.cell[data-kind='page-break'] + .cell:not([data-kind='page-break']) {
+		margin-top: 25mm !important;
+		page-break-before: always !important;
+	}
+
+	/* Reflow cells for print so tall content extends naturally */
+	.cell {
+		display: grid !important;
+		grid-template-columns: 1.5em 1fr !important;
+		align-items: stretch !important;
+		overflow: visible !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+		border: 1px solid whitesmoke !important;
+	}
+
+	.cell__gutter {
+		display: flex !important;
+		align-items: flex-start !important;
+		justify-content: center !important;
+		width: 1.5em !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		background: transparent !important;
+		border: 1px solid whitesmoke !important;
+	}
+
+	.cell__content {
+		display: block !important;
+		width: 100% !important;
+	}
+
+	/* Preserve Monaco syntax colours when printing */
+         .python-editor,
+		.monaco-editor,
+		.monaco-editor .view-lines,
+		.monaco-editor span {
+			-webkit-print-color-adjust: exact !important;
+			print-color-adjust: exact !important;
+			forced-color-adjust: none !important;
+		}
+
+	/* Ensure all content is visible */
+	html,
+	body {
+		height: auto !important;
+		overflow: visible !important;
+	}
+}

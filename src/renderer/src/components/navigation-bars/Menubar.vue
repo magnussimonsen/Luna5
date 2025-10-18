@@ -31,8 +31,13 @@
         Save File As <span class="menubar-shortcut-not-implemented">Ctrl + Shift + s</span>
         <ImplementedMark :implemented="true" />
       </div>
+       <div class="menubar-dropdown-item" @click="handleSavePDFForHandout">
+        <em>For teachers: Save PDF for Handout</em>
+        <span class="menubar-shortcut-not-implemented">Ctrl + Alt + h</span>
+        <ImplementedMark :implemented="false" />
+      </div>
       <div class="menubar-dropdown-item" @click="handleSavePDFForSubmission">
-        <strong>Save PDF For Submission</strong>
+        <strong>For students: Save PDF For Submission</strong>
         <span class="menubar-shortcut-not-implemented">Ctrl + Alt + s</span>
         <ImplementedMark :implemented="true" />
       </div>
@@ -333,10 +338,12 @@ import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
 import { computed, ref, nextTick } from 'vue'
+import '@renderer/css/media-print-css/media-print.css'
 import { saveAsCurrentWorkspace } from '@renderer/code/files/save-as'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { openWorkspaceFromDisk } from '@renderer/code/files/open-file'
 import { createNewWorkspaceWithPrompt } from '@renderer/code/files/new-file'
+import { exportSubmissionPDF } from '@renderer/code/pdf/exportSubmission'
 
 const modalStore = useModalStore()
 const sidepanelStore = useSidepanelStore()
@@ -427,258 +434,16 @@ const handleSaveFileAs = async (): Promise<void> => {
 }
 
 const handleSavePDFForSubmission = async (): Promise<void> => {
-  // Declare state variables outside try block for access in catch
-  let wasA4Preview = false
-  let wasDarkMode = false
-  let wasShowingMetadata = false
-
-  try {
-    // Save current states
-    wasA4Preview = menubarStore.isA4Preview
-    wasDarkMode = themeStore.isDarkMode
-    wasShowingMetadata = generalSettingsStore.showUserMetadataInA4PreviewGetter
-
-    // Enable metadata display for PDF export
-    if (!wasShowingMetadata) {
-      generalSettingsStore.setShowUserMetadataInA4Preview(true)
-      await nextTick()
-    }
-
-    // Switch to A4 preview mode if not already
-    if (!wasA4Preview) {
-      menubarStore.toggleA4Preview()
-      // Wait for the layout to render
-      await nextTick()
-      await new Promise((resolve) => setTimeout(resolve, 100))
-    }
-
-    // Switch to light mode if in dark mode
-    if (wasDarkMode) {
-      themeStore.toggleIsDarkMode()
-      // Wait for theme to apply
-      await nextTick()
-      await new Promise((resolve) => setTimeout(resolve, 100))
-    }
-
-    // Scroll to top to ensure content is loaded
-    const scrollContainer = document.querySelector('.scroll-container')
-    if (scrollContainer) {
-      scrollContainer.scrollTop = 0
-    }
-
-    // Wait a bit more to ensure all content is rendered
-    await new Promise((resolve) => setTimeout(resolve, 200))
-
-    // Generate filename with timestamp
-    const now = new Date()
-    const timestamp = now.toISOString().replace(/[:.]/g, '-').split('T')[0]
-    const fileName = `Luna-Submission-${timestamp}.pdf`
-
-    // Add a print-specific style to hide everything except cell-containers-list
-    const printStyle = document.createElement('style')
-    printStyle.id = 'pdf-print-style'
-    printStyle.textContent = `
-      @media print {
-        /* Hide chrome outside the workspace */
-        #app-layout > :not(.scroll-container) {
-          display: none !important;
-        }
-
-        html, body {
-          margin: 0 !important;
-          padding: 0 !important;
-          background: white !important;
-        }
-
-        #app-layout {
-          display: block !important;
-          height: auto !important;
-          min-height: auto !important;
-          width: auto !important;
-        }
-
-        #app-layout .scroll-container {
-          display: block !important;
-          height: auto !important;
-          min-height: auto !important;
-          overflow: visible !important;
-          flex: none !important;
-        }
-        
-        /* Explicitly show the metadata header (it's positioned outside cell-containers-list) 
-        .a4-user-metadata-header,
-        .a4-user-metadata-header * {
-          visibility: visible !important;
-          position: fixed !important;
-          top: 0 !important;
-          display: block !important;
-          margin: 0 0 0 0 !important;
-        }*/
-        
-        /* Position cell list for printing */
-        .cell-containers-list {
-          position: static !important;
-          width: 210mm !important;
-          min-width: 210mm !important;
-          margin: 0 !important;
-          box-shadow: none !important;
-          page-break-after: auto !important;
-          padding: 25mm 20mm !important;
-          
-          
-          /* Provide top padding to mirror in-app layout margins */
-          background-image: none !important;
-          transform: none !important;
-          box-sizing: border-box !important;
-        }
-        
-        /* Apply consistent margins to all pages */
-        @page {
-          size: A4;
-          margin: 0;
-        }
-        
-        /* Ensure parent containers don't constrain height */
-        .workspace-a4-preview-layout-container {
-          background: white !important;
-          padding: 0 !important;
-          overflow: visible !important;
-          height: auto !important;
-          position: static !important;
-        }
-        
-        /* Allow page breaks at appropriate places */
-        /* Ensure explicit page break cells force a new page when printing */
-        .cell[data-kind="page-break"] {
-          display: block !important;
-          border: none !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          height: 0 !important;
-          min-height: 0 !important;
-          page-break-after: always !important;
-          break-after: page !important;
-        }
-
-        .cell[data-kind="page-break"] .cell__gutter {
-          display: none !important;
-        }
-
-        .cell[data-kind="page-break"] .cell__content {
-          padding: 0 !important;
-          margin: 0 !important;
-        }
-
-        .cell[data-kind="page-break"] .page-break {
-          display: block !important;
-          height: 0 !important;
-          min-height: 0 !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          border: none !important;
-          background: none !important;
-          page-break-after: always !important;
-          break-after: page !important;
-        }
-
-        .cell[data-kind="page-break"] + .cell:not([data-kind="page-break"]) {
-          margin-top: 25mm !important;
-          page-break-before: always !important;
-        }
-
-        /* Reflow cells for print so tall content extends naturally */
-        .cell {
-          display: block !important;
-          overflow: visible !important;
-          width: 100% !important;
-          box-sizing: border-box !important;
-        }
-
-        .cell__gutter {
-          display: none !important;
-        }
-
-        .cell__content {
-          display: block !important;
-          width: 100% !important;
-        }
-
-        /* Ensure all content is visible */
-        html, body {
-          height: auto !important;
-          overflow: visible !important;
-        }
-      }
-    `
-    document.head.appendChild(printStyle)
-
-    // Save via Electron API using native printToPDF
-    if (window.api && typeof window.api.savePDF === 'function') {
-      const result = await window.api.savePDF({ fileName })
-
-      // Remove the print style
-      const styleElement = document.getElementById('pdf-print-style')
-      if (styleElement) {
-        styleElement.remove()
-      }
-
-      // Restore original modes
-      if (!wasShowingMetadata) {
-        generalSettingsStore.setShowUserMetadataInA4Preview(false)
-        await nextTick()
-      }
-      if (!wasA4Preview) {
-        menubarStore.toggleA4Preview()
-        await nextTick()
-      }
-      if (wasDarkMode) {
-        themeStore.toggleIsDarkMode()
-        await nextTick()
-      }
-
-      if (result.success) {
-        console.log('PDF saved successfully to:', result.filePath)
-        // Optionally show success message to user
-        if (window.electron && typeof window.electron.confirmYesNo === 'function') {
-          await window.electron.confirmYesNo(`PDF saved successfully to: ${result.filePath}`)
-        }
-      } else if (!result.canceled) {
-        console.error('Failed to save PDF:', result.error)
-        if (window.electron && typeof window.electron.confirmYesNo === 'function') {
-          await window.electron.confirmYesNo(`PDF export failed: ${result.error}`)
-        }
-      }
-    } else {
-      console.error('PDF save API not available')
-      if (window.electron && typeof window.electron.confirmYesNo === 'function') {
-        await window.electron.confirmYesNo('PDF save API not available')
-      }
-    }
-  } catch (error) {
-    console.error('Error exporting PDF:', error)
-    // Clean up and restore on error
-    const styleElement = document.getElementById('pdf-print-style')
-    if (styleElement) {
-      styleElement.remove()
-    }
-
-    // Restore original settings
-    if (!wasShowingMetadata) {
-      generalSettingsStore.setShowUserMetadataInA4Preview(false)
-    }
-    if (!wasA4Preview) {
-      menubarStore.toggleA4Preview()
-    }
-    if (wasDarkMode) {
-      themeStore.toggleIsDarkMode()
-    }
-
-    if (window.electron && typeof window.electron.confirmYesNo === 'function') {
-      await window.electron.confirmYesNo(
-        `PDF export failed: ${error instanceof Error ? error.message : String(error)}`
-      )
-    }
-  }
+  await exportSubmissionPDF({
+    menubarStore,
+    themeStore,
+    generalSettingsStore,
+    nextTick
+  })
+}
+const handleSavePDFForHandout = async (): Promise<void> => {
+  // Placeholder for future implementation
+  console.warn('Save PDF for Handout is not implemented yet.')
 }
 
 const handleAboutLuna = (): void => {
@@ -719,7 +484,6 @@ function scrollSelectedCellIntoView(): void {
     console.debug('Could not scroll cell into view:', error)
   }
 }
-
 // Edit handlers
 const handleMoveCellUp = (): void => {
   const ok = workspaceStore.moveSelectedCellUp()
