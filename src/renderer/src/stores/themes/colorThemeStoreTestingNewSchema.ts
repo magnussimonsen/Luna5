@@ -86,7 +86,7 @@ type Palette = {
   TextPrimary: DualColor
   TextMuted: DualColor
   TextLink: DualColor
-  
+
   Divider: DualColor
 
   BasicHover: DualColor
