@@ -156,7 +156,7 @@ export const useThemeStore = defineStore('theme', {
       a4MetadataEmailColor: '#aaaaaa',
 
       // Sidepanels
-      sidepanelBackground: '#444444',
+      sidepanelBackground: '#333333',
       sidepanelBorderColor: '#111111',
       resizeRailColor: 'darkgreen',
       resizeRailLineColor: 'rgba(255, 255, 255, 0.45)',

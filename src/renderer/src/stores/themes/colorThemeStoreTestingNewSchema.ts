@@ -28,12 +28,18 @@ type DualColor = { light: string; dark: string }
 export type ThemeColorTypesV2 = Record<string, string>
 
 /**
- * Descriptive palette keys
+ * Descriptive palette keys (edit here only for now. Move to /types later)
  */
 type Palette = {
   PrimaryBg: DualColor
   SecondaryBg: DualColor
   TertiaryBg: DualColor
+  //QuaternaryBg: DualColor
+
+  PrimaryAccent: DualColor
+  SecondaryAccent: DualColor
+  TertiaryAccent: DualColor
+  //QuaternaryAccent: DualColor
 
   WebLayoutBg: DualColor
   A4LayoutBg: DualColor
@@ -58,18 +64,21 @@ type Palette = {
   CellSelectedBorder: DualColor
   CellNotSelectedBorder: DualColor
 
-  PrimaryAccent: DualColor
-  SecondaryAccent: DualColor
-  TertiaryAccent: DualColor
-
   SelectedButtonBorder: DualColor
   NotSelectedButtonBorder: DualColor
   PanelBorder: DualColor
 
+  //resizeRailColor: DualColor
+  //resizeRailLineColor: DualColor
+
   PrimarySuccess: DualColor
+  //PrimarySuccsessHover: DualColor
   SecondarySuccess: DualColor
+  //SecondarySuccessHover: DualColor
   Warning: DualColor
+  //WarningHover: DualColor
   Danger: DualColor
+  //DangerHover: DualColor
   Info: DualColor
   Selected: DualColor
   Disabled: DualColor
@@ -77,9 +86,10 @@ type Palette = {
   TextPrimary: DualColor
   TextMuted: DualColor
   TextLink: DualColor
+  
   Divider: DualColor
 
-  Hover: DualColor
+  BasicHover: DualColor
   KatexHoverBg: DualColor
 
   ScrollbarThumb: DualColor
@@ -94,7 +104,7 @@ type Palette = {
 }
 
 // ----------------------
-// Unified palette (edit here only)
+// Unified palette definition
 // ----------------------
 const basePalette: Palette = {
   PrimaryBg: { light: '#ffffff', dark: '#222222' },
@@ -145,7 +155,7 @@ const basePalette: Palette = {
   TextLink: { light: '#3b82f6', dark: '#60a5fa' },
   Divider: { light: 'gainsboro', dark: '#444444' },
 
-  Hover: { light: '#e5e7eb', dark: '#3a3a3a' },
+  BasicHover: { light: '#e5e7eb', dark: '#3a3a3a' },
   KatexHoverBg: { light: '#f0f9ff', dark: '#1e293b' },
 
   ScrollbarThumb: { light: 'gray', dark: '#555555' },
