@@ -87,8 +87,21 @@
         type="email"
         :class="{ 'sidepanel__setting-row--dark-mode': themeStore.isDarkMode }"
         placeholder="Enter email address"
+        @blur="validateEmail"
       />
       <ImplementedMark :implemented="true" />
+    </div>
+    <div
+      v-if="emailError"
+      style="
+        color: #f48771;
+        font-size: 0.9em;
+        margin-top: -8px;
+        margin-bottom: 8px;
+        padding-left: 8px;
+      "
+    >
+      {{ emailError }}
     </div>
 
     <div :class="['sidepanel__selector-row-with-gap-and-x-padding', 'sidepanel-bottom-row-margin']">
@@ -233,7 +246,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useLanguageStore } from '@renderer/stores/language/languageStore'
@@ -242,6 +255,7 @@ import { AutosaveOption } from '@renderer/types/auto-save-options-types'
 import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { fontSizeOptions, useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
+import { validateEmailWithMessage } from '@renderer/code/notebook-core/utils/emailValidation'
 
 const generalSettingsStore = useGeneralSettingsStore()
 const workspaceStore = useWorkspaceStore()
@@ -249,6 +263,8 @@ const languageStore = useLanguageStore()
 const themeStore = useThemeStore()
 const fontSizeStore = useFontSizeStore()
 const fontStore = useFontStore()
+
+const emailError = ref<string>('')
 
 const autosaveOptions: { label: string; value: AutosaveOption }[] = [
   { label: 'Off', value: 0 },
@@ -261,20 +277,24 @@ const autosaveOptions: { label: string; value: AutosaveOption }[] = [
   { label: 'After 100 changes', value: 100 }
 ]
 
+const validateEmail = (): void => {
+  emailError.value = validateEmailWithMessage(ownerEmail.value, false)
+}
+
 // Owner metadata computed properties
 const ownerFirstName = computed({
   get: () => workspaceStore.getPrimaryOwnerMetadata()?.firstName ?? '',
   set: (value: string) => {
     const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
     workspaceStore.setOwnerMetadata('primary', {
-      ...currentMetadata,
       id: currentMetadata?.id ?? 'primary',
       firstName: value,
       middleName: currentMetadata?.middleName ?? '',
       lastName: currentMetadata?.lastName ?? '',
       email: currentMetadata?.email ?? '',
       phoneNumber: currentMetadata?.phoneNumber ?? '',
-      organization: currentMetadata?.organization ?? ''
+      organization: currentMetadata?.organization ?? '',
+      showUserMetadataInA4Preview: currentMetadata?.showUserMetadataInA4Preview ?? true
     })
   }
 })
@@ -284,14 +304,14 @@ const ownerMiddleName = computed({
   set: (value: string) => {
     const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
     workspaceStore.setOwnerMetadata('primary', {
-      ...currentMetadata,
       id: currentMetadata?.id ?? 'primary',
       firstName: currentMetadata?.firstName ?? '',
       middleName: value,
       lastName: currentMetadata?.lastName ?? '',
       email: currentMetadata?.email ?? '',
       phoneNumber: currentMetadata?.phoneNumber ?? '',
-      organization: currentMetadata?.organization ?? ''
+      organization: currentMetadata?.organization ?? '',
+      showUserMetadataInA4Preview: currentMetadata?.showUserMetadataInA4Preview ?? true
     })
   }
 })
@@ -301,14 +321,14 @@ const ownerLastName = computed({
   set: (value: string) => {
     const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
     workspaceStore.setOwnerMetadata('primary', {
-      ...currentMetadata,
       id: currentMetadata?.id ?? 'primary',
       firstName: currentMetadata?.firstName ?? '',
       middleName: currentMetadata?.middleName ?? '',
       lastName: value,
       email: currentMetadata?.email ?? '',
       phoneNumber: currentMetadata?.phoneNumber ?? '',
-      organization: currentMetadata?.organization ?? ''
+      organization: currentMetadata?.organization ?? '',
+      showUserMetadataInA4Preview: currentMetadata?.showUserMetadataInA4Preview ?? true
     })
   }
 })
@@ -318,14 +338,14 @@ const ownerEmail = computed({
   set: (value: string) => {
     const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
     workspaceStore.setOwnerMetadata('primary', {
-      ...currentMetadata,
       id: currentMetadata?.id ?? 'primary',
       firstName: currentMetadata?.firstName ?? '',
       middleName: currentMetadata?.middleName ?? '',
       lastName: currentMetadata?.lastName ?? '',
       email: value,
       phoneNumber: currentMetadata?.phoneNumber ?? '',
-      organization: currentMetadata?.organization ?? ''
+      organization: currentMetadata?.organization ?? '',
+      showUserMetadataInA4Preview: currentMetadata?.showUserMetadataInA4Preview ?? true
     })
   }
 })

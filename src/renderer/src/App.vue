@@ -10,6 +10,7 @@ import CellList from '@renderer/components/conteiners/CellList.vue'
 import Statusbar from '@renderer/components/navigation-bars/Statusbar.vue'
 import Sidepanel from '@renderer/components/sidepanel/Sidepanel.vue'
 import AboutLunaModal from '@renderer/components/modals/AboutLunaModal.vue'
+import StudentInfoModal from '@renderer/components/modals/StudentInfoModal.vue'
 import KatexInputModal from '@renderer/components/modals/katex-input/KatexInputModal.vue'
 //import A4UserMetadataHeader from '@renderer/components/workspace/A4UserMetadataHeader.vue'
 import { useModalStore } from '@renderer/stores/UI/modalStore'
@@ -20,6 +21,7 @@ import { useModalStore } from '@renderer/stores/UI/modalStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
+import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { computed, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useToolbarStore } from '@renderer/stores/UI/toolbarStore'
 import { useSidepanelStore } from '@renderer/stores/UI/sidepanelStore'
@@ -28,12 +30,14 @@ import { storeToRefs } from 'pinia'
 import { autosaveWatchFunction } from '@renderer/utils/save-and-load/autosave-watch-function'
 import { useTextEditorsStore } from '@renderer/stores/editors/textEditorsStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
+import { exportSubmissionPDF } from '@renderer/code/pdf/exportSubmission'
 // import { useZoomStatesStore } from '@renderer/stores/UI/zoomStatesStore'
 
 import type { Editor } from '@tiptap/vue-3'
 import BottomPanel from './components/bottompanel/BottomPanelBase.vue'
 
 const menubarStore = useMenubarStore()
+const themeStore = useThemeStore()
 const toolbarStore = useToolbarStore()
 const sidepanelStore = useSidepanelStore()
 // const zoomStatesStore = useZoomStatesStore()
@@ -141,6 +145,17 @@ function handleKatexInsert(payload: { latex: string; mode: 'inline' | 'block' })
     console.warn('[KaTeX modal] Failed to insert math expression.', error)
   }
 }
+
+async function handleStudentInfoSubmitted(): Promise<void> {
+  await nextTick()
+  await exportSubmissionPDF({
+    menubarStore,
+    themeStore,
+    generalSettingsStore,
+    workspaceStore,
+    nextTick
+  })
+}
 </script>
 <template>
   <div id="app-layout">
@@ -167,6 +182,11 @@ function handleKatexInsert(payload: { latex: string; mode: 'inline' | 'block' })
     <BottomPanel />
     <!-- Global modals (kept at root so they can render overlays) -->
     <AboutLunaModal v-if="modalStore.isAboutLunaModalOpen" />
+    <StudentInfoModal
+      v-if="modalStore.isStudentInfoModalOpen"
+      @submitted="handleStudentInfoSubmitted"
+      @cancelled="modalStore.closeStudentInfoModal"
+    />
     <KatexInputModal
       v-if="modalStore.isKatexInputModalOpen"
       @insert="handleKatexInsert"

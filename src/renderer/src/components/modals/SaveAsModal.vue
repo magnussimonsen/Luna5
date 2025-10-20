@@ -2,6 +2,7 @@
   IS THIS MODAL USED?
   SaveAsModal.vue
   A modal dialog component for saving the current workspace with a specified filename and location.
+  Not used, but can be used as a basis for future save-as functionality.
 -->
 
 <template>

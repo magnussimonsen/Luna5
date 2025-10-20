@@ -9,6 +9,8 @@ export const useModalStore = defineStore('modal', () => {
   const isSettingsModalOpen = ref(false)
   // State for Save As modal
   const isSaveAsModalOpen = ref(false)
+  // State for Student Info modal
+  const isStudentInfoModalOpen = ref(false)
   // State for Katex Input modal
   const isKatexInputModalOpen = ref(false)
   const katexInsertionMode = ref<'inline' | 'block'>('inline')
@@ -40,6 +42,12 @@ export const useModalStore = defineStore('modal', () => {
   }
   function closeSaveAsModal(): void {
     isSaveAsModalOpen.value = false
+  }
+  function openStudentInfoModal(): void {
+    isStudentInfoModalOpen.value = true
+  }
+  function closeStudentInfoModal(): void {
+    isStudentInfoModalOpen.value = false
   }
 
   /* Katex Input Modal*/
@@ -91,6 +99,9 @@ export const useModalStore = defineStore('modal', () => {
     isSaveAsModalOpen,
     openSaveAsModal,
     closeSaveAsModal,
+    isStudentInfoModalOpen,
+    openStudentInfoModal,
+    closeStudentInfoModal,
     isKatexInputModalOpen,
     katexInsertionMode,
     katexInitialLatex,

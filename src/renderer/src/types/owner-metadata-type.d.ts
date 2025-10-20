@@ -8,5 +8,5 @@ export interface ownerMetadataRecord {
   phoneNumber: string
   organization: string
   // Add any other relevant fields
-  showUserMetadataInA4Preview?: boolean // New optional field
+  showUserMetadataInA4Preview?: boolean // New optional field (is this needed here? We have it in settingsStore)
 }

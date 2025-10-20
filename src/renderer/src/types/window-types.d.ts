@@ -13,6 +13,7 @@ interface ElectronAPI {
     // Add other ipcRenderer methods as needed
   }
   confirmYesNo?: (message: string) => Promise<boolean>
+  showInfo?: (message: string) => Promise<void>
   quitApp?: (opts?: { isSaved?: boolean; isEffectivelyEmpty?: boolean }) => Promise<void>
 }
 
@@ -47,6 +48,9 @@ interface AppAPI {
     error?: string
     canceled?: boolean
   }>
+
+  // Paths
+  getDesktopPath: () => Promise<string | null>
 
   // Compression and decompression
   compressData: (opts: { data: string }) => Promise<string>

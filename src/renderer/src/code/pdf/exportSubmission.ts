@@ -1,3 +1,6 @@
+import type { Workspace } from '@renderer/code/notebook-core/model/schema'
+import { createSubmissionPdfFileName } from '@renderer/code/notebook-core/utils/create-file-names'
+
 interface MenubarStoreLike {
   isA4Preview: boolean
   toggleA4Preview(): void
@@ -13,10 +16,15 @@ interface GeneralSettingsStoreLike {
   setShowUserMetadataInA4Preview(value: boolean): void
 }
 
+interface WorkspaceStoreLike {
+  getWorkspace(): Workspace
+}
+
 interface ExportSubmissionDependencies {
   menubarStore: MenubarStoreLike
   themeStore: ThemeStoreLike
   generalSettingsStore: GeneralSettingsStoreLike
+  workspaceStore: WorkspaceStoreLike
   nextTick: NextTickFn
 }
 
@@ -24,16 +32,11 @@ type NextTickFn = (callback?: () => void) => Promise<void>
 
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
 
-const createTimestampedFilename = (): string => {
-  const now = new Date()
-  const timestamp = now.toISOString().replace(/[:.]/g, '-').split('T')[0]
-  return `Luna-Submission-${timestamp}.pdf`
-}
-
 export async function exportSubmissionPDF({
   menubarStore,
   themeStore,
   generalSettingsStore,
+  workspaceStore,
   nextTick
 }: ExportSubmissionDependencies): Promise<void> {
   let wasA4Preview = false
@@ -81,27 +84,28 @@ export async function exportSubmissionPDF({
       throw new Error('PDF save API not available')
     }
 
-    const fileName = createTimestampedFilename()
+    const workspace = workspaceStore.getWorkspace()
+    const fileName = createSubmissionPdfFileName(workspace)
 
     restoreMonacoStyles = temporarilyForceMonacoStylesForPrint()
     const result = await window.api.savePDF({ fileName })
 
     if (result.success) {
       console.log('PDF saved successfully to:', result.filePath)
-      if (window.electron && typeof window.electron.confirmYesNo === 'function') {
-        await window.electron.confirmYesNo(`PDF saved successfully to: ${result.filePath}`)
+      if (window.electron && typeof window.electron.showInfo === 'function') {
+        await window.electron.showInfo(`PDF saved successfully to: ${result.filePath}`)
       }
     } else if (!result.canceled) {
       console.error('Failed to save PDF:', result.error)
-      if (window.electron && typeof window.electron.confirmYesNo === 'function') {
-        await window.electron.confirmYesNo(`PDF export failed: ${result.error}`)
+      if (window.electron && typeof window.electron.showInfo === 'function') {
+        await window.electron.showInfo(`PDF export failed: ${result.error}`)
       }
     }
   } catch (error) {
     console.error('Error exporting PDF:', error)
-    if (window.electron && typeof window.electron.confirmYesNo === 'function') {
-      await window.electron.confirmYesNo(
-        `PDF export failed: ${error instanceof Error ? error.message : String(error)}`
+    if (window.electron && typeof window.electron.showInfo === 'function') {
+      await window.electron.showInfo(
+        `Error exporting PDF: ${error instanceof Error ? error.message : String(error)}`
       )
     }
   } finally {

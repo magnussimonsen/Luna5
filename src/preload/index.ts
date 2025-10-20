@@ -18,6 +18,9 @@ const rendererApi = {
   // PDF export
   savePDF: (opts: { fileName?: string }) => ipcRenderer.invoke('save-pdf', opts),
 
+  // Paths
+  getDesktopPath: () => ipcRenderer.invoke('get-desktop-path'),
+
   // Compression and decompression handlers
   compressData: (opts: { data: string }) => ipcRenderer.invoke('compress-data', opts),
   decompressData: (opts: { data: string }) => ipcRenderer.invoke('decompress-data', opts),
@@ -38,7 +41,8 @@ if (process.contextIsolated) {
         ipcRenderer.invoke('quit-app', opts),
       confirmEmptyBin: (): Promise<boolean> => ipcRenderer.invoke('confirm-empty-bin'),
       confirmYesNo: (message: string): Promise<boolean> =>
-        ipcRenderer.invoke('confirm-yes-no', message)
+        ipcRenderer.invoke('confirm-yes-no', message),
+      showInfo: (message: string): Promise<void> => ipcRenderer.invoke('show-info-dialog', message)
     })
     contextBridge.exposeInMainWorld('api', rendererApi)
   } catch (error) {

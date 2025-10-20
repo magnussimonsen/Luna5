@@ -24,6 +24,7 @@ export const useThemeStore = defineStore('theme', {
       appBackground: '#ffffff',
       webWorkspaceBackground: '#FFFFFF',
       webWorkspaceBorderColor: 'gainsboro',
+      modalBackground: '#ffffff',
 
       // Menu / Toolbar
       menuBackground: 'gainsboro',
@@ -81,6 +82,7 @@ export const useThemeStore = defineStore('theme', {
       buttonBorderHoverColor: 'black',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'lightgreen',
+      buttonOnColorHover: 'limegreen',
       buttonBorderOnColor: 'lightgreen',
       buttonHardOffColor: 'darksalmon',
 
@@ -143,6 +145,7 @@ export const useThemeStore = defineStore('theme', {
       appBackground: '#222222',
       webWorkspaceBackground: '#222222',
       webWorkspaceBorderColor: '#444444',
+      modalBackground: '#222222',
 
       // Menu / Toolbar
       menuBackground: '#111111',
@@ -203,6 +206,7 @@ export const useThemeStore = defineStore('theme', {
       buttonBorderHoverColor: 'whitesmoke',
       buttonTransparentOffColor: 'transparent',
       buttonOnColor: 'darkgreen',
+      buttonOnColorHover: 'forestgreen',
       buttonBorderOnColor: 'darkgreen',
       buttonHardOffColor: 'darkred',
 
@@ -288,6 +292,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--app-background', colors.appBackground)
       root.style.setProperty('--web-workspace-background', colors.webWorkspaceBackground)
       root.style.setProperty('--web-workspace-border-color', colors.webWorkspaceBorderColor)
+      root.style.setProperty('--modal-background-color', colors.modalBackground)
 
       // Menu / Toolbar
       root.style.setProperty('--menu-background', colors.menuBackground)
@@ -366,6 +371,7 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--button-border-hover-color', colors.buttonBorderHoverColor)
       root.style.setProperty('--button-on-color', colors.buttonOnColor)
       root.style.setProperty('--button-border-on-color', colors.buttonBorderOnColor)
+      root.style.setProperty('--button-on-color-hover', colors.buttonOnColorHover)
       root.style.setProperty('--button-transparent-off-color', colors.buttonTransparentOffColor)
       root.style.setProperty('--button-hard-off-color', colors.buttonHardOffColor)
 

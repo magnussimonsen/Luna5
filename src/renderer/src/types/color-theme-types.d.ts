@@ -23,6 +23,7 @@ export type ThemeColorTypes = {
   appBackground: string
   webWorkspaceBackground: string
   webWorkspaceBorderColor: string
+  modalBackground: string
 
   // Menu / Toolbar
   menuBackground: string
@@ -82,6 +83,7 @@ export type ThemeColorTypes = {
 
   // Toggle button states
   buttonOnColor: string
+  buttonOnColorHover: string
   buttonBorderOnColor: string
   buttonHardOffColor: string
 

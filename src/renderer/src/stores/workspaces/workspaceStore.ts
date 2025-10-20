@@ -1202,13 +1202,23 @@ export const useWorkspaceStore = defineStore('workspace', {
         if (!workspace.ownerMetadata) {
           workspace.ownerMetadata = {}
         }
-        workspace.ownerMetadata[ownerId] = metadata
+        const normalizedOwnerId = ownerId === 'primary-owner' ? 'primary' : ownerId
+        const normalizedMetadata: ownerMetadataRecord = {
+          ...metadata,
+          id: metadata.id === 'primary-owner' ? 'primary' : metadata.id || normalizedOwnerId
+        }
+        workspace.ownerMetadata[normalizedOwnerId] = normalizedMetadata
+        if (
+          normalizedOwnerId === 'primary' &&
+          Object.prototype.hasOwnProperty.call(workspace.ownerMetadata, 'primary-owner')
+        ) {
+          delete workspace.ownerMetadata['primary-owner']
+        }
         this.markAsUnsaved()
       } catch {
         /* ignore */
       }
     },
-
     /**
      * THERE CAN BE ONLY ONE SO WE DO NOT NEED THIS?
      */
@@ -1216,8 +1226,17 @@ export const useWorkspaceStore = defineStore('workspace', {
       try {
         const workspace = this.getWorkspace()
         if (!workspace.ownerMetadata) return null
-        const firstKey = Object.keys(workspace.ownerMetadata)[0]
-        return firstKey ? workspace.ownerMetadata[firstKey] : null
+        const keys = Object.keys(workspace.ownerMetadata)
+        if (!keys.length) return null
+        const preferredKey = workspace.ownerMetadata['primary'] ? 'primary' : keys[0]
+        const record = workspace.ownerMetadata[preferredKey]
+        if (preferredKey !== 'primary' && workspace.ownerMetadata['primary']) {
+          return workspace.ownerMetadata['primary']
+        }
+        if (!record && workspace.ownerMetadata['primary-owner']) {
+          return workspace.ownerMetadata['primary-owner']
+        }
+        return record ?? null
       } catch {
         return null
       }

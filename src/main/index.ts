@@ -12,6 +12,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { registerQuitAppHandler } from '../renderer/src/code/ipc-main-handle-functions/quitAppHandler'
 import { registerConfirmEmptyBinHandler } from '../renderer/src/code/ipc-main-handle-functions/confirmEmptyBinHandler'
 import { registerConfirmYesNoHandler } from '../renderer/src/code/ipc-main-handle-functions/show-confirm-yes-no-dialog'
+import { registerShowInfoDialogHandler } from '../renderer/src/code/ipc-main-handle-functions/showInfoDialogHandler'
 import { registerCompressDataHandler } from '../renderer/src/code/ipc-main-handle-functions/compress-data'
 import { registerDecompressDataHandler } from '../renderer/src/code/ipc-main-handle-functions/decompress-data'
 import { registerPickImageFileHandler } from '../renderer/src/code/ipc-main-handle-functions/pickImageFileHandler'
@@ -121,6 +122,7 @@ app.whenReady().then(() => {
   registerQuitAppHandler()
   registerConfirmEmptyBinHandler()
   registerConfirmYesNoHandler()
+  registerShowInfoDialogHandler()
   registerCompressDataHandler()
   registerDecompressDataHandler()
 
@@ -236,6 +238,16 @@ app.whenReady().then(() => {
       }
     }
   )
+
+  ipcMain.handle('get-desktop-path', async () => {
+    try {
+      return app.getPath('desktop')
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.error('Failed to retrieve desktop path:', message)
+      return null
+    }
+  })
 
   // Check if a file path exists (used by Save to current file without prompting)
   ipcMain.handle('file-exists', async (_event, { filePath }: { filePath: string }) => {

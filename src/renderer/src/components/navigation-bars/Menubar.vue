@@ -31,7 +31,7 @@
         Save File As <span class="menubar-shortcut-not-implemented">Ctrl + Shift + s</span>
         <ImplementedMark :implemented="true" />
       </div>
-       <div class="menubar-dropdown-item" @click="handleSavePDFForHandout">
+      <div class="menubar-dropdown-item" @click="handleSavePDFForHandout">
         <em>For teachers: Save PDF for Handout</em>
         <span class="menubar-shortcut-not-implemented">Ctrl + Alt + h</span>
         <ImplementedMark :implemented="false" />
@@ -336,14 +336,12 @@ import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
-import { useGeneralSettingsStore } from '@renderer/stores/settings/generalSettingsStore'
 import { computed, ref, nextTick } from 'vue'
 import '@renderer/css/media-print-css/media-print.css'
 import { saveAsCurrentWorkspace } from '@renderer/code/files/save-as'
 import { saveOrSaveAs } from '@renderer/code/files/save-file'
 import { openWorkspaceFromDisk } from '@renderer/code/files/open-file'
 import { createNewWorkspaceWithPrompt } from '@renderer/code/files/new-file'
-import { exportSubmissionPDF } from '@renderer/code/pdf/exportSubmission'
 
 const modalStore = useModalStore()
 const sidepanelStore = useSidepanelStore()
@@ -353,7 +351,6 @@ const themeStore = useThemeStore()
 const menubarStore = useMenubarStore()
 const workspaceStore = useWorkspaceStore()
 const cellSelectionStore = useCellSelectionStore()
-const generalSettingsStore = useGeneralSettingsStore()
 // ref to Insert dropdown menu to programmatically close after action
 const insertMenu = ref<{ closeDropdown: () => void } | null>(null)
 // Computed properties
@@ -433,13 +430,8 @@ const handleSaveFileAs = async (): Promise<void> => {
   if (!res.success) console.warn('Save As canceled or failed', res.error)
 }
 
-const handleSavePDFForSubmission = async (): Promise<void> => {
-  await exportSubmissionPDF({
-    menubarStore,
-    themeStore,
-    generalSettingsStore,
-    nextTick
-  })
+const handleSavePDFForSubmission = (): void => {
+  modalStore.openStudentInfoModal()
 }
 const handleSavePDFForHandout = async (): Promise<void> => {
   // Placeholder for future implementation

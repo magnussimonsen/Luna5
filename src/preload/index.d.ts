@@ -40,6 +40,9 @@ declare global {
         canceled?: boolean
       }>
 
+      // Paths
+      getDesktopPath: () => Promise<string | null>
+
       // Compression and decompression
       compressData: (opts: { data: string }) => Promise<string>
       decompressData: (opts: { data: string }) => Promise<string>
