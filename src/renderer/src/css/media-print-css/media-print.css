@@ -31,10 +31,6 @@
 		flex: none !important;
 	}
 
-	:root {
-		--print-header-offset: 0mm;
-	}
-
 	/* Position cell list for printing */
 	.cell-containers-list {
 		position: relative !important;
@@ -51,8 +47,13 @@
 	/* Apply consistent margins to all pages */
 	@page {
 		size: A4;
-		margin: 25mm 20mm 25mm 20mm;
+		margin: 25mm 0mm 25mm 0mm;
 	}
+
+	@page :first {
+       margin-top: 0mm; /* To give room for header */
+	   margin-bottom: 25mm;
+    }
 
 	/* Ensure parent containers don't constrain height */
 	.workspace-a4-preview-layout-container {
