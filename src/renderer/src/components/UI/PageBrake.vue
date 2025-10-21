@@ -10,8 +10,13 @@ import { computed, ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 
 const MM_TO_PX = 96 / 25.4
-const A4_HEIGHT_PX = 297 * MM_TO_PX // A4 height expressed via conversion from millimetres
-const A4_TOP_MARGIN_PX = 25 * MM_TO_PX // Top padding (25 mm) converted to pixels
+const A4_HEIGHT_PX = 297 * MM_TO_PX // Full A4 page height in px
+const A4_TOP_MARGIN_PX = 25 * MM_TO_PX // Top margin/padding (25 mm)
+const A4_BOTTOM_MARGIN_PX = 25 * MM_TO_PX // Bottom margin/padding (25 mm)
+// Content band heights matching preview/print: first page has no top margin (header) but 25mm bottom
+const FIRST_PAGE_CONTENT_HEIGHT_PX = A4_HEIGHT_PX - A4_BOTTOM_MARGIN_PX // 272mm
+// Subsequent pages have 25mm top and 25mm bottom
+const OTHER_PAGE_CONTENT_HEIGHT_PX = A4_HEIGHT_PX - A4_TOP_MARGIN_PX - A4_BOTTOM_MARGIN_PX // 247mm
 
 const menubarStore = useMenubarStore()
 const pageBreakEl = ref<HTMLElement | null>(null)
@@ -38,20 +43,27 @@ const calculateFillHeight = (): void => {
     const pageBreakRect = pageBreakEl.value.getBoundingClientRect()
     const cellListRect = cellList.getBoundingClientRect()
 
-    // Position within the cell list container (0 = top of cell list)
+    // Position within the cell list container (0 = top of paper)
     const positionInContainer = pageBreakRect.top - cellListRect.top
 
-    // Position within the A4 page content area (accounting for top margin)
-    const positionInPage = positionInContainer - A4_TOP_MARGIN_PX
+    // Measure from the first page's content start (i.e., skip the paper's 25mm top padding)
+    const positionFromFirstContentStart = positionInContainer - A4_TOP_MARGIN_PX
 
-    // Determine which page we're on and the position within that page
-    const currentPageNumber = Math.floor(positionInPage / A4_HEIGHT_PX)
-    const nextPageBoundary = (currentPageNumber + 1) * A4_HEIGHT_PX
+    let remainingHeightPx = 0
+    if (positionFromFirstContentStart <= FIRST_PAGE_CONTENT_HEIGHT_PX) {
+      // Still on first page's content band
+      remainingHeightPx = FIRST_PAGE_CONTENT_HEIGHT_PX - positionFromFirstContentStart
+    } else {
+      // Past the first page's content band: use repeating bands of OTHER_PAGE_CONTENT_HEIGHT_PX
+      const afterFirst = positionFromFirstContentStart - FIRST_PAGE_CONTENT_HEIGHT_PX
+      const pagesAfter = Math.floor(afterFirst / OTHER_PAGE_CONTENT_HEIGHT_PX)
+      const nextBoundaryFromFirstStart =
+        FIRST_PAGE_CONTENT_HEIGHT_PX + (pagesAfter + 1) * OTHER_PAGE_CONTENT_HEIGHT_PX
+      remainingHeightPx = nextBoundaryFromFirstStart - positionFromFirstContentStart
+    }
 
-    // Calculate remaining space to fill (distance from current position to next page boundary)
-    const remainingHeight = Math.max(0, nextPageBoundary - positionInPage)
-
-    calculatedHeight.value = `${remainingHeight}px`
+    const clamped = Math.max(0, remainingHeightPx)
+    calculatedHeight.value = `${clamped}px`
   } catch (error) {
     console.warn('[PageBreak] Height calculation failed:', error)
     calculatedHeight.value = 'auto'

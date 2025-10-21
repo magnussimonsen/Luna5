@@ -114,8 +114,10 @@
 	}
 
 	.cell[data-kind='page-break'] + .cell:not([data-kind='page-break']) {
-		margin-top: 25mm !important;
-		page-break-before: always !important;
+		/* Start next content at the page's content top; rely on the previous cell's page-break-after */
+		margin-top: 0 !important;
+		page-break-before: auto !important; /* or always */
+		/* Observation from testing: The page break component seems to affect the page break illustration line Why?*/
 	}
 
 	/* Reflow cells for print so tall content extends naturally */
