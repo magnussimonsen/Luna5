@@ -89,8 +89,7 @@ import {
 import { getDesktopPath as requestDesktopPath } from '@renderer/code/notebook-core/utils/get-path-to-desktop'
 import { validateEmailWithMessage } from '@renderer/code/notebook-core/utils/emailValidation'
 
-const OWNER_ID_PRIMARY = 'primary'
-const OWNER_ID_LEGACY = 'primary-owner'
+const OWNER_ID_PRIMARY = 'primary-owner'
 
 const modalStore = useModalStore()
 const workspaceStore = useWorkspaceStore()
@@ -164,13 +163,9 @@ function cleanupOnClose(): void {
 
 /**
  * Loads existing owner metadata from workspace and prefills the form.
- * Tries primary ID first, then legacy ID, then falls back to any primary owner.
  */
 function seedFormFromStore(): void {
-  const existingMetadata =
-    workspaceStore.getOwnerMetadata(OWNER_ID_PRIMARY) ??
-    workspaceStore.getOwnerMetadata(OWNER_ID_LEGACY) ??
-    workspaceStore.getPrimaryOwnerMetadata()
+  const existingMetadata = workspaceStore.getPrimaryOwnerMetadata()
 
   existingOwnerMetadata.value = existingMetadata ?? null
 
@@ -333,16 +328,7 @@ function handleSubmit(): void {
   }
 
   // Retrieve existing metadata to preserve fields not captured in this form
-  const existingMetadata =
-    workspaceStore.getOwnerMetadata(OWNER_ID_PRIMARY) ??
-    workspaceStore.getOwnerMetadata(OWNER_ID_LEGACY) ??
-    workspaceStore.getPrimaryOwnerMetadata()
-
-  // Normalize owner ID (convert legacy to current standard)
-  const ownerId =
-    existingMetadata?.id === OWNER_ID_LEGACY
-      ? OWNER_ID_PRIMARY
-      : (existingMetadata?.id ?? OWNER_ID_PRIMARY)
+  const existingMetadata = workspaceStore.getPrimaryOwnerMetadata()
 
   // Resolve name and email values from form or placeholders
   const firstName = resolveFirstName()
@@ -354,7 +340,7 @@ function handleSubmit(): void {
   const middleName = middleNameInput || existingMetadata?.middleName || ''
 
   const metadata: ownerMetadataRecord = {
-    id: ownerId,
+    id: OWNER_ID_PRIMARY,
     firstName,
     middleName,
     lastName,
@@ -364,7 +350,7 @@ function handleSubmit(): void {
     showUserMetadataInA4Preview: true
   }
 
-  workspaceStore.setOwnerMetadata(ownerId, metadata)
+  workspaceStore.setOwnerMetadata(OWNER_ID_PRIMARY, metadata)
   generalSettingsStore.setShowUserMetadataInA4Preview(true)
   modalStore.closeStudentInfoModal()
   emit('submitted', metadata)

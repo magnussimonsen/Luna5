@@ -75,6 +75,9 @@ export async function openWorkspaceFromDisk(): Promise<OpenFileResult> {
     workspaceStore.initialized = true
     workspaceStore.markAsSaved(filePath)
 
+    // 4.1) Migrate legacy owner metadata if present
+    // workspaceStore.migrateOwnerMetadata()
+
     // 5) Auto-select the first notebook if available
     const notebookOrder = workspace.notebookOrder || Object.keys(workspace.notebooks || {})
     const firstNotebookId = notebookOrder[0]

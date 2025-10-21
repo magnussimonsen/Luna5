@@ -286,8 +286,8 @@ const ownerFirstName = computed({
   get: () => workspaceStore.getPrimaryOwnerMetadata()?.firstName ?? '',
   set: (value: string) => {
     const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
-    workspaceStore.setOwnerMetadata('primary', {
-      id: currentMetadata?.id ?? 'primary',
+    workspaceStore.setOwnerMetadata('primary-owner', {
+      id: currentMetadata?.id ?? 'primary-owner',
       firstName: value,
       middleName: currentMetadata?.middleName ?? '',
       lastName: currentMetadata?.lastName ?? '',
@@ -303,8 +303,8 @@ const ownerMiddleName = computed({
   get: () => workspaceStore.getPrimaryOwnerMetadata()?.middleName ?? '',
   set: (value: string) => {
     const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
-    workspaceStore.setOwnerMetadata('primary', {
-      id: currentMetadata?.id ?? 'primary',
+    workspaceStore.setOwnerMetadata('primary-owner', {
+      id: currentMetadata?.id ?? 'primary-owner',
       firstName: currentMetadata?.firstName ?? '',
       middleName: value,
       lastName: currentMetadata?.lastName ?? '',
@@ -320,8 +320,8 @@ const ownerLastName = computed({
   get: () => workspaceStore.getPrimaryOwnerMetadata()?.lastName ?? '',
   set: (value: string) => {
     const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
-    workspaceStore.setOwnerMetadata('primary', {
-      id: currentMetadata?.id ?? 'primary',
+    workspaceStore.setOwnerMetadata('primary-owner', {
+      id: currentMetadata?.id ?? 'primary-owner',
       firstName: currentMetadata?.firstName ?? '',
       middleName: currentMetadata?.middleName ?? '',
       lastName: value,
@@ -337,8 +337,8 @@ const ownerEmail = computed({
   get: () => workspaceStore.getPrimaryOwnerMetadata()?.email ?? '',
   set: (value: string) => {
     const currentMetadata = workspaceStore.getPrimaryOwnerMetadata()
-    workspaceStore.setOwnerMetadata('primary', {
-      id: currentMetadata?.id ?? 'primary',
+    workspaceStore.setOwnerMetadata('primary-owner', {
+      id: currentMetadata?.id ?? 'primary-owner',
       firstName: currentMetadata?.firstName ?? '',
       middleName: currentMetadata?.middleName ?? '',
       lastName: currentMetadata?.lastName ?? '',

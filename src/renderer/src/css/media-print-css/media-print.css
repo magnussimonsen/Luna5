@@ -3,6 +3,11 @@
 	#app-layout > :not(.scroll-container) {
 		display: none !important;
 	}
+	#app {
+		display: block !important;
+		align-items: stretch !important;
+		justify-content: flex-start !important;
+	}
 
 	html,
 	body {
@@ -26,17 +31,18 @@
 		flex: none !important;
 	}
 
+	:root {
+		--print-header-offset: 0mm;
+	}
+
 	/* Position cell list for printing */
 	.cell-containers-list {
-		position: static !important;
-		width: 210mm !important;
-		min-width: 210mm !important;
+		position: relative !important;
+		width: auto !important;
+		min-width: auto !important;
 		margin: 0 !important;
 		box-shadow: none !important;
 		page-break-after: auto !important;
-		padding: 25mm 20mm !important;
-
-		/* Provide top padding to mirror in-app layout margins */
 		background-image: none !important;
 		transform: none !important;
 		box-sizing: border-box !important;
@@ -45,16 +51,32 @@
 	/* Apply consistent margins to all pages */
 	@page {
 		size: A4;
-		margin: 0;
+		margin: 25mm 20mm 25mm 20mm;
 	}
 
 	/* Ensure parent containers don't constrain height */
 	.workspace-a4-preview-layout-container {
 		background: white !important;
 		padding: 0 !important;
+		margin: 0 !important;
 		overflow: visible !important;
 		height: auto !important;
 		position: static !important;
+	}
+
+	/* Pin metadata header so it repeats on every page */
+	.a4-user-metadata-header {
+		display: flex !important;
+		flex-direction: row;
+		position: fixed !important;
+		top: 0 !important;
+		left: 0 !important;
+		right: 0 !important;
+		margin: 0 !important;
+		padding: 0 20mm !important;
+		box-sizing: border-box;
+		background: transparent !important;
+		max-width: 100% !important;
 	}
 
 	/* Ensure explicit page break cells force a new page when printing */
@@ -123,7 +145,7 @@
 	}
 
 	/* Preserve Monaco syntax colours when printing */
-         .python-editor,
+        .python-editor,
 		.monaco-editor,
 		.monaco-editor .view-lines,
 		.monaco-editor span {

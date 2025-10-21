@@ -406,6 +406,40 @@ export const useWorkspaceStore = defineStore('workspace', {
       }
     },
     // --- Initialize Workspace ---
+    /**
+     * Migrate legacy owner metadata from 'primary-owner' to 'primary'.
+     * This is called when a workspace is loaded to ensure data consistency.
+     */
+    // migrateOwnerMetadata(): void {
+    //   try {
+    //     const workspace = this.getWorkspace()
+    //     if (!workspace.ownerMetadata) return
+
+    //     // Check if legacy 'primary-owner' exists
+    //     if (workspace.ownerMetadata['primary-owner']) {
+    //       const legacyData = workspace.ownerMetadata['primary-owner']
+
+    //       // Copy to 'primary' (only if 'primary' doesn't already exist)
+    //       if (!workspace.ownerMetadata['primary']) {
+    //         workspace.ownerMetadata['primary'] = {
+    //           ...legacyData,
+    //           id: 'primary'
+    //         }
+    //       }
+
+    //       // Delete the legacy entry
+    //       delete workspace.ownerMetadata['primary-owner']
+
+    //       // Mark as unsaved to persist the migration
+    //       this.markAsUnsaved()
+
+    //       console.log('[workspaceStore] Migrated owner metadata from primary-owner to primary')
+    //     }
+    //   } catch (error) {
+    //     console.warn('[workspaceStore] Failed to migrate owner metadata:', error)
+    //   }
+    // },
+
     initEmpty(force = false): Workspace {
       let workspace = this.workspace
       if (force || !this.initialized || !workspace) {
@@ -1202,41 +1236,21 @@ export const useWorkspaceStore = defineStore('workspace', {
         if (!workspace.ownerMetadata) {
           workspace.ownerMetadata = {}
         }
-        const normalizedOwnerId = ownerId === 'primary-owner' ? 'primary' : ownerId
-        const normalizedMetadata: ownerMetadataRecord = {
-          ...metadata,
-          id: metadata.id === 'primary-owner' ? 'primary' : metadata.id || normalizedOwnerId
-        }
-        workspace.ownerMetadata[normalizedOwnerId] = normalizedMetadata
-        if (
-          normalizedOwnerId === 'primary' &&
-          Object.prototype.hasOwnProperty.call(workspace.ownerMetadata, 'primary-owner')
-        ) {
-          delete workspace.ownerMetadata['primary-owner']
-        }
+        workspace.ownerMetadata[ownerId] = metadata
         this.markAsUnsaved()
       } catch {
         /* ignore */
       }
     },
     /**
-     * THERE CAN BE ONLY ONE SO WE DO NOT NEED THIS?
+     * Get the primary owner metadata.
+     * Returns the 'primary-owner' owner metadata, or null if not found.
      */
     getPrimaryOwnerMetadata(): ownerMetadataRecord | null {
       try {
         const workspace = this.getWorkspace()
         if (!workspace.ownerMetadata) return null
-        const keys = Object.keys(workspace.ownerMetadata)
-        if (!keys.length) return null
-        const preferredKey = workspace.ownerMetadata['primary'] ? 'primary' : keys[0]
-        const record = workspace.ownerMetadata[preferredKey]
-        if (preferredKey !== 'primary' && workspace.ownerMetadata['primary']) {
-          return workspace.ownerMetadata['primary']
-        }
-        if (!record && workspace.ownerMetadata['primary-owner']) {
-          return workspace.ownerMetadata['primary-owner']
-        }
-        return record ?? null
+        return workspace.ownerMetadata['primary-owner'] || null
       } catch {
         return null
       }
