@@ -7,6 +7,7 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
 .workspace-a4-preview-layout-container {
   /* Layout */
   position: absolute;
+  justify-items: center;
   top: 0;
   left: 0;
   right: 0;
@@ -38,7 +39,7 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
   width: 210mm;
   min-width: 210mm;
   min-height: auto; /* Allow content to determine height */
-  
+ 
   /* Fixed position - no flex/centering, stays in place */
   margin: 0; /* Remove auto margins */
   
