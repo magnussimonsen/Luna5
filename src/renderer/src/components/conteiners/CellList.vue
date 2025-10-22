@@ -2,7 +2,6 @@
   <div class="cell-containers-list" :style="cellListStyle">
     <A4UserMetadataHeader v-if="layoutMode === 'a4Preview'" />
     <template v-for="(cellId, idx) in orderedCellIds" :key="cellId">
-      <!-- PageBreak wrapped in container to allow selection/deletion -->
       <CellContainer
         :index="idx"
         :cell-id="cellId"
@@ -15,10 +14,8 @@
         @select="onSelect"
         @deselect="onDeselect"
       >
-        <PageBreak v-if="cells[cellId].kind === 'page-break'" :cell="cells[cellId]" />
         <component
           :is="resolveCellComponent(cells[cellId].kind)"
-          v-else
           :cell="cells[cellId]"
           :parent-notebook-id="ownerNotebookId"
         />
@@ -38,7 +35,6 @@ import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
 import CellContainer from './CellContainer.vue'
 import TextCell from '@renderer/components/cells/TextCell.vue'
 import PythonCell from '@renderer/components/cells/PythonCell.vue'
-import PageBreak from '@renderer/components/UI/PageBrake.vue'
 import type { Cell } from '@renderer/types/notebook-cell-types'
 
 const zoomStatesStore = useZoomStatesStore() // For zoom state management
@@ -115,8 +111,6 @@ function resolveCellComponent(kind: string): Component {
       return TextCell
     case 'python-cell':
       return PythonCell
-    case 'page-break':
-      return PageBreak
     default:
       return TextCell // fallback
   }

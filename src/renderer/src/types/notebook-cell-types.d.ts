@@ -3,7 +3,7 @@
  * (Moved from notebook-core/cell-types/* for unified type management.)
  */
 
-export type CellKind = 'text-cell' | 'python-cell' | 'page-break'
+export type CellKind = 'text-cell' | 'python-cell'
 
 export interface BaseCell {
   cellIndex: number // Position in the notebook
@@ -22,12 +22,6 @@ export interface BaseCell {
   isCellVisible?: boolean // UI hint, not persisted
   isCellFocused?: boolean // UI hint, not persisted
   metadata?: Record<string, unknown>
-}
-
-export interface PageBrakeCell extends BaseCell {
-  kind: 'page-break'
-  cellInputContent?: string // Needed for uniformity functions with other cell types
-  // to avoid type errors when processing cells generically
 }
 
 export interface TextCell extends BaseCell {
@@ -107,4 +101,4 @@ export interface PythonCell extends BaseCell {
   exec?: PythonExecutionMeta
 }
 
-export type Cell = TextCell | PythonCell | PageBrakeCell
+export type Cell = TextCell | PythonCell

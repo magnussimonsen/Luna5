@@ -1,7 +1,6 @@
 // Direct exports to avoid subfolder barrel resolution issues
 export { createTextCell } from './cells/create-text-cell'
 export { createPythonCell } from './cells/create-python-cell'
-export { createPageBrakeCell } from './cells/create-pagebrake-cell'
 export { createNotebook } from './notebooks/create-notebook'
 export { addCellToNotebook } from './notebooks/add-cell-to-notebook'
 export { deleteNotebookSoft } from './notebooks/delete-notebook-soft'

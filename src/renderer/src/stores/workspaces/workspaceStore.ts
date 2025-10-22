@@ -53,14 +53,13 @@
 import { defineStore } from 'pinia'
 import { createEmptyWorkspace } from '@renderer/code/notebook-core/model/workspace-initial'
 import type { Workspace, Notebook } from '@renderer/code/notebook-core/model/schema'
-import type { Cell, TextCell, PageBrakeCell } from '@renderer/types/notebook-cell-types'
+import type { Cell, TextCell } from '@renderer/types/notebook-cell-types'
 import type { ownerMetadataRecord } from '@renderer/types/owner-metadata-type'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import {
   createNotebook as operationsCreateNotebook,
   createTextCell as operationsCreateTextCell,
   createPythonCell as operationsCreatePythonCell,
-  createPageBrakeCell as operationsCreatePageBrakeCell,
   addCellToNotebook as operationsAddCellToNotebook,
   deleteNotebookSoft as operationsDeleteNotebookSoft,
   moveCellIdUp as operationsMoveCellIdUp,
@@ -904,15 +903,6 @@ export const useWorkspaceStore = defineStore('workspace', {
       const cellSource = source ?? newPythonCellExampleCode ?? ''
       const newCell = operationsCreatePythonCell(cellSource)
       //operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
-      this.insertCellGeneric(newCell)
-      this.markAsUnsaved()
-      return newCell
-    },
-    /* Experimental page break feature */
-    addPageBreakCell(): PageBrakeCell {
-      this.getWorkspace()
-      this.ensureDefaultNotebook()
-      const newCell = operationsCreatePageBrakeCell()
       this.insertCellGeneric(newCell)
       this.markAsUnsaved()
       return newCell

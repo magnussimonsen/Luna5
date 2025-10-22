@@ -51,46 +51,7 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
   padding: 25mm 20mm;
   box-sizing: border-box;
   
-  /* Page break visualization */
-  --a4-page-height: 297mm;
-  --first-page-top-margin: 0mm;
-  --first-page-bottom-margin: 25mm;
-  --other-page-top-margin: 25mm;
-  --other-page-bottom-margin: 25mm;
-  --first-page-content-height: calc(
-    var(--a4-page-height) - var(--first-page-top-margin) - var(--first-page-bottom-margin)
-  );
-  --other-page-content-height: calc(
-    var(--a4-page-height) - var(--other-page-top-margin) - var(--other-page-bottom-margin)
-  );
-
-  background-image:
-    linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent calc(var(--first-page-content-height) - 0.25mm),
-      var(--page-break-divider-color, silver)
-        calc(var(--first-page-content-height) - 0.25mm),
-      var(--page-break-divider-color, silver)
-        calc(var(--first-page-content-height) + 0.25mm),
-      transparent calc(var(--first-page-content-height) + 0.25mm)
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent calc(var(--other-page-content-height) - 0.25mm),
-      var(--page-break-divider-color, silver)
-        calc(var(--other-page-content-height) - 0.25mm),
-      var(--page-break-divider-color, silver)
-        calc(var(--other-page-content-height) + 0.25mm),
-      transparent calc(var(--other-page-content-height) + 0.25mm)
-    );
-  background-size: 100% 100%, 100% var(--other-page-content-height);
-  background-position: 0 0,
-    0 calc(var(--first-page-content-height));
-  background-repeat: no-repeat, repeat-y;
-  
-  /* Position for page break borders and metadata header */
+  /* Position for metadata header */
   position: relative;
 }
 
@@ -108,5 +69,3 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
   z-index: 100;
   pointer-events: none; /* Don't interfere with clicking cells */
 }
-
-/* Additional page break markers can be added via JavaScript if greater control is needed */

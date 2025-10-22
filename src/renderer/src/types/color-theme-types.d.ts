@@ -33,7 +33,6 @@ export type ThemeColorTypes = {
   // A4 / paper workspace
   a4WorkspaceBackground: string
   a4WorkspaceBorderColor: string
-  pageBreakDividerColor: string
 
   // Sidepanel
   sidepanelBackground: string

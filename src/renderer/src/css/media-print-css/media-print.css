@@ -80,46 +80,6 @@
 		max-width: 100% !important;
 	}
 
-	/* Ensure explicit page break cells force a new page when printing */
-	.cell[data-kind='page-break'] {
-		display: block !important;
-		border: none !important;
-		padding: 0 !important;
-		margin: 0 !important;
-		height: 0 !important;
-		min-height: 0 !important;
-		page-break-after: always !important;
-		break-after: page !important;
-	}
-
-	.cell[data-kind='page-break'] .cell__gutter {
-		display: none !important;
-	}
-
-	.cell[data-kind='page-break'] .cell__content {
-		padding: 0 !important;
-		margin: 0 !important;
-	}
-
-	.cell[data-kind='page-break'] .page-break {
-		display: block !important;
-		height: 0 !important;
-		min-height: 0 !important;
-		margin: 0 !important;
-		padding: 0 !important;
-		border: none !important;
-		background: none !important;
-		page-break-after: always !important;
-		break-after: page !important;
-	}
-
-	.cell[data-kind='page-break'] + .cell:not([data-kind='page-break']) {
-		/* Start next content at the page's content top; rely on the previous cell's page-break-after */
-		margin-top: 0 !important;
-		page-break-before: auto !important; /* or always */
-		/* Observation from testing: The page break component seems to affect the page break illustration line Why?*/
-	}
-
 	/* Reflow cells for print so tall content extends naturally */
 	.cell {
 		display: grid !important;

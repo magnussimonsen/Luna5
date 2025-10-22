@@ -122,7 +122,7 @@
         :aria-disabled="isSelectedCellLocked || isSelectedCellHidden ? 'true' : undefined"
         @click="handleMoveCellToBin"
       >
-        {{ isSelectedCellPageBreak ? 'Delete Page Break' : 'Move cell to Bin' }}
+        Move cell to Bin
         <span class="menubar-shortcut-not-implemented">Ctrl + 0</span>
         <ImplementedMark :implemented="true" />
       </div>
@@ -163,11 +163,6 @@
       <div class="menubar-dropdown-item" @click="handleInsertPythonCell">
         Insert Python Cell <span class="menubar-shortcut-not-implemented">Ctrl + 7</span>
         <ImplementedMark :implemented="true" />
-      </div>
-      <div class="dropdown-menu-divider"></div>
-      <div class="menubar-dropdown-item" @click="handleInsertPageBreak">
-        Insert Page Break <span class="menubar-shortcut-not-implemented"></span>
-        <ImplementedMark :implemented="false" />
       </div>
     </DropdownMenu>
     <!--------------------------------------------------------------------->
@@ -378,11 +373,6 @@ const isSelectedCellLocked = computed(() => {
   const c = ws.cells[id]
   return !!(c?.softLocked || c?.hardLocked)
 })
-const isSelectedCellPageBreak = computed(() => {
-  const ws = workspaceStore.getWorkspace()
-  const id = cellSelectionStore.selectedCellId
-  return id ? ws.cells[id]?.kind === 'page-break' : false
-})
 // Handle workspace layout toggle
 function handleToggleWorkspaceLayout(): void {
   menubarStore.toggleA4Preview()
@@ -537,16 +527,6 @@ const handleInsertPythonCell = (): void => {
   }
 }
 
-/*Experimental page break feature*/
-const handleInsertPageBreak = (): void => {
-  workspaceStore.addPageBreakCell()
-  // Close Insert menu after action
-  try {
-    insertMenu.value?.closeDropdown()
-  } catch {
-    /* ignore */
-  }
-}
 const handleTogglePanel = (panel: string): void => {
   sidepanelStore.togglePanel(panel)
 }
@@ -572,16 +552,6 @@ const handleMoveCellToBin = (): void => {
   if (isSelectedCellLocked.value || isSelectedCellHidden.value) {
     console.warn('Cannot move locked/hidden cell to Bin')
     return
-  }
-  // Page-break cells are hard-deleted (never go to bin)
-  const selectedCellId = cellSelectionStore.selectedCellId
-  if (selectedCellId) {
-    const cell = workspaceStore.getWorkspace().cells[selectedCellId]
-    if (cell?.kind === 'page-break') {
-      const ok = workspaceStore.hardDeleteSelectedCell()
-      if (!ok) console.warn('Failed to delete page break')
-      return
-    }
   }
   // Regular cells go to bin via soft delete
   const ok = workspaceStore.softDeleteSelectedCell()

@@ -44,7 +44,6 @@ export const useThemeStore = defineStore('theme', {
       // Paper preview
       paperColor: '#ffffff',
       paperBorderColor: 'transparent',
-      pageBreakDividerColor: 'silver',
 
       // Cell (general)
       cellBackground: '#ffffff',
@@ -167,7 +166,6 @@ export const useThemeStore = defineStore('theme', {
       // Paper preview
       paperColor: '#3d3d3dff' /* I need something darker than darkgray*/,
       paperBorderColor: 'transparent',
-      pageBreakDividerColor: 'silver',
 
       // Cell (general)
       cellBackground: '#222222',
@@ -316,7 +314,6 @@ export const useThemeStore = defineStore('theme', {
       root.style.setProperty('--divider-color', colors.dividerColor)
       root.style.setProperty('--paper-color', colors.paperColor)
       root.style.setProperty('--paper-border-color', colors.paperBorderColor)
-      root.style.setProperty('--page-break-divider-color', colors.pageBreakDividerColor)
 
       // Cell
       root.style.setProperty('--cell-background', colors.cellBackground)
