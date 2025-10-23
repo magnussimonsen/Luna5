@@ -5,9 +5,9 @@ import { defineStore } from 'pinia'
 export const useZoomStatesStore = defineStore('zoom', {
   state: () => ({
     zoomPercent: 100 as number,
-    minZoom: 25 as number,
+    minZoom: 50 as number,
     maxZoom: 200 as number,
-    step: 5 as number
+    step: 1 as number
   }),
   getters: {
     zoomScale(state): number {

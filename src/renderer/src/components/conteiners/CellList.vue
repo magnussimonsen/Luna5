@@ -44,13 +44,13 @@ const menubarStore = useMenubarStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 
 const zoomScale = computed(() => zoomStatesStore.zoomScale)
-// Only apply zoom transform in web mode; A4 preview applies it at parent container level
+// Apply zoom transform with appropriate origin based on layout mode
 const cellListStyle = computed(() => {
   if (menubarStore.workspaceLayoutMode === 'a4Preview') {
     return {
       transform: `scale(${zoomScale.value})`,
-      transformOrigin: 'top left'
-    } // No transform in A4 mode - parent already has it
+      transformOrigin: 'top center'
+    }
   }
   return {
     transform: `scale(${zoomScale.value})`,
