@@ -7,7 +7,6 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
 .workspace-a4-preview-layout-container {
   /* Layout */
   position: absolute;
-  justify-items: center;
   top: 0;
   left: 0;
   right: 0;
@@ -16,6 +15,11 @@ Displays the workspace in a paper-like preview with A4 dimensions and page break
   height: 100%;
   overflow-y: scroll;
   overflow-x: auto; /* Enable horizontal scroll when needed */
+  
+  /* Flexbox centering to keep content centered when zooming */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   
   /* Background - simulates desk/table surface */
   background: var(--a4-workspace-background, #808080);

@@ -65,7 +65,7 @@ For now only placeholders for the buttons and sliders are implemented.
           v-model.number="zoomPercent"
           class="zoom-slider"
           type="range"
-          min="25"
+          min="50"
           max="200"
           step="1"
         />
