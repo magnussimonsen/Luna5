@@ -1,0 +1,36 @@
+/* Monaco Editor CSS Overrides
+ * 
+ * This file fixes cursor misalignment issues in Monaco editor instances.
+ * 
+ * Problem: The global body styles set text-rendering: optimizeLegibility and
+ * font-smoothing properties which inherit to all elements. Monaco editor
+ * requires precise character width calculations for cursor positioning, and
+ * these inherited properties can cause the cursor to be misaligned with text.
+ * 
+ * Solution: Override these properties specifically for Monaco editor to use
+ * the browser's default rendering mode, which Monaco is designed for.
+ */
+
+.monaco-editor {
+  /* Reset text rendering to default for precise character width calculations */
+  text-rendering: auto !important;
+  -webkit-font-smoothing: subpixel-antialiased !important;
+  -moz-osx-font-smoothing: auto !important;
+}
+
+/* Also apply to Monaco's internal elements to ensure consistent rendering */
+.monaco-editor *,
+.monaco-editor .view-line,
+.monaco-editor .view-lines,
+.monaco-editor span {
+  text-rendering: auto !important;
+  -webkit-font-smoothing: subpixel-antialiased !important;
+  -moz-osx-font-smoothing: auto !important;
+}
+
+/* Ensure Monaco's cursor layer uses the same rendering */
+.monaco-editor .cursor {
+  text-rendering: auto !important;
+  -webkit-font-smoothing: subpixel-antialiased !important;
+  -moz-osx-font-smoothing: auto !important;
+}
