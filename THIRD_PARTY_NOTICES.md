@@ -21,6 +21,8 @@ This document lists third-party software included in this application.
 - @tiptap/starter-kit@3.6.2 — License: MIT
 - @tiptap/vue-3@3.6.2 — License: MIT
 - electron-updater@6.6.2 — License: MIT
+- html2canvas@^1.4.1 — License: (unknown)
+- jspdf@^3.0.3 — License: (unknown)
 - katex@0.16.23 — License: MIT
 - monaco-editor@0.52.2 — License: MIT
 - monaco-themes@0.4.7 — License: MIT
