@@ -56,9 +56,6 @@ Main CSS entry for the renderer
 @import './main-imports-this-css/tiptap/tiptap-custom.css';
 @import './main-imports-this-css/tiptap/katex-min-custom.css';
 
-/* Monaco editor overrides */
-@import './main-imports-this-css/monaco/monaco-editor-overrides.css';
-
 
 #app {
   /* App root layout */

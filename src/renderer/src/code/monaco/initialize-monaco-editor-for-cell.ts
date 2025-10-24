@@ -110,6 +110,32 @@ export function initializeMonacoEditorForCell(options: {
 
   const disposables: Disposeable[] = []
 
+  let fontRefreshHandle: number | null = null
+  const scheduleFontMetricsRefresh = (): void => {
+    if (fontRefreshHandle !== null) return
+    fontRefreshHandle = window.requestAnimationFrame(() => {
+      fontRefreshHandle = null
+      try {
+        monaco.editor.remeasureFonts()
+      } catch {
+        /* ignore */
+      }
+      try {
+        editor.layout()
+      } catch {
+        /* ignore */
+      }
+    })
+  }
+  disposables.push({
+    dispose: () => {
+      if (fontRefreshHandle !== null) {
+        cancelAnimationFrame(fontRefreshHandle)
+        fontRefreshHandle = null
+      }
+    }
+  })
+
   /**
    * Sync the mount node height to Monaco's content height.
    *
@@ -252,6 +278,27 @@ export function initializeMonacoEditorForCell(options: {
 
   // Initial sizing
   syncHeight()
+  scheduleFontMetricsRefresh()
+
+  if ('fonts' in document) {
+    const fontSet = (document as unknown as { fonts?: FontFaceSet }).fonts
+    if (fontSet) {
+      void fontSet.ready
+        .then(() => scheduleFontMetricsRefresh())
+        .catch(() => {
+          scheduleFontMetricsRefresh()
+        })
+      const handle = (): void => scheduleFontMetricsRefresh()
+      if (typeof fontSet.addEventListener === 'function') {
+        fontSet.addEventListener('loadingdone', handle)
+        disposables.push({
+          dispose: () => {
+            fontSet.removeEventListener('loadingdone', handle)
+          }
+        })
+      }
+    }
+  }
 
   let resizeObserver: ResizeObserver | null = null
   if ('ResizeObserver' in window) {

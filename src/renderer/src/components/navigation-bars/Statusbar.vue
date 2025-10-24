@@ -4,8 +4,10 @@ A statusbar located fixed at the bottom of the app, showing
 - if the current cell is hidden, locked or editable 
 - the current file path and other information.
 - A button for tuding on and off the autosave feature
-- A slider for adjusting the zoom of the container that contains all the cells 
-- A button to reset the zoom to default
+- A slider for adjusting the font size of the selected cell type
+- A button to reset that font size to its default
+- A slider for adjusting the workspace zoom
+- A button to reset the workspace zoom
 For now only placeholders for the buttons and sliders are implemented.
 -->
 
@@ -46,7 +48,7 @@ For now only placeholders for the buttons and sliders are implemented.
         <input
           id="font-size-slider"
           v-model.number="changeFontSizeIndex"
-          class="zoom-slider"
+          class="font-size-slider"
           type="range"
           :min="0"
           :max="fontSizeOptions.length - 1"
@@ -54,7 +56,7 @@ For now only placeholders for the buttons and sliders are implemented.
         />
         <button
           type="button"
-          class="reset-zoom-btn btn-status-bar"
+          class="reset-font-btn btn-status-bar"
           :style="resetFontSizeBtnStyle"
           @click="onResetBtnClick"
         >
@@ -65,11 +67,16 @@ For now only placeholders for the buttons and sliders are implemented.
           v-model.number="zoomPercent"
           class="zoom-slider"
           type="range"
-          min="50"
-          max="200"
-          step="1"
+          :min="zoomStore.minZoom"
+          :max="zoomStore.maxZoom"
+          :step="zoomStore.step"
         />
-        <button class="reset-zoom-btn btn-status-bar" :style="resetZoomBtnStyle" @click="resetZoom">
+        <button
+          type="button"
+          class="reset-zoom-btn btn-status-bar"
+          :style="resetZoomBtnStyle"
+          @click="resetZoom"
+        >
           <span class="zoom-percent-fixed">{{ zoomPercent }} %</span>
         </button>
       </div>
@@ -281,12 +288,13 @@ const zoomPercent = computed<number>({
   get: () => zoomStore.zoomPercent,
   set: (val: number) => zoomStore.setZoomPercent(val)
 })
+
 function resetZoom(): void {
   zoomStore.resetZoom()
 }
 
-// Reset-zoom button color: Center vs OffCenter
 const isZoomCentered = computed(() => zoomStore.zoomPercent === 100)
+
 const resetZoomBtnStyle = computed(() => ({
   '--sb-btn-bg': isZoomCentered.value
     ? 'var(--reset-zoom-button-color-Center, var(--debug-color, lightgreen))'
@@ -399,13 +407,18 @@ const resetFontSizeBtnStyle = computed(() => ({
 
 .save-btn,
 .autosave-btn,
+.reset-font-btn,
 .reset-zoom-btn {
   color: var(--ui-text-color, var(--debug-color, #fff));
   margin: 0;
 }
 
-.reset-zoom-btn {
+.reset-font-btn {
   /* Set base background via var to play nicely with :hover */
+  --sb-btn-bg: var(--reset-zoom-button-color-OffCenter, var(--debug-color, #949494));
+}
+
+.reset-zoom-btn {
   --sb-btn-bg: var(--reset-zoom-button-color-OffCenter, var(--debug-color, #949494));
 }
 
@@ -421,6 +434,7 @@ const resetFontSizeBtnStyle = computed(() => ({
   margin-right: 0em;
 }
 
+.font-size-slider,
 .zoom-slider {
   vertical-align: middle;
   margin: 0em 0em 0em 0em;
@@ -433,18 +447,17 @@ const resetFontSizeBtnStyle = computed(() => ({
   cursor: pointer;
 }
 
-.file-path {
-  font-size: 0.9em;
-  opacity: 1;
-}
-
-/* Fixed-width zoom percentage (digits + % sign) always reserve 4 character cells */
 .zoom-percent-fixed {
   display: inline-block;
   width: 5ch;
-  text-align: right; /* Align shorter values (e.g., 25%) to the right for consistency */
-  font-variant-numeric: tabular-nums; /* Use tabular numbers if supported for consistent digit width */
-  white-space: nowrap; /* Prevent wrapping */
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.file-path {
+  font-size: 0.9em;
+  opacity: 1;
 }
 
 /* Fixed-width font size (px value). Reserve 4 character cells (e.g., '100' + space). */

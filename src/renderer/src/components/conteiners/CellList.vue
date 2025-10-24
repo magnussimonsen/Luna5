@@ -30,30 +30,31 @@ import { storeToRefs } from 'pinia'
 import { computed, type Component } from 'vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
-import { useZoomStatesStore } from '@renderer/stores/UI/zoomStatesStore' // For zoom state management
 import { useMenubarStore } from '@renderer/stores/UI/menubarStore'
+import { useZoomStatesStore } from '@renderer/stores/UI/zoomStatesStore'
 import CellContainer from './CellContainer.vue'
 import TextCell from '@renderer/components/cells/TextCell.vue'
 import PythonCell from '@renderer/components/cells/PythonCell.vue'
 import type { Cell } from '@renderer/types/notebook-cell-types'
 
-const zoomStatesStore = useZoomStatesStore() // For zoom state management
+const zoomStatesStore = useZoomStatesStore()
 const workspaceStore = useWorkspaceStore()
 const selectionStore = useCellSelectionStore()
 const menubarStore = useMenubarStore()
 const { workspaceLayoutMode: layoutMode } = storeToRefs(menubarStore)
 
 const zoomScale = computed(() => zoomStatesStore.zoomScale)
-// Apply zoom transform with appropriate origin based on layout mode
+
 const cellListStyle = computed(() => {
+  const scale = zoomScale.value
   if (menubarStore.workspaceLayoutMode === 'a4Preview') {
     return {
-      transform: `scale(${zoomScale.value})`,
+      transform: `scale(${scale})`,
       transformOrigin: 'top center'
     }
   }
   return {
-    transform: `scale(${zoomScale.value})`,
+    transform: `scale(${scale})`,
     transformOrigin: 'top left'
   }
 })

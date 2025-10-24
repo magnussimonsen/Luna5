@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from 'vue'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communication/cellSelectionStore'
 import type { PythonCell } from '@renderer/types/notebook-cell-types'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
@@ -29,6 +30,7 @@ import { useCodeSettingsStore } from '@renderer/stores/settings/codeSettingsStor
 import { useFontStore } from '@renderer/stores/fonts/fontFamilyStore'
 import { useFontSizeStore } from '@renderer/stores/fonts/fontSizeStore'
 import { ensureAllMonacoThemesDefined, applyMonacoTheme } from '@renderer/code/monaco/monaco-theme'
+import { parsePixelsToNumber } from '@renderer/utils/miscellaneous/parse-pixels-to-number'
 
 // Monaco is imported eagerly and initialized synchronously.
 // We import the API and python contribution statically for a simpler setup.
@@ -42,7 +44,18 @@ const themeStore = useThemeStore()
 const codeSettingsStore = useCodeSettingsStore()
 const fontStore = useFontStore()
 const fontSizeStore = useFontSizeStore()
-
+function refreshMonacoFontMetrics(): void {
+  try {
+    monaco.editor.remeasureFonts()
+  } catch {
+    /* ignore */
+  }
+  try {
+    editor?.layout()
+  } catch {
+    /* ignore */
+  }
+}
 // DOM reference to the Monaco editor container
 const editorElementRef = ref<HTMLDivElement | null>(null)
 // Monaco editor instance (will be assigned after Monaco is loaded)
@@ -57,7 +70,6 @@ let resizeObserver: ResizeObserver | null = null
 let isApplyingLocalEdit = false
 // (No visibility-based disposal) keep editors mounted until unmount/notebook change
 
-import { parsePixelsToNumber } from '@renderer/utils/miscellaneous/parse-pixels-to-number'
 // Eagerly import Monaco for a simple, non-lazy setup
 // Note: this avoids dynamic lazy-loading of the editor and worker.
 // Monaco initialization moved to initialize-monaco-editor.ts
@@ -172,6 +184,8 @@ function initializeMonacoEditor(): void {
     cellId: props.cell.id,
     editorPresent: !!editor
   })
+
+  refreshMonacoFontMetrics()
 
   try {
     // If this cell is currently selected in the UI, make it writable (unless
@@ -502,7 +516,7 @@ watch(
     if (!editor) return
     try {
       editor.updateOptions({ fontFamily: fontStore.fonts.codingFont })
-      editor.layout()
+      refreshMonacoFontMetrics()
     } catch {
       /* ignore */
     }
@@ -517,7 +531,7 @@ watch(
       editor.updateOptions({
         fontSize: parsePixelsToNumber(fontSizeStore.fontSizes.codeEditorCellFontSize)
       })
-      editor.layout()
+      refreshMonacoFontMetrics()
     } catch {
       /* ignore */
     }
