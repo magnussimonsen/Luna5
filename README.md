@@ -1,7 +1,7 @@
 
-# Download of first release is now available 🎉🥳✨
+# Download of pre-release is now available
 
-The first prototype build is now available for download. This early version includes only text editor and Python cells functionality and is only intended to get feedback on bugs and usability issues. Please note: this build may be unstable, and the .luna5 file format is subject to change in future releases.
+This early pre-release version includes only text editor and Python cells functionality and is only intended to get feedback on bugs and usability issues. Please note: this build may be unstable, and the .luna5 file format is subject to change in future releases.
 
 Please report any bugs or issues to **lunastemnotebook@gmail.com**
 
