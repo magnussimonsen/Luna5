@@ -3,7 +3,7 @@
  * (Moved from notebook-core/cell-types/* for unified type management.)
  */
 
-export type CellKind = 'text-cell' | 'python-cell'
+export type CellKind = 'text-cell' | 'python-cell' | 'geometry-cell'
 
 export interface BaseCell {
   cellIndex: number // Position in the notebook
@@ -101,4 +101,14 @@ export interface PythonCell extends BaseCell {
   exec?: PythonExecutionMeta
 }
 
-export type Cell = TextCell | PythonCell
+export interface GeometryCell extends BaseCell {
+  kind: 'geometry-cell'
+  source: string
+  cellInputContent?: string
+  cellOutputContent?: string // For rendered geometry output
+  cellErrorContent?: string
+  geometryCommands?: string[] // Geometry language commands
+  geometryObjects?: Record<string, unknown> // Geometric objects state
+}
+
+export type Cell = TextCell | PythonCell | GeometryCell

@@ -111,6 +111,8 @@ const cellTypeLabel = computed(() => {
       return 'Markdown'
     case 'python-cell':
       return 'Python'
+    case 'geometry-cell':
+      return 'Geometry'
     case null:
     default:
       return 'No cell selected'

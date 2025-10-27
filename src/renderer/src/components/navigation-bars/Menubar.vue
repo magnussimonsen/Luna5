@@ -147,9 +147,9 @@
         <span class="menubar-shortcut-not-implemented">Ctrl + 3</span>
         <ImplementedMark :implemented="false" />
       </div>
-      <div class="menubar-dropdown-item">
+      <div class="menubar-dropdown-item" @click="handleInsertGeometryCell">
         Insert Geometry Cell <span class="menubar-shortcut-not-implemented">Ctrl + 4</span>
-        <ImplementedMark :implemented="false" />
+        <ImplementedMark :implemented="true" />
       </div>
       <div class="menubar-dropdown-item">
         Insert Spreadsheet Cell <span class="menubar-shortcut-not-implemented">Ctrl + 5</span>
@@ -519,6 +519,16 @@ const handleInsertTextCell = (): void => {
 
 const handleInsertPythonCell = (): void => {
   workspaceStore.addPythonCell()
+  // Close Insert menu after action
+  try {
+    insertMenu.value?.closeDropdown()
+  } catch {
+    /* ignore */
+  }
+}
+
+const handleInsertGeometryCell = (): void => {
+  workspaceStore.addGeometryCell()
   // Close Insert menu after action
   try {
     insertMenu.value?.closeDropdown()

@@ -1,60 +1,35 @@
 <template>
-  <!-- Toolbar is decoupled from the TextCell component tree; it looks up the
-       currently selected cell's editor via the store. -->
-  <div
-    class="row-flex-wrap-base"
-    :class="{ 'is-dark': isDarkMode }"
-    role="toolbar"
-    aria-label="Placeholder toolbar - no cell selected"
-    :style="{
-      fontSize: 'var(--top-toolbar-font-size)',
-      fontFamily: 'var(--ui-font)'
-    }"
-  >
-    <button
-      class="top-toolbar__button"
-      type="button"
-      title="No cell selected"
-      aria-label="No cell selected button placeholder"
-      :style="{
-        fontSize: 'var(--top-toolbar-font-size)',
-        fontFamily: 'var(--ui-font)'
-      }"
-      @click="handlePlaceholdeButtonPressed"
-    >
-      No cell selected button placeholder
-    </button>
-    <!-- <button class="top-toolbar-button" type="button" @click="handleInsertTextCell">Insert text cell</button> -->
-    <!-- <button class="top-toolbar-button" type="button" @click="handleInsertPythonCell">Insert Python cell</button> -->
+  <div class="row-flex-wrap-base" role="toolbar" aria-label="No cell selected toolbar">
+    <div class="row-flex-wrap-base-child util-transparent-border">
+      <div class="top-toolbar__text">No cell selected</div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * TextCellToolbar.vue
- * A detached toolbar controlling the active text (Tiptap) editor. It resolves
- * the editor instance via the selection + textEditors stores so the toolbar
- * can live anywhere in the component tree.
+ * NoCellSelectedToolbar.vue
+ * A placeholder toolbar displayed when no cell is selected.
+ * Shows a simple message to indicate the current state.
  */
-import { computed } from 'vue'
-import { useThemeStore } from '@renderer/stores/themes/colorThemeStore'
-
-// Stores
-const themeStore = useThemeStore()
-// import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
-// const workspaceStore = useWorkspaceStore()
-
-// Reactive refs
-const isDarkMode = computed(() => !!themeStore.isDarkMode)
-const handlePlaceholdeButtonPressed = (): void => {
-  console.log('Toolbar button pressed - no action assigned yet')
-}
-
-/*const handleInsertTextCell = (): void => {
- 
-    workspaceStore.addTextCell()
-}
-const handleInsertPythonCell = (): void => {
-  workspaceStore.addPythonCell()
-}*/
 </script>
+
+<style scoped>
+/* Override global styles to ensure proper height matching with buttons */
+.top-toolbar__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--top-toolbar-button-height, 1em);
+  padding: var(--top-toolbar-button-padding, 0.3em 0.6em);
+  margin: 0em 2px;
+  line-height: var(--toolbar-button-height, 1.3em);
+  font-size: var(--top-toolbar-font-size);
+  font-family: var(--ui-font);
+  color: var(--text-color-secondary, #666);
+  border: var(--top-toolbar-button-border, 2px solid transparent);
+  border-radius: var(--top-toolbar-button-border-radius, min(4px, 0.5em));
+  background: transparent;
+  box-sizing: border-box;
+}
+</style>

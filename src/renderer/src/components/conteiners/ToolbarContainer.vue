@@ -37,6 +37,7 @@ import { useCellSelectionStore } from '@renderer/stores/toolbar-cell-communicati
 import NoCellSelectedToolbar from '@renderer/components/toolbars/NoCellSelectedToolbar.vue'
 import TextCellToolbar from '@renderer/components/toolbars/TextCellToolbar.vue'
 import PythonCellToolbar from '@renderer/components/toolbars/PythonCellToolbar.vue'
+import GeometryCellToolbar from '@renderer/components/toolbars/GeometryCellToolbar.vue'
 import { useWorkspaceStore } from '@renderer/stores/workspaces/workspaceStore'
 // Store for cell selection state (selected cell type, etc.)
 const selectionStore = useCellSelectionStore()
@@ -45,7 +46,8 @@ const workspaceStore = useWorkspaceStore()
 // Mapping of cell types to their corresponding toolbar components
 const toolbarComponents = {
   'text-cell': TextCellToolbar,
-  'python-cell': PythonCellToolbar
+  'python-cell': PythonCellToolbar,
+  'geometry-cell': GeometryCellToolbar
   // future: markdown: MarkdownCellToolbar, etc.
 } as const
 

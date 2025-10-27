@@ -60,6 +60,7 @@ import {
   createNotebook as operationsCreateNotebook,
   createTextCell as operationsCreateTextCell,
   createPythonCell as operationsCreatePythonCell,
+  createGeometryCell as operationsCreateGeometryCell,
   addCellToNotebook as operationsAddCellToNotebook,
   deleteNotebookSoft as operationsDeleteNotebookSoft,
   moveCellIdUp as operationsMoveCellIdUp,
@@ -903,6 +904,15 @@ export const useWorkspaceStore = defineStore('workspace', {
       const cellSource = source ?? newPythonCellExampleCode ?? ''
       const newCell = operationsCreatePythonCell(cellSource)
       //operationsSetCellBaseInputContent(newCell, 'Cell ID (dev mode): ' + newCell.id)
+      this.insertCellGeneric(newCell)
+      this.markAsUnsaved()
+      return newCell
+    },
+    addGeometryCell(source?: string): Cell {
+      this.getWorkspace()
+      this.ensureDefaultNotebook()
+      const cellSource = source ?? '# New geometry cell'
+      const newCell = operationsCreateGeometryCell(cellSource)
       this.insertCellGeneric(newCell)
       this.markAsUnsaved()
       return newCell

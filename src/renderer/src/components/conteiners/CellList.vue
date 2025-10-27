@@ -35,6 +35,7 @@ import { useZoomStatesStore } from '@renderer/stores/UI/zoomStatesStore'
 import CellContainer from './CellContainer.vue'
 import TextCell from '@renderer/components/cells/TextCell.vue'
 import PythonCell from '@renderer/components/cells/PythonCell.vue'
+import GeometryCell from '@renderer/components/cells/GeometryCell.vue'
 import type { Cell } from '@renderer/types/notebook-cell-types'
 
 const zoomStatesStore = useZoomStatesStore()
@@ -112,6 +113,8 @@ function resolveCellComponent(kind: string): Component {
       return TextCell
     case 'python-cell':
       return PythonCell
+    case 'geometry-cell':
+      return GeometryCell
     default:
       return TextCell // fallback
   }
